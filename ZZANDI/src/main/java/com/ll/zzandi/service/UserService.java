@@ -1,6 +1,6 @@
 package com.ll.zzandi.service;
 
-import com.ll.zzandi.domain.Users;
+import com.ll.zzandi.domain.User;
 import com.ll.zzandi.dto.UserRequestDto;
 import com.ll.zzandi.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,9 +12,9 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public Users join(UserRequestDto userRequestDto) {
-        Users users = new Users(userRequestDto.getUserId(),userRequestDto.getUserPassword(),userRequestDto.getUserEmail(), userRequestDto.getUserNickname());
-        return userRepository.save(users);
+    public User join(UserRequestDto userRequestDto) {
+        User user = new User(userRequestDto.getUserId(),userRequestDto.getUserPassword(),userRequestDto.getUserEmail(), userRequestDto.getUserNickname());
+        return userRepository.save(user);
     }
 }
 

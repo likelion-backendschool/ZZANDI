@@ -10,8 +10,9 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
+@Table(name = "\"User\"")
 @NoArgsConstructor
-public class Users extends BaseEntity{
+public class User extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "USER_UUID")
@@ -33,7 +34,7 @@ public class Users extends BaseEntity{
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
 
-    public Users(String userId, String userPassword, String userEmail, String userNickname) {
+    public User(String userId, String userPassword, String userEmail, String userNickname) {
         this.userId = userId;
         this.userPassword = userPassword;
         this.userEmail = userEmail;

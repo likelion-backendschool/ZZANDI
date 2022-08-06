@@ -1,6 +1,6 @@
 package com.ll.zzandi.controller;
 
-import com.ll.zzandi.domain.Users;
+import com.ll.zzandi.domain.User;
 import com.ll.zzandi.dto.UserRequestDto;
 import com.ll.zzandi.service.UserService;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,9 +19,9 @@ public class UserController {
     }
 
     @PostMapping
-    public Users join(@RequestBody UserRequestDto userRequestDto){
-        Users users = userService.join(userRequestDto);
-        System.out.println(users);
-        return users;
+    public User join(@RequestBody UserRequestDto userRequestDto){
+        User user = userService.join(userRequestDto);
+        System.out.println(user);
+        return user;
     }
 }

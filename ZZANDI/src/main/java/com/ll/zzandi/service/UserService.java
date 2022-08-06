@@ -13,7 +13,6 @@ public class UserService {
     private final UserRepository userRepository;
 
     public Users join(UserRequestDto userRequestDto) {
-        //user 만들기
         Users users = new Users(userRequestDto.getUserId(),userRequestDto.getUserPassword(),userRequestDto.getUserEmail(), userRequestDto.getUserNickname());
         return userRepository.save(users);
     }

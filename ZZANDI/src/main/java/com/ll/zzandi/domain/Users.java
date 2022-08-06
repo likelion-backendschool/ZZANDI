@@ -1,5 +1,6 @@
 package com.ll.zzandi.domain;
 
+import com.ll.zzandi.enumtype.UserRole;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -30,17 +31,13 @@ public class Users extends BaseEntity{
 
     @Column(name = "USER_ROLE")
     @Enumerated(EnumType.STRING)
-    private Role userRole;
+    private UserRole userRole;
 
     public Users(String userId, String userPassword, String userEmail, String userNickname) {
         this.userId = userId;
         this.userPassword = userPassword;
         this.userEmail = userEmail;
         this.userNickname = userNickname;
-        this.userRole = Role.USER;
-    }
-
-    public enum Role{
-        USER, ADMIN
+        this.userRole = UserRole.USER;
     }
 }

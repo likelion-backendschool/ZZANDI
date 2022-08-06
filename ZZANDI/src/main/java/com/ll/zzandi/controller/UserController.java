@@ -18,7 +18,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping
+    @PostMapping("/join")
     public User join(@RequestBody UserRequestDto userRequestDto){
         User user = userService.join(userRequestDto);
         System.out.println(user);

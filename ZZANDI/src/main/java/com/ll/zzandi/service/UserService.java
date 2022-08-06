@@ -12,7 +12,7 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public User join(UserRequestDto userRequestDto) {
+    public User join(final UserRequestDto userRequestDto) {
         User user = new User(userRequestDto.getUserId(),userRequestDto.getUserPassword(),userRequestDto.getUserEmail(), userRequestDto.getUserNickname());
         return userRepository.save(user);
     }

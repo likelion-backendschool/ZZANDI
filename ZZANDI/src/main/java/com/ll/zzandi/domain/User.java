@@ -1,5 +1,6 @@
 package com.ll.zzandi.domain;
 
+import com.ll.zzandi.dto.UserRequestDto;
 import com.ll.zzandi.enumtype.UserRole;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -40,5 +41,9 @@ public class User extends BaseEntity{
         this.userEmail = userEmail;
         this.userNickname = userNickname;
         this.userRole = UserRole.USER;
+    }
+
+    public static User of(UserRequestDto userRequestDto){
+        return new User(userRequestDto.getUserId(),userRequestDto.getUserPassword(),userRequestDto.getUserEmail(), userRequestDto.getUserNickname());
     }
 }

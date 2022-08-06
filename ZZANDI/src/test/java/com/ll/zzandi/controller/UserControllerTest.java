@@ -39,7 +39,6 @@ class UserControllerTest {
         String userNickname="Test";
         UserRequestDto userRequestDto=new UserRequestDto(userId,password,userEmail,userNickname);
 
-
         when(userService.join(userRequestDto)).thenReturn(mock(User.class));
 
         //Post요청으로 Dto를 넘기면 200(OK)가 나와야한다.
@@ -49,5 +48,14 @@ class UserControllerTest {
                 )
                 .andDo(print()).andExpect(status().isOk());
     }
-    
+
+    @Test
+    void 이미가입된_아이디면_회원가입은_실패한다(){
+        String userId="testId";
+        String password="testPassword";
+        String userEmail="test@test.com";
+        String userNickname="Test";
+
+
+    }
 }

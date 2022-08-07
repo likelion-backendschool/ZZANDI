@@ -3,12 +3,14 @@ package com.ll.zzandi.controller;
 import com.ll.zzandi.domain.User;
 import com.ll.zzandi.dto.UserRequestDto;
 import com.ll.zzandi.service.UserService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
-@RestController
+import javax.validation.Valid;
+
+@Controller
 @RequestMapping("/api/v1/user")
 public class UserController {
 
@@ -18,10 +20,17 @@ public class UserController {
         this.userService = userService;
     }
 
+    @GetMapping("/")
+    public String showSignForm(UserRequestDto userRequestDto) {
+        return "Sign-up";
+    }
     @PostMapping("/join")
-    public User join(@RequestBody UserRequestDto userRequestDto){
+    public String join(Model model, @Valid UserRequestDto userRequestDto, BindingResult bindingResult){
+        if (bindingResult.hasErrors()) {
+            return "Sign-up";
+        }
         User user = userService.join(userRequestDto);
-        System.out.println(user);
-        return user;
+        model.addAttribute("userid",user.getUserId());
+        return "Result";
     }
 }

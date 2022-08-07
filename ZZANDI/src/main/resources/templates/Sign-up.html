@@ -1,0 +1,37 @@
+<!--회원가입 페이지-->
+<!DOCTYPE html>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<form action="#" th:action="@{/api/v1/user/join}" th:object="${userRequestDto}" method="post">
+    <div class="container">
+        <h1>회원가입</h1>
+        <div class="form-group">
+            <label for="userid">userId</label>
+            <input type="text" th:field="*{userId}" />
+            <td th:if="${#fields.hasErrors('userId')}" >userId Error</td>
+        </div>
+        <div class="form-group">
+            <label for="userPassword">userPassword</label>
+            <td><input type="password" th:field="*{userPassword}" /></td>
+            <td th:if="${#fields.hasErrors('userPassword')}">userPassword Error</td>
+        </div>
+        <div class="form-group">
+            <label for="userEmail">userEmail</label>
+            <td><input type="text" th:field="*{userEmail}" /></td>
+            <td th:if="${#fields.hasErrors('userEmail')}">userEmail Error</td>
+        </div>
+        <div class="form-group">
+            <label for="userNickname">userNickname</label>
+            <td><input type="text" th:field="*{userNickname}" /></td>
+            <td th:if="${#fields.hasErrors('userNickname')}">userNickname Error</td>
+        </div>
+        <button type="submit" class="btn btn-primary">회원 가입</button>
+    </div>
+</form>
+</body>
+</html>

@@ -7,4 +7,15 @@ spring:
   h2:
     console:
       enabled: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: zzandi.dev@gmail.com
+    password: mzsbxaueqvjjrpoi
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 

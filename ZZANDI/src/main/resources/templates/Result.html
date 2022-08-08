@@ -5,9 +5,15 @@
     <title>Title</title>
 </head>
 <body>
+
+<div class="alert alert-warning" role="alert" th:if="${user != null && !user.userEmailVerified}">
+    <script type="text/javascript">
+        alert("ZZANDI 가입을 완료하려면 계정 인증 이메일을 확인하세요.");
+    </script>
+</div>
 <h1>회원가입 성공</h1>
 <ul>
-    <li>안녕하세요 !!<span th:text="${userid}"></span>님, 즐거운 하루보내세요!!</li>
+    <li>안녕하세요 !!<span th:text="${user.userId}"></span>님, 즐거운 하루보내세요!!</li>
 </ul>
 </body>
 </html>

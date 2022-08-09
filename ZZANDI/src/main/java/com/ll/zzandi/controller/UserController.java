@@ -1,7 +1,10 @@
 package com.ll.zzandi.controller;
 
+import com.ll.zzandi.domain.User;
 import com.ll.zzandi.dto.UserDto;
+import com.ll.zzandi.repository.UserRepository;
 import com.ll.zzandi.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,9 +17,11 @@ import javax.validation.Valid;
 public class UserController {
 
     private final UserService userService;
+    private final UserRepository userRepository;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, UserRepository userRepository) {
         this.userService = userService;
+        this.userRepository=userRepository;
     }
 
     @GetMapping("/join")
@@ -32,4 +37,24 @@ public class UserController {
         model.addAttribute("user",response);
         return "Result";
     }
+    @GetMapping("/check-email-token")
+    public String checkEmailToken(String token, String email, Model model) {
+        User user = userRepository.findByUserEmail(email);
+        String view = "user/checked-email";
+        if (user == null) {
+            model.addAttribute("error", "wrong.email");
+            return view;
+        }
+
+        if (!user.isValidToken(token)) {
+            model.addAttribute("error", "wrong.token");
+            return view;
+        }
+
+        userService.completeSignUp(user);
+        model.addAttribute("numberOfUser", userRepository.count());
+        model.addAttribute("nickname", user.getUserNickname());
+        return view;
+    }
+
 }

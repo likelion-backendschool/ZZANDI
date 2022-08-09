@@ -8,6 +8,7 @@ import com.ll.zzandi.repository.UserRepository;
 import com.ll.zzandi.util.mail.EmailMessage;
 import com.ll.zzandi.util.mail.EmailService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,6 +36,8 @@ public class UserService {
         newUser.generateEmailCheckToken();
         System.out.println(newUser.toString());
         sendSignUpConfirmEmail(newUser);
+        //TODO LOGIN로직 추가
+
         return userRepository.save(newUser);
     }
 
@@ -45,7 +48,7 @@ public class UserService {
         context.setVariable("nickname", user.getUserNickname());
         context.setVariable("linkName", "이메일 인증하기");
         context.setVariable("message", "ZZANDI 서비스를 사용하려면 링크를 클릭하세요.");
-        context.setVariable("host", "http://localhost:8080");
+        context.setVariable("host", "http://localhost:8080/user");
         String message = templateEngine.process("mail/simple-link", context);
 
         EmailMessage emailMessage = EmailMessage.builder()
@@ -53,8 +56,12 @@ public class UserService {
                 .subject("ZZANDI, 회원 가입 인증")
                 .message(message)
                 .build();
-
         emailService.sendEmail(emailMessage);
+    }
+    @Transactional
+    public void completeSignUp(User user) {
+        user.completeSignUp();
+        //TODO LOGIN로직 추가
     }
 }
 

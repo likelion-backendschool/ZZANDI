@@ -17,7 +17,7 @@
         </div>
         <div class="form-group">
             <label for="toDo_Content">toDo_Content</label>
-            <td><input type="password" th:field="*{content}" /></td>
+            <td><input type="text" th:field="*{content}" /></td>
             <td th:if="${#fields.hasErrors('content')}">toDo_Content Error</td>
         </div>
         <div class="form-group">

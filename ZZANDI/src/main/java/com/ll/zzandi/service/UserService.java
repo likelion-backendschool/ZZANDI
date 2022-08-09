@@ -41,7 +41,6 @@ public class UserService {
         return userRepository.save(newUser);
     }
 
-
     public void sendSignUpConfirmEmail(User user) {
         Context context = new Context();
         context.setVariable("link", "/check-email-token?token=" + user.getEmailCheckToken() +

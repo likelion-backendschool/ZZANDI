@@ -75,4 +75,10 @@ public class User extends BaseEntity{
         this.emailCheckToken = UUID.randomUUID().toString();
         this.emailCheckTokenGeneratedAt = LocalDateTime.now();
     }
+    public boolean isValidToken(String token) {
+        return this.emailCheckToken.equals(token);
+    }
+    public void completeSignUp() {
+        this.userEmailVerified = true;
+    }
 }

@@ -2,6 +2,7 @@ package com.ll.zzandi.controller;
 
 import com.ll.zzandi.dto.BoardDetailDto;
 import com.ll.zzandi.dto.BoardListDto;
+import com.ll.zzandi.dto.BoardUpdateFormDto;
 import com.ll.zzandi.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -34,5 +35,13 @@ public class BoardController {
         BoardDetailDto boardDetail = boardService.boardDetail(id);
         model.addAttribute("boardDetail", boardDetail);
         return "board/boardDetail";
+    }
+
+    @GetMapping("/update-form/{id}")
+    public String boardUpdateForm(@PathVariable Long id, Model model) {
+        System.out.println("hello?");
+        BoardUpdateFormDto updateFormDto = boardService.boardUpdateForm(id);
+        model.addAttribute("updateDto", updateFormDto);
+        return "board/boardUpdateForm";
     }
 }

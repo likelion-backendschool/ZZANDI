@@ -3,6 +3,7 @@ package com.ll.zzandi.service;
 import com.ll.zzandi.domain.Board;
 import com.ll.zzandi.dto.BoardDetailDto;
 import com.ll.zzandi.dto.BoardListDto;
+import com.ll.zzandi.dto.BoardUpdateFormDto;
 import com.ll.zzandi.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -36,4 +37,8 @@ public class BoardService {
         return new BoardDetailDto(board.getId(), board.getTitle(), createdDate, board.getWriter(), board.getContent(), board.getViews(), board.getRecommend(), 0);
     }
 
+    public BoardUpdateFormDto boardUpdateForm(Long id) {
+        Board board = boardRepository.findById(id).orElse(null);
+        return new BoardUpdateFormDto(board.getId(), board.getTitle(), board.getWriter(), board.getContent(), board.getUpdatedDate());
+    }
 }

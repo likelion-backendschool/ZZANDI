@@ -50,4 +50,9 @@ public class BoardService {
         findBoard.setContent(updateData.getContent());
         findBoard.setUpdatedDate(LocalDateTime.now());
     }
+
+    @Transactional
+    public void boardDelete(Long id) {
+        boardRepository.deleteById(id);
+    }
 }

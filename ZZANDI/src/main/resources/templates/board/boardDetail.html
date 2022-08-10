@@ -86,7 +86,10 @@
 
     <div class="btns btn-group">
         <button class="btn btn-primary " type="button" th:onclick="|location.href='@{/board/update/{id} (id=${boardDetail.id})}'|">수정</button>
-        <button class="btn btn-success" type="button">삭제</button>
+
+        <form th:action="@{/board/delete/{id} (id=${boardDetail.id})}" method="post">
+            <button class="btn btn-success" type="submit">삭제</button>
+        </form>
     </div>
 </div>
 </body>

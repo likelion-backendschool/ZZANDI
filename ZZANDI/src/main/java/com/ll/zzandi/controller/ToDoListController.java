@@ -2,17 +2,13 @@ package com.ll.zzandi.controller;
 
 import com.ll.zzandi.domain.ToDoList;
 import com.ll.zzandi.dto.ToDoListDto;
-import com.ll.zzandi.dto.UserDto;
 import com.ll.zzandi.service.ToDoListService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import javax.validation.Valid;
 
 @Controller
 @RequiredArgsConstructor
@@ -20,9 +16,13 @@ import javax.validation.Valid;
 public class ToDoListController {
     private final ToDoListService toDoListService;
 
+    @GetMapping()
+    public String showToDoMain() {
+        return "ToDoList-main";
+    }
     @GetMapping("/add")
     public String showToDoForm(ToDoListDto.ToDoListRequest toDoListRequest) {
-        return "ToDoList";
+        return "ToDoList-add";
     }
 
     @PostMapping("/add")

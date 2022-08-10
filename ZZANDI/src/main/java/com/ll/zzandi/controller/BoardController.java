@@ -9,10 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/board")
@@ -37,11 +34,17 @@ public class BoardController {
         return "board/boardDetail";
     }
 
-    @GetMapping("/update-form/{id}")
+    @GetMapping("/update/{id}")
     public String boardUpdateForm(@PathVariable Long id, Model model) {
-        System.out.println("hello?");
         BoardUpdateFormDto updateFormDto = boardService.boardUpdateForm(id);
         model.addAttribute("updateDto", updateFormDto);
         return "board/boardUpdateForm";
     }
+
+    @PostMapping("/update/{id}")
+    public String boardUpdate(@PathVariable Long id, BoardUpdateFormDto updateFormDto) {
+        boardService.boardUpdate(id, updateFormDto);
+        return "redirect:/board/detail/" + id;
+    }
+
 }

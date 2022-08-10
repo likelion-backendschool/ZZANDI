@@ -13,6 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Service
@@ -40,5 +41,13 @@ public class BoardService {
     public BoardUpdateFormDto boardUpdateForm(Long id) {
         Board board = boardRepository.findById(id).orElse(null);
         return new BoardUpdateFormDto(board.getId(), board.getTitle(), board.getWriter(), board.getContent(), board.getUpdatedDate());
+    }
+
+    @Transactional
+    public void boardUpdate(Long id, BoardUpdateFormDto updateData) {
+        Board findBoard = boardRepository.findById(id).orElseGet(null);
+        findBoard.setTitle(updateData.getTitle());
+        findBoard.setContent(updateData.getContent());
+        findBoard.setUpdatedDate(LocalDateTime.now());
     }
 }

@@ -1,5 +1,7 @@
 package com.ll.zzandi.service;
 
+import com.ll.zzandi.domain.Board;
+import com.ll.zzandi.dto.BoardDetailDto;
 import com.ll.zzandi.dto.BoardListDto;
 import com.ll.zzandi.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +28,12 @@ public class BoardService {
         return boardRepository.findBoardBy(pageRequest)
                 .map(board -> new BoardListDto(board.getId(), board.getTitle(), board.getWriter(),
                         board.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd")), board.getViews(), board.getRecommend()));
+    }
+
+    public BoardDetailDto boardDetail(Long id) {
+        Board board = boardRepository.findById(id).orElse(null);
+        String createdDate = board.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
+        return new BoardDetailDto(board.getId(), board.getTitle(), createdDate, board.getWriter(), board.getContent(), board.getViews(), board.getRecommend(), 0);
     }
 
 }

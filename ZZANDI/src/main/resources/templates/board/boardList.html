@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <!--    <script defer type="text/javascript" th:src="@{static/js/boardList.js}"></script>-->
+    <title>QA 게시판</title>
+    <style>
+        body {
+            text-align: center;
+        }
+        table th, td {
+            text-align: center;
+        }
+        .pagination {
+            display: flex;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <div style="margin: 40px 200px">
+    <h2>질문 게시판!</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr class="success">
+                    <th>#</th>
+                    <th>제목</th>
+                    <th>작성자</th>
+                    <th>날짜</th>
+                    <th>조회</th>
+                    <th>추천</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="board : ${boardList}">
+                    <td th:text="${board.boardId}"></td>
+                    <td><a th:href="@{detail/{id} (id=${board.boardId})}" th:text="${board.title}"></a></td>
+                    <td th:text="${board.writer}"></td>
+                    <td th:text="${board.createdDate}"></td>
+                    <td th:text="${board.views}"></td>
+                    <td th:text="${board.recommend}"></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <li class="page-item">
+                    <a class="page-link" th:href="@{list(page=${currentPage - 1})}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item page-num" th:each="page : ${#numbers.sequence(1, totalPage)}"><a class="page-link" th:href="@{list(page=${page - 1})}" th:text="${page}"></a></li>
+                <li class="page-item">
+                    <a class="page-link" th:href="@{list(page=${currentPage + 1})}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</body>
+</html>

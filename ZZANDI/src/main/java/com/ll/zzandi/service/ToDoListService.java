@@ -13,10 +13,8 @@ public class ToDoListService {
     public ToDoList save(ToDoListDto.ToDoListRequest toDoListRequest) {
         ToDoList toDoList = new ToDoList();
 
-        toDoList.setTitle(toDoListRequest.getTitle());
         toDoList.setContent(toDoListRequest.getContent());
         toDoList.setType(toDoListRequest.getType());
-        toDoList.setWriter(toDoListRequest.getWriter());
 
         return toDoListRepository.save(toDoList);
     }

@@ -35,9 +35,10 @@ public class SecurityConfig{
                 .and()
                 .formLogin()
                 .loginPage("/user/login")
-                .loginProcessingUrl("/user/login_pro")
+                .loginProcessingUrl("/user/login_proc")
                 .usernameParameter("userId")
                 .passwordParameter("userPassword")
+                .defaultSuccessUrl("/")
                 .permitAll()
         ;
         return http.build();

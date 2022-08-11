@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div class="container">
+    <div>
+        <table>
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>스터디 이름</th>
+                <th>스터디 인원 수</th>
+                <th>스터디 시작일</th>
+                <th>스터디 종료일</th>
+            </tr>
+            </thead>
+            <tbody>
+                <td th:text="${studies.id}"></td>
+                <td th:text="${studies.studyTitle}"></td>
+                <td th:text="${studies.studyPeople}"></td>
+                <td th:text="${studies.studyStart}"></td>
+                <td th:text="${studies.studyEnd}"></td>
+
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
+
+<!--<div>-->
+<!--    <a href="/study/list"> Study List </a>-->
+<!--</div>-->

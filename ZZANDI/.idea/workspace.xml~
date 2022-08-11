@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="1fb33850-1c37-4d55-bb78-1b3b0938c6bf" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.gradle/7.5/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.5/checksums/checksums.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.5/checksums/md5-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.5/checksums/md5-checksums.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.5/checksums/sha1-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.5/checksums/sha1-checksums.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/ll/zzandi/ZzandiApplicationTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/ll/zzandi/ZzandiApplicationTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/ll/zzandi/controller/UserControllerTest.java" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CompilerWorkspaceConfiguration">
+    <option name="MAKE_PROJECT_ON_SAVE" value="true" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="zzandi" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="zzandi" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="zzandi" type="f1a62948:ProjectNode" />
+                <item name="Dependencies" type="6de06a37:ExternalSystemViewDefaultContributor$MyDependenciesNode" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Interface" />
+        <option value="AnnotationType" />
+        <option value="JUnit5 Test Class" />
+        <option value="HTML File" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2CzPdq5sBm3Rk6URuOsJANZIRze" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit5&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5&quot;: &quot;&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/joohw/OneDrive/바탕 화면/zzandi/ZZANDI/ZZANDI/src/main/resources/templates/study&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;project.propCompiler&quot;,
+    &quot;spring.configuration.checksum&quot;: &quot;edcb33a0801eac55fd29ea4b6580a59a&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\joohw\OneDrive\바탕 화면\zzandi\ZZANDI\ZZANDI\src\main\resources\templates\study" />
+      <recent name="C:\Users\joohw\OneDrive\바탕 화면\zzandi\ZZANDI\ZZANDI\src\main\resources\templates" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\joohw\OneDrive\바탕 화면\zzandi\ZZANDI\ZZANDI\src\main\java\com\ll\zzandi\controller" />
+      <recent name="C:\Users\joohw\OneDrive\바탕 화면\zzandi\ZZANDI\ZZANDI\src\main\resources\templates" />
+      <recent name="C:\Users\joohw\OneDrive\바탕 화면\zzandi\ZZANDI\ZZANDI\src\main\resources\static" />
+      <recent name="C:\Users\joohw\OneDrive\바탕 화면\zzandi\ZZANDI\ZZANDI\src\main\resources\templates\study" />
+    </key>
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="" />
+    </key>
+    <key name="CreateTestDialog.RecentsKey">
+      <recent name="com.ll.zzandi.service" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.ll.zzandi.controller" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Spring Boot.ZzandiApplication">
+    <configuration name="MemoryStudyRepositoryTest.findBystartDate" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="zzandi.test" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.ll.zzandi.repository.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.ll.zzandi.repository" />
+      <option name="MAIN_CLASS_NAME" value="com.ll.zzandi.repository.MemoryStudyRepositoryTest" />
+      <option name="METHOD_NAME" value="findBystartDate" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="StudyServiceTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="zzandi.test" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.ll.zzandi.service.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.ll.zzandi.service" />
+      <option name="MAIN_CLASS_NAME" value="com.ll.zzandi.service.StudyServiceTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="StudyServiceTest.스터디생성" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="zzandi.test" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.ll.zzandi.service.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.ll.zzandi.service" />
+      <option name="MAIN_CLASS_NAME" value="com.ll.zzandi.service.StudyServiceTest" />
+      <option name="METHOD_NAME" value="스터디생성" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="StudyServiceTest.중복_스터디명_예외" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="zzandi.test" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.ll.zzandi.service.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.ll.zzandi.service" />
+      <option name="MAIN_CLASS_NAME" value="com.ll.zzandi.service.StudyServiceTest" />
+      <option name="METHOD_NAME" value="중복_스터디명_예외" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="StudyServiceTest.findById" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="zzandi.test" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.ll.zzandi.service.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.ll.zzandi.service" />
+      <option name="MAIN_CLASS_NAME" value="com.ll.zzandi.service.StudyServiceTest" />
+      <option name="METHOD_NAME" value="findById" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ZzandiApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <option name="ACTIVE_PROFILES" />
+      <option name="ENABLE_LAUNCH_OPTIMIZATION" value="false" />
+      <module name="zzandi.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.ll.zzandi.ZzandiApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="JUnit.StudyServiceTest.findById" />
+      <item itemvalue="JUnit.MemoryStudyRepositoryTest.findBystartDate" />
+      <item itemvalue="JUnit.StudyServiceTest" />
+      <item itemvalue="JUnit.StudyServiceTest.스터디생성" />
+      <item itemvalue="JUnit.StudyServiceTest.중복_스터디명_예외" />
+      <item itemvalue="Spring Boot.ZzandiApplication" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.StudyServiceTest.findById" />
+        <item itemvalue="JUnit.StudyServiceTest.스터디생성" />
+        <item itemvalue="JUnit.MemoryStudyRepositoryTest.findBystartDate" />
+        <item itemvalue="JUnit.StudyServiceTest" />
+        <item itemvalue="JUnit.StudyServiceTest.중복_스터디명_예외" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="1fb33850-1c37-4d55-bb78-1b3b0938c6bf" name="Changes" comment="" />
+      <created>1659802534219</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1659802534219</updated>
+      <workItem from="1659802536284" duration="1716000" />
+      <workItem from="1659804454195" duration="5567000" />
+      <workItem from="1659827024258" duration="2698000" />
+      <workItem from="1659830140193" duration="23000" />
+      <workItem from="1659883649598" duration="10250000" />
+      <workItem from="1659912889476" duration="7044000" />
+      <workItem from="1659944090994" duration="5813000" />
+      <workItem from="1659963470907" duration="8445000" />
+      <workItem from="1659975284561" duration="6615000" />
+      <workItem from="1660002093146" duration="10000" />
+      <workItem from="1660011433041" duration="2666000" />
+      <workItem from="1660023525680" duration="3109000" />
+      <workItem from="1660093505130" duration="1334000" />
+      <workItem from="1660119055024" duration="3827000" />
+      <workItem from="1660148937060" duration="1611000" />
+      <workItem from="1660175661070" duration="3397000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>

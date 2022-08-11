@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div class="container">
+
+    <form action="/study/new" method="post">
+        <div class="form-group">
+            <div>
+                <label for="title"> </label>
+                <input type="text" id="title" name="title" placeholder="스터디명을 입력하세요">
+            </div>
+            <div>
+                <label for="startDate"> </label>
+                <input type="date" id="startDate" name="startDate">
+            </div>
+            <div>
+                <label for="endDate"> </label>
+                <input type="date" id="endDate" name="endDate">
+            </div>
+            <div>
+                <label for="people"> </label>
+                <input type="number" id="people" name="people" placeholder="스터디 정원 수를 입력하세요">
+            </div>
+
+        </div>
+        <button type="submit">등록</button>
+
+    </form>
+
+</div>
+
+</body>
+</html>

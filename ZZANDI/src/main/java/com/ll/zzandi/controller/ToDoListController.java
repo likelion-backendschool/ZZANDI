@@ -16,9 +16,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class ToDoListController {
     private final ToDoListService toDoListService;
 
+    @GetMapping()
+    public String showToDoMain() {return "todo/ToDoListMain";}
+
     @GetMapping("/add")
     public String showToDoForm(ToDoListDto.ToDoListRequest toDoListRequest) {
-        return "ToDoList";
+        return "todo/ToDoListAdd";
     }
 
     @PostMapping("/add")

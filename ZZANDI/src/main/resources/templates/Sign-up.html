@@ -7,31 +7,50 @@
     <meta charset="UTF-8">
 </head>
 <body>
-<form action="#" th:action="@{/user/join}" th:object="${registerRequest}" method="post">
-    <div class="container">
-        <h1>회원가입</h1>
-        <div class="form-group">
-            <label for="userid">userId</label>
-            <input type="text" th:field="*{userId}" />
-            <td th:if="${#fields.hasErrors('userId')}" >userId Error</td>
+<div class="container-fluid" >
+    <div class="row">
+        <div class="col-sm-6 col-sm-offset-3">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="join-title"><h1>회원가입</h1></div>
+                    <form action="#" th:action="@{/user/join}" th:object="${registerRequest}" method="post">
+                        <div class="form-group">
+                            <label for="userId">아이디</label>
+                            <input type="text" th:field="*{userId}" class="form-control"
+                                   placeholder="사용자 ID" aria-describedby="idHelp" required />
+                            <smail th:if="${#fields.hasErrors('userId')} " th:errors="*{userId}" class="fieldError" >userId Error</smail>
+                        </div>
+                        <div class="form-group">
+                            <label for="userPassword">비밀번호</label>
+                            <input type="password" th:field="*{userPassword}" class="form-control"
+                                   placeholder="Password" aria-describedby="passwordHelp" required />
+                            <smail th:if="${#fields.hasErrors('userPassword')}" th:errors="*{userPassword}">userPassword Error</smail>
+                        </div>
+<!--                        <div class="form-group">-->
+<!--                            <label for="userPassword">비밀번호 확인</label>-->
+<!--                            <input type="password" th:field="*{userPassword}" class="form-control"-->
+<!--                                   placeholder="Password" aria-describedby="passwordHelp" required />-->
+<!--                            <smail th:if="${#fields.hasErrors('userPassword')}" th:errors="*{userPassword}">userPassword Error</smail>-->
+<!--                        </div>-->
+                        <div class="form-group">
+                            <label for="userEmail">이메일</label>
+                            <input type="text" th:field="*{userEmail}"  class="form-control"
+                                   placeholder="your@email.com" aria-describedby="emailHelp" required />
+                            <smail th:if="${#fields.hasErrors('userEmail')}" th:errors="*{userEmail}">userEmail Error</smail>
+                        </div>
+                        <div class="form-group">
+                            <label for="userNickname">닉네임</label>
+                            <input type="text" th:field="*{userNickname}" class="form-control"
+                                   placeholder="Nickname" aria-describedby="nicknameHelp" required />
+                            <smail th:if="${#fields.hasErrors('userNickname')}" th:errors="*{userNickname}">userNickname Error</smail>
+                        </div>
+                        <button type="submit" class="btn btn-primary">회원 가입</button>
+                    </form>
+                </div>
+            </div>
         </div>
-        <div class="form-group">
-            <label for="userPassword">userPassword</label>
-            <td><input type="password" th:field="*{userPassword}" /></td>
-            <td th:if="${#fields.hasErrors('userPassword')}">userPassword Error</td>
-        </div>
-        <div class="form-group">
-            <label for="userEmail">userEmail</label>
-            <td><input type="text" th:field="*{userEmail}" /></td>
-            <td th:if="${#fields.hasErrors('userEmail')}">userEmail Error</td>
-        </div>
-        <div class="form-group">
-            <label for="userNickname">userNickname</label>
-            <td><input type="text" th:field="*{userNickname}" /></td>
-            <td th:if="${#fields.hasErrors('userNickname')}">userNickname Error</td>
-        </div>
-        <button type="submit" class="btn btn-primary">회원 가입</button>
     </div>
-</form>
+</div>
+
 </body>
 </html>

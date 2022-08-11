@@ -6,6 +6,8 @@ import com.ll.zzandi.repository.ToDoListRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ToDoListService {
@@ -17,5 +19,9 @@ public class ToDoListService {
         toDoList.setType(toDoListRequest.getType());
 
         return toDoListRepository.save(toDoList);
+    }
+
+    public List<ToDoList> findAll() {
+        return toDoListRepository.findAll();
     }
 }

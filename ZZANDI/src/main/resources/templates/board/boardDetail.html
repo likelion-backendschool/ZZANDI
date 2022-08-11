@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <title>상세페이지</title>
+    <style>
+        body{
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 500px;
+            margin: 40px auto;
+        }
+        .box1 {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+
+        .box2 {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid gainsboro;
+        }
+
+        .box3 {
+            display: flex;
+            justify-content: space-evenly;
+        }
+
+        .box3 p {
+            margin-left: 10px;
+        }
+
+        .box3 span {
+            font-weight: bold;
+        }
+
+        .content {
+            margin: 40px 0;
+        }
+
+        .btns {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .btns button {
+            margin-left: 10px;
+        }
+
+        .recommend {
+            display: flex;
+            justify-content: center;
+            align-items: baseline;
+        }
+        .recommend > h3 {
+            margin: 0 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="box1">
+        <h3 th:text="${boardDetail.title}">제목1</h3>
+        <p th:text="${boardDetail.createdDate}">날짜</p>
+    </div>
+    <div class="box2">
+        <p th:text="${boardDetail.writer}">작성자</p>
+        <div class="box3">
+            <p>조회 수 <span th:text="${boardDetail.views}">29</span></p>
+            <p>추천 수 <span th:text="${boardDetail.recommend}">50</span></p>
+            <p>댓글 <span th:text="${boardDetail.comments}">0</span></p>
+        </div>
+    </div>
+    <section class="content" th:text="${boardDetail.content}"></section>
+
+    <div class="recommend">
+        <button>+</button>
+        <h3>0</h3>
+        <button>-</button>
+    </div>
+
+    <div class="btns btn-group">
+        <button class="btn btn-primary " type="button" th:onclick="|location.href='@{/board/update/{id} (id=${boardDetail.id})}'|">수정</button>
+
+        <form th:action="@{/board/delete/{id} (id=${boardDetail.id})}" method="post">
+            <button class="btn btn-success" type="submit">삭제</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

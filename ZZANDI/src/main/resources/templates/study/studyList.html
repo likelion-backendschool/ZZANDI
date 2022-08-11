@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div class="container">
+
+    <div>
+        <table>
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>스터디명</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="study : ${studies}">
+                <td th:text="${study.id}"></td>
+                <td><a href="#" th:href="@{/study/detail/{studyId}(studyId = ${study.id})}"
+                       th:text="${study.studyTitle}"></a></td>
+                <td><a href="#" th:href="@{/study/delete/{studyId}(studyId = ${study.id})}" th:text="삭제"></a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

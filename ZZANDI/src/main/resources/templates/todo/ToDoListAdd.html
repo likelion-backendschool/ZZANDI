@@ -11,19 +11,9 @@
     <div class="container">
         <h1>Todo List 추가</h1>
         <div class="form-group">
-            <label for="toDo_Title">toDo_Title</label>
-            <input type="text" th:field="*{title}" />
-            <td th:if="${#fields.hasErrors('title')}" >toDo_Title Error</td>
-        </div>
-        <div class="form-group">
             <label for="toDo_Content">toDo_Content</label>
-            <td><input type="text" th:field="*{content}" /></td>
+            <td><input id="toDo_Content" type="text" th:field="*{content}" /></td>
             <td th:if="${#fields.hasErrors('content')}">toDo_Content Error</td>
-        </div>
-        <div class="form-group">
-            <label for="toDo_Writer">toDo_Writer</label>
-            <td><input type="text" th:field="*{writer}" /></td>
-            <td th:if="${#fields.hasErrors('writer')}">toDo_Writer Error</td>
         </div>
         <button type="submit" class="btn btn-primary">목표 추가</button>
     </div>

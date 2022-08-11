@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 @Configuration
@@ -20,6 +21,9 @@ public class SecurityConfig{
 
     @Autowired
     private AuthenticationSuccessHandler customAuthenticationSuccessHandler;
+
+    @Autowired
+    private AuthenticationFailureHandler customAuthenticationFailureHandler;
 
     /*
     인증 및 인가 설정
@@ -35,7 +39,7 @@ public class SecurityConfig{
                 .and()
 
                 .authorizeRequests()
-                .antMatchers("/", "/user/join", "/h2-console/**").permitAll()
+                .antMatchers("/", "/user/join", "/h2-console/**", "/user/login/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -45,6 +49,7 @@ public class SecurityConfig{
                 .passwordParameter("userPassword")
                 .defaultSuccessUrl("/")
                 .successHandler(customAuthenticationSuccessHandler)
+                .failureHandler(customAuthenticationFailureHandler)
                 .permitAll()
         ;
         return http.build();

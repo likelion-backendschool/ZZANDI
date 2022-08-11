@@ -28,8 +28,8 @@ public class CustomUserDetailsService implements UserDetailsService {
     회원의 정보를 Spring Security가 인식할 수 있는 객체(UserDetails)로 변환
      */
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUserId(username).orElseThrow(() -> new UsernameNotFoundException("존재하지 않는 계정입니다"));
+    public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
+        User user = userRepository.findByUserId(userId).orElseThrow(() -> new UsernameNotFoundException("존재하지 않는 계정입니다"));
 
         List<GrantedAuthority> authorities = new ArrayList<>();  // 권한 저장
         authorities.add(new SimpleGrantedAuthority(String.valueOf(user.getUserId())));

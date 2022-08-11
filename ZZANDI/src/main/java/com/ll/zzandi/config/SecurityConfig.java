@@ -34,6 +34,11 @@ public class SecurityConfig{
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
+                .loginPage("/user/login")
+                .loginProcessingUrl("/user/login_pro")
+                .usernameParameter("userId")
+                .passwordParameter("userPassword")
+                .permitAll()
         ;
         return http.build();
     }

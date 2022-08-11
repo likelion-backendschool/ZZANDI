@@ -4,7 +4,6 @@ import com.ll.zzandi.domain.User;
 import com.ll.zzandi.dto.UserDto;
 import com.ll.zzandi.repository.UserRepository;
 import com.ll.zzandi.service.UserService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,22 +20,24 @@ public class UserController {
 
     public UserController(UserService userService, UserRepository userRepository) {
         this.userService = userService;
-        this.userRepository=userRepository;
+        this.userRepository = userRepository;
     }
 
     @GetMapping("/join")
     public String showSignForm(UserDto.RegisterRequest registerRequest) {
         return "Sign-up";
     }
+
     @PostMapping("/join")
-    public String join(Model model, @Valid UserDto.RegisterRequest registerRequest, BindingResult bindingResult){
+    public String join(Model model, @Valid UserDto.RegisterRequest registerRequest, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "Sign-up";
         }
         var response = userService.join(registerRequest).toResponse();
-        model.addAttribute("user",response);
+        model.addAttribute("user", response);
         return "Result";
     }
+
     @GetMapping("/check-email-token")
     public String checkEmailToken(String token, String email, Model model) {
         User user = userRepository.findByUserEmail(email);
@@ -57,4 +58,8 @@ public class UserController {
         return view;
     }
 
+    @GetMapping("/login")
+    public String showLoginForm() {
+        return "/user/login";
+    }
 }

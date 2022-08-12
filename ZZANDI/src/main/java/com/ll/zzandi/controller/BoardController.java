@@ -29,6 +29,7 @@ public class BoardController {
 
     @GetMapping("/detail/{id}")
     public String boardDetail(Model model, @PathVariable Long id) {
+        boardService.updateView(id);
         BoardDetailDto boardDetail = boardService.boardDetail(id);
         model.addAttribute("boardDetail", boardDetail);
         return "board/boardDetail";

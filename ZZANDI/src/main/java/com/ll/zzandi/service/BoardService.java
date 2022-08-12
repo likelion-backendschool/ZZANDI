@@ -33,9 +33,14 @@ public class BoardService {
     }
 
     public BoardDetailDto boardDetail(Long id) {
-        Board board = boardRepository.findById(id).orElse(null);
+        Board board = boardRepository.findById(id).orElseThrow();
         String createdDate = board.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
         return new BoardDetailDto(board.getId(), board.getTitle(), createdDate, board.getWriter(), board.getContent(), board.getViews(), board.getRecommend(), 0);
+    }
+
+    @Transactional
+    public int updateView(Long id) {
+        return boardRepository.updateView(id);
     }
 
     public BoardUpdateFormDto boardUpdateForm(Long id) {

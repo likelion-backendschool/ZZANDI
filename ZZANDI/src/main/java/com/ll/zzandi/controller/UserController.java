@@ -4,28 +4,37 @@ import com.ll.zzandi.domain.User;
 import com.ll.zzandi.dto.UserDto;
 import com.ll.zzandi.repository.UserRepository;
 import com.ll.zzandi.service.UserService;
+import com.ll.zzandi.util.validator.RegisterFormValidator;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-
 @Controller
 @RequestMapping("/user")
 public class UserController {
+    private final RegisterFormValidator registerFormValidator;
 
     private final UserService userService;
     private final UserRepository userRepository;
 
-    public UserController(UserService userService, UserRepository userRepository) {
+    public UserController(UserService userService, UserRepository userRepository, RegisterFormValidator registerFormValidator) {
         this.userService = userService;
-        this.userRepository = userRepository;
+        this.userRepository=userRepository;
+        this.registerFormValidator=registerFormValidator;
+    }
+
+    @InitBinder("registerRequest")
+    public void initBinder(WebDataBinder webDataBinder) {
+        webDataBinder.addValidators(registerFormValidator);
     }
 
     @GetMapping("/join")

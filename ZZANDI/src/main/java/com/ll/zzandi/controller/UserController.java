@@ -34,7 +34,8 @@ public class UserController {
     }
 
     @PostMapping("/join")
-    public String join(Model model, @Valid UserDto.RegisterRequest registerRequest, BindingResult bindingResult) {
+    public String join(Model model, @Valid UserDto.RegisterRequest registerRequest,
+        BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "Sign-up";
         }
@@ -65,8 +66,8 @@ public class UserController {
 
     @GetMapping("/login")
     public String showLoginForm(@RequestParam(value = "error", required = false) String error,
-                                @RequestParam(value = "exception", required = false) String exception,
-                                Model model) {
+        @RequestParam(value = "exception", required = false) String exception,
+        Model model) {
         model.addAttribute("error", error);
         model.addAttribute("exception", exception);
 
@@ -78,8 +79,18 @@ public class UserController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication != null) {
-            new SecurityContextLogoutHandler().logout(request, response, authentication); // 세션 및 인증 객체 삭제
+            new SecurityContextLogoutHandler().logout(request, response,
+                authentication); // 세션 및 인증 객체 삭제
         }
         return "redirect:/user/login";
+    }
+
+    @GetMapping("/denied")
+    public String accessDenied(@RequestParam(value = "exception", required = false) String exception, Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        model.addAttribute("userId", user.getUserId());
+        model.addAttribute("exception", exception);
+        return "/user/denied";
     }
 }

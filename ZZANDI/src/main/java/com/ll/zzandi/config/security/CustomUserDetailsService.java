@@ -32,7 +32,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         User user = userRepository.findByUserId(userId).orElseThrow(() -> new UsernameNotFoundException("존재하지 않는 계정입니다"));
 
         List<GrantedAuthority> authorities = new ArrayList<>();  // 권한 저장
-        authorities.add(new SimpleGrantedAuthority(String.valueOf(user.getUserId())));
+        authorities.add(new SimpleGrantedAuthority(String.valueOf(user.getUserRole())));
 
         return new UserContext(user, authorities);
     }

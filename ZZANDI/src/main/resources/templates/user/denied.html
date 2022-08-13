@@ -1,0 +1,14 @@
+<!--인가 거부 페이지-->
+<!DOCTYPE html>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<html xmlns:th="http://thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+</head>
+<body>
+<div class = "container">
+  <h1><span th:text="${userId}" class="alert alert-danger" />님은 접근 권한이 없습니다.</h1>
+  <br>
+  <h3 th:text="${exception}"></h3>
+</div>

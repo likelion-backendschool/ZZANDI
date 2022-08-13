@@ -5,13 +5,17 @@ import com.ll.zzandi.dto.UserDto;
 import com.ll.zzandi.repository.UserRepository;
 import com.ll.zzandi.service.UserService;
 import com.ll.zzandi.util.validator.RegisterFormValidator;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 
 @Controller
@@ -27,6 +31,7 @@ public class UserController {
         this.userRepository=userRepository;
         this.registerFormValidator=registerFormValidator;
     }
+
     @InitBinder("registerRequest")
     public void initBinder(WebDataBinder webDataBinder) {
         webDataBinder.addValidators(registerFormValidator);
@@ -36,15 +41,18 @@ public class UserController {
     public String showSignForm(UserDto.RegisterRequest registerRequest) {
         return "Sign-up";
     }
+
     @PostMapping("/join")
-    public String join(Model model, @Valid UserDto.RegisterRequest registerRequest, BindingResult bindingResult){
+    public String join(Model model, @Valid UserDto.RegisterRequest registerRequest,
+        BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "Sign-up";
         }
         var response = userService.join(registerRequest).toResponse();
-        model.addAttribute("user",response);
+        model.addAttribute("user", response);
         return "Result";
     }
+
     @GetMapping("/check-email-token")
     public String checkEmailToken(String token, String email, Model model) {
         User user = userRepository.findByUserEmail(email);
@@ -65,4 +73,33 @@ public class UserController {
         return view;
     }
 
+    @GetMapping("/login")
+    public String showLoginForm(@RequestParam(value = "error", required = false) String error,
+        @RequestParam(value = "exception", required = false) String exception,
+        Model model) {
+        model.addAttribute("error", error);
+        model.addAttribute("exception", exception);
+
+        return "/user/login";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request, HttpServletResponse response) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null) {
+            new SecurityContextLogoutHandler().logout(request, response,
+                authentication); // 세션 및 인증 객체 삭제
+        }
+        return "redirect:/user/login";
+    }
+
+    @GetMapping("/denied")
+    public String accessDenied(@RequestParam(value = "exception", required = false) String exception, Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        model.addAttribute("userId", user.getUserId());
+        model.addAttribute("exception", exception);
+        return "/user/denied";
+    }
 }

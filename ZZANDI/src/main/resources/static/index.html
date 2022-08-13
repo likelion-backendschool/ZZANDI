@@ -1,7 +1,38 @@
-<h1> ZZANDI TEST </h1>
-<div>
-    <a href="/study/new"> Create Study </a>
+<!--메인 페이지-->
+<!DOCTYPE html>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+</head>
+
+<div class = "container">
+    <h1> ZZANDI TEST </h1>
+    <div>
+        <a href="/study/new"> Create Study </a>
+    </div>
+
+    <div>
+        <a href="/study/list"> Study List </a>
+    </div>
+
+    <div sec:authorize="isAnonymous()">
+        <a href="/user/login">로그인</a>
+    </div>
+
+    <div sec:authorize="isAnonymous()">
+        <a href="/user/join">회원 가입</a>
+    </div>
+
+    <div sec:authorize="isAuthenticated()">
+        <a href="/user/logout">로그아웃</a>
+    </div>
+
+    <div sec:authorize="hasAuthority('ROLE_ADMIN')">
+        <a href="/admin">관리자</a>
+    </div>
+
 </div>
-<div>
-    <a href="/study/list"> Study List </a>
-</div>
+</html>

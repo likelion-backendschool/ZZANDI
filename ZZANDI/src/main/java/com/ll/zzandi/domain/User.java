@@ -60,8 +60,8 @@ public class User extends BaseEntity{
         this.userPassword = userPassword;
         this.userEmail = userEmail;
         this.userNickname = userNickname;
-        this.userRole = UserRole.USER;
-        this.userEmailVerified=false;
+        this.userRole = UserRole.ROLE_USER;
+        this.userEmailVerified = false;
     }
 
     public static User of(UserDto.RegisterRequest userDto){

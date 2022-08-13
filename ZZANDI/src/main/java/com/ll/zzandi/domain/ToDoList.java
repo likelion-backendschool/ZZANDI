@@ -19,14 +19,8 @@ public class ToDoList {
     @Column(name = "TODO_ID")
     private long id;
 
-    @Column (name = "TODO_TITLE")
-    private String title;
-
     @Column (name = "TODO_CONTENT")
     private String content;
-
-    @Column (name = "TODO_WRITER")
-    private String writer;
 
     @Column (name = "TODO_TYPE")
     @Enumerated(EnumType.STRING)

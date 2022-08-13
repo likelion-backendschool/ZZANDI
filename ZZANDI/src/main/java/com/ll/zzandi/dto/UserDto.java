@@ -15,20 +15,16 @@ public class UserDto {
     @Setter
     @AllArgsConstructor
     public static class RegisterRequest{
-        @NotBlank
-        @Length(min = 3, max = 20)
-        @Pattern(regexp = "^[ㄱ-ㅎ가-힣a-z0-9_-]{3,20}$")
+        @NotBlank(message = "")
+        @Pattern(regexp = "^[ㄱ-ㅎ가-힣a-z0-9,_-]{5,20}$", message = "5~20자의 영문 소문자, 숫자와 특수기호 -,_만 사용가능합니다.")
         private String userId;
         @NotBlank
-        @Length(min = 8, max = 50)
         private String userPassword;
         @Email
         @NotBlank
         private String userEmail;
 
         @NotBlank
-        @Length(min = 3, max = 20)
-        @Pattern(regexp = "^[ㄱ-ㅎ가-힣a-z0-9_-]{3,20}$")
         private String userNickname;
 
         public void encodePassword(PasswordEncoder passwordEncoder) {

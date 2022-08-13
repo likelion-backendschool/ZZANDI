@@ -9,16 +9,12 @@ public class ToDoListDto {
     @Getter
     @Setter
     public static class ToDoListRequest {
-        private String title;
         private String content;
-        private String writer;
         private Type type;
 
 
         public ToDoListRequest(String title, String content, String writer) {
-            this.title = title;
             this.content = content;
-            this.writer = writer;
             this.type = Type.DOING;
         }
     }

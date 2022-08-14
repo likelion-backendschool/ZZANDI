@@ -16,7 +16,7 @@ public class BoardDetailDto {
     private String writer;
     private String content;
     private int views;
-    private int recommend;
+    private int heart;
     private int comments; // 댓글 수
 
 }

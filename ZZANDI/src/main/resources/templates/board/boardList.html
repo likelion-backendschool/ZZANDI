@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <!--    <script defer type="text/javascript" th:src="@{static/js/boardList.js}"></script>-->
+    <script defer type="text/javascript" th:src="@{/js/boardList.js}"></script>
     <title>QA 게시판</title>
     <style>
         body {
@@ -16,6 +16,10 @@
         .pagination {
             display: flex;
             justify-content: center;
+        }
+
+        .disabled {
+            visibility: hidden;
         }
     </style>
 </head>
@@ -45,18 +49,20 @@
             </tbody>
         </table>
 
-        <nav aria-label="Page navigation example">
+        <nav class="pagination">
             <ul class="pagination">
-                <li class="page-item">
-                    <a class="page-link" th:href="@{list(page=${currentPage - 1})}" aria-label="Previous">
+                <li th:class="${hasPrev} ? 'page-item item' : 'page-item'">
+                    <button th:onclick="|location.href='@{list (page=${previous})}'|" class="prev-btn" th:data-check="${hasPrev}">
                         <span aria-hidden="true">&laquo;</span>
-                    </a>
+                    </button>
                 </li>
-                <li class="page-item page-num" th:each="page : ${#numbers.sequence(1, totalPage)}"><a class="page-link" th:href="@{list(page=${page - 1})}" th:text="${page}"></a></li>
-                <li class="page-item">
-                    <a class="page-link" th:href="@{list(page=${currentPage + 1})}" aria-label="Next">
+
+                <!-- 페이지 번호 리스트 -->
+
+                <li th:class="${hasNext} ? 'page-item' : 'page-item'" th:data-check="${hasNext}">
+                    <button th:onclick="|location.href='@{list (page=${next})}'|" class="next-btn" th:data-check="${hasNext}">
                         <span aria-hidden="true">&raquo;</span>
-                    </a>
+                    </button>
                 </li>
             </ul>
         </nav>

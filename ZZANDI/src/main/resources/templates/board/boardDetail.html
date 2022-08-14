@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <!-- Font-Awesome 추가   -->
+    <script src="https://kit.fontawesome.com/585d621f74.js" crossorigin="anonymous"></script>
     <title>상세페이지</title>
     <style>
         body{
@@ -11,7 +13,7 @@
             padding: 0;
         }
         .container {
-            width: 500px;
+            width: 700px;
             margin: 40px auto;
         }
         .box1 {
@@ -24,6 +26,10 @@
             display: flex;
             justify-content: space-between;
             border-bottom: 1px solid gainsboro;
+        }
+
+        .box2 > p {
+            font-weight: bold;
         }
 
         .box3 {
@@ -52,13 +58,36 @@
             margin-left: 10px;
         }
 
-        .recommend {
+        .heart {
             display: flex;
+            flex-direction: column;
             justify-content: center;
-            align-items: baseline;
+            align-items: center;
+            margin-bottom: 30px;
         }
-        .recommend > h3 {
-            margin: 0 10px;
+
+        .btn-heart {
+            border-radius: 50%;
+            background: transparent;
+            outline: none;
+            border: 0;
+            width: 50px;
+            height: 50px;
+        }
+
+        .heart-count {
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .fa-heart {
+            font-size: 28px;
+            list-style: none;
+            color: lightgray;
+        }
+
+        .fa-heart:hover {
+            color: darkred;
         }
     </style>
 </head>
@@ -72,16 +101,15 @@
         <p th:text="${boardDetail.writer}">작성자</p>
         <div class="box3">
             <p>조회 수 <span th:text="${boardDetail.views}"></span></p>
-            <p>추천 수 <span th:text="${boardDetail.recommend}"></span></p>
+            <p>좋아요 수 <span th:text="${boardDetail.heart}"></span></p>
             <p>댓글 <span th:text="${boardDetail.comments}"></span></p>
         </div>
     </div>
     <section class="content" th:text="${boardDetail.content}"></section>
 
-    <div class="recommend">
-        <button>+</button>
-        <h3>0</h3>
-        <button>-</button>
+    <div class="heart">
+        <button class="btn-heart"><i class="fa-solid fa-heart"></i></button>
+        <span class="heart-count">좋아요 48개</span>
     </div>
 
     <div class="btns btn-group">

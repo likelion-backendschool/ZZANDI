@@ -18,13 +18,6 @@ public class Board extends BaseEntity {
     @Column(name = "QA_ID")
     private Long id;
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "USER_UUID")
-    private User user;
-
-    @Column(name = "QA_WRITER")
-    private String writer;
-
     @Column(name = "QA_TITLE")
     private String title;
 
@@ -34,15 +27,18 @@ public class Board extends BaseEntity {
     @Column(name = "QA_VIEWS")
     private int views;
 
-    @Column(name = "QA_RECOMMEND")
-    private int recommend;
+    @Column(name = "QA_HEART")
+    private int heart;
 
-    public Board(User user, String writer, String title, String content, int views, int recommend) {
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "USER_UUID")
+    private User user;
+
+    public Board(User user, String title, String content, int views, int heart) {
         this.user = user;
-        this.writer = writer;
         this.title = title;
         this.content = content;
         this.views = views;
-        this.recommend = recommend;
+        this.heart = heart;
     }
 }

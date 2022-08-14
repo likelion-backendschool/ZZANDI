@@ -28,19 +28,24 @@ public class BoardService {
         // 페이지는 0부터 시작하고 size 개수만큼 잘라서 가져온다.
         PageRequest pageRequest = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "id"));
         return boardRepository.findBoardBy(pageRequest)
-                .map(board -> new BoardListDto(board.getId(), board.getTitle(), board.getWriter(),
-                        board.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd")), board.getViews(), board.getRecommend()));
+                .map(board -> new BoardListDto(board.getId(), board.getTitle(), board.getUser().getUserNickname(),
+                        board.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd")), board.getViews(), board.getHeart()));
     }
 
     public BoardDetailDto boardDetail(Long id) {
-        Board board = boardRepository.findById(id).orElse(null);
+        Board board = boardRepository.findById(id).orElseThrow();
         String createdDate = board.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
-        return new BoardDetailDto(board.getId(), board.getTitle(), createdDate, board.getWriter(), board.getContent(), board.getViews(), board.getRecommend(), 0);
+        return new BoardDetailDto(board.getId(), board.getTitle(), createdDate, board.getUser().getUserNickname(), board.getContent(), board.getViews(), board.getHeart(), 0);
+    }
+
+    @Transactional
+    public void updateView(Long id) {
+        boardRepository.updateView(id);
     }
 
     public BoardUpdateFormDto boardUpdateForm(Long id) {
         Board board = boardRepository.findById(id).orElse(null);
-        return new BoardUpdateFormDto(board.getId(), board.getTitle(), board.getWriter(), board.getContent(), board.getUpdatedDate());
+        return new BoardUpdateFormDto(board.getId(), board.getTitle(), board.getUser().getUserNickname(), board.getContent(), board.getUpdatedDate());
     }
 
     @Transactional

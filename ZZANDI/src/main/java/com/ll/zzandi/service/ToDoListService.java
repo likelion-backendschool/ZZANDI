@@ -5,6 +5,7 @@ import com.ll.zzandi.dto.ToDoListDto;
 import com.ll.zzandi.repository.ToDoListRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -12,6 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ToDoListService {
     private final ToDoListRepository toDoListRepository;
+    @Transactional
     public ToDoList save(ToDoListDto.ToDoListRequest toDoListRequest) {
         ToDoList toDoList = new ToDoList();
 

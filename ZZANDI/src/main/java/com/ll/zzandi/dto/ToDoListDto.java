@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 public class ToDoListDto {
-    // title , content, writer, type
     @Getter
     @Setter
     public static class ToDoListRequest {

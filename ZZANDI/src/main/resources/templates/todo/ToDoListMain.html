@@ -61,9 +61,9 @@
                     <div class="card-body p-5">
 
 <!--                        todo 추가 -->
-                        <form class="d-flex justify-content-center align-items-center mb-4">
+                        <form class="d-flex justify-content-center align-items-center mb-4" action="/todo/add" method="POST">
                             <div class="form-outline flex-fill">
-                                <input type="text" id="form2" class="form-control" />
+                                <input type="text" id="form2" class="form-control" name="content" />
                                 <label class="form-label" for="form2">New task...</label>
                             </div>
                             <button type="submit" class="btn btn-info ms-2">Add</button>
@@ -88,7 +88,7 @@
                         <div class="tab-content" id="ex1-content">
                             <div class="tab-pane fade show active" id="ex1-tabs-1" role="tabpanel"
                                  aria-labelledby="ex1-tab-1">
-                                <ul class="list-group mb-0">>
+                                <ul class="list-group mb-0">
                                     <li class="list-group-item d-flex align-items-center border-0 mb-2 rounded"
                                         style="background-color: #f4f6f7;" th:each="todo : ${toDoList}">
                                         <input class="form-check-input me-2" type="checkbox" value="" aria-label="..." checked />

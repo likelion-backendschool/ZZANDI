@@ -27,16 +27,10 @@ public class ToDoListController {
         return "todo/ToDoListMain";
     }
 
-    @GetMapping("/add")
-    public String showToDoForm(ToDoListDto.ToDoListRequest toDoListRequest) {
-        return "todo/ToDoListAdd";
-    }
-
     @PostMapping("/add")
-    @ResponseBody
-    public ToDoList addTodo (ToDoListDto.ToDoListRequest toDoListRequest) {
+    public String addTodo (ToDoListDto.ToDoListRequest toDoListRequest) {
         ToDoList toDoList = toDoListService.save(toDoListRequest);
 
-        return toDoList;
+        return "redirect:/todo";
     }
 }

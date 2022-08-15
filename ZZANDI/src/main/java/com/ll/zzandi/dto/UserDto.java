@@ -15,12 +15,13 @@ public class UserDto {
     @Setter
     @AllArgsConstructor
     public static class RegisterRequest{
-        @NotBlank(message = "")
-        @Pattern(regexp = "^[ㄱ-ㅎ가-힣a-z0-9,_-]{5,20}$", message = "5~20자의 영문 소문자, 숫자와 특수기호 -,_만 사용가능합니다.")
+        @NotBlank
+        @Pattern(regexp = "^[a-zA-Z0-9]{5,10}$", message = "회원 아이디(ID)는 띄어쓰기 없이 5~20자리의 영문자와 숫자 조합만 가능합니다.")
         private String userId;
         @NotBlank
+        @Pattern(regexp="^(?=.*[A-Za-z])(?=.*\\d)(?=.*[~!;@#$%^&*()+|=])[A-Za-z\\d~!;@#$%^&*()+|=]{8,16}$", message = "띄어쓰기 없이 영문, 숫자, 특수문자를 각각 포함하여 8~16자 사이로 입력해주세요")
         private String userPassword;
-        @Email
+        @Email(message = "올바른 이메일 형식이 아닙니다.")
         @NotBlank
         private String userEmail;
 

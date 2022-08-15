@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <title>Title</title>
+  <style>
+    body{
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      width: 500px;
+      margin: 40px auto;
+    }
+    .box1 {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    .box2 {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid gainsboro;
+    }
+
+    .box3 {
+      display: flex;
+      justify-content: space-evenly;
+    }
+
+    .box3 p {
+      margin-left: 10px;
+    }
+
+    .box3 span {
+      font-weight: bold;
+    }
+
+    .content {
+      margin: 40px 0;
+    }
+
+    .btns {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .btns button {
+      margin-left: 10px;
+    }
+
+    .heart {
+      display: flex;
+      justify-content: center;
+      align-items: baseline;
+    }
+    .heart > h3 {
+      margin: 0 10px;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <h2>글 작성 페이지</h2>
+  <form th:action="@{/board/write}" method="post">
+    <label for="title">
+      <input type="text" id="title" name="title" placeholder="제목"/>
+    </label>
+    <br>
+    <label for="content">
+      <textarea id="content" name="content" cols="30" rows="10" placeholder="내용"></textarea>
+    </label>
+    <br>
+    <button class="btn btn-primary" type="submit">등록</button>
+    <button class="btn btn-danger" type="button" th:onclick="|location.href='@{/board/list}'|">돌아가기</button>
+  </form>
+</div>
+</body>
+</html>

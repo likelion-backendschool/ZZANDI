@@ -38,6 +38,11 @@ public class BoardService {
         return new BoardDetailDto(board.getId(), board.getTitle(), createdDate, board.getUser().getUserNickname(), board.getContent(), board.getViews(), board.getHeart(), 0);
     }
 
+    public Long save(Board board) {
+        Board saveBoard = boardRepository.save(board);
+        return saveBoard.getId();
+    }
+
     @Transactional
     public void updateView(Long id) {
         boardRepository.updateView(id);
@@ -60,4 +65,5 @@ public class BoardService {
     public void boardDelete(Long id) {
         boardRepository.deleteById(id);
     }
+
 }

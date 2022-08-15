@@ -56,18 +56,18 @@
 
         <nav class="pagination">
             <ul class="pagination">
-                <li th:class="${hasPrev} ? 'page-item item' : 'page-item'">
-                    <button th:onclick="|location.href='@{list (page=${previous})}'|" class="prev-btn" th:data-check="${hasPrev}">
+                <li th:class="${hasPrev} ? 'page-item' : 'page-item disabled'">
+                    <a th:href="@{list (page=${previous})}" th:onclick="|disabled('${hasPrev}', 'prev')|" class="prev-btn">
                         <span aria-hidden="true">&laquo;</span>
-                    </button>
+                    </a>
                 </li>
 
                 <!-- 페이지 번호 리스트 -->
 
-                <li th:class="${hasNext} ? 'page-item' : 'page-item'" th:data-check="${hasNext}">
-                    <button th:onclick="|location.href='@{list (page=${next})}'|" class="next-btn" th:data-check="${hasNext}">
+                <li th:class="${hasNext} ? 'page-item' : 'page-item disabled'">
+                    <a th:href="@{list (page=${next})}" th:onclick="|disabled('${hasNext}', 'next')|" class="next-btn">
                         <span aria-hidden="true">&raquo;</span>
-                    </button>
+                    </a>
                 </li>
             </ul>
         </nav>

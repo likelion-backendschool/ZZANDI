@@ -30,7 +30,10 @@ public class BoardController {
         Page<BoardListDto> boardList = boardService.boardListPaging(pageable, page);
         model.addAttribute("boardList", boardList); // 게시물 데이터
         model.addAttribute("totalPage", boardList.getTotalPages()); // 총 페이지 수
-        model.addAttribute("currentPage", boardList.getNumber()); // 현재 페이지 번호
+        model.addAttribute("previous", pageable.previousOrFirst().getPageNumber()); // 현재 페이지 기준 이전 페이지
+        model.addAttribute("next", pageable.next().getPageNumber()); // 현재 페이지 기준 다음 페이지
+        model.addAttribute("hasNext", boardList.hasNext());
+        model.addAttribute("hasPrev", boardList.hasPrevious());
         return "board/boardList";
     }
 

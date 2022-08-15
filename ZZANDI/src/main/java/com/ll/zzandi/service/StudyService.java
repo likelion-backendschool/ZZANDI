@@ -1,32 +1,7 @@
-//
-//import com.ll.zzandi.domain.Study;
-//import com.ll.zzandi.domain.User;
-//import com.ll.zzandi.dto.StudyRequestDto;
-//import com.ll.zzandi.exception.ErrorCode;
-//import com.ll.zzandi.exception.UserApplicationException;
-//import com.ll.zzandi.repository.StudyRepository;
-//import lombok.RequiredArgsConstructor;
-//import org.springframework.stereotype.Service;
-//import org.springframework.transaction.annotation.Transactional;
-//
-//@Service
-//@RequiredArgsConstructor
-//
-//    private final StudyRepository studyRepository;
-//
-//    @Transactional
-//    public Study study(final StudyRequestDto studyRequestDto) {
-//        return studyRepository.save(Study.of(studyRequestDto));
-//    }
-//}
-//
-//
-
-
 package com.ll.zzandi.service;
 
 import com.ll.zzandi.domain.Study;
-import com.ll.zzandi.repository.MemoryStudyRepository;
+import com.ll.zzandi.dto.StudyDto;
 import com.ll.zzandi.repository.StudyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,33 +19,28 @@ public class StudyService {
         this.studyRepository = studyRepository;
     }
 
-    public Long join(Study study) {
-        //같은 이름의 중복 스터디 X
+    public void save(StudyDto studyDto) {
+        Study s1 = new Study();
 
-        validateDuplicateStudy(study); //중복 스터디명 검증
+        s1.setStudyTitle(studyDto.getStudyTitle());
+        s1.setStudyStart(studyDto.getStudyStart());
+        s1.setStudyEnd(studyDto.getStudyEnd());
+        s1.setStudyPeople(studyDto.getStudyPeople());
 
-        studyRepository.save(study);
-        return study.getId();
+        studyRepository.save(s1);
     }
 
-    private void validateDuplicateStudy(Study study) {
-        studyRepository.findBytitle(study.getStudyTitle())
-                .ifPresent(s -> {
-                    throw new IllegalStateException("이미 존재하는 스터디명입니다.");
-                });
-    }
-
-    public List<Study> findStudies() {
+    public List<Study> findall() {
         return studyRepository.findAll();
     }
 
-    public Optional<Study> findOne(Long studyId) {
+
+    public Optional<Study> findByid(Long studyId) {
         return studyRepository.findById(studyId);
     }
 
-    public void delete(Study studies, Long studyId) {
-        studyRepository.delete(studies, studyId);
+    public void delete(Study studies) {
+        studyRepository.delete(studies);
     }
 
 }
-

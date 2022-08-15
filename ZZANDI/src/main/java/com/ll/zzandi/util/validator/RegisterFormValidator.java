@@ -26,6 +26,9 @@ public class RegisterFormValidator implements Validator {
         if(userRepository.existsByUserNickname(registerForm.getUserNickname())){
             errors.rejectValue("userNickname","invalid.nickname", new Object[]{registerForm.getUserEmail()}, "이미 사용중인 닉네임입니다.");
         }
+        if(userRepository.existsByUserId(registerForm.getUserId())){
+            errors.rejectValue("userId","invalid.id", new Object[]{registerForm.getUserEmail()}, "이미 사용중인 아이디입니다.");
+        }
 
     }
 }

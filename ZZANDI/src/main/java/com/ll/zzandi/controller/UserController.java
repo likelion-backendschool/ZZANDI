@@ -47,6 +47,7 @@ public class UserController {
         if (bindingResult.hasErrors()) {
             return "Sign-up";
         }
+        userService.join(registerRequest);
         return "redirect:/";
     }
 

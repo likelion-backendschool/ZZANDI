@@ -12,7 +12,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="study : ${studies}">
+            <tr th:each="study : ${studyList}">
                 <td th:text="${study.id}"></td>
                 <td><a href="#" th:href="@{/study/detail/{studyId}(studyId = ${study.id})}"
                        th:text="${study.studyTitle}"></a></td>

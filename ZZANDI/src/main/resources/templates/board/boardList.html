@@ -18,14 +18,15 @@
             justify-content: center;
         }
 
-        .disabled {
-            visibility: hidden;
+        .btn-write {
+            display: flex;
+            justify-content: flex-end;
         }
     </style>
 </head>
 <body>
     <div style="margin: 40px 200px">
-    <h2>질문 게시판!</h2>
+    <h2>Q&A 게시판</h2>
         <table class="table table-striped">
             <thead>
                 <tr class="success">
@@ -34,7 +35,7 @@
                     <th>작성자</th>
                     <th>날짜</th>
                     <th>조회</th>
-                    <th>추천</th>
+                    <th>좋아요</th>
                 </tr>
             </thead>
             <tbody>
@@ -44,10 +45,14 @@
                     <td th:text="${board.writer}"></td>
                     <td th:text="${board.createdDate}"></td>
                     <td th:text="${board.views}"></td>
-                    <td th:text="${board.recommend}"></td>
+                    <td th:text="${board.heart}"></td>
                 </tr>
             </tbody>
         </table>
+
+        <div class="btn-write">
+            <button class="btn btn-primary" type="button" th:onclick="|location.href='@{/board/write}'|">글 쓰기</button>
+        </div>
 
         <nav class="pagination">
             <ul class="pagination">

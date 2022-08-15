@@ -43,14 +43,11 @@ public class UserController {
     }
 
     @PostMapping("/join")
-    public String join(Model model, @Valid UserDto.RegisterRequest registerRequest,
-        BindingResult bindingResult) {
+    public String join(Model model, @Valid UserDto.RegisterRequest registerRequest, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "Sign-up";
         }
-        var response = userService.join(registerRequest).toResponse();
-        model.addAttribute("user", response);
-        return "Result";
+        return "redirect:/";
     }
 
     @GetMapping("/check-email-token")

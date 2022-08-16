@@ -11,6 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 
 public class StudyDto {
+    private Long id;
     private String studyTitle;
     private String studyStart;
     private String studyEnd;
@@ -19,6 +20,14 @@ public class StudyDto {
     private String studyType;
     private int studyRate;
     private String studyStatus;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getStudyTitle() {
         return studyTitle;

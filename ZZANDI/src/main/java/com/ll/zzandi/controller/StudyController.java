@@ -41,7 +41,6 @@ public class StudyController {
         Study studies = studyService.findByid(studyId).get();
         model.addAttribute("studies", studies);
         return "study/studyDetail";
-
     }
 
     @GetMapping("/study/delete/{studyId}")
@@ -49,8 +48,17 @@ public class StudyController {
         Study studies = studyService.findByid(studyId).get();
         studyService.delete(studies);
         return "redirect:/";
-
     }
 
+    @GetMapping("/study/modify/{studyId}")
+    public String modify(Model model, @PathVariable Long studyId){
+        return "study/studyModify";
+    }
+
+    @PostMapping("/study/modify/{studyId}")
+    public String modify(StudyDto studyDto, @PathVariable Long studyId) {
+        studyService.modify(studyId, studyDto);
+        return "redirect:/";
+    }
 
 }

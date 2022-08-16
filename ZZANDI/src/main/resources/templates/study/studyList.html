@@ -17,6 +17,7 @@
                 <td><a href="#" th:href="@{/study/detail/{studyId}(studyId = ${study.id})}"
                        th:text="${study.studyTitle}"></a></td>
                 <td><a href="#" th:href="@{/study/delete/{studyId}(studyId = ${study.id})}" th:text="삭제"></a></td>
+                <td><a href="#" th:href="@{/study/modify/{studyId}(studyId = ${study.getId})}" th:text="수정"></a></td>
             </tr>
             </tbody>
         </table>

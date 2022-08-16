@@ -85,9 +85,9 @@
                             <div class="tab-pane fade" id="ex1-tabs-2" role="tabpanel" aria-labelledby="ex1-tab-2">
                                 <ul class="list-group mb-0">
                                     <li class="list-group-item d-flex align-items-center border-0 mb-2 rounded"
-                                        style="background-color: #f4f6f7;" >
+                                        style="background-color: #f4f6f7;" th:each="todo : ${toDoList}" th:if="${todo.type.name() == 'DOING'}">
 
-                                        <input class="form-check-input me-2" type="checkbox" th:each="todo : ${toDoList}" th:if="${todo.type.name() == 'DOING'}"
+                                        <input class="form-check-input me-2" type="checkbox"
                                                value="" aria-label="..." th:text="${todo.content}"/>
 
                                     </li>
@@ -97,11 +97,11 @@
                             <div class="tab-pane fade" id="ex1-tabs-3" role="tabpanel" aria-labelledby="ex1-tab-3">
                                 <ul class="list-group mb-0">
                                     <li class="list-group-item d-flex align-items-center border-0 mb-2 rounded"
-                                        style="background-color: #f4f6f7;" >
+                                        style="background-color: #f4f6f7;" th:each="todo : ${toDoList}" th:if="${todo.type.name() == 'DONE'}">
 
-                                        <input  class="form-check-input me-2" type="checkbox" th:each="todo : ${toDoList}" th:if="${todo.type.name() == 'DONE'}"
-                                                value="" aria-label="..." th:text="${todo.content}" checked/>
-
+                                        <input  class="form-check-input me-2" type="checkbox"
+                                                value="" aria-label="..." checked/>
+                                        <s th:text="${todo.content}"> </s>
                                     </li>
                                 </ul>
                             </div>

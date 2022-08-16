@@ -43,4 +43,15 @@ public class StudyService {
         studyRepository.delete(studies);
     }
 
+    public void modify(Long studyId, StudyDto studyDto) {
+        Study s1 = new Study();
+        s1.setId(studyId);
+        s1.setStudyTitle(studyDto.getStudyTitle());
+        s1.setStudyStart(studyDto.getStudyStart());
+        s1.setStudyEnd(studyDto.getStudyEnd());
+        s1.setStudyPeople(studyDto.getStudyPeople());
+
+        studyRepository.save(s1);
+    }
+
 }

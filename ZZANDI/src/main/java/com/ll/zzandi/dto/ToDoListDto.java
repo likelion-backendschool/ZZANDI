@@ -11,8 +11,7 @@ public class ToDoListDto {
         private String content;
         private Type type;
 
-
-        public ToDoListRequest(String title, String content, String writer) {
+        public ToDoListRequest(String content) {
             this.content = content;
             this.type = Type.DOING;
         }

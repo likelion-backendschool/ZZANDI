@@ -4,6 +4,7 @@ import com.ll.zzandi.domain.ToDoList;
 import com.ll.zzandi.dto.ToDoListDto;
 import com.ll.zzandi.repository.ToDoListRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

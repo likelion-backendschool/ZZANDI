@@ -4,6 +4,7 @@ import com.ll.zzandi.enumtype.Type;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 
@@ -12,6 +13,7 @@ import javax.persistence.*;
 @Setter
 @Table(name = "TO_DO_LIST")
 @NoArgsConstructor
+@ToString
 public class ToDoList {
 
     @Id

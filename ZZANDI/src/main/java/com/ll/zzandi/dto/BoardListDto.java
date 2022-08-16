@@ -15,6 +15,6 @@ public class BoardListDto {
     private String writer;
     private String createdDate;
     private int views; // 조회수
-    private int recommend; // 추천수
+    private int heart; // 좋아요 수
 
 }

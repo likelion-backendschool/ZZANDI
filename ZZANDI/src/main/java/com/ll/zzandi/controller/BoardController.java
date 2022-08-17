@@ -14,9 +14,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/board")
@@ -65,12 +67,18 @@ public class BoardController {
     }
 
     @GetMapping("/write")
-    public String boardWriteForm() {
+    public String boardWriteForm(Model model) {
+        model.addAttribute("boardWriteDto", new BoardWriteDto());
         return "board/boardWriteForm";
     }
 
     @PostMapping("/write")
-    public String boardWrite(BoardWriteDto boardWriteDto) {
+    public String boardWrite(@Valid BoardWriteDto boardWriteDto, BindingResult result) {
+        // @NotBlank 값이 없는 경우 BindingResult로 처리!
+        if (result.hasErrors()) {
+            return "/board/boardWriteForm";
+        }
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal(); // 현재 로그인 한 유저 정보
 

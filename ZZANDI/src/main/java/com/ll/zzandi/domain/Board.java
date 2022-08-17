@@ -10,24 +10,24 @@ import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Getter @Setter
-@Table(name = "QA_BOARD")
+@Table(name = "BOARD")
 @NoArgsConstructor
 public class Board extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "QA_ID")
+    @Column(name = "BOARD_ID")
     private Long id;
 
-    @Column(name = "QA_TITLE")
+    @Column(name = "TITLE")
     private String title;
 
-    @Column(name = "QA_CONTENT")
+    @Column(name = "CONTENT")
     private String content;
 
-    @Column(name = "QA_VIEWS")
+    @Column(name = "VIEWS")
     private int views;
 
-    @Column(name = "QA_HEART")
+    @Column(name = "HEART")
     private int heart;
 
     @ManyToOne(fetch = LAZY)

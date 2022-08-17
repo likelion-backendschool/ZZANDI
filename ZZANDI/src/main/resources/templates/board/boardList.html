@@ -3,10 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <!-- Font-Awesome 추가   -->
+    <script src="https://kit.fontawesome.com/585d621f74.js" crossorigin="anonymous"></script>
     <script defer type="text/javascript" th:src="@{/js/boardList.js}"></script>
     <title>QA 게시판</title>
     <style>
         body {
+            box-sizing: border-box;
             text-align: center;
         }
         table th, td {
@@ -20,6 +23,27 @@
         .btn-write {
             display: flex;
             justify-content: flex-end;
+        }
+
+        .page-btn {
+            border: none;
+            margin: 0 5px;
+            background: transparent;
+        }
+
+        .page-num {
+            font-weight: bold;
+        }
+
+        .page-num:hover {
+            border-radius: 100px;
+            background-color: greenyellow;
+        }
+
+        /* 클래스 */
+        .active {
+            border-radius: 50%;
+            background-color: greenyellow;
         }
     </style>
 </head>
@@ -44,21 +68,21 @@
             <button class="btn btn-primary" type="button" th:onclick="|location.href='@{/board/write}'|">글 쓰기</button>
         </div>
 
-        <nav class="pagination">
+        <nav>
             <ul class="pagination">
                 <li th:class="${hasPrev} ? 'page-item' : 'page-item disabled'">
-                    <button type="button" th:onclick="|createListAjax('${previous - 1}')|">
-                        <span aria-hidden="true">&laquo;</span>
+                    <button type="button" class="page-btn prev-btn" th:onclick="|createListAjax('${previous - 1}')|">
+                        <i class="fa-solid fa-angle-left"></i>
                     </button>
                 </li>
 
                 <li class="page-item page-num" th:each="page : ${#numbers.sequence(1, page)}">
-                    <button type="button" th:onclick="|createListAjax('${page - 1}')|" th:text="${page}" th:value="${page}"></button>
+                    <button type="button" class="page-btn page-curr" th:onclick="|createListAjax('${page - 1}')|" th:text="${page}" th:value="${page}"></button>
                 </li>
 
                 <li th:class="${hasNext} ? 'page-item' : 'page-item disabled'">
-                    <button type="button" th:onclick="|createListAjax('${next + 1}')|" class="next-btn">
-                        <span aria-hidden="true">&raquo;</span>
+                    <button type="button" class="page-btn next-btn" th:onclick="|createListAjax('${next + 1}')|">
+                        <i class="fa-solid fa-angle-right"></i>
                     </button>
                 </li>
             </ul>

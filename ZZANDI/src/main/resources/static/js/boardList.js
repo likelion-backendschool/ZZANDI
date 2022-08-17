@@ -1,9 +1,17 @@
 'use strict'
 
 const body = document.querySelector(".list");
+const pageList = document.querySelectorAll(".page-curr");
 
 createListAjax(0);
 function createListAjax(page) {
+    for(let i = 0; i < pageList.length; i++) {
+        pageList[i].classList.remove("active");
+    }
+
+    const curr = pageList[page]; // 현재 페이지
+    curr.classList.add("active");
+
     fetch("/board/list-json?page=" + page)
         .then(response => response.json())
         .then(data => {
@@ -13,13 +21,15 @@ function createListAjax(page) {
         });
 }
 
-// 만든 리스트 화면에 그리기
+/**
+ * 만들어진 list 목록을 <tbody>에 그려주는 함수
+ */
 function displayItems(items) {
     let list = document.querySelector(".list");
     list.innerHTML = items.content.map(item => createHTMLString(item)).join('');
 }
 
-// 리스트 만들기
+// json 형태의 게시물 정보를 이용해서 리스트 row를 그려주는 함수
 function createHTMLString(item) {
     return `<tr>
                 <td>${item.boardId}</td>

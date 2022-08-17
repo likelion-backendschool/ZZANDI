@@ -106,6 +106,15 @@
                                    placeholder="사용할 닉네임을 입력해주세요.(추후 변경이 가능합니다.)" aria-describedby="nicknameHelp" required />
                             <smail th:if="${#fields.hasErrors('userNickname')}" th:errors="*{userNickname}">userNickname Error</smail>
                         </div>
+                        <div>
+                            <div>등록 지역</div>
+                            <div th:each="intrest : ${interests}" class="form-check form-check-inline">
+                                <input type="checkbox" th:field="*{interests}" th:value="${intrest.key}"
+                                       class="form-check-input">
+                                <label th:for="${#ids.prev('interests')}"
+                                       th:text="${intrest.value}" class="form-check-label">서울</label>
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col text-center">
                         <button class="btn btn-outline-primary btn-lg" type="button" onclick="joinform_check();">가입하기</button>

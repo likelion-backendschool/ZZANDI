@@ -10,6 +10,8 @@ import lombok.ToString;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -55,6 +57,7 @@ public class User extends BaseEntity{
     @Column(name="USER_EMAILCHECKGENERATEDAT")
     private LocalDateTime emailCheckTokenGeneratedAt;
 
+
     public User(String userId, String userPassword, String userEmail, String userNickname) {
         this.userId = userId;
         this.userPassword = userPassword;
@@ -81,4 +84,5 @@ public class User extends BaseEntity{
     public void completeSignUp() {
         this.userEmailVerified = true;
     }
+
 }

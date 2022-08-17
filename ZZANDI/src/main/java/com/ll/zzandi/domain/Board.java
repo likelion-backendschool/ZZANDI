@@ -1,10 +1,12 @@
 package com.ll.zzandi.domain;
 
+import com.ll.zzandi.enumtype.BoardCategory;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 import static javax.persistence.FetchType.LAZY;
 
@@ -18,7 +20,13 @@ public class Board extends BaseEntity {
     @Column(name = "BOARD_ID")
     private Long id;
 
+    @Column(name = "CATEGORY")
+    @Enumerated(EnumType.STRING)
+    @NotNull
+    private BoardCategory category;
+
     @Column(name = "TITLE")
+    @NotNull
     private String title;
 
     @Column(name = "CONTENT")
@@ -34,8 +42,9 @@ public class Board extends BaseEntity {
     @JoinColumn(name = "USER_UUID")
     private User user;
 
-    public Board(User user, String title, String content, int views, int heart) {
+    public Board(User user, BoardCategory category, String title, String content, int views, int heart) {
         this.user = user;
+        this.category = category;
         this.title = title;
         this.content = content;
         this.views = views;

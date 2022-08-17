@@ -1,19 +1,27 @@
 package com.ll.zzandi.service;
 
+import com.ll.zzandi.config.security.UserContext;
+import com.ll.zzandi.domain.Interest;
 import com.ll.zzandi.domain.User;
 import com.ll.zzandi.dto.UserDto;
 import com.ll.zzandi.exception.ErrorCode;
 import com.ll.zzandi.exception.UserApplicationException;
+import com.ll.zzandi.repository.InterestRepository;
 import com.ll.zzandi.repository.UserRepository;
 import com.ll.zzandi.util.mail.EmailMessage;
 import com.ll.zzandi.util.mail.EmailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
+
+import java.util.List;
 
 
 @Service
@@ -25,20 +33,24 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final TemplateEngine templateEngine;
     private final EmailService emailService;
+    private final InterestRepository interestRepository;
 
     @Transactional
     public User join(final UserDto.RegisterRequest registerRequest) {
-        userRepository.findByUserId(registerRequest.getUserId()).ifPresent(x -> {
-            throw new UserApplicationException(ErrorCode.DUPLICATED_USER_NAME, String.format("%s is duplicated", registerRequest.getUserId()));
-        });
-        registerRequest.encodePassword(passwordEncoder);
-        User newUser=User.of(registerRequest);
-        newUser.generateEmailCheckToken();
-        System.out.println(newUser.toString());
-        sendSignUpConfirmEmail(newUser);
-        //TODO LOGIN로직 추가
-
-        return userRepository.save(newUser);
+            registerRequest.encodePassword(passwordEncoder);
+            User newUser=userRepository.save(User.of(registerRequest));
+            newUser.generateEmailCheckToken();
+            sendSignUpConfirmEmail(newUser);
+            for(int i=0;i<registerRequest.getInterests().size();i++){
+                Interest interest=new Interest();
+                interest.setInterest(registerRequest.getInterests().get(i));
+                interest.setUser(newUser);
+                interestRepository.save(interest);
+            }
+            System.out.println("----------로그인 전------------");
+            login(newUser);
+            System.out.println("----------로그인 후------------");
+            return newUser;
     }
 
     public void sendSignUpConfirmEmail(User user) {
@@ -61,7 +73,17 @@ public class UserService {
     @Transactional
     public void completeSignUp(User user) {
         user.completeSignUp();
-        //TODO LOGIN로직 추가
+        userRepository.save(user);
+        login(user);
+    }
+
+    public void login(User account) {
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
+                new UserContext(account,List.of(new SimpleGrantedAuthority("ROLE_USER"))),
+                account.getUserPassword(),
+                List.of(new SimpleGrantedAuthority("ROLE_USER")));
+        SecurityContextHolder.getContext().setAuthentication(token);
+        System.out.println("TOKEN 생성완료");
     }
 }
 

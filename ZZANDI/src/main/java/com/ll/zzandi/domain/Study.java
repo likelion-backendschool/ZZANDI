@@ -5,74 +5,61 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
 @Getter
 @Setter
-@Table(name = "\"Study\"")
+@Table(name = "STUDY")
 @NoArgsConstructor
-public class Study extends BaseEntity {
+public class Study {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "STUDY_YYID")
+    @Column(name = "STUDY_ID")
     private Long id;
+
     @Column(name = "STUDY_TITLE")
     private String studyTitle;
+
+    @Column(name = "BOOK_ID")
+    private int bookId;
+
+    @Column(name = "LC_ID")
+    private int lcId;
+
+    @Column(name = "STUDY_TYPE")
+    private String studyType;
+
     @Column(name = "STUDY_START")
     private String studyStart;
+
     @Column(name = "STUDY_END")
     private String studyEnd;
 
-    public String getStudyStart() {
-        return studyStart;
-    }
+    @Column(name = "STUDY_PEOPLE")
+    private int studyPeople;
 
-    public void setStudyStart(String studyStart) {
-        this.studyStart = studyStart;
-    }
-
-    public String getStudyEnd() {
-        return studyEnd;
-    }
-
-    public void setStudyEnd(String studyEnd) {
-        this.studyEnd = studyEnd;
-    }
-
+    @Column(name = "STUDY_TAG")
     private String studyTag;
 
-    public Long getId() {
-        return id;
-    }
+    @Column(name = "STUDY_RATE")
+    private int studyRate;
 
-    public void setId(Long id) {
+    @Column(name = "STUDY_STATUS")
+    private String studyStatus;
+
+    public Study(Long id, String studyTitle, int bookId, int lcId, String studyType, String studyStart, String studyEnd, int studyPeople, String studyTag, int studyRate, String studyStatus) {
         this.id = id;
-    }
-
-    public String getStudyTitle() {
-        return studyTitle;
-    }
-
-    public void setStudyTitle(String studyTitle) {
         this.studyTitle = studyTitle;
-    }
-
-    public String getStudyTag() {
-        return studyTag;
-    }
-
-    public void setStudyTag(String studyTag) {
-        this.studyTag = studyTag;
-    }
-
-    public int getStudyPeople() {
-        return studyPeople;
-    }
-
-    public void setStudyPeople(int studyPeople) {
+        this.bookId = bookId;
+        this.lcId = lcId;
+        this.studyType = studyType;
+        this.studyStart = studyStart;
+        this.studyEnd = studyEnd;
         this.studyPeople = studyPeople;
+        this.studyTag = studyTag;
+        this.studyRate = studyRate;
+        this.studyStatus = studyStatus;
     }
-
-    private int studyPeople;
 }
+
+

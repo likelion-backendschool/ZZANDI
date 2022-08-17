@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -32,15 +33,16 @@ public class SecurityConfig{
     */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
         http
             .cors().disable()		//cors방지
             .csrf().disable()		//csrf방지
 //                .formLogin().disable()	//기본 로그인 페이지 없애기
             .headers().frameOptions().disable()
             .and()
-
             .authorizeRequests()
-            .antMatchers("/", "/user/join", "/h2-console/**", "/user/login/**", "/user/check-email-token/**", "/user/denied/**", "/board/**").permitAll()
+            .antMatchers("/images/**", "/js/**").permitAll()
+            .antMatchers("/", "/user/join", "/h2-console/**", "/user/login/**", "/user/check-email-token/**", "/user/denied/**").permitAll()
             .antMatchers("/admin/**").hasRole("ADMIN")
             .anyRequest().authenticated()
             .and()

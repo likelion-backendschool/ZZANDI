@@ -17,6 +17,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/user")
@@ -38,19 +40,25 @@ public class UserController {
     }
 
     @GetMapping("/join")
-    public String showSignForm(UserDto.RegisterRequest registerRequest) {
+    public String showSignForm(UserDto.RegisterRequest registerRequest, Model model) {
+        Map<String, String> interesting = new LinkedHashMap<>();
+        interesting.put("IT", "IT");
+        interesting.put("NOVEL", "소설책");
+        interesting.put("ENGLISH", "영어");
+        model.addAttribute("interests", interesting);
         return "Sign-up";
     }
 
+
     @PostMapping("/join")
-    public String join(Model model, @Valid UserDto.RegisterRequest registerRequest,
-        BindingResult bindingResult) {
+    public String join(Model model, @Valid UserDto.RegisterRequest registerRequest, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
+            System.out.println(bindingResult.getFieldError());
             return "Sign-up";
         }
-        var response = userService.join(registerRequest).toResponse();
-        model.addAttribute("user", response);
-        return "Result";
+
+        userService.join(registerRequest);
+        return "redirect:/";
     }
 
     @GetMapping("/check-email-token")

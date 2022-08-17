@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="/node_modules/font-awesome/css/font-awesome.min.css"/>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
@@ -10,6 +11,17 @@
 
 <div class = "container">
     <h1> ZZANDI TEST </h1>
+    <div th:if="${user != null && !user.userEmailVerified}">
+        <script type="text/javascript">
+            alert("ZZANDI 가입을 완료하려면 계정 인증 이메일을 확인하세요.");
+        </script>
+    </div>
+    <div sec:authorize="isAuthenticated()">
+    <svg th:data-jdenticon-value="${user.userId}"
+         width="50" height="50" class="rounded border bg-light"></svg>
+        <div th:text="${user.userNickname}"></div>
+    </div>
+
     <div>
         <a href="/study/new"> Create Study </a>
     </div>
@@ -17,7 +29,9 @@
     <div>
         <a href="/study/list"> Study List </a>
     </div>
-
+    <div>
+        <a href="/todo">ToDoList</a>
+    </div>
     <div>
         <a href="/board/list">QA 게시판</a>
     </div>
@@ -39,4 +53,7 @@
     </div>
 
 </div>
+<script src="https://cdn.jsdelivr.net/npm/jdenticon@3.2.0/dist/jdenticon.min.js" async
+        integrity="sha384-yBhgDqxM50qJV5JPdayci8wCfooqvhFYbIKhv0hTtLvfeeyJMJCscRfFNKIxt43M" crossorigin="anonymous">
+</script>
 </html>

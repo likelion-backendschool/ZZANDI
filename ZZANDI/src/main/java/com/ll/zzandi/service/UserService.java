@@ -79,7 +79,7 @@ public class UserService {
 
     public void login(User account) {
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
-                new UserContext(account,List.of(new SimpleGrantedAuthority("ROLE_USER"))),
+                new UserContext(account,List.of(new SimpleGrantedAuthority("ROLE_USER"))).getUser(),
                 account.getUserPassword(),
                 List.of(new SimpleGrantedAuthority("ROLE_USER")));
         SecurityContextHolder.getContext().setAuthentication(token);

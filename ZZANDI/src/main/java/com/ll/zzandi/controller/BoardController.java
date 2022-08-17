@@ -25,16 +25,28 @@ public class BoardController {
 
     private final BoardService boardService;
 
+    @GetMapping("/list-ajax")
+    public String ajaxTest() {
+        return "board/boardListAjax";
+    }
+
     @GetMapping("/list")
     public String boardListPaging(Model model, Pageable pageable, @RequestParam(defaultValue = "0") int page) {
         Page<BoardListDto> boardList = boardService.boardListPaging(pageable, page);
         model.addAttribute("boardList", boardList); // 게시물 데이터
-        model.addAttribute("totalPage", boardList.getTotalPages()); // 총 페이지 수
+        model.addAttribute("totalPage", boardList.getTotalPages()); // 총 페이지
+        model.addAttribute("page", 10); // 10개씩 끊기
         model.addAttribute("previous", pageable.previousOrFirst().getPageNumber()); // 현재 페이지 기준 이전 페이지
         model.addAttribute("next", pageable.next().getPageNumber()); // 현재 페이지 기준 다음 페이지
         model.addAttribute("hasNext", boardList.hasNext());
         model.addAttribute("hasPrev", boardList.hasPrevious());
         return "board/boardList";
+    }
+
+    @GetMapping("/list-json")
+    @ResponseBody
+    public Page<BoardListDto> boardListPagingToJson(Pageable pageable, @RequestParam(defaultValue = "0") int page) {
+        return boardService.boardListPaging(pageable, page);
     }
 
     @GetMapping("/detail/{id}")

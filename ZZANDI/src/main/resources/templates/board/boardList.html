@@ -2,7 +2,6 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
     <meta charset="UTF-8">
-    <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script defer type="text/javascript" th:src="@{/js/boardList.js}"></script>
     <title>QA 게시판</title>
@@ -38,16 +37,7 @@
                     <th>좋아요</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr th:each="board : ${boardList}">
-                    <td th:text="${board.boardId}"></td>
-                    <td><a th:href="@{detail/{id} (id=${board.boardId})}" th:text="${board.title}"></a></td>
-                    <td th:text="${board.writer}"></td>
-                    <td th:text="${board.createdDate}"></td>
-                    <td th:text="${board.views}"></td>
-                    <td th:text="${board.heart}"></td>
-                </tr>
-            </tbody>
+            <tbody class="list"></tbody>
         </table>
 
         <div class="btn-write">
@@ -57,17 +47,19 @@
         <nav class="pagination">
             <ul class="pagination">
                 <li th:class="${hasPrev} ? 'page-item' : 'page-item disabled'">
-                    <a th:href="@{list (page=${previous})}" th:onclick="|disabled('${hasPrev}', 'prev')|" class="prev-btn">
+                    <button type="button" th:onclick="|createListAjax('${previous - 1}')|">
                         <span aria-hidden="true">&laquo;</span>
-                    </a>
+                    </button>
                 </li>
 
-                <!-- 페이지 번호 리스트 -->
+                <li class="page-item page-num" th:each="page : ${#numbers.sequence(1, page)}">
+                    <button type="button" th:onclick="|createListAjax('${page - 1}')|" th:text="${page}" th:value="${page}"></button>
+                </li>
 
                 <li th:class="${hasNext} ? 'page-item' : 'page-item disabled'">
-                    <a th:href="@{list (page=${next})}" th:onclick="|disabled('${hasNext}', 'next')|" class="next-btn">
+                    <button type="button" th:onclick="|createListAjax('${next + 1}')|" class="next-btn">
                         <span aria-hidden="true">&raquo;</span>
-                    </a>
+                    </button>
                 </li>
             </ul>
         </nav>

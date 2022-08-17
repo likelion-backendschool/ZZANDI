@@ -61,7 +61,16 @@
                     <th>좋아요</th>
                 </tr>
             </thead>
-            <tbody class="list"></tbody>
+            <tbody class="list">
+                <tr th:each="board : ${boardList}">
+                    <td th:text="${board.boardId}"></td>
+                    <td><a th:href="@{detail/{id} (id=${board.boardId})}" th:text="${board.title}"></a></td>
+                    <td th:text="${board.writer}"></td>
+                    <td th:text="${board.createdDate}"></td>
+                    <td th:text="${board.views}"></td>
+                    <td th:text="${board.heart}"></td>
+                </tr>
+            </tbody>
         </table>
 
         <div class="btn-write">
@@ -70,8 +79,8 @@
 
         <nav>
             <ul class="pagination">
-                <li th:class="${hasPrev} ? 'page-item' : 'page-item disabled'">
-                    <button type="button" class="page-btn prev-btn" th:onclick="|createListAjax('${previous - 1}')|">
+                <li class="page-item">
+                    <button type="button" class="page-btn prev-btn" th:onclick="|createListAjax('${page - 2}')|">
                         <i class="fa-solid fa-angle-left"></i>
                     </button>
                 </li>
@@ -80,8 +89,8 @@
                     <button type="button" class="page-btn page-curr" th:onclick="|createListAjax('${page - 1}')|" th:text="${page}" th:value="${page}"></button>
                 </li>
 
-                <li th:class="${hasNext} ? 'page-item' : 'page-item disabled'">
-                    <button type="button" class="page-btn next-btn" th:onclick="|createListAjax('${next + 1}')|">
+                <li class="page-item">
+                    <button type="button" class="page-btn next-btn" th:onclick="|createListAjax('${page}')|">
                         <i class="fa-solid fa-angle-right"></i>
                     </button>
                 </li>

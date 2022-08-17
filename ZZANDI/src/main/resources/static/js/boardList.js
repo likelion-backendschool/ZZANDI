@@ -3,7 +3,6 @@
 const body = document.querySelector(".list");
 const pageList = document.querySelectorAll(".page-curr");
 
-createListAjax(0);
 function createListAjax(page) {
     for(let i = 0; i < pageList.length; i++) {
         pageList[i].classList.remove("active");

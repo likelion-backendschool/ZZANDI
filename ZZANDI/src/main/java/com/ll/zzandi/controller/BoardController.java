@@ -59,13 +59,6 @@ public class BoardController {
         return "board/boardDetail";
     }
 
-    @GetMapping("/update/{id}")
-    public String boardUpdateForm(@PathVariable Long id, Model model) {
-        BoardUpdateFormDto updateFormDto = boardService.boardUpdateForm(id);
-        model.addAttribute("updateDto", updateFormDto);
-        return "board/boardUpdateForm";
-    }
-
     @GetMapping("/write")
     public String boardWriteForm(Model model) {
         model.addAttribute("boardWriteDto", new BoardWriteDto());
@@ -87,6 +80,13 @@ public class BoardController {
         Long saveId = boardService.save(board);
 
         return "redirect:/board/detail/" + saveId;
+    }
+
+    @GetMapping("/update/{id}")
+    public String boardUpdateForm(@PathVariable Long id, Model model) {
+        BoardUpdateFormDto updateFormDto = boardService.boardUpdateForm(id);
+        model.addAttribute("updateDto", updateFormDto);
+        return "board/boardUpdateForm";
     }
 
     @PostMapping("/update/{id}")

@@ -1,5 +1,6 @@
 package com.ll.zzandi.dto;
 
+import com.ll.zzandi.enumtype.BoardCategory;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 public class BoardUpdateFormDto {
 
     private Long id;
+    private BoardCategory category;
     private String title;
     private String writer;
     private String content;

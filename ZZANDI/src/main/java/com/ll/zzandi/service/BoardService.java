@@ -50,12 +50,13 @@ public class BoardService {
 
     public BoardUpdateFormDto boardUpdateForm(Long id) {
         Board board = boardRepository.findById(id).orElse(null);
-        return new BoardUpdateFormDto(board.getId(), board.getTitle(), board.getUser().getUserNickname(), board.getContent(), board.getUpdatedDate());
+        return new BoardUpdateFormDto(board.getId(), board.getCategory(), board.getTitle(), board.getUser().getUserNickname(), board.getContent(), board.getUpdatedDate());
     }
 
     @Transactional
     public void boardUpdate(Long id, BoardUpdateFormDto updateData) {
         Board findBoard = boardRepository.findById(id).orElseGet(null);
+        findBoard.setCategory(updateData.getCategory());
         findBoard.setTitle(updateData.getTitle());
         findBoard.setContent(updateData.getContent());
         findBoard.setUpdatedDate(LocalDateTime.now());

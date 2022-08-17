@@ -1,10 +1,12 @@
 package com.ll.zzandi.service;
 
 import com.ll.zzandi.config.security.UserContext;
+import com.ll.zzandi.domain.Interest;
 import com.ll.zzandi.domain.User;
 import com.ll.zzandi.dto.UserDto;
 import com.ll.zzandi.exception.ErrorCode;
 import com.ll.zzandi.exception.UserApplicationException;
+import com.ll.zzandi.repository.InterestRepository;
 import com.ll.zzandi.repository.UserRepository;
 import com.ll.zzandi.util.mail.EmailMessage;
 import com.ll.zzandi.util.mail.EmailService;
@@ -31,17 +33,24 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final TemplateEngine templateEngine;
     private final EmailService emailService;
+    private final InterestRepository interestRepository;
 
     @Transactional
     public User join(final UserDto.RegisterRequest registerRequest) {
             registerRequest.encodePassword(passwordEncoder);
-            User newUser = User.of(registerRequest);
+            User newUser=userRepository.save(User.of(registerRequest));
             newUser.generateEmailCheckToken();
             sendSignUpConfirmEmail(newUser);
+            for(int i=0;i<registerRequest.getInterests().size();i++){
+                Interest interest=new Interest();
+                interest.setInterest(registerRequest.getInterests().get(i));
+                interest.setUser(newUser);
+                interestRepository.save(interest);
+            }
             System.out.println("----------로그인 전------------");
             login(newUser);
             System.out.println("----------로그인 후------------");
-            return userRepository.save(newUser);
+            return newUser;
     }
 
     public void sendSignUpConfirmEmail(User user) {

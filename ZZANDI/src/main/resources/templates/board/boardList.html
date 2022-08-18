@@ -6,27 +6,49 @@
           rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <script src="https://kit.fontawesome.com/585d621f74.js" crossorigin="anonymous"></script>
     <script defer type="text/javascript" th:src="@{/js/boardList.js}"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dongle:wght@700&family=DynaPuff&family=Gamja+Flower&display=swap" rel="stylesheet">
     <title>스터디 게시판</title>
     <style>
-        .page-btn {
-            border: none;
-            margin: 0 5px;
-            background: transparent;
+        body {
+            background-color: #eceff1;
+            font-family: 'Dongle', 'Gamja Flower', sans-serif;
+            font-size: 28px;
         }
 
-        .page-num {
-            font-weight: bold;
+        a {
+            text-decoration: none;
+            color: #01579b;
+        }
+
+        .page-btn {
+            background-color: transparent;
+            border: none;
+            outline: none;
+            font-size: 28px;
+        }
+
+        .active {
+            background-color: pink;
+            color: white;
+            pointer-events : none;
+        }
+
+        .page-item {
+            border: 1px solid #eceff1;
         }
     </style>
 </head>
 <body>
-    <div class="w-100 d-flex align-items-center justify-content-center bg-success text-white" style="height: 100px;">
-        <h2 class="text-center mb-3">스터디 게시판</h2>
+    <div class="w-100 d-flex flex-column justify-content-center align-items-center bg-primary text-white" style="height: 70px;">
+        <p class="mx-3 my-0" style="font-weight: bold;">스터디 게시판</p>
     </div>
-    <div class="container w-50 mx-auto my-4">
+
+    <div class="container w-75 mx-auto my-4 bg-#f5f5f5 rounded">
         <table class="table text-center">
             <thead>
-                <tr class="table-success">
+                <tr>
                     <th class="text-center">분류</th>
                     <th class="text-center">제목</th>
                     <th class="text-center">글쓴이</th>
@@ -36,31 +58,17 @@
                 </tr>
             </thead>
             <tbody class="list">
-                <!-- 비동기로 데이터 처리 -->
+                <!-- 게시물 리스트 그려질 부분... -->
             </tbody>
         </table>
 
         <div class="d-flex justify-content-end">
-            <button class="btn btn-primary" type="button" th:onclick="|location.href='@{/board/write}'|">글 쓰기</button>
+            <button class="btn btn-primary" type="button" th:onclick="|location.href='@{/board/write}'|" style="font-size: 24px;">글 쓰기</button>
         </div>
 
-        <nav>
+        <nav class="text-center pb-3">
             <ul class="pagination d-flex justify-content-center">
-                <li class="page-item">
-                    <button type="button" class="page-btn prev-btn" th:onclick="|createListAjax('${page - 2}')|">
-                        <i class="fa-solid fa-angle-left"></i>
-                    </button>
-                </li>
-
-                <li class="page-item page-num" th:each="page : ${#numbers.sequence(1, page)}">
-                    <button type="button" class="page-btn page-curr" th:onclick="|createListAjax('${page - 1}')|" th:text="${page}" th:value="${page}"></button>
-                </li>
-
-                <li class="page-item">
-                    <button type="button" class="page-btn next-btn" th:onclick="|createListAjax('${page}')|">
-                        <i class="fa-solid fa-angle-right"></i>
-                    </button>
-                </li>
+                <!-- 페이지 번호 목록이 그려질 부분... -->
             </ul>
         </nav>
     </div>

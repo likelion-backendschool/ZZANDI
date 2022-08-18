@@ -1,5 +1,6 @@
 package com.ll.zzandi.config.security;
 
+import java.util.Enumeration;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
@@ -21,21 +22,26 @@ import java.io.IOException;
 @Component  // 빈 등록
 public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-    private RequestCache requestCache = new HttpSessionRequestCache(); // 이전 요청에 대한 정보
-    private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
+    private final RequestCache requestCache = new HttpSessionRequestCache(); // 이전 요청에 대한 정보
+    private final RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
 
+        String uri = "/";
         SavedRequest savedRequest = requestCache.getRequest(request, response);
 
-        setDefaultTargetUrl("/");
+        String prevPage = (String) request.getSession().getAttribute("prevPage");
+        if (prevPage != null) {
+            request.getSession().removeAttribute("prevPage");
+        }
 
         if (savedRequest != null) {
-            String redirectUrl = savedRequest.getRedirectUrl();
-            redirectStrategy.sendRedirect(request, response, redirectUrl);
-        } else {
-            redirectStrategy.sendRedirect(request, response, getDefaultTargetUrl());
+            uri = savedRequest.getRedirectUrl();
         }
+        else if (prevPage != null && !prevPage.equals("")) {
+            uri = prevPage;
+        }
+        redirectStrategy.sendRedirect(request, response, uri);
     }
 }

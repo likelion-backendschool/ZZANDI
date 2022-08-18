@@ -72,12 +72,12 @@ function createPageList(items) {
     // 첫 페이지(0)인 경우 이전 버튼 disabled 속성 추가
     const prevDisabled = hasPrev ? "disabled='disabled'" : '';
     pageHTML +=
-        `<li>
+        `<li class="page-item">
             <button class="page-btn" onClick="findByPage(0);" ${prevDisabled} aria-label="Previous">
                 <span aria-hidden="true">&laquo;</span>
             </button>
         </li>
-        <li>
+        <li class="page-item">
             <button class="page-btn" onClick="findByPage(${nowPage - 1});" ${prevDisabled} aria-label="Previous">
                 <span aria-hidden="true">&lsaquo;</span>
             </button>
@@ -85,20 +85,20 @@ function createPageList(items) {
 
     // 페이지 번호
     for (let i = startPage; i < endPage; i++) {
-        const active = (i === nowPage) ? 'class="active"' : '';
-        pageHTML += `<li ${active}><button class="page-btn page-num" onclick="findByPage(${i})">${i + 1}</button></li>`;
+        const active = (i === nowPage) ? 'active' : '';
+        pageHTML += `<li class="page-item"><button class="page-btn page-num ${active}" onclick="findByPage(${i})">${i + 1}</button></li>`;
     }
 
     // 다음 페이지, 마지막 페이지
     // 마지막 페이지인 경우 다음 버튼 disabled 속성 추가
     const nextDisabled = hasNext ? "disabled='disabled'" : '';
     pageHTML +=
-        `<li>
+        `<li class="page-item">
             <button class="page-btn" onClick="findByPage(${nowPage + 1});" ${nextDisabled} aria-label="Next">
                 <span aria-hidden="true">&rsaquo;</span>
             </button>
         </li>
-        <li>
+        <li class="page-item">
             <button class="page-btn" onClick="findByPage(${totalPage - 1});" ${nextDisabled}  aria-label="Next">
                 <span aria-hidden="true">&raquo;</span>
             </button>

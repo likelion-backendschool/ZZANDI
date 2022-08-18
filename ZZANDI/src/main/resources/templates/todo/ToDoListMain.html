@@ -1,6 +1,6 @@
 <!--ToDo 리스트 메인 페이지-->
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <!-- MDB -->
@@ -34,11 +34,18 @@
                     <div class="card-body p-5">
 
 <!--                        todo 추가 -->
-                        <form class="d-flex justify-content-center align-items-center mb-4" action="/todo/add" method="POST">
-                            <div class="form-outline flex-fill">
-                                <input type="text" id="form2" class="form-control" name="content" />
-                                <label class="form-label" for="form2">New task...</label>
+                        <form class="d-flex justify-content-center align-items-center mb-4"
+                              th:action="@{/todo/add}" th:object="${toDoListRequest}" method="POST">
+
+                            <div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">
+                                <div th:each="err : ${#fields.allErrors()}" th:text="${err}"/>
                             </div>
+
+                            <div class="form-outline flex-fill">
+                                <input type="text" th:field="*{content}" class="form-control" />
+                                <label class="form-label" > New task...</label>
+                            </div>
+
                             <button type="submit" class="btn btn-info ms-2">Add</button>
                         </form>
 

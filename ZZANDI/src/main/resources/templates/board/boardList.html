@@ -9,13 +9,15 @@
     <title>스터디 게시판</title>
     <style>
         .page-btn {
+            background-color: transparent;
             border: none;
-            margin: 0 5px;
-            background: transparent;
+            outline: none;
+            font-weight: bold;
         }
 
-        .page-num {
-            font-weight: bold;
+        .active {
+            background-color: pink;
+            pointer-events : none;
         }
     </style>
 </head>
@@ -36,7 +38,7 @@
                 </tr>
             </thead>
             <tbody class="list">
-                <!-- 비동기로 데이터 처리 -->
+                <!-- 게시물 리스트 그려질 부분... -->
             </tbody>
         </table>
 
@@ -44,23 +46,9 @@
             <button class="btn btn-primary" type="button" th:onclick="|location.href='@{/board/write}'|">글 쓰기</button>
         </div>
 
-        <nav>
+        <nav class="text-center">
             <ul class="pagination d-flex justify-content-center">
-                <li class="page-item">
-                    <button type="button" class="page-btn prev-btn" th:onclick="|createListAjax('${page - 2}')|">
-                        <i class="fa-solid fa-angle-left"></i>
-                    </button>
-                </li>
-
-                <li class="page-item page-num" th:each="page : ${#numbers.sequence(1, page)}">
-                    <button type="button" class="page-btn page-curr" th:onclick="|createListAjax('${page - 1}')|" th:text="${page}" th:value="${page}"></button>
-                </li>
-
-                <li class="page-item">
-                    <button type="button" class="page-btn next-btn" th:onclick="|createListAjax('${page}')|">
-                        <i class="fa-solid fa-angle-right"></i>
-                    </button>
-                </li>
+                <!-- 페이지 번호 목록이 그려질 부분... -->
             </ul>
         </nav>
     </div>

@@ -1,5 +1,6 @@
 package com.ll.zzandi.controller;
 
+import antlr.StringUtils;
 import com.ll.zzandi.domain.User;
 import com.ll.zzandi.dto.UserDto;
 import com.ll.zzandi.repository.UserRepository;
@@ -83,8 +84,14 @@ public class UserController {
 
     @GetMapping("/login")
     public String showLoginForm(@RequestParam(value = "error", required = false) String error,
-        @RequestParam(value = "exception", required = false) String exception,
-        Model model) {
+        @RequestParam(value = "exception", required = false) String exception, HttpServletRequest request, Model model) {
+
+        String uri = request.getHeader("Referer");
+        if (uri != null) {
+            if (!uri.contains("/login")) {
+                request.getSession().setAttribute("prevPage", uri);
+            }
+        }
         model.addAttribute("error", error);
         model.addAttribute("exception", exception);
 

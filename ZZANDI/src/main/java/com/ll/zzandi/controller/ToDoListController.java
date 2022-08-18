@@ -3,6 +3,7 @@ package com.ll.zzandi.controller;
 import com.ll.zzandi.domain.Study;
 import com.ll.zzandi.domain.ToDoList;
 import com.ll.zzandi.dto.ToDoListDto;
+import com.ll.zzandi.enumtype.Type;
 import com.ll.zzandi.service.ToDoListService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
@@ -42,5 +43,14 @@ public class ToDoListController {
         toDoListService.save(toDoListRequest);
 
         return "redirect:/todo";
+    }
+
+    @GetMapping("/change")
+    @ResponseBody
+    public String changeType (Type type) {
+        if (type.name().equals("DOING")) {
+            return "일단 성공" + type;
+        }
+        return "실패";
     }
 }

@@ -2,10 +2,12 @@ package com.ll.zzandi.service;
 
 import com.ll.zzandi.domain.Study;
 import com.ll.zzandi.dto.StudyDto;
+import com.ll.zzandi.exception.StudyForm;
 import com.ll.zzandi.repository.StudyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,14 +21,12 @@ public class StudyService {
         this.studyRepository = studyRepository;
     }
 
-    public void save(StudyDto studyDto) {
+    public void save(@Valid StudyForm studyform) {
         Study s1 = new Study();
-
-        s1.setStudyTitle(studyDto.getStudyTitle());
-        s1.setStudyStart(studyDto.getStudyStart());
-        s1.setStudyEnd(studyDto.getStudyEnd());
-        s1.setStudyPeople(studyDto.getStudyPeople());
-
+        s1.setStudyTitle(studyform.getStudyTitle());
+        s1.setStudyStart(studyform.getStudyStart());
+        s1.setStudyEnd(studyform.getStudyEnd());
+        s1.setStudyPeople(studyform.getStudyPeople());
         studyRepository.save(s1);
     }
 
@@ -43,14 +43,13 @@ public class StudyService {
         studyRepository.delete(studies);
     }
 
-    public void modify(Long studyId, StudyDto studyDto) {
+    public void modify(Long studyId, @Valid StudyForm studyform) {
         Study s1 = new Study();
         s1.setId(studyId);
-        s1.setStudyTitle(studyDto.getStudyTitle());
-        s1.setStudyStart(studyDto.getStudyStart());
-        s1.setStudyEnd(studyDto.getStudyEnd());
-        s1.setStudyPeople(studyDto.getStudyPeople());
-
+        s1.setStudyTitle(studyform.getStudyTitle());
+        s1.setStudyStart(studyform.getStudyStart());
+        s1.setStudyEnd(studyform.getStudyEnd());
+        s1.setStudyPeople(studyform.getStudyPeople());
         studyRepository.save(s1);
     }
 

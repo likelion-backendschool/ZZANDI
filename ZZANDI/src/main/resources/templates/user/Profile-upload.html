@@ -1,0 +1,40 @@
+<!--회원가입 페이지-->
+<!DOCTYPE html>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+
+<body>
+<div class="col-sm-6">
+    <div class="card text-center">
+        <div class="card-header">
+            프로필 이미지
+        </div>
+        <div id="current-profile-image" class="mt-3">
+            <svg th:data-jdenticon-value="${user.userId}"
+                 width="125" height="125" class="rounded border bg-light"></svg>
+            <div th:text="${user.userNickname}"></div>
+        </div>
+        <div id="new-profile-image" class="mt-3"></div>
+        <div class="card-body">
+            <div class="custom-file">
+                <input type="file" class="custom-file-input" id="profile-image-file">
+                <label class="custom-file-label" for="profile-image-file">프로필 이미지 변경</label>
+            </div>
+            <div id="new-profile-image-control" class="mt-3">
+                <button class="btn btn-outline-primary btn-block" id="cut-button">자르기</button>
+                <button class="btn btn-outline-success btn-block" id="confirm-button">확인</button>
+                <button class="btn btn-outline-warning btn-block" id="reset-button">취소</button>
+            </div>
+            <div id="cropped-new-profile-image" class="mt-3"></div>
+        </div>
+    </div>
+</div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/jdenticon@3.2.0/dist/jdenticon.min.js" async
+        integrity="sha384-yBhgDqxM50qJV5JPdayci8wCfooqvhFYbIKhv0hTtLvfeeyJMJCscRfFNKIxt43M" crossorigin="anonymous">
+</script>
+</html>

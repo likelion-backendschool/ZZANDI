@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
@@ -106,5 +107,11 @@ public class UserController {
         model.addAttribute("userId", user.getUserId());
         model.addAttribute("exception", exception);
         return "/user/denied";
+    }
+
+    @GetMapping("/profile")
+    public String getProfilePage(@AuthenticationPrincipal User user,Model model){
+        model.addAttribute("user",user);
+        return"/user/Profile-upload";
     }
 }

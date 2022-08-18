@@ -107,7 +107,7 @@
                             <smail th:if="${#fields.hasErrors('userNickname')}" th:errors="*{userNickname}">userNickname Error</smail>
                         </div>
                         <div>
-                            <div>등록 지역</div>
+                            <div>관심사</div>
                             <div th:each="intrest : ${interests}" class="form-check form-check-inline">
                                 <input type="checkbox" th:field="*{interests}" th:value="${intrest.key}"
                                        class="form-check-input">

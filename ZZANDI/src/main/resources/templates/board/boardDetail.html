@@ -2,121 +2,33 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
     <meta charset="UTF-8">
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <!-- Font-Awesome 추가   -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+          rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <script src="https://kit.fontawesome.com/585d621f74.js" crossorigin="anonymous"></script>
     <title>상세페이지</title>
-    <style>
-        body{
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            width: 700px;
-            margin: 40px auto;
-        }
-        .box1 {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-        }
-
-        .box2 {
-            display: flex;
-            justify-content: space-between;
-            border-bottom: 1px solid gainsboro;
-        }
-
-        .box2 > p {
-            font-weight: bold;
-        }
-
-        .box3 {
-            display: flex;
-            justify-content: space-evenly;
-        }
-
-        .box3 p {
-            margin-left: 10px;
-        }
-
-        .box3 span {
-            font-weight: bold;
-        }
-
-        .content {
-            margin: 40px 0;
-        }
-
-        .btns {
-            display: flex;
-            justify-content: flex-end;
-        }
-
-        .btns button {
-            margin-left: 10px;
-        }
-
-        .heart {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 30px;
-        }
-
-        .btn-heart {
-            border-radius: 50%;
-            background: transparent;
-            outline: none;
-            border: 0;
-            width: 50px;
-            height: 50px;
-        }
-
-        .heart-count {
-            font-size: 12px;
-            font-weight: bold;
-        }
-
-        .fa-heart {
-            font-size: 28px;
-            list-style: none;
-            color: lightgray;
-        }
-
-        .fa-heart:hover {
-            color: darkred;
-        }
-    </style>
 </head>
 <body>
-<div class="container">
-    <div class="box1">
+<div class="container w-25 mx-auto mt-5">
+    <div class="d-flex justify-content-between align-self-baseline">
         <h3 th:text="${boardDetail.title}">제목1</h3>
         <p th:text="${boardDetail.createdDate}">날짜</p>
     </div>
-    <div class="box2">
+    <div class="d-flex justify-content-between border-bottom">
         <p th:text="${boardDetail.writer}">작성자</p>
-        <div class="box3">
-            <p>조회 수 <span th:text="${boardDetail.views}"></span></p>
-            <p>좋아요 수 <span th:text="${boardDetail.heart}"></span></p>
-            <p>댓글 <span th:text="${boardDetail.comments}"></span></p>
+        <div class="d-flex justify-content-evenly">
+            <p class="mx-1">조회 수 <span th:text="${boardDetail.views}"></span></p>
+            <p class="mx-1">좋아요 수 <span th:text="${boardDetail.heart}"></span></p>
+            <p class="mx-1">댓글 <span th:text="${boardDetail.comments}"></span></p>
         </div>
     </div>
-    <section class="content" th:text="${boardDetail.content}"></section>
 
-    <div class="heart">
-        <button class="btn-heart"><i class="fa-solid fa-heart"></i></button>
-        <span class="heart-count">좋아요 48개</span>
-    </div>
+    <section class="mt-4" th:text="${boardDetail.content}"></section>
 
-    <div class="btns btn-group">
+    <div class="d-flex justify-content-end btn-group" style="margin-top: 30px;">
         <form th:action="@{/board/delete/{id} (id=${boardDetail.id})}" method="post">
-            <button class="btn btn-primary " type="button" th:onclick="|location.href='@{/board/update/{id} (id=${boardDetail.id})}'|">수정</button>
-            <button class="btn btn-success" type="submit">삭제</button>
-            <button class="btn btn-warning" type="button" th:onclick="|location.href='@{/board/list}'|">목록으로</button>
+            <button class="btn btn-primary mx-1" type="button" th:onclick="|location.href='@{/board/update/{id} (id=${boardDetail.id})}'|">수정</button>
+            <button class="btn btn-success mx-1" type="submit">삭제</button>
+            <button class="btn btn-warning mx-1" type="button" th:onclick="|location.href='@{/board/list}'|">목록으로</button>
         </form>
     </div>
 </div>

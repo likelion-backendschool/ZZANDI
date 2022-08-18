@@ -46,11 +46,9 @@ public class ToDoListController {
     }
 
     @GetMapping("/change")
-    @ResponseBody
-    public String changeType (Type type) {
-        if (type.name().equals("DOING")) {
-            return "일단 성공" + type;
-        }
-        return "실패";
+    public String changeType (long id) {
+        toDoListService.changeType(id);
+
+        return "redirect:/todo";
     }
 }

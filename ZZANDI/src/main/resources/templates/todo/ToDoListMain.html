@@ -77,12 +77,12 @@
 
                                         <div th:if="${todo.type.name() == 'DOING'}">
                                             <input class="form-check-input me-2" type="checkbox" value="" aria-label="..."
-                                                   th:onclick="|location.href='@{/todo/change(type=${todo.type})}'|"/>
+                                                   th:onclick="|location.href='@{/todo/change(id=${todo.id})}'|"/>
                                             [[${todo.content}]]
                                         </div>
                                         <div th:unless="${todo.type.name() == 'DOING'}">
                                             <input  class="form-check-input me-2" type="checkbox" value="" aria-label="..." checked
-                                                    th:onclick="|location.href='@{/todo/change(type=${todo.type})}'|"/>
+                                                    th:onclick="|location.href='@{/todo/change(id=${todo.id})}'|"/>
 
                                             <s th:text="${todo.content}"> </s>
                                         </div>
@@ -96,8 +96,8 @@
                                     <li class="list-group-item d-flex align-items-center border-0 mb-2 rounded"
                                         style="background-color: #f4f6f7;" th:each="todo : ${toDoList}" th:if="${todo.type.name() == 'DOING'}">
 
-                                        <input class="form-check-input me-2" type="checkbox"
-                                               value="" aria-label="..." th:text="${todo.content}"/>
+                                        <input class="form-check-input me-2" type="checkbox" value="" aria-label="..."
+                                               th:text="${todo.content}" th:onclick="|location.href='@{/todo/change(id=${todo.id})}'|"/>
 
                                     </li>
                                 </ul>
@@ -108,8 +108,8 @@
                                     <li class="list-group-item d-flex align-items-center border-0 mb-2 rounded"
                                         style="background-color: #f4f6f7;" th:each="todo : ${toDoList}" th:if="${todo.type.name() == 'DONE'}">
 
-                                        <input  class="form-check-input me-2" type="checkbox"
-                                                value="" aria-label="..." checked/>
+                                        <input  class="form-check-input me-2" type="checkbox" value="" aria-label="..." checked
+                                                th:onclick="|location.href='@{/todo/change(id=${todo.id})}'|"/>
                                         <s th:text="${todo.content}"> </s>
                                     </li>
                                 </ul>

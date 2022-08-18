@@ -1,33 +1,32 @@
-<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 <div class="container">
-
-    <form action="/study/create" method="post">
+    <form action="/study/create" th:object="${studyForm}" method="post">
+        <div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">
+            <div th:each="err : ${#fields.allErrors()}" th:text="${err}"/>
+        </div>
         <div class="form-group">
             <div>
                 <label for="studyTitle"> </label>
-                <input type="text" id="studyTitle" name="studyTitle" placeholder="스터디명을 입력하세요">
+                <input type="text" id="studyTitle" th:field="*{studyTitle}" placeholder="스터디명을 입력하세요">
             </div>
             <div>
                 <label for="studyStart"> </label>
-                <input type="date" id="studyStart" name="studyStart">
+                <input type="date" id="studyStart" th:field="*{studyStart}"
+                       th:min="${#temporals.format(#temporals.createToday(),'yyyy-MM-dd')}">
             </div>
             <div>
                 <label for="studyEnd"> </label>
-                <input type="date" id="studyEnd" name="studyEnd">
+                <input type="date" id="studyEnd" th:field="*{studyEnd}">
             </div>
             <div>
                 <label for="studyPeople"> </label>
-                <input type="number" id="studyPeople" name="studyPeople" placeholder="스터디 정원 수를 입력하세요">
+                <input type="number" id="studyPeople" th:field="*{studyPeople}" placeholder="스터디 인원 수를 입력하세요">
             </div>
 
         </div>
         <button type="submit">등록</button>
-
     </form>
-
 </div>
-
 </body>
 </html>

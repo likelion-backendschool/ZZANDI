@@ -1,3 +1,4 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 <div class="container">
@@ -13,11 +14,11 @@
             <div>
                 <label for="studyStart"> </label>
                 <input type="date" id="studyStart" th:field="*{studyStart}"
-                       th:min="${#temporals.format(#temporals.createToday(),'yyyy-MM-dd')}">
+                       th:min="${#temporals.format(#temporals.createToday(),'yyyy-MM-dd')}" class="a1">
             </div>
             <div>
                 <label for="studyEnd"> </label>
-                <input type="date" id="studyEnd" th:field="*{studyEnd}">
+                <input type="date" id="studyEnd" th:field="*{studyEnd}" min="" class="a2">
             </div>
             <div>
                 <label for="studyPeople"> </label>
@@ -28,5 +29,12 @@
         <button type="submit">등록</button>
     </form>
 </div>
+<script>
+    $(".a1").change(function () {
+        const val = $(this).val();
+        console.log(val);
+        $(".a2").attr("min", val);
+    });
+</script>
 </body>
 </html>

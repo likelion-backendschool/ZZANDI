@@ -41,11 +41,7 @@ public class UserController {
 
     @GetMapping("/join")
     public String showSignForm(UserDto.RegisterRequest registerRequest, Model model) {
-        Map<String, String> interesting = new LinkedHashMap<>();
-        interesting.put("IT", "IT");
-        interesting.put("NOVEL", "소설책");
-        interesting.put("ENGLISH", "영어");
-        model.addAttribute("interests", interesting);
+        model.addAttribute("interests", UserDto.RegisterRequest.getInterest());
         return "Sign-up";
     }
 
@@ -54,6 +50,7 @@ public class UserController {
     public String join(Model model, @Valid UserDto.RegisterRequest registerRequest, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             System.out.println(bindingResult.getFieldError());
+            model.addAttribute("interests", UserDto.RegisterRequest.getInterest());
             return "Sign-up";
         }
 

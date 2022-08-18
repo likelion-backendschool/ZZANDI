@@ -3,13 +3,17 @@
 const body = document.querySelector(".list");
 const pageList = document.querySelectorAll(".page-curr");
 
-function createListAjax(page) {
-    for(let i = 0; i < pageList.length; i++) {
-        pageList[i].classList.remove("active");
-    }
+window.onload = () => {
+    createListAjax(0);
+}
 
-    const curr = pageList[page]; // 현재 페이지
-    curr.classList.add("active");
+function createListAjax(page) {
+    // for(let i = 0; i < pageList.length; i++) {
+    //     pageList[i].classList.remove("active");
+    // }
+    //
+    // const curr = pageList[page]; // 현재 페이지
+    // curr.classList.add("active");
 
     fetch("/board/list-json?page=" + page)
         .then(response => response.json())
@@ -31,7 +35,7 @@ function displayItems(items) {
 // json 형태의 게시물 정보를 이용해서 리스트 row를 그려주는 함수
 function createHTMLString(item) {
     return `<tr>
-                <td>${item.boardId}</td>
+                <td style="color: mediumpurple;">${item.category}</td>
                 <td><a href="detail/${item.boardId}">${item.title}</a></td>
                 <td>${item.writer}</td>
                 <td>${item.createdDate}</td>

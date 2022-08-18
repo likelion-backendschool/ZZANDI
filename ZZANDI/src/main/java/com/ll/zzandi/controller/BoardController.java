@@ -14,9 +14,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/board")
@@ -57,27 +59,34 @@ public class BoardController {
         return "board/boardDetail";
     }
 
+    @GetMapping("/write")
+    public String boardWriteForm(Model model) {
+        model.addAttribute("boardWriteDto", new BoardWriteDto());
+        return "board/boardWriteForm";
+    }
+
+    @PostMapping("/write")
+    public String boardWrite(@Valid BoardWriteDto boardWriteDto, BindingResult result) {
+        System.out.println(boardWriteDto.getCategory());
+        // @NotBlank 값이 없는 경우 BindingResult로 처리!
+        if (result.hasErrors()) {
+            return "/board/boardWriteForm";
+        }
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal(); // 현재 로그인 한 유저 정보
+
+        Board board = new Board(user, boardWriteDto.getCategory(), boardWriteDto.getTitle(), boardWriteDto.getContent(), 0, 0);
+        Long saveId = boardService.save(board);
+
+        return "redirect:/board/detail/" + saveId;
+    }
+
     @GetMapping("/update/{id}")
     public String boardUpdateForm(@PathVariable Long id, Model model) {
         BoardUpdateFormDto updateFormDto = boardService.boardUpdateForm(id);
         model.addAttribute("updateDto", updateFormDto);
         return "board/boardUpdateForm";
-    }
-
-    @GetMapping("/write")
-    public String boardWriteForm() {
-        return "board/boardWriteForm";
-    }
-
-    @PostMapping("/write")
-    public String boardWrite(BoardWriteDto boardWriteDto) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal(); // 현재 로그인 한 유저 정보
-
-        Board board = new Board(user, boardWriteDto.getTitle(), boardWriteDto.getContent(), 0, 0);
-        Long saveId = boardService.save(board);
-
-        return "redirect:/board/detail/" + saveId;
     }
 
     @PostMapping("/update/{id}")

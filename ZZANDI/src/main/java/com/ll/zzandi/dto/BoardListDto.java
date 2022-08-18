@@ -1,5 +1,6 @@
 package com.ll.zzandi.dto;
 
+import com.ll.zzandi.enumtype.BoardCategory;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,6 +12,7 @@ import lombok.Setter;
 public class BoardListDto {
 
     private Long boardId;
+    private BoardCategory category;
     private String title;
     private String writer;
     private String createdDate;

@@ -28,7 +28,7 @@ public class BoardService {
         // 페이지는 0부터 시작하고 size 개수만큼 잘라서 가져온다.
         PageRequest pageRequest = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "id"));
         return boardRepository.findBoardBy(pageRequest)
-                .map(board -> new BoardListDto(board.getId(), board.getTitle(), board.getUser().getUserNickname(),
+                .map(board -> new BoardListDto(board.getId(), board.getCategory(), board.getTitle(), board.getUser().getUserNickname(),
                         board.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd")), board.getViews(), board.getHeart()));
     }
 
@@ -50,12 +50,13 @@ public class BoardService {
 
     public BoardUpdateFormDto boardUpdateForm(Long id) {
         Board board = boardRepository.findById(id).orElse(null);
-        return new BoardUpdateFormDto(board.getId(), board.getTitle(), board.getUser().getUserNickname(), board.getContent(), board.getUpdatedDate());
+        return new BoardUpdateFormDto(board.getId(), board.getCategory(), board.getTitle(), board.getUser().getUserNickname(), board.getContent(), board.getUpdatedDate());
     }
 
     @Transactional
     public void boardUpdate(Long id, BoardUpdateFormDto updateData) {
         Board findBoard = boardRepository.findById(id).orElseGet(null);
+        findBoard.setCategory(updateData.getCategory());
         findBoard.setTitle(updateData.getTitle());
         findBoard.setContent(updateData.getContent());
         findBoard.setUpdatedDate(LocalDateTime.now());

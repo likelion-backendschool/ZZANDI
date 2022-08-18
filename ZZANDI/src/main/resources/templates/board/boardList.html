@@ -2,29 +2,12 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <!-- Font-Awesome 추가   -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+          rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <script src="https://kit.fontawesome.com/585d621f74.js" crossorigin="anonymous"></script>
     <script defer type="text/javascript" th:src="@{/js/boardList.js}"></script>
-    <title>QA 게시판</title>
+    <title>스터디 게시판</title>
     <style>
-        body {
-            box-sizing: border-box;
-            text-align: center;
-        }
-        table th, td {
-            text-align: center;
-        }
-        .pagination {
-            display: flex;
-            justify-content: center;
-        }
-
-        .btn-write {
-            display: flex;
-            justify-content: flex-end;
-        }
-
         .page-btn {
             border: none;
             margin: 0 5px;
@@ -34,51 +17,35 @@
         .page-num {
             font-weight: bold;
         }
-
-        .page-num:hover {
-            border-radius: 100px;
-            background-color: greenyellow;
-        }
-
-        /* 클래스 */
-        .active {
-            border-radius: 50%;
-            background-color: greenyellow;
-        }
     </style>
 </head>
 <body>
-    <div style="margin: 40px 200px">
-    <h2>Q&A 게시판</h2>
-        <table class="table table-striped">
+    <div class="w-100 d-flex align-items-center justify-content-center bg-success text-white" style="height: 100px;">
+        <h2 class="text-center mb-3">스터디 게시판</h2>
+    </div>
+    <div class="container w-50 mx-auto my-4">
+        <table class="table text-center">
             <thead>
-                <tr class="success">
-                    <th>#</th>
-                    <th>제목</th>
-                    <th>작성자</th>
-                    <th>날짜</th>
-                    <th>조회</th>
-                    <th>좋아요</th>
+                <tr class="table-success">
+                    <th class="text-center">분류</th>
+                    <th class="text-center">제목</th>
+                    <th class="text-center">글쓴이</th>
+                    <th class="text-center">날짜</th>
+                    <th class="text-center">조회</th>
+                    <th class="text-center">좋아요</th>
                 </tr>
             </thead>
             <tbody class="list">
-                <tr th:each="board : ${boardList}">
-                    <td th:text="${board.boardId}"></td>
-                    <td><a th:href="@{detail/{id} (id=${board.boardId})}" th:text="${board.title}"></a></td>
-                    <td th:text="${board.writer}"></td>
-                    <td th:text="${board.createdDate}"></td>
-                    <td th:text="${board.views}"></td>
-                    <td th:text="${board.heart}"></td>
-                </tr>
+                <!-- 비동기로 데이터 처리 -->
             </tbody>
         </table>
 
-        <div class="btn-write">
+        <div class="d-flex justify-content-end">
             <button class="btn btn-primary" type="button" th:onclick="|location.href='@{/board/write}'|">글 쓰기</button>
         </div>
 
         <nav>
-            <ul class="pagination">
+            <ul class="pagination d-flex justify-content-center">
                 <li class="page-item">
                     <button type="button" class="page-btn prev-btn" th:onclick="|createListAjax('${page - 2}')|">
                         <i class="fa-solid fa-angle-left"></i>

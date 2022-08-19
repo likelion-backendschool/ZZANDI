@@ -1,6 +1,5 @@
 package com.ll.zzandi.controller;
 
-import antlr.StringUtils;
 import com.ll.zzandi.domain.User;
 import com.ll.zzandi.dto.UserDto;
 import com.ll.zzandi.repository.UserRepository;
@@ -8,7 +7,7 @@ import com.ll.zzandi.service.UserService;
 import com.ll.zzandi.util.validator.RegisterFormValidator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,8 +18,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 @Controller
 @RequestMapping("/user")
@@ -44,7 +41,7 @@ public class UserController {
     @GetMapping("/join")
     public String showSignForm(UserDto.RegisterRequest registerRequest, Model model) {
         model.addAttribute("interests", UserDto.RegisterRequest.getInterest());
-        return "Sign-up";
+        return "user/Sign-up";
     }
 
 
@@ -53,7 +50,7 @@ public class UserController {
         if (bindingResult.hasErrors()) {
             System.out.println(bindingResult.getFieldError());
             model.addAttribute("interests", UserDto.RegisterRequest.getInterest());
-            return "Sign-up";
+            return "user/Sign-up";
         }
 
         userService.join(registerRequest);

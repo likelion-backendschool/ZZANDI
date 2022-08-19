@@ -96,7 +96,7 @@
                         </div>
                         <div class="form-group">
                             <i class="fa-solid fa-envelope"></i><label for="userEmail">이메일</label>
-                            <input type="text" th:field="*{userEmail}"  class="form-control"
+                            <input type="email" th:field="*{userEmail}"  class="form-control"
                                    placeholder="이메일을 입력해주세요." aria-describedby="emailHelp" required />
                             <smail th:if="${#fields.hasErrors('userEmail')}" th:errors="*{userEmail}">userEmail Error</smail>
                         </div>

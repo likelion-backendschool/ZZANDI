@@ -43,4 +43,10 @@ public class ToDoListService {
 
         toDoListRepository.save(toDoList);
     }
+
+    public void delete(long id) {
+        ToDoList toDoList = toDoListRepository.findById(id).get();
+
+        toDoListRepository.delete(toDoList);
+    }
 }

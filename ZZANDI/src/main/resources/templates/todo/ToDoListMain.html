@@ -33,7 +33,7 @@
                 <div class="card">
                     <div class="card-body p-5">
 
-<!--                        todo 추가 -->
+                        <!--                        todo 추가 -->
                         <form class="d-flex justify-content-center align-items-center mb-4"
                               th:action="@{/todo/add}" th:object="${toDoListRequest}" method="POST">
 
@@ -51,7 +51,7 @@
 
 
                         <!-- Tabs navs -->
-<!--                        선택칸-->
+                        <!--                        선택칸-->
                         <ul class="nav nav-tabs mb-4 pb-2" id="ex1" role="tablist">
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link active" id="ex1-tab-1" data-mdb-toggle="tab" href="#ex1-tabs-1" role="tab"
@@ -72,37 +72,44 @@
                             <div class="tab-pane fade show active" id="ex1-tabs-1" role="tabpanel"
                                  aria-labelledby="ex1-tab-1">
                                 <ul class="list-group mb-0">
+
                                     <li class="list-group-item d-flex align-items-center border-0 mb-2 rounded"
                                         style="background-color: #f4f6f7;" th:each="todo : ${toDoList}">
 
-                                        <div th:if="${todo.type.name() == 'DOING'}">
+                                        <div th:if="${todo.type.name() == 'DOING'}" class="flex-grow-1">
                                             <input class="form-check-input me-2" type="checkbox" value="" aria-label="..."
                                                    th:onclick="|location.href='@{/todo/change(id=${todo.id})}'|"/>
                                             [[${todo.content}]]
                                         </div>
-                                        <div th:unless="${todo.type.name() == 'DOING'}">
+                                        <div th:unless="${todo.type.name() == 'DOING'}" class="flex-grow-1">
                                             <input  class="form-check-input me-2" type="checkbox" value="" aria-label="..." checked
                                                     th:onclick="|location.href='@{/todo/change(id=${todo.id})}'|"/>
 
-                                            <s th:text="${todo.content}"> </s>
+                                            <s class="flex-grow-1" th:text="${todo.content}"> </s>
                                         </div>
 
+                                        <button type="button" class="btn-close" aria-label="Close"
+                                                th:onclick="|location.href='@{/todo/delete(id=${todo.id})}'|"></button>
                                     </li>
+
                                 </ul>
                             </div>
-<!--                            active 부분-->
+                            <!--                            active 부분-->
                             <div class="tab-pane fade" id="ex1-tabs-2" role="tabpanel" aria-labelledby="ex1-tab-2">
                                 <ul class="list-group mb-0">
+
                                     <li class="list-group-item d-flex align-items-center border-0 mb-2 rounded"
                                         style="background-color: #f4f6f7;" th:each="todo : ${toDoList}" th:if="${todo.type.name() == 'DOING'}">
 
                                         <input class="form-check-input me-2" type="checkbox" value="" aria-label="..."
-                                               th:text="${todo.content}" th:onclick="|location.href='@{/todo/change(id=${todo.id})}'|"/>
-
+                                               th:onclick="|location.href='@{/todo/change(id=${todo.id})}'|"/>
+                                        <text th:text="${todo.content}" class="flex-grow-1"> </text>
+                                        <button type="button" class="btn-close" aria-label="Close"
+                                                th:onclick="|location.href='@{/todo/delete(id=${todo.id})}'|"></button>
                                     </li>
                                 </ul>
                             </div>
-<!--                            complted 부분-->
+                            <!--                            complted 부분-->
                             <div class="tab-pane fade" id="ex1-tabs-3" role="tabpanel" aria-labelledby="ex1-tab-3">
                                 <ul class="list-group mb-0">
                                     <li class="list-group-item d-flex align-items-center border-0 mb-2 rounded"
@@ -110,7 +117,9 @@
 
                                         <input  class="form-check-input me-2" type="checkbox" value="" aria-label="..." checked
                                                 th:onclick="|location.href='@{/todo/change(id=${todo.id})}'|"/>
-                                        <s th:text="${todo.content}"> </s>
+                                        <s th:text="${todo.content}" class="flex-grow-1"> </s>
+                                        <button type="button" class="btn-close" aria-label="Close"
+                                                th:onclick="|location.href='@{/todo/delete(id=${todo.id})}'|"></button>
                                     </li>
                                 </ul>
                             </div>

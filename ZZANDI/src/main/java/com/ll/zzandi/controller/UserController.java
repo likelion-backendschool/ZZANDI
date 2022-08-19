@@ -1,6 +1,5 @@
 package com.ll.zzandi.controller;
 
-import antlr.StringUtils;
 import com.ll.zzandi.domain.User;
 import com.ll.zzandi.dto.UserDto;
 import com.ll.zzandi.repository.UserRepository;
@@ -8,8 +7,9 @@ import com.ll.zzandi.service.UserService;
 import com.ll.zzandi.util.validator.RegisterFormValidator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
+
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
@@ -18,8 +18,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 @Controller
 @RequestMapping("/user")
@@ -42,12 +40,8 @@ public class UserController {
 
     @GetMapping("/join")
     public String showSignForm(UserDto.RegisterRequest registerRequest, Model model) {
-        Map<String, String> interesting = new LinkedHashMap<>();
-        interesting.put("IT", "IT");
-        interesting.put("NOVEL", "소설책");
-        interesting.put("ENGLISH", "영어");
-        model.addAttribute("interests", interesting);
-        return "Sign-up";
+        model.addAttribute("interests", UserDto.RegisterRequest.getInterest());
+        return "user/Sign-up";
     }
 
 
@@ -55,7 +49,8 @@ public class UserController {
     public String join(Model model, @Valid UserDto.RegisterRequest registerRequest, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             System.out.println(bindingResult.getFieldError());
-            return "Sign-up";
+            model.addAttribute("interests", UserDto.RegisterRequest.getInterest());
+            return "user/Sign-up";
         }
 
         userService.join(registerRequest);
@@ -116,5 +111,11 @@ public class UserController {
         model.addAttribute("userId", user.getUserId());
         model.addAttribute("exception", exception);
         return "/user/denied";
+    }
+
+    @GetMapping("/profile")
+    public String getProfilePage(@AuthenticationPrincipal User user,Model model){
+        model.addAttribute("user",user);
+        return"/user/Profile-upload";
     }
 }

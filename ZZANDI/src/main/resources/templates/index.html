@@ -17,11 +17,13 @@
           alert("ZZANDI 가입을 완료하려면 계정 인증 이메일을 확인하세요.");
         </script>
     </div>
+    <a th:href="@{/user/profile}">
     <div sec:authorize="isAuthenticated()">
         <svg th:data-jdenticon-value="${user.userId}"
             width="50" height="50" class="rounded border bg-light"></svg>
         <div th:text="${user.userNickname}"></div>
     </div>
+    </a>
 
     <div>
         <a href="/study/create"> Create Study </a>

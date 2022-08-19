@@ -11,6 +11,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -42,6 +43,14 @@ public class UserDto {
 
         public void encodePassword(PasswordEncoder passwordEncoder) {
             this.userPassword = passwordEncoder.encode(this.userPassword);
+        }
+
+        public static Map<String,String> getInterest(){
+            Map<String, String> interesting = new LinkedHashMap<>();
+            interesting.put("IT", "IT");
+            interesting.put("NOVEL", "소설책");
+            interesting.put("ENGLISH", "영어");
+            return interesting;
         }
     }
 

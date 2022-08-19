@@ -1,0 +1,142 @@
+<!--회원가입 페이지-->
+<!DOCTYPE html>
+<!-- Latest compiled and minified CSS -->
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropper/4.1.0/cropper.min.css" integrity="sha512-vmXqikRa5kmI3gOQygzml5nV+5NGxG8rt8KWHKj8JYYK12JUl2L8RBfWinFGTzvpwwsIRcINy9mhLyodnmzjig==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.js" integrity="sha512-n/4gHW3atM3QqRcbCn6ewmpxcLAHGaDjpEBu4xZd47N0W2oQ+6q7oc3PXstrJYXcbNU1OHdQ1T7pAP+gi5Yu8g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <meta charset="UTF-8">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cropper/1.0.1/jquery-cropper.js" integrity="sha512-7H4tikIFoyAdYD31w/uNYvvAUL6gyunWXLwTQ7ZXkyjD+brw+PfJpLxFkANnbkKnSJzU89YpnF3fJKbpvV+QYg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.0/js/bootstrap.bundle.min.js" integrity="sha512-9GacT4119eY3AcosfWtHMsT5JyZudrexyEVzTBWV3viP/YfB9e2pEy3N7WXL3SV6ASXpTU0vzzSxsbfsuUH4sQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body>
+<div class="container-fluid" >
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="card text-center">
+                <div class="card-header">
+                    프로필 이미지
+                </div>
+                <div id="current-profile-image" class="mt-3">
+                    <svg th:data-jdenticon-value="${user.userId}"
+                         width="125" height="125" class="rounded border bg-light"></svg>
+                    <div th:text="${user.userNickname}"></div>
+                </div>
+                <div id="new-profile-image" class="mt-3"></div>
+                <div class="card-body">
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="profile-image-file">
+                        <label class="custom-file-label" for="profile-image-file">프로필 이미지 변경</label>
+                    </div>
+                    <div id="new-profile-image-control" class="mt-3">
+                        <button class="btn btn-outline-primary btn-block" id="cut-button">자르기</button>
+                        <button class="btn btn-outline-success btn-block" id="confirm-button">확인</button>
+                        <button class="btn btn-outline-warning btn-block" id="reset-button">취소</button>
+                    </div>
+                    <div id="cropped-new-profile-image" class="mt-3"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+
+<script>
+    $(function() {
+         cropper = '';
+        let $confirmBtn = $("#confirm-button");  // 확인 버튼
+        let $resetBtn = $("#reset-button");  // 취소 버튼
+        let $cutBtn = $("#cut-button");  // 자르기 버튼
+        let $newProfileImage = $("#new-profile-image"); // 새로 선택한 이미지
+        let $currentProfileImage = $("#current-profile-image"); // 현재 프로필 이미지
+        let $resultImage = $("#cropped-new-profile-image");  // 선택한 이미지 자른 부분
+        let $profileImage = $("#profileImage"); // 최종 프로필 이미지
+
+        // 버튼 숨기기
+        $newProfileImage.hide();
+        $cutBtn.hide();
+        $resetBtn.hide();
+        $confirmBtn.hide();
+
+        // 이미지 파일 선택하면 해당 파일 읽어오고 저장하는 로직
+        // profile-image-file (프로필 이미지 변경 선택)
+        $("#profile-image-file").change(function(e) {
+            if (e.target.files.length === 1) {
+                const reader = new FileReader();
+                reader.onload = e => {
+                    if (e.target.result) {
+                        if (!e.target.result.startsWith("data:image")) {
+                            alert("이미지 파일을 선택하세요.");
+                            return;
+                        }
+
+                        let img = document.createElement("img");
+                        img.id = 'new-profile';
+                        img.src = e.target.result;
+                        img.setAttribute('width', '100%');
+
+                        $newProfileImage.html(img);
+                        $newProfileImage.show();
+                        $currentProfileImage.hide();
+
+                        let $newImage = $(img);
+                        $newImage.cropper({aspectRatio: 1});
+                        cropper = $newImage.data('cropper');
+
+                        $cutBtn.show();
+                        $confirmBtn.hide();
+                        $resetBtn.show();
+                    }
+                };
+
+                reader.readAsDataURL(e.target.files[0]);
+            }
+        });
+
+        // 취소 버튼 로직
+        $resetBtn.click(function() {
+            $currentProfileImage.show();
+            $newProfileImage.hide();
+            $resultImage.hide();
+            $resetBtn.hide();
+            $cutBtn.hide();
+            $confirmBtn.hide();
+            $profileImage.val(''); // 프로필 이미지 비어있게 저장
+        });
+
+        // 자르기 버튼 로직
+        $cutBtn.click(function () {
+            let dataUrl = cropper.getCroppedCanvas().toDataURL();
+
+            if (dataUrl.length > 1000 * 1024) {
+                alert("이미지 파일이 너무 큽니다. 1024000 보다 작은 파일을 사용하세요. 현재 이미지 사이즈 " + dataUrl.length);
+                return;
+            }
+
+            let newImage = document.createElement("img");
+            newImage.id = "cropped-new-profile-image";
+            newImage.src = dataUrl;
+            newImage.width = 125;
+            $resultImage.html(newImage);
+            $resultImage.show();
+            $confirmBtn.show();
+
+            $confirmBtn.click(function () {
+                $newProfileImage.html(newImage);
+                $cutBtn.hide();
+                $confirmBtn.hide();
+                $profileImage.val(dataUrl);
+            });
+        });
+    });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/jdenticon@3.2.0/dist/jdenticon.min.js" async
+        integrity="sha384-yBhgDqxM50qJV5JPdayci8wCfooqvhFYbIKhv0hTtLvfeeyJMJCscRfFNKIxt43M" crossorigin="anonymous">
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropper/4.1.0/cropper.min.js" integrity="sha512-E+gDQcIvNXE60SjCS38ysf1mGh4ObBpKcUOp0oEaHQHQAdaN2p7GelOpgEdpTuCLoIJyLkNXiqFZbyD9Ak/Ygw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.0/js/bootstrap.min.js"></script>
+
+
+</html>

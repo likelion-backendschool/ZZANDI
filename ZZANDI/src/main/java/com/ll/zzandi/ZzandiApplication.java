@@ -8,7 +8,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @EnableJpaAuditing
 @SpringBootApplication
 @EnableAsync
-public class ZzandiApplication {
+public class ZzandiApplication  {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ZzandiApplication.class, args);

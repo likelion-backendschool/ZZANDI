@@ -116,6 +116,13 @@ public class UserController {
     @GetMapping("/profile")
     public String getProfilePage(@AuthenticationPrincipal User user,Model model){
         model.addAttribute("user",user);
-        return"/user/Profile-upload";
+        return"/user/profile-upload2";
+    }
+
+    @ResponseBody
+    @PostMapping("/profiles")
+    public String updateProfileImage(){
+        System.out.println("일단 입력은 성공");
+        return  "redirect:/";
     }
 }

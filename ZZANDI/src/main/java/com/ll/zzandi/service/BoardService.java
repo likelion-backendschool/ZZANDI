@@ -29,13 +29,13 @@ public class BoardService {
         PageRequest pageRequest = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "id"));
         return boardRepository.findBoardBy(pageRequest)
                 .map(board -> new BoardListDto(board.getId(), board.getCategory(), board.getTitle(), board.getUser().getUserNickname(),
-                        board.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd")), board.getViews(), board.getHeart()));
+                        board.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd")), board.getViews(), board.getHeart(), page));
     }
 
-    public BoardDetailDto boardDetail(Long id) {
+    public BoardDetailDto boardDetail(Long id, int page) {
         Board board = boardRepository.findById(id).orElseThrow();
         String createdDate = board.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
-        return new BoardDetailDto(board.getId(), board.getTitle(), createdDate, board.getUser().getUserNickname(), board.getContent(), board.getViews(), board.getHeart(), 0);
+        return new BoardDetailDto(board.getId(), board.getTitle(), createdDate, board.getUser().getUserNickname(), board.getContent(), board.getViews(), board.getHeart(), 0, page);
     }
 
     public Long save(Board board) {
@@ -48,9 +48,9 @@ public class BoardService {
         boardRepository.updateView(id);
     }
 
-    public BoardUpdateFormDto boardUpdateForm(Long id) {
+    public BoardUpdateFormDto boardUpdateForm(Long id, int page) {
         Board board = boardRepository.findById(id).orElse(null);
-        return new BoardUpdateFormDto(board.getId(), board.getCategory(), board.getTitle(), board.getUser().getUserNickname(), board.getContent(), board.getUpdatedDate());
+        return new BoardUpdateFormDto(board.getId(), board.getCategory(), board.getTitle(), board.getUser().getUserNickname(), board.getContent(), page, board.getUpdatedDate());
     }
 
     @Transactional

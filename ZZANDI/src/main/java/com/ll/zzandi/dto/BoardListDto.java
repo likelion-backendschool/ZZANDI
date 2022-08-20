@@ -18,5 +18,6 @@ public class BoardListDto {
     private String createdDate;
     private int views; // 조회수
     private int heart; // 좋아요 수
+    private int pageNum; // 현재 페이지 번호
 
 }

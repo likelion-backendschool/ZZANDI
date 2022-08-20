@@ -13,9 +13,10 @@
 */
 const list = document.querySelector(".list");
 const pagination = document.querySelector('.pagination');
+const currPage = document.querySelector(".page").value; // 현재 페이지 정보
 
 window.onload = () => {
-    findByPage(0);
+    findByPage(currPage);
 }
 
 // 게시물 검색
@@ -47,7 +48,7 @@ function displayItems(items) {
 function createBoardList(item) {
     return `<tr>
                 <td style="color: mediumpurple;">${item.category}</td>
-                <td><a href="detail/${item.boardId}">${item.title}</a></td>
+                <td><a href="detail/${item.boardId}/${item.pageNum}">${item.title}</a></td>
                 <td>${item.writer}</td>
                 <td>${item.createdDate}</td>
                 <td>${item.views}</td>

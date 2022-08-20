@@ -18,5 +18,6 @@ public class BoardDetailDto {
     private int views;
     private int heart;
     private int comments; // 댓글 수
+    private int pageNum; // 현재 페이지 번호
 
 }

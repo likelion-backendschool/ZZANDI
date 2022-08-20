@@ -18,6 +18,7 @@ public class BoardUpdateFormDto {
     private String title;
     private String writer;
     private String content;
+    private int pageNum;
 
     private LocalDateTime updatedDate;
 

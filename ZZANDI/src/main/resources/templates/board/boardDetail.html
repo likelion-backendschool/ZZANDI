@@ -26,9 +26,9 @@
 
     <div class="d-flex justify-content-end btn-group" style="margin-top: 30px;">
         <form th:action="@{/board/delete/{id} (id=${boardDetail.id})}" method="post">
-            <button class="btn btn-primary mx-1" type="button" th:onclick="|location.href='@{/board/update/{id} (id=${boardDetail.id})}'|">수정</button>
+            <button class="btn btn-primary mx-1" type="button" th:onclick="|location.href='@{/board/update/{id}/{page} (id=${boardDetail.id}, page=${boardDetail.pageNum})}'|">수정</button>
             <button class="btn btn-success mx-1" type="submit">삭제</button>
-            <button class="btn btn-warning mx-1" type="button" th:onclick="|location.href='@{/board/list}'|">목록으로</button>
+            <button class="btn btn-warning mx-1" type="button" th:onclick="|location.href='@{/board/list?page={page} (page=${boardDetail.pageNum})}'|">목록으로</button>
         </form>
     </div>
 </div>

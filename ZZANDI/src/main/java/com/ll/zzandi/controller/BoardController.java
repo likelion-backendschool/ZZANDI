@@ -17,7 +17,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 @Controller
@@ -28,7 +27,8 @@ public class BoardController {
     private final BoardService boardService;
 
     @GetMapping("/list")
-    public String boardListPaging() {
+    public String boardListPaging(Model model, @RequestParam(defaultValue = "0") int page) {
+        model.addAttribute("page", page);
         return "board/boardList";
     }
 
@@ -38,23 +38,20 @@ public class BoardController {
         return boardService.boardListPaging(pageable, page);
     }
 
-    @GetMapping("/detail/{id}")
-    public String boardDetail(Model model, @PathVariable Long id) {
+    @GetMapping("/detail/{id}/{page}")
+    public String boardDetail(Model model, @PathVariable Long id, @PathVariable int page) {
         boardService.updateView(id);
-        BoardDetailDto boardDetail = boardService.boardDetail(id);
-        model.addAttribute("boardDetail", boardDetail);
+        model.addAttribute("boardDetail", boardService.boardDetail(id, page));
         return "board/boardDetail";
     }
 
     @GetMapping("/write")
-    public String boardWriteForm(Model model) {
-        model.addAttribute("boardWriteDto", new BoardWriteDto());
+    public String boardWriteForm(BoardWriteDto boardWriteDto) {
         return "board/boardWriteForm";
     }
 
     @PostMapping("/write")
     public String boardWrite(@Valid BoardWriteDto boardWriteDto, BindingResult result) {
-        System.out.println(boardWriteDto.getCategory());
         // @NotBlank 값이 없는 경우 BindingResult로 처리!
         if (result.hasErrors()) {
             return "/board/boardWriteForm";
@@ -66,20 +63,19 @@ public class BoardController {
         Board board = new Board(user, boardWriteDto.getCategory(), boardWriteDto.getTitle(), boardWriteDto.getContent(), 0, 0);
         Long saveId = boardService.save(board);
 
-        return "redirect:/board/detail/" + saveId;
+        return "redirect:/board/detail/%d/0".formatted(saveId);
     }
 
-    @GetMapping("/update/{id}")
-    public String boardUpdateForm(@PathVariable Long id, Model model) {
-        BoardUpdateFormDto updateFormDto = boardService.boardUpdateForm(id);
-        model.addAttribute("updateDto", updateFormDto);
+    @GetMapping("/update/{id}/{page}")
+    public String boardUpdateForm(Model model, @PathVariable Long id, @PathVariable int page) {
+        model.addAttribute("updateDto", boardService.boardUpdateForm(id, page));
         return "board/boardUpdateForm";
     }
 
-    @PostMapping("/update/{id}")
-    public String boardUpdate(@PathVariable Long id, BoardUpdateFormDto updateFormDto) {
+    @PostMapping("/update/{id}/{page}")
+    public String boardUpdate(@PathVariable Long id, @PathVariable int page, BoardUpdateFormDto updateFormDto) {
         boardService.boardUpdate(id, updateFormDto);
-        return "redirect:/board/detail/" + id;
+        return "redirect:/board/detail/%d/%d".formatted(id, page);
     }
 
     @PostMapping("/delete/{id}")

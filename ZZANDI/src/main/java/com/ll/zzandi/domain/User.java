@@ -54,8 +54,11 @@ public class User extends BaseEntity{
     @Column(name="USER_EMAILCHECKTOKEN")
     private String emailCheckToken;
 
-    @Column(name="USER_EMAILCHECKGENERATEDAT")
+    @Column(name="USER_EMAILCHECKGENERATEDATE")
     private LocalDateTime emailCheckTokenGeneratedAt;
+
+    @Column(name="USER_PROFILEURL")
+    private String userprofileUrl;
 
 
     public User(String userId, String userPassword, String userEmail, String userNickname) {

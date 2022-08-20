@@ -17,6 +17,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
 import javax.validation.Valid;
 
 @Controller
@@ -116,13 +118,17 @@ public class UserController {
     @GetMapping("/profile")
     public String getProfilePage(@AuthenticationPrincipal User user,Model model){
         model.addAttribute("user",user);
-        return"/user/profile-upload2";
+        return"/user/Profile-upload";
     }
 
-    @ResponseBody
     @PostMapping("/profiles")
-    public String updateProfileImage(){
+    @ResponseBody
+    public String updateProfileImage(@RequestParam("croppedImage") MultipartFile multipartFile){
         System.out.println("일단 입력은 성공");
+        String fileName=multipartFile.getName();
+        String originalName=multipartFile.getOriginalFilename();
+        System.out.println(fileName);
+        System.out.println(originalName);
         return  "redirect:/";
     }
 }

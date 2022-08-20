@@ -65,44 +65,30 @@
             reader.readAsDataURL(this.files[0]);
             $('#uploadimage').show();
         });
-
-
-        // $('.crop_image').click(function(event){
-        //     $image_crop.croppie('result', {
-        //         type: 'canvas',
-        //         size: 'viewport'
-        //     }).then(function(response){
-        //         $.ajax({
-        //             url:"user/profiles",
-        //             type: "POST",
-        //             data:{"image": response},
-        //             success : function(data) {
-        //                 {
-        //                     $('#uploaded_image').html(data)
-        //                 }
-        //             },
-        //             error : function(error) {
-        //                 console.log("error");
-        //             }
-        //         });
-        //     })
-        // });
-
-        $('.crop_image').click(function() {
-
-            $.ajax({
-
-                type: 'POST',
-                url: '/user/profiles',
-                dataType: 'json',
-                success: function(obj) {
-                    console.log("성공");
-                },
-                error: function(error) {
-                    console.log("error");
-                }
-
-            });
+        $('.crop_image').click(function(event) {
+            $image_crop.croppie('result', {
+                type: 'canvas',
+                size: 'viewport'
+            }).then(function(response) {
+                var formData = new FormData();
+                formData.append("file",response);
+                $.ajax({
+                    type: 'POST',
+                    enctype: 'multipart/form-data',
+                    url: '/user/profiles',
+                    dataType:'json',
+                    data:response,
+                    processData: false,	// 필수
+                    contentType: false,	// 필수
+                    cache: false,
+                    success: function (obj) {
+                        console.log("성공");
+                    },
+                    error: function (error) {
+                        console.log("error");
+                    }
+                });
+            })
         });
     });
 </script>

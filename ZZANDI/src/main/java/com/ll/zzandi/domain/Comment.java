@@ -9,6 +9,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+import static javax.persistence.FetchType.LAZY;
+
 @Entity
 @Getter @Setter
 @Table(name = "COMMENT")
@@ -19,10 +21,13 @@ public class Comment extends BaseEntity {
     @Column(name = "CM_ID")
     private Long id; // 댓글 id
 
-
-    @ManyToOne
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "board_id")
     private Board board;
+
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "user_uuid")
+    private User user;
 
     @Column(name = "CM_PARENT_ID")
     private Long parentId; // 부모 댓글 id
@@ -31,7 +36,7 @@ public class Comment extends BaseEntity {
     private String content;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "CM_DEL_STATUS")
+    @Column(name = "CM_STATUS")
     private CommentStatus deleteStatus; // 댓글 삭제 여부
 
     @LastModifiedDate

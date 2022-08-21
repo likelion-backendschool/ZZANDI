@@ -37,16 +37,11 @@ import java.util.UUID;
 @RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserController {
-    @Value("${cloud.aws.s3.bucket.name}")
-    private String bucket;
-    @Value("${cloud.aws.s3.bucket.url}")
-    private String defaultUrl;
     private final RegisterFormValidator registerFormValidator;
 
     private final UserService userService;
     private final UserRepository userRepository;
 
-    private final AmazonS3Client amazonS3Client;
 
     @InitBinder("registerRequest")
     public void initBinder(WebDataBinder webDataBinder) {
@@ -136,39 +131,11 @@ public class UserController {
         return"/user/Profile-upload";
     }
 
-    @PostMapping("/profiles")
+    @PostMapping("/profile")
     @ResponseBody
     @Transactional
     public String updateProfileImage(@RequestParam("croppedImage") MultipartFile multipartFile, @AuthenticationPrincipal User user) throws IOException {
-        User user1=userRepository.findByUserId(user.getUserId()).orElseThrow(RuntimeException::new);
-        //TODO 일단 컨트롤러 몰빵 코드 분리 하기 && 설정들도 숨기기 && 하드코딩 좀 손보기
-        System.out.println("일단 입력은 성공");
-        System.out.println(multipartFile.getSize());
-        String fileName=multipartFile.getName();
-        String originalName=multipartFile.getOriginalFilename();
-        System.out.println(fileName);
-        System.out.println(originalName);
-        String[] name=originalName.split("\\\\");
-        System.out.println(Arrays.stream(name).toList());
-        File file = new File(System.getProperty("user.dir") + name[2]);
-        multipartFile.transferTo(file);
-        final String ext = name[2].substring(name[2].lastIndexOf('.'));
-        final String saveFileName = getUuid() + ext;
-        final TransferManager transferManager = new TransferManager(this.amazonS3Client);
-        final PutObjectRequest request = new PutObjectRequest(bucket, saveFileName, file);
-        final Upload upload =  transferManager.upload(request);
-        try {
-            upload.waitForCompletion();
-        } catch (AmazonClientException | InterruptedException amazonClientException) {
-            amazonClientException.printStackTrace();
-        }
-        user1.setUserprofileUrl(defaultUrl+saveFileName);
-        file.delete();
-//        awsS3.uploadImg(multipartFile);
-        //System.out.println(Arrays.toString(multipartFile.getBytes()));
+        userService.updateProfile(multipartFile,user.getUserId());
         return  "redirect:/";
-    }
-    private static String getUuid() {
-        return UUID.randomUUID().toString().replaceAll("-", "");
     }
 }

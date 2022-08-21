@@ -154,7 +154,7 @@
                     const formData = new FormData();
                     var file = new File([blob], "filename");
                     formData.append('croppedImage', file,fileName);
-                    $.ajax('/user/profiles', {
+                    $.ajax('/user/profile', {
                         method: 'POST',
                         data: formData,//앞에서 생성한 formData
                         processData : false,	// data 파라미터 강제 string 변환 방지

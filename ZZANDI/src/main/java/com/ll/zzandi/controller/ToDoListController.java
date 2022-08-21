@@ -64,4 +64,9 @@ public class ToDoListController {
     public List<ToDoList> boardListPagingToJson() {
         return toDoListService.findAll();
     }
+
+    @GetMapping("/test")
+    public String testToDoMain() {
+        return "todo/ToDoListMainAsync";
+    }
 }

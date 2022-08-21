@@ -41,7 +41,7 @@ public class SecurityConfig{
             .headers().frameOptions().disable()
             .and()
             .authorizeRequests()
-            .antMatchers("/images/**", "/js/**").permitAll()
+            .antMatchers("/images/**", "/js/**", "/bootstrap/**").permitAll()
             .antMatchers("/", "/user/join", "/h2-console/**", "/user/login/**", "/user/check-email-token/**", "/user/denied/**", "/board/**").permitAll()
             .antMatchers("/admin/**").hasRole("ADMIN")
             .anyRequest().authenticated()

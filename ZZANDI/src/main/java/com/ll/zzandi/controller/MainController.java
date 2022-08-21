@@ -23,8 +23,8 @@ public class MainController {
     @GetMapping("/")
     public String main(@AuthenticationPrincipal User user, Model model){
         if(user!=null) {
-            //User currentUser = userRepository.findByUserId(user.getUserId()).orElseThrow(EntityExistsException::new);
-            model.addAttribute("user", user);
+            User currentUser = userRepository.findByUserId(user.getUserId()).orElseThrow(EntityExistsException::new);
+            model.addAttribute("user", currentUser);
         }
         return "index";
     }

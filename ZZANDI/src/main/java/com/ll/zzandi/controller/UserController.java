@@ -1,5 +1,10 @@
 package com.ll.zzandi.controller;
 
+import com.amazonaws.AmazonClientException;
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.transfer.TransferManager;
+import com.amazonaws.services.s3.transfer.Upload;
 import com.ll.zzandi.domain.User;
 import com.ll.zzandi.dto.UserDto;
 import com.ll.zzandi.repository.UserRepository;
@@ -8,6 +13,8 @@ import com.ll.zzandi.util.validator.RegisterFormValidator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,21 +26,22 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
+import java.io.File;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/user")
+@RequiredArgsConstructor
 public class UserController {
     private final RegisterFormValidator registerFormValidator;
 
     private final UserService userService;
     private final UserRepository userRepository;
 
-    public UserController(UserService userService, UserRepository userRepository, RegisterFormValidator registerFormValidator) {
-        this.userService = userService;
-        this.userRepository=userRepository;
-        this.registerFormValidator=registerFormValidator;
-    }
 
     @InitBinder("registerRequest")
     public void initBinder(WebDataBinder webDataBinder) {
@@ -117,18 +125,17 @@ public class UserController {
 
     @GetMapping("/profile")
     public String getProfilePage(@AuthenticationPrincipal User user,Model model){
-        model.addAttribute("user",user);
+        //TODO 이거 질문 하기 이로직을 너무 많이 사용할거 같은데 유저가 업데이트 되면 @Autuen 에서 가져오는 User정보도 업데이트를 하는 방법
+        User currentUser=userRepository.findByUserId(user.getUserId()).orElseThrow(RuntimeException::new);
+        model.addAttribute("user",currentUser);
         return"/user/Profile-upload";
     }
 
-    @PostMapping("/profiles")
+    @PostMapping("/profile")
     @ResponseBody
-    public String updateProfileImage(@RequestParam("croppedImage") MultipartFile multipartFile){
-        System.out.println("일단 입력은 성공");
-        String fileName=multipartFile.getName();
-        String originalName=multipartFile.getOriginalFilename();
-        System.out.println(fileName);
-        System.out.println(originalName);
+    @Transactional
+    public String updateProfileImage(@RequestParam("croppedImage") MultipartFile multipartFile, @AuthenticationPrincipal User user) throws IOException {
+        userService.updateProfile(multipartFile,user.getUserId());
         return  "redirect:/";
     }
 }

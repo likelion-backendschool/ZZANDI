@@ -34,6 +34,13 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '2.6.3'
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
+	// AWS 의존성 추가
+	// https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-aws
+	implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-aws', version: '2.2.1.RELEASE'
+	// https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-aws-context
+	implementation group: 'org.springframework.cloud', name: 'spring-cloud-aws-context', version: '2.2.1.RELEASE'
+	// https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-aws-autoconfigure
+	implementation group: 'org.springframework.cloud', name: 'spring-cloud-aws-autoconfigure', version: '2.2.1.RELEASE'
 }
 
 tasks.named('test') {

@@ -24,15 +24,12 @@ function findByPage(page) {
     fetch("/board/list-json?page=" + page)
         .then(response => response.json())
         .then(data => {
-            const json = JSON.stringify(data);
-            const items = JSON.parse(json);
-            // 게시물이 하나도 없는 경우
-            if(items.content.length === 0) {
+            if(data.content.length === 0) {
                 list.innerHTML = '<td colspan="6">등록된 게시글이 없습니다.</td>';
-                createPageList();
                 return false;
+            } else {
+                displayItems(data);
             }
-            displayItems(items);
         });
 }
 

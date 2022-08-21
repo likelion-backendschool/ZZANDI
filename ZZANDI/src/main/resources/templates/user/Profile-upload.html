@@ -1,12 +1,16 @@
 <!--회원가입 페이지-->
 <!DOCTYPE html>
 <!-- Latest compiled and minified CSS -->
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.0/css/bootstrap.min.css">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+
+
+<head th:replace="layout/head.html :: head">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropper/4.1.0/cropper.min.css" integrity="sha512-vmXqikRa5kmI3gOQygzml5nV+5NGxG8rt8KWHKj8JYYK12JUl2L8RBfWinFGTzvpwwsIRcINy9mhLyodnmzjig==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
+
 <body>
+<section th:replace="layout/header.html :: header"></section>
 <div class="container-fluid" >
     <div class="row">
         <div class="col-sm-6">
@@ -15,14 +19,18 @@
                     프로필 이미지
                 </div>
                 <div id="current-profile-image" class="mt-3">
-                    <svg th:data-jdenticon-value="${user.userId}"
-                         width="125" height="125" class="rounded border bg-light"></svg>
+                    <div sec:authorize="isAuthenticated()">
+                        <svg th:if="${#strings.isEmpty(user?.userprofileUrl)}" th:data-jdenticon-value="${user.userId}"
+                             width="150" height="150" class="rounded border bg-light"></svg>
+                        <img th:if="${!#strings.isEmpty(user?.userprofileUrl)}" th:src="${user.userprofileUrl}"
+                             width="150" height="150" class="rounded border"/>
+                    </div>
                     <div th:text="${user.userNickname}"></div>
                 </div>
                 <div id="new-profile-image" class="mt-3"></div>
                 <div class="card-body">
                     <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="profile-image-file">
+                        <input type="file" class="custom-file-input" id="profile-image-file" name="image">
                         <label class="custom-file-label" for="profile-image-file">프로필 이미지 변경</label>
                     </div>
                     <div id="new-profile-image-control" class="mt-3">
@@ -37,8 +45,9 @@
     </div>
 </div>
 
+<!-- footer -->
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.js" integrity="sha512-n/4gHW3atM3QqRcbCn6ewmpxcLAHGaDjpEBu4xZd47N0W2oQ+6q7oc3PXstrJYXcbNU1OHdQ1T7pAP+gi5Yu8g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<meta charset="UTF-8">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cropper/1.0.1/jquery-cropper.js" integrity="sha512-7H4tikIFoyAdYD31w/uNYvvAUL6gyunWXLwTQ7ZXkyjD+brw+PfJpLxFkANnbkKnSJzU89YpnF3fJKbpvV+QYg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.0/js/bootstrap.bundle.min.js" integrity="sha512-9GacT4119eY3AcosfWtHMsT5JyZudrexyEVzTBWV3viP/YfB9e2pEy3N7WXL3SV6ASXpTU0vzzSxsbfsuUH4sQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdn.jsdelivr.net/npm/jdenticon@3.2.0/dist/jdenticon.min.js" async
@@ -46,10 +55,11 @@
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropper/4.1.0/cropper.min.js" integrity="sha512-E+gDQcIvNXE60SjCS38ysf1mGh4ObBpKcUOp0oEaHQHQAdaN2p7GelOpgEdpTuCLoIJyLkNXiqFZbyD9Ak/Ygw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.0/js/bootstrap.min.js"></script>
+<footer th:replace="layout/footer.html :: footer"></footer>
 </body>
 <script>
     $(function() {
-         cropper = '';
+        cropper = '';
         let $confirmBtn = $("#confirm-button");  // 확인 버튼
         let $resetBtn = $("#reset-button");  // 취소 버튼
         let $cutBtn = $("#cut-button");  // 자르기 버튼
@@ -126,11 +136,24 @@
             $resultImage.html(newImage);
             $resultImage.show();
             $confirmBtn.show();
+            function dataURLtoFile (dataurl, fileName){
+                var arr = dataurl.split(','),
+                    mime = arr[0].match(/:(.*?);/)[1],
+                    bstr = atob(arr[1]),
+                    n = bstr.length,
+                    u8arr = new Uint8Array(n);
+                while(n--){
+                    u8arr[n] = bstr.charCodeAt(n);
+                }
+                return new File([u8arr], fileName, {type:mime});
+            }
 
             $confirmBtn.click(function () {
                 cropper.getCroppedCanvas().toBlob((blob) => {
+                    var fileName = $('#profile-image-file').val();
                     const formData = new FormData();
-                    formData.append('croppedImage', blob);
+                    var file = new File([blob], "filename");
+                    formData.append('croppedImage', file,fileName);
                     $.ajax('/user/profiles', {
                         method: 'POST',
                         data: formData,//앞에서 생성한 formData

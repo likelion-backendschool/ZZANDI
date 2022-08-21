@@ -1,5 +1,10 @@
 package com.ll.zzandi.controller;
 
+import com.amazonaws.AmazonClientException;
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.transfer.TransferManager;
+import com.amazonaws.services.s3.transfer.Upload;
 import com.ll.zzandi.domain.User;
 import com.ll.zzandi.dto.UserDto;
 import com.ll.zzandi.repository.UserRepository;
@@ -8,6 +13,8 @@ import com.ll.zzandi.util.validator.RegisterFormValidator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,21 +26,27 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
+import java.io.File;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/user")
+@RequiredArgsConstructor
 public class UserController {
+    @Value("${cloud.aws.s3.bucket.name}")
+    private String bucket;
+    @Value("${cloud.aws.s3.bucket.url}")
+    private String defaultUrl;
     private final RegisterFormValidator registerFormValidator;
 
     private final UserService userService;
     private final UserRepository userRepository;
 
-    public UserController(UserService userService, UserRepository userRepository, RegisterFormValidator registerFormValidator) {
-        this.userService = userService;
-        this.userRepository=userRepository;
-        this.registerFormValidator=registerFormValidator;
-    }
+    private final AmazonS3Client amazonS3Client;
 
     @InitBinder("registerRequest")
     public void initBinder(WebDataBinder webDataBinder) {
@@ -117,18 +130,45 @@ public class UserController {
 
     @GetMapping("/profile")
     public String getProfilePage(@AuthenticationPrincipal User user,Model model){
-        model.addAttribute("user",user);
+        //TODO 이거 질문 하기 이로직을 너무 많이 사용할거 같은데 유저가 업데이트 되면 @Autuen 에서 가져오는 User정보도 업데이트를 하는 방법
+        User currentUser=userRepository.findByUserId(user.getUserId()).orElseThrow(RuntimeException::new);
+        model.addAttribute("user",currentUser);
         return"/user/Profile-upload";
     }
 
     @PostMapping("/profiles")
     @ResponseBody
-    public String updateProfileImage(@RequestParam("croppedImage") MultipartFile multipartFile){
+    @Transactional
+    public String updateProfileImage(@RequestParam("croppedImage") MultipartFile multipartFile, @AuthenticationPrincipal User user) throws IOException {
+        User user1=userRepository.findByUserId(user.getUserId()).orElseThrow(RuntimeException::new);
+        //TODO 일단 컨트롤러 몰빵 코드 분리 하기 && 설정들도 숨기기 && 하드코딩 좀 손보기
         System.out.println("일단 입력은 성공");
+        System.out.println(multipartFile.getSize());
         String fileName=multipartFile.getName();
         String originalName=multipartFile.getOriginalFilename();
         System.out.println(fileName);
         System.out.println(originalName);
+        String[] name=originalName.split("\\\\");
+        System.out.println(Arrays.stream(name).toList());
+        File file = new File(System.getProperty("user.dir") + name[2]);
+        multipartFile.transferTo(file);
+        final String ext = name[2].substring(name[2].lastIndexOf('.'));
+        final String saveFileName = getUuid() + ext;
+        final TransferManager transferManager = new TransferManager(this.amazonS3Client);
+        final PutObjectRequest request = new PutObjectRequest(bucket, saveFileName, file);
+        final Upload upload =  transferManager.upload(request);
+        try {
+            upload.waitForCompletion();
+        } catch (AmazonClientException | InterruptedException amazonClientException) {
+            amazonClientException.printStackTrace();
+        }
+        user1.setUserprofileUrl(defaultUrl+saveFileName);
+        file.delete();
+//        awsS3.uploadImg(multipartFile);
+        //System.out.println(Arrays.toString(multipartFile.getBytes()));
         return  "redirect:/";
+    }
+    private static String getUuid() {
+        return UUID.randomUUID().toString().replaceAll("-", "");
     }
 }

@@ -52,11 +52,10 @@ public class ToDoListController {
         return "redirect:/todo";
     }
 
-    @GetMapping("/delete")
-    public String deleteToDoList (long id) {
+    @DeleteMapping("/delete")
+    @ResponseBody
+    public void deleteToDoList (long id) {
         toDoListService.delete(id);
-
-        return "redirect:/todo";
     }
 
     @GetMapping("/list-json")

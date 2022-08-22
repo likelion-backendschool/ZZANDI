@@ -1,7 +1,10 @@
 package com.ll.zzandi.service;
 
+import com.ll.zzandi.domain.Book;
+import com.ll.zzandi.domain.Lecture;
 import com.ll.zzandi.domain.Study;
-import com.ll.zzandi.dto.StudyDto;
+import com.ll.zzandi.enumtype.StudyStatus;
+import com.ll.zzandi.enumtype.StudyType;
 import com.ll.zzandi.exception.StudyForm;
 import com.ll.zzandi.repository.StudyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,15 +24,20 @@ public class StudyService {
         this.studyRepository = studyRepository;
     }
 
-    public void save(@Valid StudyForm studyform) {
-        Study s1 = new Study();
-        s1.setStudyTitle(studyform.getStudyTitle());
-        s1.setStudyStart(studyform.getStudyStart());
-        s1.setStudyEnd(studyform.getStudyEnd());
-        s1.setStudyPeople(studyform.getStudyPeople());
-        s1.setStudyTag(studyform.getStudyTag());
-        s1.setStudyType(studyform.getStudyType());
-        studyRepository.save(s1);
+    public void saveWithBook(@Valid StudyForm studyform, Book book) {
+        Study study = new Study(studyform.getStudyTitle(), book, null, StudyType.BOOK,
+            studyform.getStudyStart(),
+            studyform.getStudyEnd(), studyform.getStudyPeople(), studyform.getStudyTag(), 0,
+            StudyStatus.RECRUIT);
+        studyRepository.save(study);
+    }
+
+    public void saveWithLecture(@Valid StudyForm studyform, Lecture lecture) {
+        Study study = new Study(studyform.getStudyTitle(), null, lecture, StudyType.LECTURE,
+            studyform.getStudyStart(),
+            studyform.getStudyEnd(), studyform.getStudyPeople(), studyform.getStudyTag(), 0,
+            StudyStatus.RECRUIT);
+        studyRepository.save(study);
     }
 
     public List<Study> findall() {
@@ -53,7 +61,7 @@ public class StudyService {
         s1.setStudyEnd(studyform.getStudyEnd());
         s1.setStudyPeople(studyform.getStudyPeople());
         s1.setStudyTag(studyform.getStudyTag());
-        s1.setStudyType(studyform.getStudyType());
+        s1.setStudyType(StudyType.valueOf(studyform.getStudyType()));
         studyRepository.save(s1);
     }
 

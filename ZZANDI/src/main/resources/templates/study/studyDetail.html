@@ -27,14 +27,14 @@
                         <td th:text="${studies.studyEnd}"></td>
                         <td th:text="${studies.studyTag}"></td>
                         <td><input type="button" th:value="${studies.studyType}" onclick="dis()"></td>
-                        <td id="book">
+                        <td id="book" th:if = "${books != null}">
                             <p th:text="${books.bookName}"></p>
                             <p th:text="${books.bookAuthor}"></p>
                             <p th:text="${books.bookPage}"></p>
                             <p th:text="${books.bookPublisher}"></p>
                             <p th:text="${books.bookUrl}"></p>
                         </td>
-                        <td id="lecture">
+                        <td id="lecture" th:if = "${lectures != null}">
                             <p th:text="${lectures.lectureName}"></p>
                             <p th:text="${lectures.lecturer}"></p>
                             <p th:text="${lectures.lectureNumber}"></p>

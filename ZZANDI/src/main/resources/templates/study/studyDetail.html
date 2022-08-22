@@ -1,28 +1,47 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<body>
-<div class="container">
-    <div>
-        <table>
-            <thead>
-            <tr>
-                <th>#</th>
-                <th>스터디 이름</th>
-                <th>스터디 인원 수</th>
-                <th>스터디 시작일</th>
-                <th>스터디 종료일</th>
-            </tr>
-            </thead>
-            <tbody>
-            <td th:text="${studies.id}"></td>
-            <td th:text="${studies.studyTitle}"></td>
-            <td th:text="${studies.studyPeople}"></td>
-            <td th:text="${studies.studyStart}"></td>
-            <td th:text="${studies.studyEnd}"></td>
-
-            </tbody>
-        </table>
-    </div>
-</div>
-</body>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script type="text/javascript" th:src="@{/js/studyDetail.js}"></script>
+</head>
+    <body>
+        <div class="container">
+            <div>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>스터디 이름</th>
+                        <th>스터디 인원 수</th>
+                        <th>스터디 시작일</th>
+                        <th>스터디 종료일</th>
+                        <th>스터디 태그</th>
+                        <th>스터디 타입</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <td th:text="${studies.getId}"></td>
+                        <td th:text="${studies.studyTitle}"></td>
+                        <td th:text="${studies.studyPeople}"></td>
+                        <td th:text="${studies.studyStart}"></td>
+                        <td th:text="${studies.studyEnd}"></td>
+                        <td th:text="${studies.studyTag}"></td>
+                        <td><input type="button" th:value="${studies.studyType}" onclick="dis()"></td>
+                        <td id="book">
+                            <p th:text="${books.bookName}"></p>
+                            <p th:text="${books.bookAuthor}"></p>
+                            <p th:text="${books.bookPage}"></p>
+                            <p th:text="${books.bookPublisher}"></p>
+                            <p th:text="${books.bookUrl}"></p>
+                        </td>
+                        <td id="lecture">
+                            <p th:text="${lectures.lectureName}"></p>
+                            <p th:text="${lectures.lecturer}"></p>
+                            <p th:text="${lectures.lectureNumber}"></p>
+                        </td>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </body>
 </html>

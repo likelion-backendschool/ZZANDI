@@ -22,4 +22,10 @@ public class StudyForm {
 
     @NotNull(message = "스터디 인원 수는 필수항목입니다.")
     private Integer studyPeople;
+
+    @NotNull(message = "스터디 태그는 필수항목입니다.")
+    private String studyTag;
+
+    @NotNull(message = "스터디 타입은 필수항목입니다.")
+    private String studyType;
 }

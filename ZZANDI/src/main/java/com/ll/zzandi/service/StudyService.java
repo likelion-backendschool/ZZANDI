@@ -27,6 +27,8 @@ public class StudyService {
         s1.setStudyStart(studyform.getStudyStart());
         s1.setStudyEnd(studyform.getStudyEnd());
         s1.setStudyPeople(studyform.getStudyPeople());
+        s1.setStudyTag(studyform.getStudyTag());
+        s1.setStudyType(studyform.getStudyType());
         studyRepository.save(s1);
     }
 
@@ -50,6 +52,8 @@ public class StudyService {
         s1.setStudyStart(studyform.getStudyStart());
         s1.setStudyEnd(studyform.getStudyEnd());
         s1.setStudyPeople(studyform.getStudyPeople());
+        s1.setStudyTag(studyform.getStudyTag());
+        s1.setStudyType(studyform.getStudyType());
         studyRepository.save(s1);
     }
 

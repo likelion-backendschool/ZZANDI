@@ -28,6 +28,10 @@ public class ToDoListService {
         toDoListRepository.save(toDoList);
     }
 
+    public List<ToDoList> findAllByType(Type type) {
+        return toDoListRepository.findAllByType(type);
+    }
+
     public List<ToDoList> findAll() {
         return toDoListRepository.findAll();
     }

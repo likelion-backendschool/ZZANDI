@@ -34,11 +34,11 @@ public class ToDoListController {
     @PostMapping("/add")
     public String addTodo (Model model, @Valid ToDoListDto.ToDoListRequest toDoListRequest, BindingResult bindingResult) {
 
-        if(bindingResult.hasErrors()) {
-            List<ToDoList> toDoList = toDoListService.findAll();
-            model.addAttribute("toDoList", toDoList);
-            return "todo/ToDoListMain";
-        }
+//        if(bindingResult.hasErrors()) {
+//            List<ToDoList> toDoList = toDoListService.findAll();
+//            model.addAttribute("toDoList", toDoList);
+//            return "todo/ToDoListMain";
+//        }
 
         toDoListService.save(toDoListRequest);
 
@@ -61,8 +61,8 @@ public class ToDoListController {
 
     @GetMapping("/list-json")
     @ResponseBody
-    public List<ToDoList> boardListPagingToJson() {
-        return toDoListService.findAll();
+    public List<ToDoList> boardListPagingToJson(@RequestParam(required = false) Type type) {
+        return (type == null) ? toDoListService.findAll() : toDoListService.findAllByType(type);
     }
 
     @GetMapping("/test")

@@ -1,6 +1,7 @@
 <!--ToDo 리스트 메인 페이지-->
 <!DOCTYPE html>
 <html xmlns:th="http://thymeleaf.org" lang="ko">
+
 <head>
     <meta charset="UTF-8">
     <!-- js -->
@@ -49,42 +50,27 @@
                         </form>
 
                         <!-- Tabs navs -->
-                        <!--                        선택칸-->
+                        <!-- 선택칸-->
                         <ul class="nav nav-tabs mb-4 pb-2" id="ex1" role="tablist">
                             <li class="nav-item" role="presentation">
-                                <a class="nav-link active" id="ex1-tab-1" data-mdb-toggle="tab" href="#ex1-tabs-1" role="tab"
-                                   aria-controls="ex1-tabs-1" aria-selected="true">All</a>
+                                <button th:onclick="findAll()" class="nav-link active" id="ex1-tab-1" data-mdb-toggle="tab" href="#ex1-tabs-1" role="tab"
+                                   aria-controls="ex1-tabs-1" aria-selected="true">ALL</button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <a class="nav-link" id="ex1-tab-2" data-mdb-toggle="tab" href="#ex1-tabs-2" role="tab"
-                                   aria-controls="ex1-tabs-2" aria-selected="false">Active</a>
+                                <button th:onclick="|findAll('DOING')|" class="nav-link" id="ex1-tab-2" data-mdb-toggle="tab" href="#ex1-tabs-2" role="tab"
+                                   aria-controls="ex1-tabs-2" aria-selected="false">DOING</button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <a class="nav-link" id="ex1-tab-3" data-mdb-toggle="tab" href="#ex1-tabs-3" role="tab"
-                                   aria-controls="ex1-tabs-3" aria-selected="false">Completed</a>
+                                <button th:onclick="|findAll('DONE')|" class="nav-link" id="ex1-tab-3" data-mdb-toggle="tab" role="tab"
+                                   aria-controls="ex1-tabs-3" aria-selected="false">DONE</button>
                             </li>
                         </ul>
 
-                        <!--                            All 부분-->
                         <div class="tab-content" id="ex1-content">
                             <div class="tab-pane fade show active" id="ex1-tabs-1" role="tabpanel"
                                  aria-labelledby="ex1-tab-1">
-
-                                <ul class="list-group mb-0 listAll">
-
-                                </ul>
-
-                            </div>
-                            <!--                            active 부분-->
-                            <div class="tab-pane fade" id="ex1-tabs-2" role="tabpanel" aria-labelledby="ex1-tab-2">
-                                <ul class="list-group mb-0 listActive">
-
-                                </ul>
-                            </div>
-                            <!--                            complted 부분-->
-                            <div class="tab-pane fade" id="ex1-tabs-3" role="tabpanel" aria-labelledby="ex1-tab-3">
-                                <ul class="list-group mb-0 listCompleted">
-
+                                <ul class="list-group mb-0 list">
+                                    <!-- 각 리스트 내용이 들어갈 부분 -->
                                 </ul>
                             </div>
                         </div>

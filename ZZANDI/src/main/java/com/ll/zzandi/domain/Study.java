@@ -1,5 +1,9 @@
 package com.ll.zzandi.domain;
 
+import static javax.persistence.FetchType.*;
+
+import com.ll.zzandi.enumtype.StudyStatus;
+import com.ll.zzandi.enumtype.StudyType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,14 +24,17 @@ public class Study {
     @Column(name = "STUDY_TITLE")
     private String studyTitle;
 
-    @Column(name = "BOOK_ID")
-    private int bookId;
+    @JoinColumn(name = "BOOK_ID")
+    @OneToOne(fetch = LAZY, cascade = CascadeType.REMOVE)
+    private Book book;
 
-    @Column(name = "LC_ID")
-    private int lcId;
+    @JoinColumn(name = "LC_ID")
+    @OneToOne(fetch = LAZY, cascade = CascadeType.REMOVE)
+    private Lecture lecture;
 
     @Column(name = "STUDY_TYPE")
-    private String studyType;
+    @Enumerated(EnumType.STRING)
+    private StudyType studyType;
 
     @Column(name = "STUDY_START")
     private String studyStart;
@@ -45,13 +52,13 @@ public class Study {
     private int studyRate;
 
     @Column(name = "STUDY_STATUS")
-    private String studyStatus;
+    @Enumerated(EnumType.STRING)
+    private StudyStatus studyStatus;
 
-    public Study(Long id, String studyTitle, int bookId, int lcId, String studyType, String studyStart, String studyEnd, int studyPeople, String studyTag, int studyRate, String studyStatus) {
-        this.id = id;
+    public Study(String studyTitle, Book book, Lecture lecture, StudyType studyType, String studyStart, String studyEnd, int studyPeople, String studyTag, int studyRate, StudyStatus studyStatus) {
         this.studyTitle = studyTitle;
-        this.bookId = bookId;
-        this.lcId = lcId;
+        this.book = book;
+        this.lecture = lecture;
         this.studyType = studyType;
         this.studyStart = studyStart;
         this.studyEnd = studyEnd;

@@ -10,6 +10,8 @@ import com.ll.zzandi.exception.StudyForm;
 import com.ll.zzandi.service.BookService;
 import com.ll.zzandi.service.LectureService;
 import com.ll.zzandi.service.StudyService;
+import java.util.Objects;
+import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -39,9 +41,16 @@ public class StudyController {
         if (bindingResult.hasErrors()) {
             return "study/studyForm";
         }
-        studyService.save(studyForm);
-        bookService.save(bookDto);
-        lectureService.save(lectureDto);
+
+        if (Stream.of(bookDto.getBookName(), bookDto.getBookPage(), bookDto.getBookAuthor(),
+            bookDto.getBookPublisher(), bookDto.getBookUrl()).allMatch(Objects::nonNull)) {
+            Book book = bookService.save(bookDto);
+            studyService.saveWithBook(studyForm, book);
+        } else if (Stream.of(lectureDto.getLecturer(), lectureDto.getLectureName(),
+            lectureDto.getLecturer(), lectureDto.getLectureNumber()).allMatch(Objects::nonNull)) {
+            Lecture lecture = lectureService.save(lectureDto);
+            studyService.saveWithLecture(studyForm, lecture);
+        }
         return "redirect:/";
     }
 
@@ -54,9 +63,15 @@ public class StudyController {
 
     @GetMapping("/study/detail/{studyId}")
     public String detail(Model model, @PathVariable Long studyId) {
-        Study studies = studyService.findByid(studyId).get();
-        Book books = bookService.findByid(studyId).get();
-        Lecture lectures = lectureService.findById(studyId).get();
+        Study studies = studyService.findByid(studyId).orElseThrow(null);
+        Book books = studies.getBook();
+        Lecture lectures = studies.getLecture();
+        if (books != null) {
+            books = bookService.findByid(books.getId()).orElseThrow(null);
+        } else if (lectures != null) {
+            lectures = lectureService.findById(lectures.getId()).orElseThrow(null);
+        }
+
         model.addAttribute("studies", studies);
         model.addAttribute("books", books);
         model.addAttribute("lectures", lectures);
@@ -65,12 +80,8 @@ public class StudyController {
 
     @GetMapping("/study/delete/{studyId}")
     public String delete(@PathVariable Long studyId) {
-        Study studies = studyService.findByid(studyId).get();
-        Book books = bookService.findByid(studyId).get();
-        Lecture lectures = lectureService.findById(studyId).get();
+        Study studies = studyService.findByid(studyId).orElseThrow(null);
         studyService.delete(studies);
-        bookService.delete(books);
-        lectureService.delete(lectures);
         return "redirect:/";
     }
 

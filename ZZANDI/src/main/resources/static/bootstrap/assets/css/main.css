@@ -19,8 +19,14 @@
 /* Colors */
 :root {
   --color-default: #222222;
-  --color-primary: #008374;
-  --color-secondary: #f85a40;
+  /*hover에 적용*/
+  --color-hover: #064635;
+  /*글자 색에 적용*/
+  --color-font : #fff;
+  /*배경 색에 적용*/
+  --color-back : #519259;
+  /*nav 밑줄 색 & top up butoon에 적용*/
+  --color-nav : #efc173;
 }
 
 /* Smooth scroll behavior */
@@ -37,12 +43,12 @@ body {
 }
 
 a {
-  color: var(--color-primary);
+  color: var(--color-back);
   text-decoration: none;
 }
 
 a:hover {
-  color: #00b6a1;
+  color: var(--color-hover);
   text-decoration: none;
 }
 
@@ -65,7 +71,7 @@ h6 {
   right: 15px;
   bottom: -15px;
   z-index: 99999;
-  background: var(--color-secondary);
+  background: var(--color-nav);
   width: 44px;
   height: 44px;
   border-radius: 50px;
@@ -79,7 +85,7 @@ h6 {
 }
 
 .scroll-top:hover {
-  background: rgba(248, 90, 64, 0.8);
+  background: #f3d19a;
   color: #fff;
 }
 
@@ -107,7 +113,7 @@ h6 {
   top: calc(50% - 30px);
   left: calc(50% - 30px);
   border: 6px solid #fff;
-  border-color: var(--color-primary) transparent var(--color-primary) transparent;
+  border-color: var(--color-back) transparent var(--color-back) transparent;
   border-radius: 50%;
   width: 60px;
   height: 60px;
@@ -151,7 +157,7 @@ h6 {
   transition: all 0.5s;
   z-index: 997;
   height: 90px;
-  background-color: var(--color-primary);
+  background-color: var(--color-back);
 }
 
 .header.sticked {
@@ -173,7 +179,7 @@ h6 {
   margin: 0;
   font-weight: 600;
   letter-spacing: 0.8px;
-  color: #fff;
+  color: var(--color-font);
   font-family: var(--font-primary);
 }
 
@@ -235,7 +241,7 @@ h6 {
     height: 2px;
     bottom: -6px;
     left: 0;
-    background-color: var(--color-secondary);
+    background-color: var(--color-nav);
     visibility: hidden;
     width: 0px;
     transition: all 0.3s ease-in-out 0s;
@@ -252,7 +258,7 @@ h6 {
   .navbar .active,
   .navbar .active:focus,
   .navbar li:hover>a {
-    color: #fff;
+    color: var(--color-font);
   }
 
   .navbar .dropdown ul {
@@ -272,7 +278,7 @@ h6 {
   }
 
   .navbar .dropdown ul li {
-    min-width: 200px;
+    min-width: 160px;
   }
 
   .navbar .dropdown ul a {
@@ -280,7 +286,7 @@ h6 {
     font-size: 15px;
     text-transform: none;
     font-weight: 600;
-    color: #006a5d;
+    color: var(--color-hover);
   }
 
   .navbar .dropdown ul a i {
@@ -290,7 +296,7 @@ h6 {
   .navbar .dropdown ul a:hover,
   .navbar .dropdown ul .active:hover,
   .navbar .dropdown ul li:hover>a {
-    color: var(--color-secondary);
+    color: var(--color-back);
   }
 
   .navbar .dropdown:hover>ul {
@@ -351,7 +357,7 @@ h6 {
     inset: 0;
     padding: 50px 0 10px 0;
     margin: 0;
-    background: rgba(0, 131, 116, 0.9);
+    background: var(--color-back);
     overflow-y: auto;
     transition: 0.3s;
     z-index: 9998;
@@ -366,7 +372,7 @@ h6 {
     font-family: var(--font-primary);
     font-size: 15px;
     font-weight: 600;
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--color-font);
     white-space: nowrap;
     transition: 0.3s;
   }
@@ -382,22 +388,7 @@ h6 {
   .navbar .active,
   .navbar .active:focus,
   .navbar li:hover>a {
-    color: #fff;
-  }
-
-  .navbar .getstarted,
-  .navbar .getstarted:focus {
-    background: var(--color-primary);
-    padding: 8px 20px;
-    border-radius: 4px;
-    margin: 15px;
-    color: #fff;
-  }
-
-  .navbar .getstarted:hover,
-  .navbar .getstarted:focus:hover {
-    color: #fff;
-    background: rgba(0, 131, 116, 0.8);
+    color: var(--color-hover);
   }
 
   .navbar .dropdown ul,
@@ -407,8 +398,8 @@ h6 {
     padding: 10px 0;
     margin: 10px 20px;
     transition: all 0.5s ease-in-out;
-    background-color: #007466;
-    border: 1px solid #006459;
+    background-color: var(--color-hover);
+    border-radius: 1em;
   }
 
   .navbar .dropdown>.dropdown-active,
@@ -417,7 +408,7 @@ h6 {
   }
 
   .mobile-nav-show {
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--color-hover);
     font-size: 28px;
     cursor: pointer;
     line-height: 0;
@@ -427,7 +418,7 @@ h6 {
   }
 
   .mobile-nav-hide {
-    color: #fff;
+    color: var(--color-hover);
     font-size: 32px;
     cursor: pointer;
     line-height: 0;
@@ -450,7 +441,7 @@ h6 {
     content: "";
     position: fixed;
     inset: 0;
-    background: rgba(0, 106, 93, 0.8);
+    background: rgba(177, 204, 181, 0.8);
     z-index: 9996;
   }
 }
@@ -460,9 +451,9 @@ h6 {
 --------------------------------------------------------------*/
 .footer {
   font-size: 14px;
-  background-color: var(--color-primary);
+  background-color: var(--color-back);
   padding: 50px 0;
-  color: white;
+  color: var(--color-font);
 }
 
 .footer .footer-info .logo {
@@ -479,7 +470,7 @@ h6 {
   font-size: 30px;
   font-weight: 700;
   letter-spacing: 1px;
-  color: #fff;
+  color: var(--color-font);
   font-family: var(--font-primary);
 }
 
@@ -497,75 +488,16 @@ h6 {
   border-radius: 50%;
   border: 1px solid rgba(255, 255, 255, 0.2);
   font-size: 16px;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--color-font);
   margin-right: 10px;
   transition: 0.3s;
 }
 
 .footer .social-links a:hover {
-  color: #fff;
-  border-color: #fff;
+  color: var(--color-hover);
+  border-color: var(--color-hover);
 }
 
-.footer h4 {
-  font-size: 16px;
-  font-weight: bold;
-  position: relative;
-  padding-bottom: 12px;
-}
-
-.footer .footer-links {
-  margin-bottom: 30px;
-}
-
-.footer .footer-links ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.footer .footer-links ul i {
-  padding-right: 2px;
-  color: rgba(0, 131, 116, 0.8);
-  font-size: 12px;
-  line-height: 0;
-}
-
-.footer .footer-links ul li {
-  padding: 10px 0;
-  display: flex;
-  align-items: center;
-}
-
-.footer .footer-links ul li:first-child {
-  padding-top: 0;
-}
-
-.footer .footer-links ul a {
-  color: rgba(255, 255, 255, 0.7);
-  transition: 0.3s;
-  display: inline-block;
-  line-height: 1;
-}
-
-.footer .footer-links ul a:hover {
-  color: #fff;
-}
-
-.footer .footer-contact p {
-  line-height: 26px;
-}
-
-.footer .copyright {
-  text-align: center;
-}
-
-.footer .credits {
-  padding-top: 4px;
-  text-align: center;
-  font-size: 13px;
-}
-
-.footer .credits a {
-  color: #fff;
+.credit {
+  color: var(--color-font);
 }

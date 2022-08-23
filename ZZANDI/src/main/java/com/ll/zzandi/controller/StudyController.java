@@ -95,10 +95,14 @@ public class StudyController {
         if (bindingResult.hasErrors()) {
             return "study/studyModify";
         }
-        studyService.modify(studyId, studyForm);
-        bookService.modify(studyId, bookDto);
-        lectureService.modify(studyId, lectureDto);
+
+        if (Stream.of(bookDto.getBookName(), bookDto.getBookPage(), bookDto.getBookAuthor(),
+            bookDto.getBookPublisher(), bookDto.getBookUrl()).allMatch(Objects::nonNull)) {
+            studyService.modifyWithBook(studyId, studyForm, bookDto);
+        } else if (Stream.of(lectureDto.getLecturer(), lectureDto.getLectureName(),
+            lectureDto.getLecturer(), lectureDto.getLectureNumber()).allMatch(Objects::nonNull)) {
+            studyService.modifyWithLecture(studyId, studyForm, lectureDto);
+        }
         return "redirect:/";
     }
-
 }

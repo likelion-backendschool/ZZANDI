@@ -26,5 +26,10 @@ public class CommentService {
         return responseList;
     }
 
+    public Long save(Comment comment) {
+        commentRepository.save(comment);
+        return comment.getId();
+    }
+
 
 }

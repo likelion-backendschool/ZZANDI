@@ -42,4 +42,12 @@ public class Comment extends BaseEntity {
     @LastModifiedDate
     @Column(name = "DELETED_DATE")
     private LocalDateTime deletedDate; // 삭제일
+
+    public Comment(Board board, User user, Long parentId, String content, CommentStatus deleteStatus) {
+        this.board = board;
+        this.user = user;
+        this.parentId = parentId;
+        this.content = content;
+        this.deleteStatus = deleteStatus;
+    }
 }

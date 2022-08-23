@@ -5,10 +5,11 @@ const commentCount = document.querySelector(".comment-count");
 const commentList = document.querySelector(".comment-list");
 
 window.onload = () => {
-    comment(boardId);
+    printComment(boardId);
 }
 
-function comment(boardId) {
+// 댓글 목록 출력 함수
+function printComment(boardId) {
     fetch(`/comment/list/${boardId}`)
         .then(response => response.json())
         .then(data => {
@@ -17,6 +18,7 @@ function comment(boardId) {
 
             commentCount.innerHTML = `<span>댓글 ${count}개</span>`;
 
+            commentList.innerHTML = "";
             for (let i = 0; i < count; i++) {
                 commentList.innerHTML += `<li style="border-bottom: 1px solid black;">
                                             <img src="${comment[i].profile}" alt="profile" width="50" height="50">
@@ -26,4 +28,20 @@ function comment(boardId) {
             }
         });
 }
+
+const writeBtn = document.querySelector(".cm-btn");
+writeBtn.addEventListener("click", () => {
+    const content = document.querySelector("#content").value;
+    const comment = {content: content}
+
+    const url = `/comment/write/${boardId}`;
+    fetch(url, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(comment)
+    }).then(() => printComment(boardId));
+});
+
 

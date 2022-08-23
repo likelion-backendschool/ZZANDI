@@ -1,22 +1,20 @@
 package com.ll.zzandi.service;
 
 import com.ll.zzandi.domain.Book;
+import com.ll.zzandi.domain.Study;
 import com.ll.zzandi.dto.BookDto;
 import com.ll.zzandi.repository.BookRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class BookService {
 
     private final BookRepository bookRepository;
-
-    @Autowired
-    public BookService(BookRepository bookRepository) {
-        this.bookRepository = bookRepository;
-    }
 
     public Book save(BookDto bookDto) {
         Book b1 = new Book();
@@ -28,19 +26,19 @@ public class BookService {
         return bookRepository.save(b1);
     }
 
-    public Optional<Book> findByid(Long studyId) {
-        return bookRepository.findById(studyId);
+    public Optional<Book> findByid(Long bookId) {
+        return bookRepository.findById(bookId);
     }
 
-    public void modify(Long studyId, BookDto bookDto) {
+    public Book modify(Long bookId, BookDto bookDto) {
         Book b1 = new Book();
-        b1.setId(studyId);
+        b1.setId(bookId);
         b1.setBookName(bookDto.getBookName());
         b1.setBookPage(bookDto.getBookPage());
         b1.setBookAuthor(bookDto.getBookAuthor());
         b1.setBookPublisher(bookDto.getBookPublisher());
         b1.setBookUrl(bookDto.getBookUrl());
-        bookRepository.save(b1);
+        return bookRepository.save(b1);
     }
 
     public void delete(Book books) {

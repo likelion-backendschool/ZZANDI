@@ -3,6 +3,7 @@
 const boardId = document.querySelector('.board-id').value;
 const commentCount = document.querySelector(".comment-count");
 const commentList = document.querySelector(".comment-list");
+const content = document.querySelector("#content");
 
 window.onload = () => {
     printComment(boardId);
@@ -31,8 +32,8 @@ function printComment(boardId) {
 
 const writeBtn = document.querySelector(".cm-btn");
 writeBtn.addEventListener("click", () => {
-    const content = document.querySelector("#content").value;
-    const comment = {content: content}
+    const value = content.value;
+    const comment = {content: value}
 
     const url = `/comment/write/${boardId}`;
     fetch(url, {
@@ -41,7 +42,8 @@ writeBtn.addEventListener("click", () => {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(comment)
-    }).then(() => printComment(boardId));
+    }).then(() => {
+        content.value = "";
+        printComment(boardId);
+    });
 });
-
-

@@ -1,15 +1,15 @@
 package com.ll.zzandi.controller;
 
 import com.ll.zzandi.domain.Board;
+import com.ll.zzandi.domain.Study;
 import com.ll.zzandi.domain.User;
-import com.ll.zzandi.dto.BoardDetailDto;
 import com.ll.zzandi.dto.BoardListDto;
 import com.ll.zzandi.dto.BoardUpdateFormDto;
 import com.ll.zzandi.dto.BoardWriteDto;
 import com.ll.zzandi.service.BoardService;
+import com.ll.zzandi.service.StudyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -20,38 +20,42 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @Controller
-@RequestMapping("/board")
+@RequestMapping("/{studyId}/board")
 @RequiredArgsConstructor
 public class BoardController {
 
     private final BoardService boardService;
+    private final StudyService studyService;
 
     @GetMapping("/list")
-    public String boardListPaging(Model model, @RequestParam(defaultValue = "0") int page) {
+    public String boardListPaging(@PathVariable Long studyId, @RequestParam(defaultValue = "0") int page, Model model) {
         model.addAttribute("page", page);
+        model.addAttribute("studyId", studyId);
         return "board/boardList";
     }
 
-    @GetMapping("/list-json")
+    @GetMapping("/list-data")
     @ResponseBody
-    public Page<BoardListDto> boardListPagingToJson(Pageable pageable, @RequestParam(defaultValue = "0") int page) {
-        return boardService.boardListPaging(pageable, page);
+    public Page<BoardListDto> boardListPagingToJson(@PathVariable Long studyId, @RequestParam(defaultValue = "0") int page) {
+        return boardService.boardListPaging(page, studyId);
     }
 
-    @GetMapping("/detail/{id}/{page}")
-    public String boardDetail(Model model, @PathVariable Long id, @PathVariable int page) {
-        boardService.updateView(id);
-        model.addAttribute("boardDetail", boardService.boardDetail(id, page));
+    @GetMapping("/detail/{boardId}/{page}")
+    public String boardDetail(@PathVariable Long studyId, @PathVariable Long boardId, @PathVariable int page, Model model) {
+        boardService.updateView(boardId);
+        model.addAttribute("boardDetail", boardService.boardDetail(boardId, page));
+        model.addAttribute("studyId", studyId);
         return "board/boardDetail";
     }
 
     @GetMapping("/write")
-    public String boardWriteForm(BoardWriteDto boardWriteDto) {
+    public String boardWriteForm(@PathVariable Long studyId, BoardWriteDto boardWriteDto, Model model) {
+        model.addAttribute("studyId", studyId);
         return "board/boardWriteForm";
     }
 
     @PostMapping("/write")
-    public String boardWrite(@Valid BoardWriteDto boardWriteDto, BindingResult result) {
+    public String boardWrite(@PathVariable Long studyId, @Valid BoardWriteDto boardWriteDto, BindingResult result) {
         // @NotBlank 값이 없는 경우 BindingResult로 처리!
         if (result.hasErrors()) {
             return "/board/boardWriteForm";
@@ -60,28 +64,30 @@ public class BoardController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal(); // 현재 로그인 한 유저 정보
 
-        Board board = new Board(user, boardWriteDto.getCategory(), boardWriteDto.getTitle(), boardWriteDto.getContent(), 0, 0);
-        Long saveId = boardService.save(board);
+        Study study = studyService.findByid(studyId).get();
+        Board board = new Board(user, boardWriteDto.getCategory(), boardWriteDto.getTitle(), boardWriteDto.getContent(), 0, 0, study);
+        Long boardId = boardService.save(board);
 
-        return "redirect:/board/detail/%d/0".formatted(saveId);
+        return "redirect:/%d/board/detail/%d/0".formatted(studyId, boardId);
     }
 
-    @GetMapping("/update/{id}/{page}")
-    public String boardUpdateForm(Model model, @PathVariable Long id, @PathVariable int page) {
-        model.addAttribute("updateDto", boardService.boardUpdateForm(id, page));
+    @GetMapping("/update/{boardId}/{page}")
+    public String boardUpdateForm(@PathVariable Long studyId, @PathVariable Long boardId, @PathVariable int page, Model model) {
+        model.addAttribute("updateDto", boardService.boardUpdateForm(boardId, page));
+        model.addAttribute("studyId", studyId);
         return "board/boardUpdateForm";
     }
 
-    @PostMapping("/update/{id}/{page}")
-    public String boardUpdate(@PathVariable Long id, @PathVariable int page, BoardUpdateFormDto updateFormDto) {
-        boardService.boardUpdate(id, updateFormDto);
-        return "redirect:/board/detail/%d/%d".formatted(id, page);
+    @PostMapping("/update/{boardId}/{page}")
+    public String boardUpdate(@PathVariable Long studyId, @PathVariable Long boardId, @PathVariable int page, BoardUpdateFormDto updateFormDto) {
+        boardService.boardUpdate(boardId, updateFormDto);
+        return "redirect:/%d/board/detail/%d/%d".formatted(studyId, boardId, page);
     }
 
-    @PostMapping("/delete/{id}")
-    public String boardDelete(@PathVariable Long id) {
-        boardService.boardDelete(id);
-        return "redirect:/board/list";
+    @PostMapping("/delete/{boardId}")
+    public String boardDelete(@PathVariable Long studyId, @PathVariable Long boardId) {
+        boardService.boardDelete(boardId);
+        return "redirect:/%d/board/list".formatted(studyId);
     }
 
 }

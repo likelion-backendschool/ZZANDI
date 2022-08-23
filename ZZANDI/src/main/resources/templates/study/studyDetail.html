@@ -5,6 +5,9 @@
     <script type="text/javascript" th:src="@{/js/studyDetail.js}"></script>
 </head>
     <body>
+        <div>
+            <a th:href="@{/{studyId}/board/list (studyId=${studies.getId})}">게시판 이동</a>
+        </div>
         <div class="container">
             <div>
                 <table>

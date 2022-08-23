@@ -42,12 +42,17 @@ public class Board extends BaseEntity {
     @JoinColumn(name = "USER_UUID")
     private User user;
 
-    public Board(User user, BoardCategory category, String title, String content, int views, int heart) {
+    @JoinColumn(name = "STUDY_ID")
+    @OneToOne(fetch = LAZY)
+    private Study study;
+
+    public Board(User user, BoardCategory category, String title, String content, int views, int heart, Study study) {
         this.user = user;
         this.category = category;
         this.title = title;
         this.content = content;
         this.views = views;
         this.heart = heart;
+        this.study = study;
     }
 }

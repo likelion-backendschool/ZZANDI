@@ -11,7 +11,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface BoardRepository extends JpaRepository<Board, Long> {
-    Page<Board> findBoardBy(Pageable pageable);
+
+    @Query("select b from Board b where b.study.id = :studyId")
+    Page<Board> findBoardList(Pageable pageable, @Param("studyId") Long studyId);
 
     @Modifying
     @Query("update Board b set b.views = b.views + 1 where b.id = :id")

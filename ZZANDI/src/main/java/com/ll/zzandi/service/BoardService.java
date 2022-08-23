@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,10 +24,10 @@ public class BoardService {
     private final BoardRepository boardRepository;
 
     // 게시물 페이지 별로 조회
-    public Page<BoardListDto> boardListPaging(Pageable pageable, int page) {
+    public Page<BoardListDto> boardListPaging(int page, Long studyId) {
         // 페이지는 0부터 시작하고 size 개수만큼 잘라서 가져온다.
         PageRequest pageRequest = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "id"));
-        return boardRepository.findBoardBy(pageRequest)
+        return boardRepository.findBoardList(pageRequest, studyId)
                 .map(board -> new BoardListDto(board.getId(), board.getCategory(), board.getTitle(), board.getUser().getUserNickname(),
                         board.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd")), board.getViews(), board.getHeart(), page));
     }

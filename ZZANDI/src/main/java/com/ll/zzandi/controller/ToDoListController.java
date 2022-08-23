@@ -2,18 +2,19 @@ package com.ll.zzandi.controller;
 
 import com.ll.zzandi.domain.Study;
 import com.ll.zzandi.domain.ToDoList;
+import com.ll.zzandi.dto.BoardListDto;
 import com.ll.zzandi.dto.ToDoListDto;
 import com.ll.zzandi.enumtype.Type;
 import com.ll.zzandi.service.ToDoListService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -25,37 +26,33 @@ public class ToDoListController {
     private final ToDoListService toDoListService;
 
     @GetMapping()
-    public String showToDoMain(Model model, ToDoListDto.ToDoListRequest toDoListRequest) {
-        List<ToDoList> toDoList = toDoListService.findAll();
-        model.addAttribute("toDoList", toDoList);
-        return "todo/ToDoListMain";
+    public String testToDoMain() {
+        return "todo/ToDoListMainAsync";
     }
 
-    @PostMapping("/add")
-    public String addTodo (Model model, @Valid ToDoListDto.ToDoListRequest toDoListRequest, BindingResult bindingResult) {
+    @GetMapping("add")
+    @ResponseBody
+    public ToDoList addToDo(String content) {
+        ToDoListDto.ToDoListRequest toDoListRequest = new ToDoListDto.ToDoListRequest(content);
 
-        if(bindingResult.hasErrors()) {
-            List<ToDoList> toDoList = toDoListService.findAll();
-            model.addAttribute("toDoList", toDoList);
-            return "todo/ToDoListMain";
-        }
-
-        toDoListService.save(toDoListRequest);
-
-        return "redirect:/todo";
+        return toDoListService.save(toDoListRequest);
     }
 
     @GetMapping("/change")
-    public String changeType (long id) {
-        toDoListService.changeType(id);
-
-        return "redirect:/todo";
+    @ResponseBody
+    public ToDoList changeType (long id) {
+        return toDoListService.changeType(id);
     }
 
-    @GetMapping("/delete")
-    public String deleteToDoList (long id) {
+    @DeleteMapping("/delete")
+    @ResponseBody
+    public void deleteToDoList (long id) {
         toDoListService.delete(id);
+    }
 
-        return "redirect:/todo";
+    @GetMapping("/list-json")
+    @ResponseBody
+    public List<ToDoList> boardListPagingToJson(@RequestParam(required = false) Type type) {
+        return (type == null) ? toDoListService.findAll() : toDoListService.findAllByType(type);
     }
 }

@@ -3,6 +3,8 @@
 <html xmlns:th="http://thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <!-- 펜슬 이모티콘   -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
     <!-- MDB -->
     <script
             type="text/javascript"
@@ -88,6 +90,7 @@
                                             <s class="flex-grow-1" th:text="${todo.content}"> </s>
                                         </div>
 
+                                        <i class="bi bi-pencil-fill"></i>
                                         <button type="button" class="btn-close" aria-label="Close"
                                                 th:onclick="|location.href='@{/todo/delete(id=${todo.id})}'|"></button>
                                     </li>

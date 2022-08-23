@@ -19,20 +19,26 @@ import static com.ll.zzandi.enumtype.Type.DONE;
 public class ToDoListService {
     private final ToDoListRepository toDoListRepository;
     @Transactional
-    public void save(ToDoListDto.ToDoListRequest toDoListRequest) {
+    public ToDoList save(ToDoListDto.ToDoListRequest toDoListRequest) {
         ToDoList toDoList = new ToDoList();
 
         toDoList.setContent(toDoListRequest.getContent());
         toDoList.setType(toDoListRequest.getType());
 
         toDoListRepository.save(toDoList);
+
+        return toDoList;
+    }
+
+    public List<ToDoList> findAllByType(Type type) {
+        return toDoListRepository.findAllByType(type);
     }
 
     public List<ToDoList> findAll() {
         return toDoListRepository.findAll();
     }
 
-    public void changeType(long id) {
+    public ToDoList changeType(long id) {
 
         ToDoList toDoList = toDoListRepository.findById(id).get();
 
@@ -42,6 +48,8 @@ public class ToDoListService {
         else toDoList.setType(DOING);
 
         toDoListRepository.save(toDoList);
+
+        return toDoList;
     }
 
     public void delete(long id) {

@@ -11,6 +11,7 @@ import com.ll.zzandi.domain.User;
 import com.ll.zzandi.dto.UserDto;
 import com.ll.zzandi.exception.ErrorCode;
 import com.ll.zzandi.exception.UserApplicationException;
+import com.ll.zzandi.repository.FileRepository;
 import com.ll.zzandi.repository.InterestRepository;
 import com.ll.zzandi.repository.UserRepository;
 import com.ll.zzandi.util.aws.ImageUploadService;
@@ -49,6 +50,8 @@ public class UserService {
 
     private final AmazonS3Client amazonS3Client;
     private final ImageUploadService imageUploadService;
+
+    private final FileRepository fileRepository;
 
     @Transactional
     public User join(final UserDto.RegisterRequest registerRequest) {

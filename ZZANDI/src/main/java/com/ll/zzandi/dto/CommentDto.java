@@ -26,6 +26,7 @@ public class CommentDto {
         private Long boardId;
         private Long userUuid;
         private String writer;
+        private String profile;
 
         private Long parentId; // 부모 댓글의 아이디
 

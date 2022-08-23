@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -36,6 +37,10 @@ public class BoardService {
         Board board = boardRepository.findById(id).orElseThrow();
         String createdDate = board.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
         return new BoardDetailDto(board.getId(), board.getTitle(), createdDate, board.getUser().getUserNickname(), board.getContent(), board.getViews(), board.getHeart(), 0, page);
+    }
+
+    public Board findById(Long id) {
+        return boardRepository.findById(id).get();
     }
 
     public Long save(Board board) {

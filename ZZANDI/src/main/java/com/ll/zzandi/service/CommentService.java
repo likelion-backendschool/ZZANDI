@@ -21,9 +21,14 @@ public class CommentService {
         List<Response> responseList = new ArrayList<>();
         for (Comment comment : list) {
             responseList.add(new Response(comment.getId(), comment.getBoard().getId(), comment.getUser().getId(), comment.getUser().getUserNickname(),
-                    comment.getParentId(), comment.getContent(), comment.getDeleteStatus(), comment.getCreatedDate()));
+                    comment.getUser().getUserprofileUrl(), comment.getParentId(), comment.getContent(), comment.getDeleteStatus(), comment.getCreatedDate()));
         }
         return responseList;
+    }
+
+    public Long save(Comment comment) {
+        commentRepository.save(comment);
+        return comment.getId();
     }
 
 

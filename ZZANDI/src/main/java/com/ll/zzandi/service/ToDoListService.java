@@ -19,13 +19,15 @@ import static com.ll.zzandi.enumtype.Type.DONE;
 public class ToDoListService {
     private final ToDoListRepository toDoListRepository;
     @Transactional
-    public void save(ToDoListDto.ToDoListRequest toDoListRequest) {
+    public ToDoList save(ToDoListDto.ToDoListRequest toDoListRequest) {
         ToDoList toDoList = new ToDoList();
 
         toDoList.setContent(toDoListRequest.getContent());
         toDoList.setType(toDoListRequest.getType());
 
         toDoListRepository.save(toDoList);
+
+        return toDoList;
     }
 
     public List<ToDoList> findAllByType(Type type) {

@@ -2,13 +2,15 @@
 
 const list = document.querySelector(".list");
 const menu = document.querySelector(".menu");
+const addForm = document.querySelector(".addForm");
 
 window.onload = () => {
     findAll('TOTAL');
     displayMenu();
+    displayAddForm();
 }
 
-// 게시물 검색
+// ToDoList 검색
 function findAll(type) {
     let url = (type === 'TOTAL') ? "/todo/list-json" : `/todo/list-json?type=${type}`;
     fetch(url)
@@ -18,6 +20,7 @@ function findAll(type) {
         });
 }
 
+// ToDoList 삭제
 function deleteToDo(id) {
     fetch("/todo/delete?id=" + id, {method: "DELETE"})
         .then(() => {
@@ -26,13 +29,36 @@ function deleteToDo(id) {
         });
 }
 
+// ToDoList Type 변경 (DOING <--> DONE)
 function changeType(id) {
-    console.log(id);
     fetch("/todo/change?id=" +id)
         .then(response => response.json())
         .then(() => {
             findAll('TOTAL')
             displayMenu();
+        });
+}
+
+
+// ToDoList 추가
+function submitAddForm(form) {
+    form.todo.value = form.todo.value.trim();
+
+    if (form.todo.value.length == 0) {
+        alert("목표를 입력해주세요.");
+        form.todo.focus();
+        return;
+    }
+
+    let content = form.todo.value;
+
+    fetch("/todo/add/?content="+ content)
+        .then(response => response.json())
+        .then(content => null)
+        .then(() => {
+            findAll('TOTAL')
+            displayMenu();
+            displayAddForm();
         });
 }
 
@@ -60,6 +86,9 @@ function displayItems(data, type) {
     list.innerHTML = html;
 }
 
+/**
+ * All / Doing / Done 섹션을 그려주는 함수
+ */
 function displayMenu() {
     let html = '';
     let tab1 = "active";
@@ -80,4 +109,21 @@ function displayMenu() {
             </li>
     `
     menu.innerHTML = html;
+}
+
+/**
+ * ToDoList 추가 Form 을 그려주는 함수
+ */
+function displayAddForm() {
+    let html = `
+    <form class="d-flex justify-content-center align-items-center mb-4"
+        onsubmit="submitAddForm(this); return false;" method="get">
+        <div class="form-outline flex-fill">
+            <input type="text" name="todo" class="form-control"/>
+            <label class="form-label" > New task...</label>
+        </div>
+        <button type="submit" class="btn btn-info ms-2">Add</button>
+    </form>`
+
+    addForm.innerHTML = html;
 }

@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,24 +26,16 @@ public class ToDoListController {
     private final ToDoListService toDoListService;
 
     @GetMapping()
-    public String showToDoMain(Model model, ToDoListDto.ToDoListRequest toDoListRequest) {
-        List<ToDoList> toDoList = toDoListService.findAll();
-        model.addAttribute("toDoList", toDoList);
-        return "todo/ToDoListMain";
+    public String testToDoMain() {
+        return "todo/ToDoListMainAsync";
     }
 
-    @PostMapping("/add")
-    public String addTodo (Model model, @Valid ToDoListDto.ToDoListRequest toDoListRequest, BindingResult bindingResult) {
+    @GetMapping("add")
+    @ResponseBody
+    public ToDoList addToDo(String content) {
+        ToDoListDto.ToDoListRequest toDoListRequest = new ToDoListDto.ToDoListRequest(content);
 
-//        if(bindingResult.hasErrors()) {
-//            List<ToDoList> toDoList = toDoListService.findAll();
-//            model.addAttribute("toDoList", toDoList);
-//            return "todo/ToDoListMain";
-//        }
-
-        toDoListService.save(toDoListRequest);
-
-        return "redirect:/todo";
+        return toDoListService.save(toDoListRequest);
     }
 
     @GetMapping("/change")
@@ -61,10 +54,5 @@ public class ToDoListController {
     @ResponseBody
     public List<ToDoList> boardListPagingToJson(@RequestParam(required = false) Type type) {
         return (type == null) ? toDoListService.findAll() : toDoListService.findAllByType(type);
-    }
-
-    @GetMapping("/test")
-    public String testToDoMain() {
-        return "todo/ToDoListMainAsync";
     }
 }

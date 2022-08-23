@@ -14,13 +14,12 @@ function comment(boardId) {
         .then(data => {
             const count = data.count;
             const comment = data.comment;
-            console.log(comment);
-            console.log(comment[0].writer);
 
             commentCount.innerHTML = `<span>댓글 ${count}개</span>`;
 
             for (let i = 0; i < count; i++) {
                 commentList.innerHTML += `<li style="border-bottom: 1px solid black;">
+                                            <img src="${comment[i].profile}" alt="profile" width="50" height="50">
                                             <div>${comment[i].writer}</div>
                                             <div>${comment[i].content}</div>
                                           </li>`;

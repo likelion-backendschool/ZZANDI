@@ -11,7 +11,7 @@
     <!-- header -->
     <section th:replace="layout/header.html :: header"></section>
 
-    <div class="container">
+    <div class="container" style="height: 700px;">
         <h1> ZZANDI TEST </h1>
         <div th:if="${user != null && !user.userEmailVerified}">
             <script type="text/javascript">
@@ -38,9 +38,6 @@
         <div>
             <a href="/todo">ToDoList</a>
         </div>
-        <div>
-            <a href="/board/list">QA 게시판</a>
-        </div>
 
         <div sec:authorize="isAnonymous()">
             <a href="/user/login">로그인</a>
@@ -57,47 +54,6 @@
         <div sec:authorize="hasAuthority('ROLE_ADMIN')">
             <a href="/admin">관리자</a>
         </div>
-
-        a;sdlfkasdlfs;dkfaj;dlkfa;skdfasdf
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
     </div>
 
     <!-- footer -->

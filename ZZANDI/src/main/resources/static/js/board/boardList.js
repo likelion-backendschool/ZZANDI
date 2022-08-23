@@ -14,21 +14,23 @@
 const list = document.querySelector(".list");
 const pagination = document.querySelector('.pagination');
 const currPage = document.querySelector(".page").value; // 현재 페이지 정보
+const studyId = document.querySelector(".study-id").value;
 
 window.onload = () => {
-    findByPage(currPage);
+    findByPage(currPage, studyId);
 }
 
 // 게시물 검색
-function findByPage(page) {
-    fetch("/board/list-json?page=" + page)
+function findByPage(page, studyId) {
+    fetch(`/${studyId}/board/list-data?page=${page}`)
         .then(response => response.json())
         .then(data => {
+            console.log(data);
             if(data.content.length === 0) {
                 list.innerHTML = '<td colspan="6">등록된 게시글이 없습니다.</td>';
                 return false;
             } else {
-                displayItems(data);
+                displayItems(data, studyId);
             }
         });
 }
@@ -71,12 +73,12 @@ function createPageList(items) {
     const prevDisabled = hasPrev ? "disabled='disabled'" : '';
     pageHTML +=
         `<li class="page-item">
-            <button class="page-btn" onClick="findByPage(0);" ${prevDisabled} aria-label="Previous">
+            <button class="page-btn" onClick="findByPage(0, ${studyId});" ${prevDisabled} aria-label="Previous">
                 <span aria-hidden="true">&laquo;</span>
             </button>
         </li>
         <li class="page-item">
-            <button class="page-btn" onClick="findByPage(${nowPage - 1});" ${prevDisabled} aria-label="Previous">
+            <button class="page-btn" onClick="findByPage(${nowPage - 1}, ${studyId});" ${prevDisabled} aria-label="Previous">
                 <span aria-hidden="true">&lsaquo;</span>
             </button>
         </li>`;
@@ -84,7 +86,7 @@ function createPageList(items) {
     // 페이지 번호
     for (let i = startPage; i < endPage; i++) {
         const active = (i === nowPage) ? 'active' : '';
-        pageHTML += `<li class="page-item"><button class="page-btn page-num ${active}" onclick="findByPage(${i})">${i + 1}</button></li>`;
+        pageHTML += `<li class="page-item"><button class="page-btn page-num ${active}" onclick="findByPage(${i}, ${studyId})">${i + 1}</button></li>`;
     }
 
     // 다음 페이지, 마지막 페이지
@@ -92,12 +94,12 @@ function createPageList(items) {
     const nextDisabled = hasNext ? "disabled='disabled'" : '';
     pageHTML +=
         `<li class="page-item">
-            <button class="page-btn" onClick="findByPage(${nowPage + 1});" ${nextDisabled} aria-label="Next">
+            <button class="page-btn" onClick="findByPage(${nowPage + 1}, ${studyId});" ${nextDisabled} aria-label="Next">
                 <span aria-hidden="true">&rsaquo;</span>
             </button>
         </li>
         <li class="page-item">
-            <button class="page-btn" onClick="findByPage(${totalPage - 1});" ${nextDisabled}  aria-label="Next">
+            <button class="page-btn" onClick="findByPage(${totalPage - 1}, ${studyId});" ${nextDisabled}  aria-label="Next">
                 <span aria-hidden="true">&raquo;</span>
             </button>
         </li>`;

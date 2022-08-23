@@ -46,10 +46,9 @@ public class ToDoListController {
     }
 
     @GetMapping("/change")
-    public String changeType (long id) {
-        toDoListService.changeType(id);
-
-        return "redirect:/todo";
+    @ResponseBody
+    public ToDoList changeType (long id) {
+        return toDoListService.changeType(id);
     }
 
     @DeleteMapping("/delete")

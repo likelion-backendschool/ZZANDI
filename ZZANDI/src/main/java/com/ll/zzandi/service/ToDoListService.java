@@ -36,7 +36,7 @@ public class ToDoListService {
         return toDoListRepository.findAll();
     }
 
-    public void changeType(long id) {
+    public ToDoList changeType(long id) {
 
         ToDoList toDoList = toDoListRepository.findById(id).get();
 
@@ -46,6 +46,8 @@ public class ToDoListService {
         else toDoList.setType(DOING);
 
         toDoListRepository.save(toDoList);
+
+        return toDoList;
     }
 
     public void delete(long id) {

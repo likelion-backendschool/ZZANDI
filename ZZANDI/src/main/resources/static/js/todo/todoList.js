@@ -17,9 +17,18 @@ function findAll(type) {
 }
 
 function deleteToDo(id) {
-    fetch("/todo/delete?id=" + id, {method: "DELETE",})
+    fetch("/todo/delete?id=" + id, {method: "DELETE"})
         .then(() => {
             findAll('TOTAL')
+        });
+}
+
+function changeType(id) {
+    console.log(id);
+    fetch("/todo/change?id=" +id)
+        .then(response => response.json())
+        .then((data) => {
+            findAll(data.type)
         });
 }
 
@@ -31,9 +40,9 @@ function displayItems(data, type) {
     for(let i = 0; i < data.length; i++) {
         let li = '';
         if(type === 'DONE' || type === 'TOTAL' && data[i].type === 'DONE') {
-            li += `<input class="form-check-input me-2" type="checkbox" checked>${data[i].content}</input>`;
+            li += `<input class="form-check-input me-2" onclick="changeType(${data[i].id})" type="checkbox" checked>${data[i].content}</input>`;
         } else {
-            li += `<input class="form-check-input me-2" type="checkbox"/>${data[i].content}</input>`;
+            li += `<input class="form-check-input me-2" onclick="changeType(${data[i].id})" type="checkbox"/>${data[i].content}</input>`;
         }
 
         html += `<li class="list-group-item d-flex align-items-center border-0 mb-2 rounded"

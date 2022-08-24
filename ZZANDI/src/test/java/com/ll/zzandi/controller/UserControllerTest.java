@@ -54,7 +54,5 @@ class UserControllerTest {
         String password="testPassword";
         String userEmail="test@test.com";
         String userNickname="Test";
-
-
     }
 }

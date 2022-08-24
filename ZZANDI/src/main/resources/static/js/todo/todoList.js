@@ -12,7 +12,7 @@ window.onload = () => {
 
 // ToDoList 검색
 function findAll(type) {
-    let url = (type === 'TOTAL') ? "/todo/list-json" : `/todo/list-json?type=${type}`;
+    let url = (type === 'TOTAL') ? "/todo/list-data" : `/todo/list-data?type=${type}`;
     fetch(url)
         .then(response => response.json())
         .then(data => {
@@ -52,7 +52,7 @@ function submitAddForm(form) {
 
     let content = form.todo.value;
 
-    fetch("/todo/add/?content="+ content)
+    fetch("/todo/create/?content="+ content)
         .then(response => response.json())
         .then(content => null)
         .then(() => {

@@ -26,13 +26,13 @@ public class ToDoListController {
     private final ToDoListService toDoListService;
 
     @GetMapping()
-    public String testToDoMain() {
+    public String showToDo() {
         return "todo/ToDoListMainAsync";
     }
 
-    @GetMapping("add")
+    @GetMapping("/create")
     @ResponseBody
-    public ToDoList addToDo(String content) {
+    public ToDoList createToDo(String content) {
         ToDoListDto.ToDoListRequest toDoListRequest = new ToDoListDto.ToDoListRequest(content);
 
         return toDoListService.save(toDoListRequest);
@@ -40,19 +40,19 @@ public class ToDoListController {
 
     @GetMapping("/change")
     @ResponseBody
-    public ToDoList changeType (long id) {
+    public ToDoList changeToDoType (long id) {
         return toDoListService.changeType(id);
     }
 
     @DeleteMapping("/delete")
     @ResponseBody
-    public void deleteToDoList (long id) {
+    public void deleteToDo (long id) {
         toDoListService.delete(id);
     }
 
-    @GetMapping("/list-json")
+    @GetMapping("/list-data")
     @ResponseBody
-    public List<ToDoList> boardListPagingToJson(@RequestParam(required = false) ToDoType type) {
+    public List<ToDoList> ToDoToJson(@RequestParam(required = false) ToDoType type) {
         return (type == null) ? toDoListService.findAll() : toDoListService.findAllByType(type);
     }
 }

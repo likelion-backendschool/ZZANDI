@@ -2,14 +2,17 @@ package com.ll.zzandi.domain;
 
 import com.ll.zzandi.enumtype.DeleteStatus;
 import com.ll.zzandi.enumtype.TableType;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class File {
     @Id
     @GeneratedValue
@@ -22,13 +25,14 @@ public class File {
     private String fileName;
 
     @Column(name = "TABLE_TYPE")
+    @Enumerated(value = EnumType.STRING)
     private TableType tableType;
 
     @Column(name ="TABLE_ID")
     private Long tableId;
 
     @Column(name = "FILE_SIZE")
-    private Integer fileSize;
+    private Long fileSize;
 
     @Column(name="FILE_EXT")
     private String fileExt;
@@ -44,7 +48,7 @@ public class File {
     private LocalDateTime deletedDate;
 
     @Builder
-    public File(String originalName, String fileName, TableType tableType, Long tableId, Integer fileSize, String fileExt, String fileUrl) {
+    public File(String originalName, String fileName, TableType tableType, Long tableId, Long fileSize, String fileExt, String fileUrl) {
         this.originalName = originalName;
         this.fileName = fileName;
         this.tableType = tableType;

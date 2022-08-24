@@ -4,7 +4,7 @@ import com.ll.zzandi.domain.Study;
 import com.ll.zzandi.domain.ToDoList;
 import com.ll.zzandi.dto.BoardListDto;
 import com.ll.zzandi.dto.ToDoListDto;
-import com.ll.zzandi.enumtype.Type;
+import com.ll.zzandi.enumtype.ToDoType;
 import com.ll.zzandi.service.ToDoListService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -52,7 +52,7 @@ public class ToDoListController {
 
     @GetMapping("/list-json")
     @ResponseBody
-    public List<ToDoList> boardListPagingToJson(@RequestParam(required = false) Type type) {
+    public List<ToDoList> boardListPagingToJson(@RequestParam(required = false) ToDoType type) {
         return (type == null) ? toDoListService.findAll() : toDoListService.findAllByType(type);
     }
 }

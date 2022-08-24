@@ -1,5 +1,5 @@
 package com.ll.zzandi.enumtype;
 
-public enum Type {
+public enum ToDoType {
     DOING, DONE
 }

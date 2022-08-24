@@ -44,6 +44,7 @@ public class BoardService {
         return boardRepository.findById(id).get();
     }
 
+    @Transactional
     public Long save(Board board) {
         Board saveBoard = boardRepository.save(board);
         return saveBoard.getId();

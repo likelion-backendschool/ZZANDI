@@ -47,3 +47,11 @@ writeBtn.addEventListener("click", () => {
         printComment(boardId);
     });
 });
+
+// 삭제 버튼 함수
+function deleteBoard() {
+    if (confirm("정말로 삭제하시겠습니까?") === false) {
+        return false;
+    }
+    document.forms['form'].submit();
+}

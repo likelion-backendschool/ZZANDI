@@ -3,23 +3,21 @@ package com.ll.zzandi.controller;
 import com.ll.zzandi.domain.Board;
 import com.ll.zzandi.domain.Study;
 import com.ll.zzandi.domain.User;
-import com.ll.zzandi.dto.BoardDetailDto;
 import com.ll.zzandi.dto.BoardListDto;
 import com.ll.zzandi.dto.BoardUpdateFormDto;
 import com.ll.zzandi.dto.BoardWriteDto;
 import com.ll.zzandi.service.BoardService;
+import com.ll.zzandi.service.CommentService;
 import com.ll.zzandi.service.StudyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.security.Principal;
 
 @Controller
 @RequestMapping("/{studyId}/board")
@@ -27,6 +25,7 @@ import java.security.Principal;
 public class BoardController {
 
     private final BoardService boardService;
+    private final CommentService commentService;
     private final StudyService studyService;
 
     @GetMapping("/list")
@@ -43,10 +42,7 @@ public class BoardController {
     }
 
     @GetMapping("/detail/{boardId}/{page}")
-    public String boardDetail(@PathVariable Long studyId, @PathVariable Long boardId, @PathVariable int page, Model model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal();
-
+    public String boardDetail(@AuthenticationPrincipal User user, @PathVariable Long studyId, @PathVariable Long boardId, @PathVariable int page, Model model) {
         boardService.updateView(boardId);
 
         model.addAttribute("boardDetail", boardService.boardDetail(boardId, page));
@@ -62,14 +58,10 @@ public class BoardController {
     }
 
     @PostMapping("/write")
-    public String boardWrite(@PathVariable Long studyId, @Valid BoardWriteDto boardWriteDto, BindingResult result) {
-        // @NotBlank 값이 없는 경우 BindingResult로 처리!
+    public String boardWrite(@AuthenticationPrincipal User user, @PathVariable Long studyId, @Valid BoardWriteDto boardWriteDto, BindingResult result) {
         if (result.hasErrors()) {
             return "/board/boardWriteForm";
         }
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal(); // 현재 로그인 한 유저 정보
 
         Study study = studyService.findByid(studyId).get();
         Board board = new Board(user, boardWriteDto.getCategory(), boardWriteDto.getTitle(), boardWriteDto.getContent(), 0, 0, study);
@@ -93,8 +85,8 @@ public class BoardController {
 
     @PostMapping("/delete/{boardId}")
     public String boardDelete(@PathVariable Long studyId, @PathVariable Long boardId) {
+        commentService.deleteComment(boardId);
         boardService.boardDelete(boardId);
         return "redirect:/%d/board/list".formatted(studyId);
     }
-
 }

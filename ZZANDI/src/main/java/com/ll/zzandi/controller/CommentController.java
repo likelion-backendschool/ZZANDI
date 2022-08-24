@@ -4,13 +4,12 @@ import com.ll.zzandi.domain.Board;
 import com.ll.zzandi.domain.Comment;
 import com.ll.zzandi.domain.User;
 import com.ll.zzandi.dto.CommentDto.Response;
-import com.ll.zzandi.enumtype.CommentStatus;
+import com.ll.zzandi.enumtype.DeleteStatus;
 import com.ll.zzandi.service.BoardService;
 import com.ll.zzandi.service.CommentService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -40,7 +39,7 @@ public class CommentController {
         User user = (User) authentication.getPrincipal(); // 현재 로그인 한 유저 정보
 
         Board board = boardService.findById(boardId);
-        Comment comment = new Comment(board, user, 0L, data.getContent(), CommentStatus.EXIST);
+        Comment comment = new Comment(board, user, 0L, data.getContent(), DeleteStatus.EXIST);
         commentService.save(comment);
     }
 

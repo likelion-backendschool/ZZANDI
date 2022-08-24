@@ -1,6 +1,6 @@
 package com.ll.zzandi.domain;
 
-import com.ll.zzandi.enumtype.CommentStatus;
+import com.ll.zzandi.enumtype.DeleteStatus;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -37,13 +37,13 @@ public class Comment extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "CM_STATUS")
-    private CommentStatus deleteStatus; // 댓글 삭제 여부
+    private DeleteStatus deleteStatus; // 댓글 삭제 여부
 
     @LastModifiedDate
     @Column(name = "DELETED_DATE")
     private LocalDateTime deletedDate; // 삭제일
 
-    public Comment(Board board, User user, Long parentId, String content, CommentStatus deleteStatus) {
+    public Comment(Board board, User user, Long parentId, String content, DeleteStatus deleteStatus) {
         this.board = board;
         this.user = user;
         this.parentId = parentId;

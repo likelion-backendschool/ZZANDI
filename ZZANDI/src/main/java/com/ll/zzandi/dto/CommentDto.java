@@ -1,6 +1,6 @@
 package com.ll.zzandi.dto;
 
-import com.ll.zzandi.enumtype.CommentStatus;
+import com.ll.zzandi.enumtype.DeleteStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,7 +32,7 @@ public class CommentDto {
 
         @NotEmpty(message = "댓글 내용을 입력해주세요.")
         private String content;
-        private CommentStatus status;
+        private DeleteStatus status;
         private LocalDateTime createdDate;
     }
 }

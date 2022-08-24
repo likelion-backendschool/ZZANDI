@@ -135,7 +135,7 @@ public class UserController {
     @ResponseBody
     @Transactional
     public String updateProfileImage(@RequestParam("croppedImage") MultipartFile multipartFile, @AuthenticationPrincipal User user) throws IOException {
-        userService.updateProfile(multipartFile,user.getUserId());
+        userService.updateProfile(multipartFile,user.getId());
         return  "redirect:/";
     }
 }

@@ -3,6 +3,7 @@ package com.ll.zzandi.service;
 import com.ll.zzandi.domain.Book;
 import com.ll.zzandi.domain.Lecture;
 import com.ll.zzandi.domain.Study;
+import com.ll.zzandi.domain.User;
 import com.ll.zzandi.dto.BookDto;
 import com.ll.zzandi.dto.LectureDto;
 import com.ll.zzandi.enumtype.StudyStatus;
@@ -27,16 +28,16 @@ public class StudyService {
     private final StudyRepository studyRepository;
     private final BookRepository bookRepository;
 
-    public void saveWithBook(@Valid StudyForm studyform, Book book) {
-        Study study = new Study(studyform.getStudyTitle(), book, null, StudyType.BOOK,
+    public void saveWithBook(@Valid StudyForm studyform, Book book , User user) {
+        Study study = new Study(user , studyform.getStudyTitle(), book, null, StudyType.BOOK,
             studyform.getStudyStart(),
             studyform.getStudyEnd(), studyform.getStudyPeople(), studyform.getStudyTag(), 0,
             StudyStatus.RECRUIT);
         studyRepository.save(study);
     }
 
-    public void saveWithLecture(@Valid StudyForm studyform, Lecture lecture) {
-        Study study = new Study(studyform.getStudyTitle(), null, lecture, StudyType.LECTURE,
+    public void saveWithLecture(@Valid StudyForm studyform, Lecture lecture , User user) {
+        Study study = new Study(user , studyform.getStudyTitle(), null, lecture, StudyType.LECTURE,
             studyform.getStudyStart(),
             studyform.getStudyEnd(), studyform.getStudyPeople(), studyform.getStudyTag(), 0,
             StudyStatus.RECRUIT);
@@ -56,7 +57,7 @@ public class StudyService {
         studyRepository.delete(studies);
     }
 
-    public void modifyWithBook(Long studyId, @Valid StudyForm studyform, BookDto bookDto) {
+    public void modifyWithBook(Long studyId, @Valid StudyForm studyform, BookDto bookDto , User user) {
         Study s1 = studyRepository.findById(studyId).orElseThrow(null);
         Book book;
         if (s1.getBook() != null) {
@@ -66,6 +67,7 @@ public class StudyService {
         }
 
         Lecture lecture = s1.getLecture();
+        s1.setUser(user);
         s1.setId(studyId);
         s1.setStudyTitle(studyform.getStudyTitle());
         s1.setBook(book);
@@ -82,7 +84,7 @@ public class StudyService {
         }
     }
 
-    public void modifyWithLecture(Long studyId, StudyForm studyform, LectureDto lectureDto) {
+    public void modifyWithLecture(Long studyId, StudyForm studyform, LectureDto lectureDto, User user) {
         Study s1 = studyRepository.findById(studyId).orElseThrow(null);
         Lecture lecture;
         if (s1.getLecture() != null) {
@@ -92,6 +94,7 @@ public class StudyService {
         }
 
         Book book = s1.getBook();
+        s1.setUser(user);
         s1.setId(studyId);
         s1.setStudyTitle(studyform.getStudyTitle());
         s1.setBook(null);

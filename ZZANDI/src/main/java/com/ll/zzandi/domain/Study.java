@@ -55,7 +55,12 @@ public class Study {
     @Enumerated(EnumType.STRING)
     private StudyStatus studyStatus;
 
-    public Study(String studyTitle, Book book, Lecture lecture, StudyType studyType, String studyStart, String studyEnd, int studyPeople, String studyTag, int studyRate, StudyStatus studyStatus) {
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "USER_UUID")
+    private User user;
+
+    public Study(User user , String studyTitle, Book book, Lecture lecture, StudyType studyType, String studyStart, String studyEnd, int studyPeople, String studyTag, int studyRate, StudyStatus studyStatus) {
+        this.user = user;
         this.studyTitle = studyTitle;
         this.book = book;
         this.lecture = lecture;

@@ -2,7 +2,7 @@ package com.ll.zzandi.service;
 
 import com.ll.zzandi.domain.ToDoList;
 import com.ll.zzandi.dto.ToDoListDto;
-import com.ll.zzandi.enumtype.Type;
+import com.ll.zzandi.enumtype.ToDoType;
 import com.ll.zzandi.repository.ToDoListRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
@@ -11,8 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.ll.zzandi.enumtype.Type.DOING;
-import static com.ll.zzandi.enumtype.Type.DONE;
+import static com.ll.zzandi.enumtype.ToDoType.DOING;
+import static com.ll.zzandi.enumtype.ToDoType.DONE;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +30,7 @@ public class ToDoListService {
         return toDoList;
     }
 
-    public List<ToDoList> findAllByType(Type type) {
+    public List<ToDoList> findAllByType(ToDoType type) {
         return toDoListRepository.findAllByType(type);
     }
 

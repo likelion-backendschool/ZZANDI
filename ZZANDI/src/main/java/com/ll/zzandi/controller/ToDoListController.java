@@ -4,7 +4,7 @@ import com.ll.zzandi.domain.Study;
 import com.ll.zzandi.domain.ToDoList;
 import com.ll.zzandi.dto.BoardListDto;
 import com.ll.zzandi.dto.ToDoListDto;
-import com.ll.zzandi.enumtype.Type;
+import com.ll.zzandi.enumtype.ToDoType;
 import com.ll.zzandi.service.ToDoListService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -26,13 +26,13 @@ public class ToDoListController {
     private final ToDoListService toDoListService;
 
     @GetMapping()
-    public String testToDoMain() {
+    public String showToDo() {
         return "todo/ToDoListMainAsync";
     }
 
-    @GetMapping("add")
+    @GetMapping("/create")
     @ResponseBody
-    public ToDoList addToDo(String content) {
+    public ToDoList createToDo(String content) {
         ToDoListDto.ToDoListRequest toDoListRequest = new ToDoListDto.ToDoListRequest(content);
 
         return toDoListService.save(toDoListRequest);
@@ -40,19 +40,19 @@ public class ToDoListController {
 
     @GetMapping("/change")
     @ResponseBody
-    public ToDoList changeType (long id) {
+    public ToDoList changeToDoType (long id) {
         return toDoListService.changeType(id);
     }
 
     @DeleteMapping("/delete")
     @ResponseBody
-    public void deleteToDoList (long id) {
+    public void deleteToDo (long id) {
         toDoListService.delete(id);
     }
 
-    @GetMapping("/list-json")
+    @GetMapping("/list-data")
     @ResponseBody
-    public List<ToDoList> boardListPagingToJson(@RequestParam(required = false) Type type) {
+    public List<ToDoList> ToDoToJson(@RequestParam(required = false) ToDoType type) {
         return (type == null) ? toDoListService.findAll() : toDoListService.findAllByType(type);
     }
 }

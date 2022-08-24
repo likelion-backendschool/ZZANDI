@@ -1,95 +1,31 @@
 package com.ll.zzandi.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
-
 public class StudyDto {
-    private Long id;
+    @NotEmpty(message = "스터디명은 필수항목입니다.")
+    @Size(max = 200)
     private String studyTitle;
+
+    @NotEmpty(message = "스터디 시작일은 필수항목입니다.")
     private String studyStart;
+
+    @NotEmpty(message = "스터디 종료일은 필수항목입니다.")
     private String studyEnd;
-    private int studyPeople;
+
+    @NotNull(message = "스터디 인원 수는 필수항목입니다.")
+    private Integer studyPeople;
+
+    @NotNull(message = "스터디 태그는 필수항목입니다.")
     private String studyTag;
+
+    @NotNull(message = "스터디 타입은 필수항목입니다.")
     private String studyType;
-    private int studyRate;
-    private String studyStatus;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getStudyTitle() {
-        return studyTitle;
-    }
-
-    public void setStudyTitle(String studyTitle) {
-        this.studyTitle = studyTitle;
-    }
-
-    public String getStudyStart() {
-        return studyStart;
-    }
-
-    public void setStudyStart(String studyStart) {
-        this.studyStart = studyStart;
-    }
-
-    public String getStudyEnd() {
-        return studyEnd;
-    }
-
-    public void setStudyEnd(String studyEnd) {
-        this.studyEnd = studyEnd;
-    }
-
-    public int getStudyPeople() {
-        return studyPeople;
-    }
-
-    public void setStudyPeople(int studyPeople) {
-        this.studyPeople = studyPeople;
-    }
-
-    public String getStudyTag() {
-        return studyTag;
-    }
-
-    public void setStudyTag(String studyTag) {
-        this.studyTag = studyTag;
-    }
-
-    public String getStudyType() {
-        return studyType;
-    }
-
-    public void setStudyType(String studyType) {
-        this.studyType = studyType;
-    }
-
-    public int getStudyRate() {
-        return studyRate;
-    }
-
-    public void setStudyRate(int studyRate) {
-        this.studyRate = studyRate;
-    }
-
-    public String getStudyStatus() {
-        return studyStatus;
-    }
-
-    public void setStudyStatus(String studyStatus) {
-        this.studyStatus = studyStatus;
-    }
 }

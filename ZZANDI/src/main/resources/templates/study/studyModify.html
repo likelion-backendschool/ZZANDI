@@ -7,75 +7,83 @@
           rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://unpkg.com/@yaireo/tagify"></script>
-    <script defer type="text/javascript" th:src="@{/js/studyForm.js}"></script>
+    <script defer type="text/javascript" th:src="@{/js/studyDto.js}"></script>
 </head>
 <body>
 <div class="container">
-    <form th:object="${studyForm}" method="post">
+    <form th:object="${studies}" method="post">
         <div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">
             <div th:each="err : ${#fields.allErrors()}" th:text="${err}" />
         </div>
         <div class="form-group">
             <div>
                 <label for="studyTitle"> </label>
-                <input type="text" id="studyTitle" th:field="*{studyTitle}" placeholder="스터디명을 입력하세요">
+                <input type="text" id="studyTitle" th:field="${studies.studyTitle}" placeholder="스터디명을 입력하세요">
             </div>
             <div>
                 <label for="studyStart"> </label>
-                <input type="date" id="studyStart" th:field="*{studyStart}" th:min="${#temporals.format(#temporals.createToday(),'yyyy-MM-dd')}" class="a1">
+                <input type="date" id="studyStart" th:field="${studies.studyStart}" th:min="${#temporals.format(#temporals.createToday(),'yyyy-MM-dd')}" class="a1">
             </div>
             <div>
                 <label for="studyEnd"> </label>
-                <input type="date" id="studyEnd"th:field="*{studyEnd}" min="" class="a2">
+                <input type="date" id="studyEnd"th:field="${studies.studyEnd}" min="" class="a2">
             </div>
             <div>
                 <label for="studyPeople"> </label>
-                <input type="number" id="studyPeople" th:field="*{studyPeople}" placeholder="스터디 인원 수를 입력하세요">
+                <input type="number" id="studyPeople" th:field="${studies.studyPeople}" placeholder="스터디 인원 수를 입력하세요">
             </div>
             <div>
                 <label for="studyType"> </label>
-                <input type="radio" id="studyType" name="studyType" value="Book"> Book
-                <input type="radio" id="studyType" name="studyType" value="Lecture" > Lecture
+                <input type="radio" id="studyType" name="studyType" th:field="${studies.studyType}" value="Book"> Book
+                <input type="radio" id="studyType" name="studyType" th:field="${studies.studyType}" value="Lecture" > Lecture
             </div>
             <div id="book">
                 <div>
                     <label for="bookName"> </label>
-                    <input type="text" id="bookName" name="bookName" placeholder="책 이름을 입력하세요.">
+                    <input th:if="${studies.studyType.toString().equals('BOOK')}" type="text" id="bookName" name="bookName" th:field="${books.bookName}" placeholder="책 이름을 입력하세요.">
+                    <input th:unless="${studies.studyType.toString().equals('BOOK')}" type="text" id="bookName" name="bookName" placeholder="책 이름을 입력하세요.">
                 </div>
                 <div>
                     <label for="bookPage"> </label>
-                    <input type="number" id="bookPage" name="bookPage" placeholder="페이지 수를 입력하세요.">
+                    <input th:if="${studies.studyType.toString().equals('BOOK')}" type="number" id="bookPage" name="bookPage" th:field="${books.bookPage}" placeholder="페이지 수를 입력하세요.">
+                    <input th:unless="${studies.studyType.toString().equals('BOOK')}" type="number" id="bookPage" name="bookPage" placeholder="페이지 수를 입력하세요.">
                 </div>
                 <div>
                     <label for="bookAuhor"> </label>
-                    <input type="text" id="bookAuhor" name="bookAuthor" placeholder="작가를 입력하세요.">
+                    <input th:if="${studies.studyType.toString().equals('BOOK')}" type="text" id="bookAuhor" name="bookAuthor" th:field="${books.bookAuthor}" placeholder="작가를 입력하세요.">
+                    <input th:unless="${studies.studyType.toString().equals('BOOK')}" type="text" id="bookAuhor" name="bookAuthor" placeholder="작가를 입력하세요.">
                 </div>
                 <div>
                     <label for="bookPublisher"> </label>
-                    <input type="text" id="bookPublisher" name="bookPublisher" placeholder="출판사를 입력하세요.">
+                    <input th:if="${studies.studyType.toString().equals('BOOK')}" type="text" id="bookPublisher" name="bookPublisher" th:field="${books.bookPublisher}" placeholder="출판사를 입력하세요.">
+                    <input th:unless="${studies.studyType.toString().equals('BOOK')}" type="text" id="bookPublisher" name="bookPublisher" placeholder="출판사를 입력하세요.">
                 </div>
                 <div>
                     <label for="bookUrl"> </label>
-                    <input type="text" id="bookUrl" name="bookUrl" placeholder="책 판매페이지를 입력하세요.">
+                    <input th:if="${studies.studyType.toString().equals('BOOK')}" type="text" id="bookUrl" name="bookUrl" th:field="${books.bookUrl}" placeholder="책 판매페이지를 입력하세요.">
+                    <input th:unless="${studies.studyType.toString().equals('BOOK')}" type="text" id="bookUrl" name="bookUrl" placeholder="책 판매페이지를 입력하세요.">
                 </div>
             </div>
             <div id="lecture">
                 <div>
                     <label for="lectureName"> </label>
-                    <input type="text" id="lectureName" name="lectureName" placeholder="강의 제목을 입력하세요">
+                    <input th:if="${studies.studyType.toString().equals('LECTURE')}" type="text" id="lectureName" name="lectureName" th:field="${lectures.lectureName}" placeholder="강의 제목을 입력하세요">
+                    <input th:unless="${studies.studyType.toString().equals('LECTURE')}" type="text" id="lectureName" name="lectureName"  placeholder="강의 제목을 입력하세요">
                 </div>
                 <div>
                     <label for="lecturer"> </label>
-                    <input type="text" id="lecturer" name="lecturer" placeholder="강사를 입력하세요.">
+                    <input  th:if="${studies.studyType.toString().equals('LECTURE')}" type="text" id="lecturer" name="lecturer" th:field="${lectures.lecturer}" placeholder="강사를 입력하세요.">
+                    <input  th:unless="${studies.studyType.toString().equals('LECTURE')}" type="text" id="lecturer" name="lecturer" placeholder="강사를 입력하세요.">
                 </div>
                 <div>
                     <label for="lectureNumber"> </label>
-                    <input type="number" id="lectureNumber" name="lectureNumber" placeholder="lecturNumber...??">
+                    <input th:if="${studies.studyType.toString().equals('LECTURE')}" type="number" id="lectureNumber" name="lectureNumber"  th:field="${lectures.lectureNumber}" placeholder="lecturNumber...??">
+                    <input th:unless="${studies.studyType.toString().equals('LECTURE')}" type="number" id="lectureNumber" name="lectureNumber"  placeholder="lecturNumber...??">
                 </div>
             </div>
             <div>
                 <label for="studyTag"></label>
-                <input name="studyTag" id="studyTag" placeholder="#해시태그" type="hidden">
+                <input name="studyTag" id="studyTag" placeholder="#해시태그" th:field="${studies.studyTag}" type="hidden">
             </div>
         </div>
         <button type="submit">등록</button>

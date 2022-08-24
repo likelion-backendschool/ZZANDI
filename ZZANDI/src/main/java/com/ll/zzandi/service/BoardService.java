@@ -32,10 +32,12 @@ public class BoardService {
                         board.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd")), board.getViews(), board.getHeart(), page));
     }
 
-    public BoardDetailDto boardDetail(Long id, int page) {
-        Board board = boardRepository.findById(id).orElseThrow();
+    public BoardDetailDto boardDetail(Long boardId, int page) {
+        Board board = boardRepository.findById(boardId).orElseThrow();
         String createdDate = board.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
-        return new BoardDetailDto(board.getId(), board.getTitle(), createdDate, board.getUser().getUserNickname(), board.getContent(), board.getViews(), board.getHeart(), 0, page);
+        return new BoardDetailDto(board.getId(), board.getUser().getId(), board.getTitle(),
+                createdDate, board.getUser().getUserNickname(), board.getContent(),
+                board.getViews(), board.getHeart(), 0, page);
     }
 
     public Board findById(Long id) {

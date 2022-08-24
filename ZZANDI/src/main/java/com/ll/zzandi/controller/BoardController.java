@@ -3,6 +3,7 @@ package com.ll.zzandi.controller;
 import com.ll.zzandi.domain.Board;
 import com.ll.zzandi.domain.Study;
 import com.ll.zzandi.domain.User;
+import com.ll.zzandi.dto.BoardDetailDto;
 import com.ll.zzandi.dto.BoardListDto;
 import com.ll.zzandi.dto.BoardUpdateFormDto;
 import com.ll.zzandi.dto.BoardWriteDto;
@@ -18,6 +19,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.security.Principal;
 
 @Controller
 @RequestMapping("/{studyId}/board")
@@ -42,8 +44,13 @@ public class BoardController {
 
     @GetMapping("/detail/{boardId}/{page}")
     public String boardDetail(@PathVariable Long studyId, @PathVariable Long boardId, @PathVariable int page, Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+
         boardService.updateView(boardId);
+
         model.addAttribute("boardDetail", boardService.boardDetail(boardId, page));
+        model.addAttribute("userUUID", user.getId());
         model.addAttribute("studyId", studyId);
         return "board/boardDetail";
     }

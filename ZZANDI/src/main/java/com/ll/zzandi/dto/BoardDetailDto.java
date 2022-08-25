@@ -10,7 +10,8 @@ import lombok.Setter;
 @NoArgsConstructor
 public class BoardDetailDto {
 
-    private Long id;
+    private Long boardId;
+    private Long userUUID;
     private String title;
     private String createdDate;
     private String writer;

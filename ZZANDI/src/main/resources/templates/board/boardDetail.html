@@ -27,7 +27,7 @@
 </head>
 <body>
 <div class="container w-75 mx-auto mt-5">
-    <input type="hidden" class="board-id" th:value="${boardDetail.id}"> <!-- 현재 게시글 번호 -->
+    <input type="hidden" class="board-id" th:value="${boardDetail.boardId}"> <!-- 현재 게시글 번호 -->
 
     <div class="d-flex justify-content-between align-self-baseline">
         <h3 th:text="${boardDetail.title}">제목1</h3>
@@ -45,9 +45,9 @@
     <section class="mt-4" th:text="${boardDetail.content}"></section>
 
     <div class="d-flex justify-content-end btn-group" style="margin-top: 30px;">
-        <form th:action="@{/{studyId}/board/delete/{boardId} (studyId=${studyId}, boardId=${boardDetail.id})}" method="post">
-            <button class="btn btn-primary mx-1" type="button" th:onclick="|location.href='@{/{studyId}/board/update/{boardId}/{page} (studyId=${studyId}, boardId=${boardDetail.id}, page=${boardDetail.pageNum})}'|">수정</button>
-            <button class="btn btn-success mx-1" type="submit">삭제</button>
+        <form name="form" th:action="@{/{studyId}/board/delete/{boardId} (studyId=${studyId}, boardId=${boardDetail.boardId})}" th:onsubmit="return false" method="post">
+            <button class="btn btn-primary mx-1" th:if="${userUUID == boardDetail.userUUID}" type="button" th:onclick="|location.href='@{/{studyId}/board/update/{boardId}/{page} (studyId=${studyId}, boardId=${boardDetail.boardId}, page=${boardDetail.pageNum})}'|">수정</button>
+            <button class="btn btn-success mx-1" th:if="${userUUID == boardDetail.userUUID}" type="submit" th:onclick="deleteBoard()">삭제</button>
             <button class="btn btn-warning mx-1" type="button" th:onclick="|location.href='@{/{studyId}/board/list?page={page} (studyId=${studyId}, page=${boardDetail.pageNum})}'|">목록으로</button>
         </form>
     </div>

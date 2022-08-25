@@ -1,12 +1,10 @@
 package com.ll.zzandi.controller;
 
-import com.ll.zzandi.domain.Book;
-import com.ll.zzandi.domain.Lecture;
-import com.ll.zzandi.domain.Study;
-import com.ll.zzandi.domain.User;
+import com.ll.zzandi.domain.*;
 import com.ll.zzandi.dto.BookDto;
 import com.ll.zzandi.dto.LectureDto;
-import com.ll.zzandi.dto.StudyDto;
+import com.ll.zzandi.exception.StudyForm;
+import com.ll.zzandi.service.BoardService;
 import com.ll.zzandi.service.BookService;
 import com.ll.zzandi.service.LectureService;
 import com.ll.zzandi.service.StudyService;
@@ -35,14 +33,15 @@ public class StudyController {
     private final StudyService studyService;
     private final BookService bookService;
     private final LectureService lectureService;
+    private final BoardService boardService;
 
     @GetMapping("/study/create")
-    public String studyCreate(StudyDto studyDto) {
+    public String createStudy(StudyForm studyForm) {
         return "study/studyForm";
     }
 
     @PostMapping("/study/create")
-    public String studyCreate(@Valid StudyDto studyDto, BindingResult bindingResult, BookDto bookDto, LectureDto lectureDto) {
+    public String createStudy(@Valid StudyForm studyForm, BindingResult bindingResult, BookDto bookDto, LectureDto lectureDto) {
         if (bindingResult.hasErrors()) {
             return "study/studyForm";
         }
@@ -51,28 +50,28 @@ public class StudyController {
         if (Stream.of(bookDto.getBookName(), bookDto.getBookPage(), bookDto.getBookAuthor(),
             bookDto.getBookPublisher(), bookDto.getBookUrl()).allMatch(Objects::nonNull)) {
             Book book = bookService.save(bookDto);
-            studyService.saveWithBook(studyDto, book , user);
+            studyService.createStudyWithBook(studyForm, book , user);
         } else if (Stream.of(lectureDto.getLecturer(), lectureDto.getLectureName(),
             lectureDto.getLecturer(), lectureDto.getLectureNumber()).allMatch(Objects::nonNull)) {
             Lecture lecture = lectureService.save(lectureDto);
-            studyService.saveWithLecture(studyDto, lecture , user);
+            studyService.createStudyWithLecture(studyForm, lecture , user);
         }
         return "redirect:/";
     }
 
     @GetMapping("/study/list")
-    public String list(Model model) {
+    public String studyList(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
-        List<Study> studyList = studyService.findall();
+        List<Study> studyList = studyService.findAll();
         model.addAttribute("studyList", studyList);
         model.addAttribute("user", user);
         return "study/studyList";
     }
 
     @GetMapping("/study/detail/{studyId}")
-    public String detail(Model model, @PathVariable Long studyId) {
-        Study studies = studyService.findByid(studyId).orElseThrow(null);
+    public String detailStudy(Model model, @PathVariable Long studyId) {
+        Study studies = studyService.findByStudyId(studyId).orElseThrow(null);
         Book books = studies.getBook();
         Lecture lectures = studies.getLecture();
         if (books != null) {
@@ -88,17 +87,18 @@ public class StudyController {
     }
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/study/delete/{studyId}")
-    public String delete(@PathVariable Long studyId, Principal principal) {
-        Study studies = studyService.findByid(studyId).orElseThrow(null);
+    public String deleteStudy(@PathVariable Long studyId, Principal principal) {
+        Study studies = studyService.findByStudyId(studyId).orElseThrow(null);
+
         if(!studies.getUser().getUserId().equals(principal.getName().split(",")[1].substring(8,principal.getName().split(",")[1].length()))){
             return "study/studyError";
         }
-        studyService.delete(studies);
+        studyService.deleteStudy(studies);
         return "redirect:/";
     }
 
     @GetMapping("/study/modify/{studyId}")
-    public String modify(@PathVariable Long studyId, Model model , StudyDto studyDto) {
+    public String updateStudyForm(StudyForm studyForm) {
         Study studies = studyService.findByid(studyId).orElseThrow(null);
         Book books = studies.getBook();
         Lecture lectures = studies.getLecture();
@@ -110,11 +110,11 @@ public class StudyController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/study/modify/{studyId}")
-    public String modify(@Valid StudyDto studyDto, BindingResult bindingResult, @PathVariable Long studyId, BookDto bookDto, LectureDto lectureDto, Principal principal) {
+    public String updateStudy(@Valid StudyForm studyForm, BindingResult bindingResult, @PathVariable Long studyId, BookDto bookDto, LectureDto lectureDto, Principal principal) {
         if (bindingResult.hasErrors()) {
             return "study/studyModify";
         }
-        Study studies = studyService.findByid(studyId).orElseThrow(null);
+        Study studies = studyService.findByStudyId(studyId).orElseThrow(null);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal(); // 현재 로그인 한 유저 정보
         System.out.println("principal.getName() = " + principal.getName());
@@ -123,10 +123,10 @@ public class StudyController {
         }
         if (Stream.of(bookDto.getBookName(), bookDto.getBookPage(), bookDto.getBookAuthor(),
             bookDto.getBookPublisher(), bookDto.getBookUrl()).allMatch(Objects::nonNull)) {
-            studyService.modifyWithBook(studyId, studyDto, bookDto , user);
+            studyService.updateStudyWithBook(studyId, studyForm, bookDto , user);
         } else if (Stream.of(lectureDto.getLecturer(), lectureDto.getLectureName(),
             lectureDto.getLecturer(), lectureDto.getLectureNumber()).allMatch(Objects::nonNull)) {
-            studyService.modifyWithLecture(studyId, studyDto, lectureDto, user);
+            studyService.updateStudyWithLecture(studyId, studyForm, lectureDto, user);
         }
         return "redirect:/";
     }

@@ -62,6 +62,30 @@ function submitAddForm(form) {
         });
 }
 
+// ToDoList 수정
+function submitModifyForm(form) {
+    form.todo.value = form.todo.value.trim();
+
+    if (form.todo.value.length == 0) {
+        alert("목표를 입력해주세요.");
+        form.todo.focus();
+        return;
+    }
+
+    let content = form.todo.value;
+
+    // fetch("/todo/create/?content="+ content)
+    // .then(response => response.json())
+    // .then(content => null)
+    // .then(() => {
+    //     findAll('TOTAL')
+    //     displayMenu();
+    //     displayAddForm();
+    // });
+
+    console.log(form.status.value)
+}
+
 /**
  * 만들어진 list 목록을 <div>에 그려주는 함수
  */
@@ -80,7 +104,7 @@ function displayItems(data, type) {
                     <div class="flex-grow-1">
                         ${li}
                     </div>
-                    <i type="button" onclick="deleteToDo(${data[i].id})" class="fa-solid fa-pen me-3"></i>
+                    <i type="button" onclick="displayModifyForm()" class="fa-solid fa-pen me-3"></i>
                     <i type="button" onclick="deleteToDo(${data[i].id})" class="fa-solid fa-trash-can"></i>
                 </li>`;
     }
@@ -124,6 +148,24 @@ function displayAddForm() {
             <label class="form-label" > New task...</label>
         </div>
         <button type="submit" class="btn btn-info ms-2">Add</button>
+    </form>`
+
+    addForm.innerHTML = html;
+}
+
+/**
+ * ToDoList 추가 Form 을 그려주는 함수
+ */
+function displayModifyForm() {
+    let html = `
+    <form class="d-flex justify-content-center align-items-center mb-4"
+        onsubmit="submitModifyForm(this); return false;" method="get">
+        <div class="form-outline flex-fill">
+            <input type="text" name="todo" class="form-control"/>
+            <label class="form-label" >원래 목표 내용</label>
+        </div>
+        <button type="submit" id="status" value="modify" class="btn btn-info ms-2">수정</button>
+        <button onclick="displayAddForm()" id="status" value="undo" class="btn btn-info ms-2">취소</button>
     </form>`
 
     addForm.innerHTML = html;

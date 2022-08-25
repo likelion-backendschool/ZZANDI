@@ -18,21 +18,19 @@ import java.time.format.DateTimeFormatter;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true) // default: readOnly = false (읽기/쓰기)
+@Transactional(readOnly = true)
 public class BoardService {
 
     private final BoardRepository boardRepository;
 
-    // 게시물 페이지 별로 조회
-    public Page<BoardListDto> boardListPaging(int page, Long studyId) {
-        // 페이지는 0부터 시작하고 size 개수만큼 잘라서 가져온다.
+    public Page<BoardListDto> findBoardListPaging(int page, Long studyId) {
         PageRequest pageRequest = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "id"));
         return boardRepository.findBoardList(pageRequest, studyId)
                 .map(board -> new BoardListDto(board.getId(), board.getCategory(), board.getTitle(), board.getUser().getUserNickname(),
                         board.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd")), board.getViews(), board.getHeart(), page));
     }
 
-    public BoardDetailDto boardDetail(Long boardId, int page) {
+    public BoardDetailDto detailBoard(Long boardId, int page) {
         Board board = boardRepository.findById(boardId).orElseThrow();
         String createdDate = board.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
         return new BoardDetailDto(board.getId(), board.getUser().getId(), board.getTitle(),
@@ -40,28 +38,28 @@ public class BoardService {
                 board.getViews(), board.getHeart(), 0, page);
     }
 
-    public Board findById(Long id) {
-        return boardRepository.findById(id).get();
+    public Board findByBoardId(Long boardId) {
+        return boardRepository.findById(boardId).get();
     }
 
     @Transactional
-    public Long save(Board board) {
+    public Long createBoard(Board board) {
         Board saveBoard = boardRepository.save(board);
         return saveBoard.getId();
     }
 
     @Transactional
-    public void updateView(Long id) {
+    public void updateBoardView(Long id) {
         boardRepository.updateView(id);
     }
 
-    public BoardUpdateFormDto boardUpdateForm(Long id, int page) {
+    public BoardUpdateFormDto updateBoardForm(Long id, int page) {
         Board board = boardRepository.findById(id).orElse(null);
         return new BoardUpdateFormDto(board.getId(), board.getCategory(), board.getTitle(), board.getUser().getUserNickname(), board.getContent(), page, board.getUpdatedDate());
     }
 
     @Transactional
-    public void boardUpdate(Long id, BoardUpdateFormDto updateData) {
+    public void updateBoard(Long id, BoardUpdateFormDto updateData) {
         Board findBoard = boardRepository.findById(id).orElseGet(null);
         findBoard.setCategory(updateData.getCategory());
         findBoard.setTitle(updateData.getTitle());
@@ -70,8 +68,13 @@ public class BoardService {
     }
 
     @Transactional
-    public void boardDelete(Long id) {
+    public void deleteBoard(Long id) {
         boardRepository.deleteById(id);
+    }
+
+    @Transactional
+    public void deleteBoardByStudyId(Long studyId) {
+        boardRepository.deleteBoardByStudyId(studyId);
     }
 
 }

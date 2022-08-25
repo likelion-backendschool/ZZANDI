@@ -38,7 +38,7 @@ public class CommentController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal(); // 현재 로그인 한 유저 정보
 
-        Board board = boardService.findById(boardId);
+        Board board = boardService.findByBoardId(boardId);
         Comment comment = new Comment(board, user, 0L, data.getContent(), DeleteStatus.EXIST);
         commentService.save(comment);
     }

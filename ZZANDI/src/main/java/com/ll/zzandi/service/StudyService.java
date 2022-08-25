@@ -1,19 +1,19 @@
 package com.ll.zzandi.service;
 
-import com.ll.zzandi.domain.Book;
-import com.ll.zzandi.domain.Lecture;
-import com.ll.zzandi.domain.Study;
-import com.ll.zzandi.domain.User;
+import com.ll.zzandi.domain.*;
 import com.ll.zzandi.dto.BookDto;
 import com.ll.zzandi.dto.LectureDto;
 import com.ll.zzandi.enumtype.StudyStatus;
 import com.ll.zzandi.enumtype.StudyType;
 import com.ll.zzandi.exception.StudyForm;
+import com.ll.zzandi.repository.BoardRepository;
 import com.ll.zzandi.repository.BookRepository;
+import com.ll.zzandi.repository.CommentRepository;
 import com.ll.zzandi.repository.StudyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -27,8 +27,10 @@ public class StudyService {
     private final LectureService lectureService;
     private final StudyRepository studyRepository;
     private final BookRepository bookRepository;
+    private final BoardRepository boardRepository;
+    private final CommentRepository commentRepository;
 
-    public void saveWithBook(@Valid StudyForm studyform, Book book , User user) {
+    public void createStudyWithBook(@Valid StudyForm studyform, Book book , User user) {
         Study study = new Study(user , studyform.getStudyTitle(), book, null, StudyType.BOOK,
             studyform.getStudyStart(),
             studyform.getStudyEnd(), studyform.getStudyPeople(), studyform.getStudyTag(), 0,
@@ -36,7 +38,7 @@ public class StudyService {
         studyRepository.save(study);
     }
 
-    public void saveWithLecture(@Valid StudyForm studyform, Lecture lecture , User user) {
+    public void createStudyWithLecture(@Valid StudyForm studyform, Lecture lecture , User user) {
         Study study = new Study(user , studyform.getStudyTitle(), null, lecture, StudyType.LECTURE,
             studyform.getStudyStart(),
             studyform.getStudyEnd(), studyform.getStudyPeople(), studyform.getStudyTag(), 0,
@@ -44,20 +46,25 @@ public class StudyService {
         studyRepository.save(study);
     }
 
-    public List<Study> findall() {
+    public List<Study> findAll() {
         return studyRepository.findAll();
     }
 
-
-    public Optional<Study> findByid(Long studyId) {
+    public Optional<Study> findByStudyId(Long studyId) {
         return studyRepository.findById(studyId);
     }
 
-    public void delete(Study studies) {
+    @Transactional
+    public void deleteStudy(Study studies) {
+        List<Board> boardList = boardRepository.findBoardListByStudyId(studies.getId());
+        for (Board board : boardList) {
+            commentRepository.deleteCommentByBoardId(board.getId());
+        }
+        boardRepository.deleteBoardByStudyId(studies.getId());
         studyRepository.delete(studies);
     }
 
-    public void modifyWithBook(Long studyId, @Valid StudyForm studyform, BookDto bookDto , User user) {
+    public void updateStudyWithBook(Long studyId, @Valid StudyForm studyform, BookDto bookDto , User user) {
         Study s1 = studyRepository.findById(studyId).orElseThrow(null);
         Book book;
         if (s1.getBook() != null) {
@@ -84,7 +91,7 @@ public class StudyService {
         }
     }
 
-    public void modifyWithLecture(Long studyId, StudyForm studyform, LectureDto lectureDto, User user) {
+    public void updateStudyWithLecture(Long studyId, StudyForm studyform, LectureDto lectureDto, User user) {
         Study s1 = studyRepository.findById(studyId).orElseThrow(null);
         Lecture lecture;
         if (s1.getLecture() != null) {

@@ -29,7 +29,7 @@ public class BoardController {
     private final StudyService studyService;
 
     @GetMapping("/list")
-    public String boardListPaging(@PathVariable Long studyId, @RequestParam(defaultValue = "0") int page, Model model) {
+    public String findBoardListPaging(@PathVariable Long studyId, @RequestParam(defaultValue = "0") int page, Model model) {
         model.addAttribute("page", page);
         model.addAttribute("studyId", studyId);
         return "board/boardList";
@@ -37,56 +37,56 @@ public class BoardController {
 
     @GetMapping("/list-data")
     @ResponseBody
-    public Page<BoardListDto> boardListPagingToJson(@PathVariable Long studyId, @RequestParam(defaultValue = "0") int page) {
-        return boardService.boardListPaging(page, studyId);
+    public Page<BoardListDto> findBoardListPagingToJson(@PathVariable Long studyId, @RequestParam(defaultValue = "0") int page) {
+        return boardService.findBoardListPaging(page, studyId);
     }
 
     @GetMapping("/detail/{boardId}/{page}")
-    public String boardDetail(@AuthenticationPrincipal User user, @PathVariable Long studyId, @PathVariable Long boardId, @PathVariable int page, Model model) {
-        boardService.updateView(boardId);
+    public String detailBoard(@AuthenticationPrincipal User user, @PathVariable Long studyId, @PathVariable Long boardId, @PathVariable int page, Model model) {
+        boardService.updateBoardView(boardId);
 
-        model.addAttribute("boardDetail", boardService.boardDetail(boardId, page));
+        model.addAttribute("boardDetail", boardService.detailBoard(boardId, page));
         model.addAttribute("userUUID", user.getId());
         model.addAttribute("studyId", studyId);
         return "board/boardDetail";
     }
 
-    @GetMapping("/write")
-    public String boardWriteForm(@PathVariable Long studyId, BoardWriteDto boardWriteDto, Model model) {
+    @GetMapping("/create")
+    public String createBoardForm(@PathVariable Long studyId, BoardWriteDto boardWriteDto, Model model) {
         model.addAttribute("studyId", studyId);
         return "board/boardWriteForm";
     }
 
-    @PostMapping("/write")
-    public String boardWrite(@AuthenticationPrincipal User user, @PathVariable Long studyId, @Valid BoardWriteDto boardWriteDto, BindingResult result) {
+    @PostMapping("/create")
+    public String createBoard(@AuthenticationPrincipal User user, @PathVariable Long studyId, @Valid BoardWriteDto boardWriteDto, BindingResult result) {
         if (result.hasErrors()) {
             return "/board/boardWriteForm";
         }
 
-        Study study = studyService.findById(studyId).get();
+        Study study = studyService.findByStudyId(studyId).get();
         Board board = new Board(user, boardWriteDto.getCategory(), boardWriteDto.getTitle(), boardWriteDto.getContent(), 0, 0, study);
-        Long boardId = boardService.save(board);
+        Long boardId = boardService.createBoard(board);
 
         return "redirect:/%d/board/detail/%d/0".formatted(studyId, boardId);
     }
 
     @GetMapping("/update/{boardId}/{page}")
-    public String boardUpdateForm(@PathVariable Long studyId, @PathVariable Long boardId, @PathVariable int page, Model model) {
-        model.addAttribute("updateDto", boardService.boardUpdateForm(boardId, page));
+    public String updateBoardForm(@PathVariable Long studyId, @PathVariable Long boardId, @PathVariable int page, Model model) {
+        model.addAttribute("updateDto", boardService.updateBoardForm(boardId, page));
         model.addAttribute("studyId", studyId);
         return "board/boardUpdateForm";
     }
 
     @PostMapping("/update/{boardId}/{page}")
-    public String boardUpdate(@PathVariable Long studyId, @PathVariable Long boardId, @PathVariable int page, BoardUpdateFormDto updateFormDto) {
-        boardService.boardUpdate(boardId, updateFormDto);
+    public String updateBoard(@PathVariable Long studyId, @PathVariable Long boardId, @PathVariable int page, BoardUpdateFormDto updateFormDto) {
+        boardService.updateBoard(boardId, updateFormDto);
         return "redirect:/%d/board/detail/%d/%d".formatted(studyId, boardId, page);
     }
 
     @PostMapping("/delete/{boardId}")
-    public String boardDelete(@PathVariable Long studyId, @PathVariable Long boardId) {
+    public String deleteBoard(@PathVariable Long studyId, @PathVariable Long boardId) {
         commentService.deleteComment(boardId);
-        boardService.boardDelete(boardId);
+        boardService.deleteBoard(boardId);
         return "redirect:/%d/board/list".formatted(studyId);
     }
 }

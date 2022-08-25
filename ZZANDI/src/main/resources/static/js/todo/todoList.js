@@ -20,6 +20,14 @@ function findAll(type) {
         });
 }
 
+function findById(id) {
+    fetch("/todo/todo-data?id="+id)
+        .then(response => response.json())
+        .then(data => {
+            displayModifyForm(data);
+        });
+}
+
 // ToDoList 삭제
 function deleteToDo(id) {
     fetch("/todo/delete?id=" + id, {method: "DELETE"})
@@ -63,7 +71,7 @@ function submitAddForm(form) {
 }
 
 // ToDoList 수정
-function submitModifyForm(form) {
+function submitModifyForm(form, id) {
     form.todo.value = form.todo.value.trim();
 
     if (form.todo.value.length == 0) {
@@ -74,16 +82,15 @@ function submitModifyForm(form) {
 
     let content = form.todo.value;
 
-    // fetch("/todo/create/?content="+ content)
-    // .then(response => response.json())
-    // .then(content => null)
-    // .then(() => {
-    //     findAll('TOTAL')
-    //     displayMenu();
-    //     displayAddForm();
-    // });
+    let url = `/todo/update/?id=${id}&content=${content}`
 
-    console.log(form.status.value)
+    fetch(url)
+        .then(response => response.json())
+        .then(() => {
+            findAll('TOTAL')
+            displayMenu();
+            displayAddForm();
+        });
 }
 
 /**
@@ -104,7 +111,7 @@ function displayItems(data, type) {
                     <div class="flex-grow-1">
                         ${li}
                     </div>
-                    <i type="button" onclick="displayModifyForm()" class="fa-solid fa-pen me-3"></i>
+                    <i type="button" onclick="findById(${data[i].id})" class="fa-solid fa-pen me-3"></i>
                     <i type="button" onclick="deleteToDo(${data[i].id})" class="fa-solid fa-trash-can"></i>
                 </li>`;
     }
@@ -154,15 +161,17 @@ function displayAddForm() {
 }
 
 /**
- * ToDoList 추가 Form 을 그려주는 함수
+ * ToDoList 수정 Form 을 그려주는 함수
  */
-function displayModifyForm() {
+function displayModifyForm(data) {
+
+
     let html = `
     <form class="d-flex justify-content-center align-items-center mb-4"
-        onsubmit="submitModifyForm(this); return false;" method="get">
+        onsubmit="submitModifyForm(this, ${data.id}); return false;" method="get">
         <div class="form-outline flex-fill">
             <input type="text" name="todo" class="form-control"/>
-            <label class="form-label" >원래 목표 내용</label>
+            <label class="form-label" >${data.content}</label>
         </div>
         <button type="submit" id="status" value="modify" class="btn btn-info ms-2">수정</button>
         <button onclick="displayAddForm()" id="status" value="undo" class="btn btn-info ms-2">취소</button>

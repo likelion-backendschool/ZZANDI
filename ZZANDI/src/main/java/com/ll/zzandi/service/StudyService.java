@@ -3,9 +3,9 @@ package com.ll.zzandi.service;
 import com.ll.zzandi.domain.*;
 import com.ll.zzandi.dto.BookDto;
 import com.ll.zzandi.dto.LectureDto;
+import com.ll.zzandi.dto.StudyDto;
 import com.ll.zzandi.enumtype.StudyStatus;
 import com.ll.zzandi.enumtype.StudyType;
-import com.ll.zzandi.exception.StudyForm;
 import com.ll.zzandi.repository.BoardRepository;
 import com.ll.zzandi.repository.BookRepository;
 import com.ll.zzandi.repository.CommentRepository;
@@ -29,18 +29,18 @@ public class StudyService {
     private final BoardRepository boardRepository;
     private final CommentRepository commentRepository;
 
-    public void createStudyWithBook(@Valid StudyForm studyform, Book book , User user) {
-        Study study = new Study(user , studyform.getStudyTitle(), book, null, StudyType.BOOK,
-            studyform.getStudyStart(),
-            studyform.getStudyEnd(), studyform.getStudyPeople(), studyform.getStudyTag(), 0,
+    public void createStudyWithBook(@Valid StudyDto studyDto, Book book , User user) {
+        Study study = new Study(user , studyDto.getStudyTitle(), book, null, StudyType.BOOK,
+                studyDto.getStudyStart(),
+                studyDto.getStudyEnd(), studyDto.getStudyPeople(), studyDto.getStudyTag(), 0,
             StudyStatus.RECRUIT);
         studyRepository.save(study);
     }
 
-    public void createStudyWithLecture(@Valid StudyForm studyform, Lecture lecture , User user) {
-        Study study = new Study(user , studyform.getStudyTitle(), null, lecture, StudyType.LECTURE,
-            studyform.getStudyStart(),
-            studyform.getStudyEnd(), studyform.getStudyPeople(), studyform.getStudyTag(), 0,
+    public void createStudyWithLecture(@Valid StudyDto studyDto, Lecture lecture , User user) {
+        Study study = new Study(user , studyDto.getStudyTitle(), null, lecture, StudyType.LECTURE,
+                studyDto.getStudyStart(),
+                studyDto.getStudyEnd(), studyDto.getStudyPeople(), studyDto.getStudyTag(), 0,
             StudyStatus.RECRUIT);
         studyRepository.save(study);
     }
@@ -63,7 +63,7 @@ public class StudyService {
         studyRepository.delete(studies);
     }
 
-    public void updateStudyWithBook(Long studyId, @Valid StudyForm studyform, BookDto bookDto , User user) {
+    public void updateStudyWithBook(Long studyId, @Valid StudyDto studyDto, BookDto bookDto , User user) {
         Study s1 = studyRepository.findById(studyId).orElseThrow(null);
         Book book;
         if (s1.getBook() != null) {
@@ -90,7 +90,7 @@ public class StudyService {
         }
     }
 
-    public void updateStudyWithLecture(Long studyId, StudyForm studyform, LectureDto lectureDto, User user) {
+    public void updateStudyWithLecture(Long studyId, StudyDto studyDto, LectureDto lectureDto, User user) {
         Study s1 = studyRepository.findById(studyId).orElseThrow(null);
         Lecture lecture;
         if (s1.getLecture() != null) {

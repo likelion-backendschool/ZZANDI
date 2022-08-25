@@ -25,8 +25,8 @@ import java.util.List;
 public class ToDoListController {
     private final ToDoListService toDoListService;
 
-    @GetMapping()
-    public String showToDo() {
+    @GetMapping("/list")
+    public String findToDoList() {
         return "todo/ToDoListMainAsync";
     }
 

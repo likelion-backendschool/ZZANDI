@@ -80,7 +80,8 @@ function displayItems(data, type) {
                     <div class="flex-grow-1">
                         ${li}
                     </div>
-                    <button type="button" onclick="deleteToDo(${data[i].id})" class="btn-close" aria-label="Close"></button>
+                    <i type="button" onclick="deleteToDo(${data[i].id})" class="fa-solid fa-pen me-3"></i>
+                    <i type="button" onclick="deleteToDo(${data[i].id})" class="fa-solid fa-trash-can"></i>
                 </li>`;
     }
     list.innerHTML = html;

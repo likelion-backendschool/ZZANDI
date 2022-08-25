@@ -3,7 +3,7 @@ package com.ll.zzandi.controller;
 import com.ll.zzandi.domain.*;
 import com.ll.zzandi.dto.BookDto;
 import com.ll.zzandi.dto.LectureDto;
-import com.ll.zzandi.exception.StudyForm;
+import com.ll.zzandi.dto.StudyDto;
 import com.ll.zzandi.service.BoardService;
 import com.ll.zzandi.service.BookService;
 import com.ll.zzandi.service.LectureService;
@@ -36,12 +36,12 @@ public class StudyController {
     private final BoardService boardService;
 
     @GetMapping("/study/create")
-    public String createStudy(StudyForm studyForm) {
+    public String createStudy(StudyDto studyDto) {
         return "study/studyForm";
     }
 
     @PostMapping("/study/create")
-    public String createStudy(@Valid StudyForm studyForm, BindingResult bindingResult, BookDto bookDto, LectureDto lectureDto) {
+    public String createStudy(@Valid StudyDto studyDto, BindingResult bindingResult, BookDto bookDto, LectureDto lectureDto) {
         if (bindingResult.hasErrors()) {
             return "study/studyForm";
         }
@@ -50,11 +50,11 @@ public class StudyController {
         if (Stream.of(bookDto.getBookName(), bookDto.getBookPage(), bookDto.getBookAuthor(),
             bookDto.getBookPublisher(), bookDto.getBookUrl()).allMatch(Objects::nonNull)) {
             Book book = bookService.save(bookDto);
-            studyService.createStudyWithBook(studyForm, book , user);
+            studyService.createStudyWithBook(studyDto, book , user);
         } else if (Stream.of(lectureDto.getLecturer(), lectureDto.getLectureName(),
             lectureDto.getLecturer(), lectureDto.getLectureNumber()).allMatch(Objects::nonNull)) {
             Lecture lecture = lectureService.save(lectureDto);
-            studyService.createStudyWithLecture(studyForm, lecture , user);
+            studyService.createStudyWithLecture(studyDto, lecture , user);
         }
         return "redirect:/";
     }
@@ -98,8 +98,8 @@ public class StudyController {
     }
 
     @GetMapping("/study/modify/{studyId}")
-    public String updateStudyForm(StudyForm studyForm) {
-        Study studies = studyService.findByid(studyId).orElseThrow(null);
+    public String updateStudyForm(@PathVariable Long studyId, Model model, StudyDto studyDto) {
+        Study studies = studyService.findByStudyId(studyId).orElseThrow(null);
         Book books = studies.getBook();
         Lecture lectures = studies.getLecture();
         model.addAttribute("studies" , studies);
@@ -110,7 +110,7 @@ public class StudyController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/study/modify/{studyId}")
-    public String updateStudy(@Valid StudyForm studyForm, BindingResult bindingResult, @PathVariable Long studyId, BookDto bookDto, LectureDto lectureDto, Principal principal) {
+    public String updateStudy(@Valid StudyDto studyDto, BindingResult bindingResult, @PathVariable Long studyId, BookDto bookDto, LectureDto lectureDto, Principal principal) {
         if (bindingResult.hasErrors()) {
             return "study/studyModify";
         }
@@ -123,10 +123,10 @@ public class StudyController {
         }
         if (Stream.of(bookDto.getBookName(), bookDto.getBookPage(), bookDto.getBookAuthor(),
             bookDto.getBookPublisher(), bookDto.getBookUrl()).allMatch(Objects::nonNull)) {
-            studyService.updateStudyWithBook(studyId, studyForm, bookDto , user);
+            studyService.updateStudyWithBook(studyId, studyDto, bookDto , user);
         } else if (Stream.of(lectureDto.getLecturer(), lectureDto.getLectureName(),
             lectureDto.getLecturer(), lectureDto.getLectureNumber()).allMatch(Objects::nonNull)) {
-            studyService.updateStudyWithLecture(studyId, studyForm, lectureDto, user);
+            studyService.updateStudyWithLecture(studyId, studyDto, lectureDto, user);
         }
         return "redirect:/";
     }

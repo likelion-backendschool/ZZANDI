@@ -1,22 +1,12 @@
 package com.ll.zzandi.controller;
 
-import com.ll.zzandi.domain.Study;
 import com.ll.zzandi.domain.ToDoList;
-import com.ll.zzandi.dto.BoardListDto;
 import com.ll.zzandi.dto.ToDoListDto;
 import com.ll.zzandi.enumtype.ToDoType;
 import com.ll.zzandi.service.ToDoListService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -25,8 +15,8 @@ import java.util.List;
 public class ToDoListController {
     private final ToDoListService toDoListService;
 
-    @GetMapping()
-    public String showToDo() {
+    @GetMapping("/list")
+    public String findToDoList() {
         return "todo/ToDoListMainAsync";
     }
 
@@ -36,6 +26,14 @@ public class ToDoListController {
         ToDoListDto.ToDoListRequest toDoListRequest = new ToDoListDto.ToDoListRequest(content);
 
         return toDoListService.save(toDoListRequest);
+    }
+
+    @GetMapping("/update")
+    @ResponseBody
+    public ToDoList updateToDo(@RequestParam long id, @RequestParam String content) {
+
+
+        return toDoListService.update(id, content);
     }
 
     @GetMapping("/change")
@@ -54,5 +52,11 @@ public class ToDoListController {
     @ResponseBody
     public List<ToDoList> ToDoToJson(@RequestParam(required = false) ToDoType type) {
         return (type == null) ? toDoListService.findAll() : toDoListService.findAllByType(type);
+    }
+
+    @GetMapping("/todo-data")
+    @ResponseBody
+    public ToDoList ToDoToJson(@RequestParam(required = false) long id) {
+        return toDoListService.findById(id);
     }
 }

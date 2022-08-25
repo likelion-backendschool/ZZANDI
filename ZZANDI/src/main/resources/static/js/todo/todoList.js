@@ -20,6 +20,14 @@ function findAll(type) {
         });
 }
 
+function findById(id) {
+    fetch("/todo/todo-data?id="+id)
+        .then(response => response.json())
+        .then(data => {
+            displayModifyForm(data);
+        });
+}
+
 // ToDoList 삭제
 function deleteToDo(id) {
     fetch("/todo/delete?id=" + id, {method: "DELETE"})
@@ -62,6 +70,29 @@ function submitAddForm(form) {
         });
 }
 
+// ToDoList 수정
+function submitModifyForm(form, id) {
+    form.todo.value = form.todo.value.trim();
+
+    if (form.todo.value.length == 0) {
+        alert("목표를 입력해주세요.");
+        form.todo.focus();
+        return;
+    }
+
+    let content = form.todo.value;
+
+    let url = `/todo/update/?id=${id}&content=${content}`
+
+    fetch(url)
+        .then(response => response.json())
+        .then(() => {
+            findAll('TOTAL')
+            displayMenu();
+            displayAddForm();
+        });
+}
+
 /**
  * 만들어진 list 목록을 <div>에 그려주는 함수
  */
@@ -80,7 +111,8 @@ function displayItems(data, type) {
                     <div class="flex-grow-1">
                         ${li}
                     </div>
-                    <button type="button" onclick="deleteToDo(${data[i].id})" class="btn-close" aria-label="Close"></button>
+                    <i type="button" onclick="findById(${data[i].id})" class="fa-solid fa-pen me-3"></i>
+                    <i type="button" onclick="deleteToDo(${data[i].id})" class="fa-solid fa-trash-can"></i>
                 </li>`;
     }
     list.innerHTML = html;
@@ -123,6 +155,26 @@ function displayAddForm() {
             <label class="form-label" > New task...</label>
         </div>
         <button type="submit" class="btn btn-info ms-2">Add</button>
+    </form>`
+
+    addForm.innerHTML = html;
+}
+
+/**
+ * ToDoList 수정 Form 을 그려주는 함수
+ */
+function displayModifyForm(data) {
+
+
+    let html = `
+    <form class="d-flex justify-content-center align-items-center mb-4"
+        onsubmit="submitModifyForm(this, ${data.id}); return false;" method="get">
+        <div class="form-outline flex-fill">
+            <input type="text" name="todo" class="form-control"/>
+            <label class="form-label" >${data.content}</label>
+        </div>
+        <button type="submit" id="status" value="modify" class="btn btn-info ms-2">수정</button>
+        <button onclick="displayAddForm()" id="status" value="undo" class="btn btn-info ms-2">취소</button>
     </form>`
 
     addForm.innerHTML = html;

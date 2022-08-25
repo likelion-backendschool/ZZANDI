@@ -5,7 +5,6 @@ import com.ll.zzandi.dto.ToDoListDto;
 import com.ll.zzandi.enumtype.ToDoType;
 import com.ll.zzandi.repository.ToDoListRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -56,5 +55,18 @@ public class ToDoListService {
         ToDoList toDoList = toDoListRepository.findById(id).get();
 
         toDoListRepository.delete(toDoList);
+    }
+
+  public ToDoList findById(long id) {
+        return toDoListRepository.findById(id).get();
+  }
+
+    public ToDoList update(long id, String content) {
+        ToDoList toDoList = toDoListRepository.findById(id).get();
+
+        toDoList.setContent(content);
+        toDoListRepository.save(toDoList);
+
+        return toDoList;
     }
 }

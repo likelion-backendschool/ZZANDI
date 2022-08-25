@@ -20,16 +20,32 @@ window.onload = () => {
     findByPage(currPage, studyId);
 }
 
+// 뒤로가기 / 앞으로가기 처리
+window.addEventListener('popstate', (e) => {
+    const data = history.state;
+    console.log(data.page);
+    fetch(`/${studyId}/board/list-data?page=${data.page}`)
+        .then(response => response.json())
+        .then(data => {
+            if(data.content.length === 0) {
+                list.innerHTML = '<td colspan="6">등록된 게시글이 없습니다.</td>';
+                return false;
+            } else {
+                displayItems(data, studyId);
+            }
+        })
+});
+
 // 게시물 검색
 function findByPage(page, studyId) {
     fetch(`/${studyId}/board/list-data?page=${page}`)
         .then(response => response.json())
         .then(data => {
-            console.log(data);
             if(data.content.length === 0) {
                 list.innerHTML = '<td colspan="6">등록된 게시글이 없습니다.</td>';
                 return false;
             } else {
+                history.pushState({page : page}, "", `/${studyId}/board/list?page=${page}`)
                 displayItems(data, studyId);
             }
         });

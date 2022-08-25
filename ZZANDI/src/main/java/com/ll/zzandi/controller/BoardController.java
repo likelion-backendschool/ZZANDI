@@ -63,7 +63,7 @@ public class BoardController {
             return "/board/boardWriteForm";
         }
 
-        Study study = studyService.findByid(studyId).get();
+        Study study = studyService.findById(studyId).get();
         Board board = new Board(user, boardWriteDto.getCategory(), boardWriteDto.getTitle(), boardWriteDto.getContent(), 0, 0, study);
         Long boardId = boardService.save(board);
 

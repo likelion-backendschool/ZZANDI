@@ -1,6 +1,6 @@
 package com.ll.zzandi.dto;
 
-import com.ll.zzandi.enumtype.Type;
+import com.ll.zzandi.enumtype.ToDoType;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,11 +12,11 @@ public class ToDoListDto {
     public static class ToDoListRequest {
         @NotEmpty(message = "목표를 적어주세요!")
         private String content;
-        private Type type;
+        private ToDoType type;
 
         public ToDoListRequest(String content) {
             this.content = content;
-            this.type = Type.DOING;
+            this.type = ToDoType.DOING;
         }
     }
     public static class ToDOListResponse {

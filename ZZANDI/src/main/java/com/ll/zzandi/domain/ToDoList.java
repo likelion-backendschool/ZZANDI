@@ -1,6 +1,6 @@
 package com.ll.zzandi.domain;
 
-import com.ll.zzandi.enumtype.Type;
+import com.ll.zzandi.enumtype.ToDoType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -26,5 +26,5 @@ public class ToDoList {
 
     @Column (name = "TODO_TYPE")
     @Enumerated(EnumType.STRING)
-    private Type type;
+    private ToDoType type;
 }

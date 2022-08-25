@@ -13,6 +13,7 @@
                 <th>#</th>
                 <th>스터디명</th>
                 <th>글쓴이</th>
+                <th>모집 상태</th>
             </tr>
             </thead>
             <tbody>
@@ -21,6 +22,13 @@
                 <td><a href="#" th:href="@{/study/detail/{studyId}(studyId = ${study.getId})}"
                        th:text="${study.studyTitle}"></a></td>
                 <td th:text="${study.user.userId}"></td>
+                <td th:if="${#dates.create(#temporals.year(#temporals.createDate(study.studyStart, 'yyyy-MM-dd')),#temporals.month(#temporals.createDate(study.studyStart, 'yyyy-MM-dd')),#temporals.day(#temporals.createDate(study.studyStart, 'yyyy-MM-dd'))).after(#dates.createNow())}">
+                    모집 중</td>
+                <td th:if="${#dates.create(#temporals.year(#temporals.createDate(study.studyEnd, 'yyyy-MM-dd')),#temporals.month(#temporals.createDate(study.studyEnd, 'yyyy-MM-dd')),#temporals.day(#temporals.createDate(study.studyEnd, 'yyyy-MM-dd'))).after(#dates.createNow()) and
+                             #dates.create(#temporals.year(#temporals.createDate(study.studyStart, 'yyyy-MM-dd')),#temporals.month(#temporals.createDate(study.studyStart, 'yyyy-MM-dd')),#temporals.day(#temporals.createDate(study.studyStart, 'yyyy-MM-dd'))).before(#dates.createNow())}">
+                    진행 중</td>
+                <td th:if="${#dates.create(#temporals.year(#temporals.createDate(study.studyEnd, 'yyyy-MM-dd')),#temporals.month(#temporals.createDate(study.studyEnd, 'yyyy-MM-dd')),#temporals.day(#temporals.createDate(study.studyEnd, 'yyyy-MM-dd'))).before(#dates.createNow())}">
+                    완료</td>
                 <td><a th:if="${user.userId == study.user.userId}"
                         th:href="@{/study/delete/{studyId}(studyId = ${study.getId})}" th:text="삭제"></a></td>
                 <td>

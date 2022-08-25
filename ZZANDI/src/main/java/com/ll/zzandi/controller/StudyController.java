@@ -99,6 +99,12 @@ public class StudyController {
 
     @GetMapping("/study/modify/{studyId}")
     public String updateStudyForm(StudyForm studyForm) {
+        Study studies = studyService.findByid(studyId).orElseThrow(null);
+        Book books = studies.getBook();
+        Lecture lectures = studies.getLecture();
+        model.addAttribute("studies" , studies);
+        model.addAttribute("lectures", lectures);
+        model.addAttribute("books", books);
         return "study/studyModify";
     }
 

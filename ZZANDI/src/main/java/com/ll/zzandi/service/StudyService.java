@@ -11,7 +11,6 @@ import com.ll.zzandi.repository.BookRepository;
 import com.ll.zzandi.repository.CommentRepository;
 import com.ll.zzandi.repository.StudyRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -76,14 +75,14 @@ public class StudyService {
         Lecture lecture = s1.getLecture();
         s1.setUser(user);
         s1.setId(studyId);
-        s1.setStudyTitle(studyform.getStudyTitle());
+        s1.setStudyTitle(studyDto.getStudyTitle());
         s1.setBook(book);
         s1.setLecture(null);
         s1.setStudyType(StudyType.BOOK);
-        s1.setStudyStart(studyform.getStudyStart());
-        s1.setStudyEnd(studyform.getStudyEnd());
-        s1.setStudyPeople(studyform.getStudyPeople());
-        s1.setStudyTag(studyform.getStudyTag());
+        s1.setStudyStart(studyDto.getStudyStart());
+        s1.setStudyEnd(studyDto.getStudyEnd());
+        s1.setStudyPeople(studyDto.getStudyPeople());
+        s1.setStudyTag(studyDto.getStudyTag());
         studyRepository.save(s1);
 
         if (lecture != null) {
@@ -103,14 +102,14 @@ public class StudyService {
         Book book = s1.getBook();
         s1.setUser(user);
         s1.setId(studyId);
-        s1.setStudyTitle(studyform.getStudyTitle());
+        s1.setStudyTitle(studyDto.getStudyTitle());
         s1.setBook(null);
         s1.setLecture(lecture);
         s1.setStudyType(StudyType.LECTURE);
-        s1.setStudyStart(studyform.getStudyStart());
-        s1.setStudyEnd(studyform.getStudyEnd());
-        s1.setStudyPeople(studyform.getStudyPeople());
-        s1.setStudyTag(studyform.getStudyTag());
+        s1.setStudyStart(studyDto.getStudyStart());
+        s1.setStudyEnd(studyDto.getStudyEnd());
+        s1.setStudyPeople(studyDto.getStudyPeople());
+        s1.setStudyTag(studyDto.getStudyTag());
         studyRepository.save(s1);
 
         if (book != null) {

@@ -6,11 +6,10 @@ const commentList = document.querySelector(".comment-list");
 const content = document.querySelector("#content");
 
 window.onload = () => {
-    printComment(boardId);
+    findCommentList(boardId);
 }
 
-// 댓글 목록 출력 함수
-function printComment(boardId) {
+function findCommentList(boardId) {
     fetch(`/comment/list/${boardId}`)
         .then(response => response.json())
         .then(data => {
@@ -30,12 +29,11 @@ function printComment(boardId) {
         });
 }
 
-const writeBtn = document.querySelector(".cm-btn");
-writeBtn.addEventListener("click", () => {
+function create(){
     const value = content.value;
     const comment = {content: value}
 
-    const url = `/comment/write/${boardId}`;
+    const url = `/comment/create/${boardId}`;
     fetch(url, {
         method: "POST",
         headers: {
@@ -44,9 +42,9 @@ writeBtn.addEventListener("click", () => {
         body: JSON.stringify(comment)
     }).then(() => {
         content.value = "";
-        printComment(boardId);
+        findCommentList(boardId);
     });
-});
+}
 
 // 삭제 버튼 함수
 function deleteBoard() {

@@ -16,7 +16,7 @@
         }
 
         body {
-            background-color: #eceff1;
+            background-color: #ffffff;
             font-family: "GmarketSansMedium", serif;
         }
 
@@ -26,8 +26,9 @@
     </style>
 </head>
 <body>
-<div class="container w-75 mx-auto mt-5">
+<div class="container w-50 mx-auto mt-5">
     <input type="hidden" class="board-id" th:value="${boardDetail.boardId}"> <!-- 현재 게시글 번호 -->
+    <input type="hidden" class="user-uuid" th:value="${userUUID}"> <!-- 현재 로그인 한 유저 식별자 -->
 
     <div class="d-flex justify-content-between align-self-baseline">
         <h3 th:text="${boardDetail.title}">제목1</h3>

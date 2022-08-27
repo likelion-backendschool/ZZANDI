@@ -24,7 +24,7 @@ public class CommentDto {
     public static class Response {
         private Long commentId;
         private Long boardId;
-        private Long userUuid;
+        private Long userUUID;
         private String writer;
         private String profile;
 

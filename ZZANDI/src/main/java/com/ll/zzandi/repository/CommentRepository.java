@@ -11,7 +11,7 @@ import java.util.List;
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     @Query("select c from Comment c where c.board.id = :id")
-    List<Comment> findCommentByBoardId(@Param("id") Long boardId);
+    List<Comment> findCommentListByBoardId(@Param("id") Long boardId);
 
     @Modifying
     @Query("delete from Comment c where c.board.id = :boardId")

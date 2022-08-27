@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -27,20 +28,18 @@ public class CommentController {
 
     @GetMapping("/list/{boardId}")
     @ResponseBody
-    public Result<List<Response>> commentList(@PathVariable Long boardId) {
-        List<Response> responses = commentService.commentList(boardId);
+    public Result<List<Response>> findCommentList(@PathVariable Long boardId) {
+        List<Response> responses = commentService.findCommentList(boardId);
         return new Result<>(responses.size(), responses);
     }
 
-    @PostMapping("/write/{boardId}")
+    @PostMapping("/create/{boardId}")
     @ResponseBody
-    public void commentWrite(@PathVariable Long boardId, @RequestBody Comment data) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal(); // 현재 로그인 한 유저 정보
-
+    public void createComment(@AuthenticationPrincipal User user, @PathVariable Long boardId, @RequestBody Comment data) {
         Board board = boardService.findByBoardId(boardId);
+
         Comment comment = new Comment(board, user, 0L, data.getContent(), DeleteStatus.EXIST);
-        commentService.save(comment);
+        commentService.createComment(comment);
     }
 
     // 컬렉션 데이터를 한 번 감싸서 반환하기 위한 클래스

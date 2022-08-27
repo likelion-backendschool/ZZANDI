@@ -85,10 +85,12 @@ public class StudyController {
             lectures = lectureService.findById(lectures.getId()).orElseThrow(null);
         }
 
+        boolean participation = userService.participation(studies.getTeamMateList(), user);
         model.addAttribute("studies", studies);
         model.addAttribute("books", books);
         model.addAttribute("lectures", lectures);
         model.addAttribute("user", user);
+        model.addAttribute("participation", participation);
         return "study/studyDetail";
     }
     @PreAuthorize("isAuthenticated()")

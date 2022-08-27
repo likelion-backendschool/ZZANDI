@@ -10,12 +10,14 @@ import com.ll.zzandi.service.LectureService;
 import com.ll.zzandi.service.StudyService;
 
 import com.ll.zzandi.service.TeamMateService;
+import com.ll.zzandi.service.UserService;
 import java.security.Principal;
 import java.util.Objects;
 import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,6 +38,7 @@ public class StudyController {
     private final LectureService lectureService;
     private final BoardService boardService;
     private final TeamMateService teamMateService;
+    private final UserService userService;
 
     @GetMapping("/study/create")
     public String createStudy(StudyDto studyDto) {
@@ -74,7 +77,7 @@ public class StudyController {
     }
 
     @GetMapping("/study/detail/{studyId}")
-    public String detailStudy(Model model, @PathVariable Long studyId) {
+    public String detailStudy(@AuthenticationPrincipal User user, Model model, @PathVariable Long studyId) {
         Study studies = studyService.findByStudyId(studyId).orElseThrow(null);
         Book books = studies.getBook();
         Lecture lectures = studies.getLecture();
@@ -87,6 +90,7 @@ public class StudyController {
         model.addAttribute("studies", studies);
         model.addAttribute("books", books);
         model.addAttribute("lectures", lectures);
+        model.addAttribute("user", user);
         return "study/studyDetail";
     }
     @PreAuthorize("isAuthenticated()")

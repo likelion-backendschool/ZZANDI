@@ -9,6 +9,7 @@ import com.ll.zzandi.service.BookService;
 import com.ll.zzandi.service.LectureService;
 import com.ll.zzandi.service.StudyService;
 
+import com.ll.zzandi.service.TeamMateService;
 import java.security.Principal;
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -34,6 +35,7 @@ public class StudyController {
     private final BookService bookService;
     private final LectureService lectureService;
     private final BoardService boardService;
+    private final TeamMateService teamMateService;
 
     @GetMapping("/study/create")
     public String createStudy(StudyDto studyDto) {
@@ -47,15 +49,17 @@ public class StudyController {
         }
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal(); // 현재 로그인 한 유저 정보
+        Study study = null;
         if (Stream.of(bookDto.getBookName(), bookDto.getBookPage(), bookDto.getBookAuthor(),
             bookDto.getBookPublisher(), bookDto.getBookUrl()).allMatch(Objects::nonNull)) {
             Book book = bookService.save(bookDto);
-            studyService.createStudyWithBook(studyDto, book , user);
+            study = studyService.createStudyWithBook(studyDto, book, user);
         } else if (Stream.of(lectureDto.getLecturer(), lectureDto.getLectureName(),
             lectureDto.getLecturer(), lectureDto.getLectureNumber()).allMatch(Objects::nonNull)) {
             Lecture lecture = lectureService.save(lectureDto);
-            studyService.createStudyWithLecture(studyDto, lecture , user);
+            study = studyService.createStudyWithLecture(studyDto, lecture , user);
         }
+        teamMateService.createTeamMate(user, study.getId());
         return "redirect:/";
     }
 

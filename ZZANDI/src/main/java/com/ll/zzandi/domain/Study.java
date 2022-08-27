@@ -4,6 +4,8 @@ import static javax.persistence.FetchType.*;
 
 import com.ll.zzandi.enumtype.StudyStatus;
 import com.ll.zzandi.enumtype.StudyType;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -58,6 +60,9 @@ public class Study {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "USER_UUID")
     private User user;
+
+    @OneToMany(mappedBy = "study", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TeamMate> teamMateList = new ArrayList<>();
 
     public Study(User user , String studyTitle, Book book, Lecture lecture, StudyType studyType, String studyStart, String studyEnd, int studyPeople, String studyTag, int studyRate, StudyStatus studyStatus) {
         this.user = user;

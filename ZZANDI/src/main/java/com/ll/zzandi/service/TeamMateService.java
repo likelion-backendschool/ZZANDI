@@ -3,6 +3,7 @@ package com.ll.zzandi.service;
 import com.ll.zzandi.domain.Study;
 import com.ll.zzandi.domain.TeamMate;
 import com.ll.zzandi.domain.User;
+import com.ll.zzandi.enumtype.StudyStatus;
 import com.ll.zzandi.enumtype.TeamMateStatus;
 import com.ll.zzandi.exception.TeamMateException;
 import com.ll.zzandi.repository.StudyRepository;
@@ -27,12 +28,6 @@ public class TeamMateService {
     User currentUser = userRepository.findByUserId(user.getUserId()).orElseThrow(RuntimeException::new);
     Study study = studyRepository.findById(studyId).orElseThrow(RuntimeException::new);
     TeamMate teamMate = teamMateRepository.findByUserAndAndStudy(currentUser, study).orElse(null);
-    Integer teamMateCount = teamMateRepository.countByStudyAndTeamMateStatus(study, TeamMateStatus.ACCEPTED);
-
-    if (teamMateCount == study.getStudyPeople()) {
-      // StudyStatus 상태 변화 추가하기
-      throw new TeamMateException("팀원이 모두 모집되어 신청할 수 없습니다.");
-    }
 
     // 팀장과 일치하는 경우, Accepted인 상태로 팀원에 팀장 추가
     if (study.getUser().getId().equals(currentUser.getId()) && teamMate == null) {
@@ -40,7 +35,19 @@ public class TeamMateService {
     } else if (teamMate == null) {
       teamMate = teamMateRepository.save(new TeamMate(user, study, 0, TeamMateStatus.WAITING));
       sendWaitingEmail(currentUser, study);
+    } else {
+      throw new TeamMateException("이미 신청한 스터디입니다.");
     }
+
+    if (study.getStudyStatus().equals(StudyStatus.RECRUIT_COMPLETE)) {
+      throw new TeamMateException("팀원이 모두 모집되어 신청할 수 없습니다.");
+    } else {
+      Integer teamMateCount = teamMateRepository.countByStudyAndTeamMateStatus(study, TeamMateStatus.ACCEPTED);
+      if (teamMateCount == study.getStudyPeople()) {
+        studyService.updateStudyStatusRecruitComplete(study);
+      }
+    }
+
     return teamMate;
   }
 

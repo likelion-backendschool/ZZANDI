@@ -116,4 +116,9 @@ public class StudyService {
             bookRepository.delete(book);
         }
     }
+
+    public void updateStudyStatusRecruitComplete(Study study) {
+        study.setStudyStatus(StudyStatus.RECRUIT_COMPLETE);
+        studyRepository.save(study);
+    }
 }

@@ -7,7 +7,6 @@ import com.ll.zzandi.enumtype.ToDoType;
 import com.ll.zzandi.repository.ToDoListRepository;
 import com.ll.zzandi.repository.UserRepository;
 import java.time.LocalDateTime;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

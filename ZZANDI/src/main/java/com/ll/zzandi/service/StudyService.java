@@ -29,20 +29,20 @@ public class StudyService {
     private final BoardRepository boardRepository;
     private final CommentRepository commentRepository;
 
-    public void createStudyWithBook(@Valid StudyDto studyDto, Book book , User user) {
+    public Study createStudyWithBook(@Valid StudyDto studyDto, Book book , User user) {
         Study study = new Study(user , studyDto.getStudyTitle(), book, null, StudyType.BOOK,
                 studyDto.getStudyStart(),
                 studyDto.getStudyEnd(), studyDto.getStudyPeople(), studyDto.getStudyTag(), 0,
             StudyStatus.RECRUIT);
-        studyRepository.save(study);
+        return studyRepository.save(study);
     }
 
-    public void createStudyWithLecture(@Valid StudyDto studyDto, Lecture lecture , User user) {
+    public Study createStudyWithLecture(@Valid StudyDto studyDto, Lecture lecture , User user) {
         Study study = new Study(user , studyDto.getStudyTitle(), null, lecture, StudyType.LECTURE,
                 studyDto.getStudyStart(),
                 studyDto.getStudyEnd(), studyDto.getStudyPeople(), studyDto.getStudyTag(), 0,
             StudyStatus.RECRUIT);
-        studyRepository.save(study);
+        return studyRepository.save(study);
     }
 
     public List<Study> findAll() {
@@ -141,5 +141,10 @@ public class StudyService {
         }
 
         return studyDto;
+    }
+
+    public void updateStudyStatusRecruitComplete(Study study) {
+        study.setStudyStatus(StudyStatus.RECRUIT_COMPLETE);
+        studyRepository.save(study);
     }
 }

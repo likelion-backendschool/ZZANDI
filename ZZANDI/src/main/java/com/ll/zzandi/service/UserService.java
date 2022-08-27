@@ -4,6 +4,7 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.ll.zzandi.config.security.UserContext;
 import com.ll.zzandi.domain.File;
 import com.ll.zzandi.domain.Interest;
+import com.ll.zzandi.domain.TeamMate;
 import com.ll.zzandi.domain.User;
 import com.ll.zzandi.dto.UserDto;
 import com.ll.zzandi.enumtype.TableType;
@@ -118,6 +119,15 @@ public class UserService {
     }
     private static String getUuid() {
         return UUID.randomUUID().toString().replaceAll("-", "");
+    }
+
+    public boolean participation(List<TeamMate> teamMateList, User user) {
+        for (TeamMate teamMate : teamMateList) {
+            if (teamMate.getUser().getId().equals(user.getId())) {
+                return true;
+            }
+        }
+        return false;
     }
 }
 

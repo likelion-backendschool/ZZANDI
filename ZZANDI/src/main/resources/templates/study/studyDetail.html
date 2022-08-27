@@ -45,10 +45,44 @@
                     </tbody>
                 </table>
                 <div class="d-flex justify-content-start">
+                    <a onclick="if (!confirm('스터디에 참가 신청하시겠습니까?')) return false; else alert('신청이 완료되었습니다.')" class = "btn btn-outline-secondary"
+                       th:if ="!${participation}" th:href="@{|/${studies.id}/teamMate/create|}">참가 신청</a>
                     <a class="btn btn-danger mx-2" th:href="@{/study/list}">스터디 리스트</a>
                     <a class="btn btn-primary" th:href="@{/{studyId}/board/list (studyId=${studies.getId})}">게시판 이동</a>
                 </div>
             </div>
+
+            <div th:if = "${user.id == studies.user.id}">
+                <div class="border-bottom my-3 py-2 w-50">수락 대기 중인 신청자 목록</div>
+                <div class = "card my-3 w-50" th:each="teamMate : ${studies.teamMateList}" th:if = "${teamMate.teamMateStatus.name() == 'WAITING'}">
+                    <div class = "card-body">
+                        <span>
+                            <svg th:if="${#strings.isEmpty(teamMate.user?.userprofileUrl)}" th:data-jdenticon-value="${teamMate.user.getUserNickname}"
+                                 width="30" height="30" class="rounded border bg-light"></svg>
+                            <img th:if="${!#strings.isEmpty(teamMate.user?.userprofileUrl)}" th:src="${teamMate.user.userprofileUrl}"
+                                 width="30" height="30" class="rounded border"/>
+                            <span th:text="${teamMate.user.getUserNickname}"></span>
+                            <a onclick = "if (!confirm('참가 신청을 수락하시겠습니까?')) return false;" class = "btn btn-outline-secondary" th:href="@{|/${studyId}/teamMate/update/${teamMate.id}|}">수락</a>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-bottom my-3 py-2 w-50">팀원 목록</div>
+            <div class = "card my-3 w-50" th:each="teamMate : ${studies.teamMateList}" th:if = "${teamMate.teamMateStatus.name() == 'ACCEPTED'}">
+                <div class = "card-body">
+                        <span>
+                            <svg th:if="${#strings.isEmpty(teamMate.user?.userprofileUrl)}" th:data-jdenticon-value="${teamMate.user.getUserNickname}"
+                                 width="30" height="30" class="rounded border bg-light"></svg>
+                            <img th:if="${!#strings.isEmpty(teamMate.user?.userprofileUrl)}" th:src="${teamMate.user.userprofileUrl}"
+                                 width="30" height="30" class="rounded border"/>
+                            <span th:text="${teamMate.user.getUserNickname}"></span>
+                        </span>
+                </div>
+            </div>
         </div>
+        <script src="https://cdn.jsdelivr.net/npm/jdenticon@3.2.0/dist/jdenticon.min.js" async
+                integrity="sha384-yBhgDqxM50qJV5JPdayci8wCfooqvhFYbIKhv0hTtLvfeeyJMJCscRfFNKIxt43M" crossorigin="anonymous">
+        </script>
     </body>
 </html>

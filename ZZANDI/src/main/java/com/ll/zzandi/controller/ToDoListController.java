@@ -25,11 +25,6 @@ public class ToDoListController {
     @GetMapping("/create")
     @ResponseBody
     public ToDoList createToDo(@AuthenticationPrincipal User user, String content) {
-        System.out.println("user id : " + user);
-        System.out.println("user id : " + user.getUserId());
-        System.out.println("user id : " + user.getId());
-
-
         ToDoListDto.ToDoListRequest toDoListRequest = new ToDoListDto.ToDoListRequest(content, user);
 
         return toDoListService.save(toDoListRequest);

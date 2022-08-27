@@ -20,10 +20,12 @@ public class ToDoListService {
     private final ToDoListRepository toDoListRepository;
     @Transactional
     public ToDoList save(ToDoListDto.ToDoListRequest toDoListRequest) {
+
         ToDoList toDoList = new ToDoList();
 
         toDoList.setContent(toDoListRequest.getContent());
         toDoList.setType(toDoListRequest.getType());
+        toDoList.setUser(toDoListRequest.getUser());
 
         toDoListRepository.save(toDoList);
 

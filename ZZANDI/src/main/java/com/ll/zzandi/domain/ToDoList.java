@@ -1,5 +1,7 @@
 package com.ll.zzandi.domain;
 
+import static javax.persistence.FetchType.LAZY;
+
 import com.ll.zzandi.enumtype.ToDoType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,4 +29,12 @@ public class ToDoList extends BaseEntity {
     @Column (name = "TODO_TYPE")
     @Enumerated(EnumType.STRING)
     private ToDoType type;
+
+    @ManyToOne
+    @JoinColumn (name = "USER_UUID")
+    private User user;
+
+//    @ManyToOne(fetch = LAZY)
+//    @JoinColumn(name = "USER_UUID")
+//    private User user;
 }

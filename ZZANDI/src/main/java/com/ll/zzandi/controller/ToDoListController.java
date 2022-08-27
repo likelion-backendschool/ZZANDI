@@ -1,10 +1,12 @@
 package com.ll.zzandi.controller;
 
 import com.ll.zzandi.domain.ToDoList;
+import com.ll.zzandi.domain.User;
 import com.ll.zzandi.dto.ToDoListDto;
 import com.ll.zzandi.enumtype.ToDoType;
 import com.ll.zzandi.service.ToDoListService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -22,8 +24,13 @@ public class ToDoListController {
 
     @GetMapping("/create")
     @ResponseBody
-    public ToDoList createToDo(String content) {
-        ToDoListDto.ToDoListRequest toDoListRequest = new ToDoListDto.ToDoListRequest(content);
+    public ToDoList createToDo(@AuthenticationPrincipal User user, String content) {
+        System.out.println("user id : " + user);
+        System.out.println("user id : " + user.getUserId());
+        System.out.println("user id : " + user.getId());
+
+
+        ToDoListDto.ToDoListRequest toDoListRequest = new ToDoListDto.ToDoListRequest(content, user);
 
         return toDoListService.save(toDoListRequest);
     }

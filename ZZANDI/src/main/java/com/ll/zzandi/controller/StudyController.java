@@ -53,12 +53,10 @@ public class StudyController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal(); // 현재 로그인 한 유저 정보
         Study study = null;
-        if (Stream.of(bookDto.getBookName(), bookDto.getBookPage(), bookDto.getBookAuthor(),
-            bookDto.getBookPublisher(), bookDto.getBookUrl()).allMatch(Objects::nonNull)) {
+        if (studyDto.getStudyType().equals("BOOK")) {
             Book book = bookService.save(bookDto);
-            study = studyService.createStudyWithBook(studyDto, book, user);
-        } else if (Stream.of(lectureDto.getLecturer(), lectureDto.getLectureName(),
-            lectureDto.getLecturer(), lectureDto.getLectureNumber()).allMatch(Objects::nonNull)) {
+            study = studyService.createStudyWithBook(studyDto, book , user);
+        } else if (studyDto.getStudyType().equals("LECTURE")) {
             Lecture lecture = lectureService.save(lectureDto);
             study = studyService.createStudyWithLecture(studyDto, lecture , user);
         }
@@ -105,37 +103,40 @@ public class StudyController {
         return "redirect:/";
     }
 
-    @GetMapping("/study/modify/{studyId}")
+    @GetMapping("/study/update/{studyId}")
     public String updateStudyForm(@PathVariable Long studyId, Model model, StudyDto studyDto) {
+
         Study studies = studyService.findByStudyId(studyId).orElseThrow(null);
         Book books = studies.getBook();
         Lecture lectures = studies.getLecture();
+        StudyDto newStudyDto = studyService.saveNewStudyDto(studyId, studyDto);
         model.addAttribute("studies" , studies);
         model.addAttribute("lectures", lectures);
         model.addAttribute("books", books);
-        return "study/studyModify";
+        model.addAttribute("studyDto", newStudyDto);
+        return "study/studyUpdate";
     }
 
     @PreAuthorize("isAuthenticated()")
-    @PostMapping("/study/modify/{studyId}")
-    public String updateStudy(@Valid StudyDto studyDto, BindingResult bindingResult, @PathVariable Long studyId, BookDto bookDto, LectureDto lectureDto, Principal principal) {
+    @PostMapping("/study/update/{studyId}")
+    public String updateStudy(@Valid StudyDto studyDto, BindingResult bindingResult, @PathVariable Long studyId, BookDto bookDto, LectureDto lectureDto, Principal principal, Model model) {
+
         if (bindingResult.hasErrors()) {
-            return "study/studyModify";
+            return "study/studyUpdate";
         }
-        Study studies = studyService.findByStudyId(studyId).orElseThrow(null);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal(); // 현재 로그인 한 유저 정보
+        Study studies = studyService.findByStudyId(studyId).orElseThrow(null);
         System.out.println("principal.getName() = " + principal.getName());
         if(!studies.getUser().getUserId().equals(principal.getName().split(",")[1].substring(8,principal.getName().split(",")[1].length()))){
             return "study/studyError";
         }
-        if (Stream.of(bookDto.getBookName(), bookDto.getBookPage(), bookDto.getBookAuthor(),
-            bookDto.getBookPublisher(), bookDto.getBookUrl()).allMatch(Objects::nonNull)) {
+        if (studyDto.getStudyType().equals("BOOK")) {
             studyService.updateStudyWithBook(studyId, studyDto, bookDto , user);
-        } else if (Stream.of(lectureDto.getLecturer(), lectureDto.getLectureName(),
-            lectureDto.getLecturer(), lectureDto.getLectureNumber()).allMatch(Objects::nonNull)) {
+        } else if (studyDto.getStudyType().equals("LECTURE")) {
             studyService.updateStudyWithLecture(studyId, studyDto, lectureDto, user);
         }
+
         return "redirect:/";
     }
 }

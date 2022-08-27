@@ -23,8 +23,16 @@ public class TeamMateController {
    */
   @GetMapping("/create")
   public String createTeamMate(@AuthenticationPrincipal User user, @PathVariable Long studyId, Model model) {
-    TeamMate teamMate = teamMateService.createTeamMate(user, studyId);
-//    model.addAttribute("teamMate", teamMate);
+    teamMateService.createTeamMate(user, studyId);
     return "redirect:/study/detail/%d".formatted(studyId);
+  }
+
+  /*
+  스터디 참가 수락
+    */
+  @GetMapping("/update/{teamMateId}")
+  public String updateTeamMate(@AuthenticationPrincipal User user, @PathVariable Long studyId, @PathVariable Long teamMateId, Model model) {
+    teamMateService.updateTeamMate(user, studyId, teamMateId);
+    return"redirect:/study/detail/%d".formatted(studyId);
   }
 }

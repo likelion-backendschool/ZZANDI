@@ -45,7 +45,7 @@
                     </tbody>
                 </table>
                 <div class="d-flex justify-content-start">
-                    <a onclick="if (!confirm('스터디에 참가 신청하시겠습니까?')) return false;" class = "btn btn-outline-secondary" th:href="@{/{studyId}/teamMate/create (studyId=${studies.getId})}">참가 신청</a>
+                    <a onclick="if (!confirm('스터디에 참가 신청하시겠습니까?')) return false;" class = "btn btn-outline-secondary" th:href="@{|/${studies.id}/teamMate/create|}">참가 신청</a>
                     <a class="btn btn-danger mx-2" th:href="@{/study/list}">스터디 리스트</a>
                     <a class="btn btn-primary" th:href="@{/{studyId}/board/list (studyId=${studies.getId})}">게시판 이동</a>
                 </div>
@@ -61,6 +61,7 @@
                             <img th:if="${!#strings.isEmpty(teamMate.user?.userprofileUrl)}" th:src="${teamMate.user.userprofileUrl}"
                                  width="30" height="30" class="rounded border"/>
                             <span th:text="${teamMate.user.getUserNickname}"></span>
+                            <a onclick = "if (!confirm('참가 신청을 수락하시겠습니까?')) return false;" class = "btn btn-outline-secondary" th:href="@{|/${studyId}/teamMate/update/${teamMate.id}|}">수락</a>
                         </span>
                     </div>
                 </div>

@@ -11,6 +11,7 @@ import com.ll.zzandi.repository.TeamMateRepository;
 import com.ll.zzandi.repository.UserRepository;
 import com.ll.zzandi.util.mail.EmailMessage;
 import com.ll.zzandi.util.mail.EmailService;
+import jdk.jshell.spi.ExecutionControl.UserException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,16 +25,16 @@ public class TeamMateService {
   private final EmailService emailService;
   private final StudyService studyService;
 
-  public TeamMate createTeamMate(User user, Long studyId) {
+  public void createTeamMate(User user, Long studyId) {
     User currentUser = userRepository.findByUserId(user.getUserId()).orElseThrow(RuntimeException::new);
     Study study = studyRepository.findById(studyId).orElseThrow(RuntimeException::new);
     TeamMate teamMate = teamMateRepository.findByUserAndAndStudy(currentUser, study).orElse(null);
 
     // 팀장과 일치하는 경우, Accepted인 상태로 팀원에 팀장 추가
     if (study.getUser().getId().equals(currentUser.getId()) && teamMate == null) {
-      teamMate = teamMateRepository.save(new TeamMate(user, study, 0, TeamMateStatus.ACCEPTED));
+      teamMateRepository.save(new TeamMate(user, study, 0, TeamMateStatus.ACCEPTED));
     } else if (teamMate == null) {
-      teamMate = teamMateRepository.save(new TeamMate(user, study, 0, TeamMateStatus.WAITING));
+      teamMateRepository.save(new TeamMate(user, study, 0, TeamMateStatus.WAITING));
       sendWaitingEmail(currentUser, study);
     } else {
       throw new TeamMateException("이미 신청한 스터디입니다.");
@@ -41,14 +42,24 @@ public class TeamMateService {
 
     if (study.getStudyStatus().equals(StudyStatus.RECRUIT_COMPLETE)) {
       throw new TeamMateException("팀원이 모두 모집되어 신청할 수 없습니다.");
-    } else {
-      Integer teamMateCount = teamMateRepository.countByStudyAndTeamMateStatus(study, TeamMateStatus.ACCEPTED);
-      if (teamMateCount == study.getStudyPeople()) {
-        studyService.updateStudyStatusRecruitComplete(study);
-      }
+    }
+  }
+
+  public void updateTeamMate(User user, Long studyId, Long teamMateId) {
+    User currentUser = userRepository.findByUserId(user.getUserId()).orElseThrow(RuntimeException::new);
+    Study study = studyRepository.findById(studyId).orElseThrow(RuntimeException::new);
+    TeamMate teamMate = teamMateRepository.findById(teamMateId).orElseThrow(RuntimeException::new);
+
+    // 팀장만 수락이 가능
+    if(study.getUser() == currentUser) {
+      teamMate.setTeamMateStatus(TeamMateStatus.ACCEPTED);
+      teamMateRepository.save(teamMate);
     }
 
-    return teamMate;
+    Integer teamMateCount = teamMateRepository.countByStudyAndTeamMateStatus(study, TeamMateStatus.ACCEPTED);
+    if (teamMateCount == study.getStudyPeople()) {
+      studyService.updateStudyStatusRecruitComplete(study);
+    }
   }
 
   private void sendWaitingEmail(User user, Study study) {

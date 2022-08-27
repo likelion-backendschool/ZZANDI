@@ -4,6 +4,7 @@ import com.ll.zzandi.domain.ToDoList;
 import com.ll.zzandi.dto.ToDoListDto;
 import com.ll.zzandi.enumtype.ToDoType;
 import com.ll.zzandi.repository.ToDoListRepository;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -65,6 +66,7 @@ public class ToDoListService {
         ToDoList toDoList = toDoListRepository.findById(id).get();
 
         toDoList.setContent(content);
+        toDoList.setUpdatedDate(LocalDateTime.now());
         toDoListRepository.save(toDoList);
 
         return toDoList;

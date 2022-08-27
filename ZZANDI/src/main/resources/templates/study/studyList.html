@@ -34,7 +34,7 @@
                 <td>
                     <a th:if="${#dates.create(#temporals.year(#temporals.createDate(study.studyStart, 'yyyy-MM-dd')),#temporals.month(#temporals.createDate(study.studyStart, 'yyyy-MM-dd')),#temporals.day(#temporals.createDate(study.studyStart, 'yyyy-MM-dd'))).after(#dates.createNow()) and
                                 user.userId == study.user.userId}"
-                       th:href="@{/study/modify/{studyId}(studyId = ${study.getId})}"
+                       th:href="@{/study/update/{studyId}(studyId = ${study.getId})}"
                        th:text="수정">
                     </a>
                 </td>

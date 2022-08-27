@@ -32,7 +32,7 @@
                     </div>
                     <div>
                         <label for="studyPeople"> </label>
-                        <input type="number" id="studyPeople" th:field="*{studyPeople}" placeholder="스터디 인원 수를 입력하세요">
+                        <input type="number" id="studyPeople" th:field="*{studyPeople}" min="1" placeholder="스터디 인원 수를 입력하세요">
                     </div>
                     <div>
                         <label for="studyType"> </label>
@@ -46,7 +46,7 @@
                         </div>
                         <div>
                             <label for="bookPage"> </label>
-                            <input type="number" id="bookPage" name="bookPage" placeholder="페이지 수를 입력하세요.">
+                            <input type="number" id="bookPage" name="bookPage" min="1" placeholder="페이지 수를 입력하세요.">
                         </div>
                         <div>
                             <label for="bookAuhor"> </label>
@@ -72,7 +72,7 @@
                         </div>
                         <div>
                             <label for="lectureNumber"> </label>
-                            <input type="number" id="lectureNumber" name="lectureNumber" placeholder="lecturNumber...??">
+                            <input type="number" id="lectureNumber" name="lectureNumber" min="1" placeholder="lecturNumber...??">
                         </div>
                     </div>
                     <div>

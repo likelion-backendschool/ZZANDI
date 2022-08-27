@@ -28,4 +28,13 @@ public class StudyDto {
 
     @NotNull(message = "스터디 타입은 필수항목입니다.")
     private String studyType;
+
+    private String bookName;
+    private Integer bookPage;
+    private String bookAuthor;
+    private String bookPublisher;
+    private String bookUrl;
+    private String lectureName;
+    private String lecturer;
+    private Integer lectureNumber;
 }

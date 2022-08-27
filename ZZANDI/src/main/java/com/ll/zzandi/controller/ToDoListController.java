@@ -1,10 +1,13 @@
 package com.ll.zzandi.controller;
 
 import com.ll.zzandi.domain.ToDoList;
+import com.ll.zzandi.domain.User;
 import com.ll.zzandi.dto.ToDoListDto;
 import com.ll.zzandi.enumtype.ToDoType;
 import com.ll.zzandi.service.ToDoListService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -22,8 +25,8 @@ public class ToDoListController {
 
     @GetMapping("/create")
     @ResponseBody
-    public ToDoList createToDo(String content) {
-        ToDoListDto.ToDoListRequest toDoListRequest = new ToDoListDto.ToDoListRequest(content);
+    public ToDoList createToDo(@AuthenticationPrincipal User user, String content) {
+        ToDoListDto.ToDoListRequest toDoListRequest = new ToDoListDto.ToDoListRequest(content, user);
 
         return toDoListService.save(toDoListRequest);
     }
@@ -50,8 +53,10 @@ public class ToDoListController {
 
     @GetMapping("/list-data")
     @ResponseBody
-    public List<ToDoList> ToDoToJson(@RequestParam(required = false) ToDoType type) {
-        return (type == null) ? toDoListService.findAll() : toDoListService.findAllByType(type);
+    public List<ToDoList> ToDoToJson(@RequestParam(required = false) ToDoType type, @AuthenticationPrincipal User user) {
+//        return (type == null) ? toDoListService.findAll() : toDoListService.findAllByType(type);
+
+        return (type == null) ? toDoListService.findAllByUser(user) : toDoListService.findAllByUserAndType(user, type);
     }
 
     @GetMapping("/todo-data")

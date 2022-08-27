@@ -24,11 +24,11 @@ $(document).ready(function(){
     $('#lecture').hide(); // 초깃값 설정
 
     $("input[name='studyType']").change(function(){
-        if($("input[name='studyType']:checked").val() == 'Book'){
+        if($("input[name='studyType']:checked").val() == 'BOOK'){
             $('#book').show();
             $('#lecture').hide();
         }
-        else if($("input[name='studyType']:checked").val() == 'Lecture'){
+        else if($("input[name='studyType']:checked").val() == 'LECTURE'){
             $('#book').hide();
             $('#lecture').show();
         }

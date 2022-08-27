@@ -116,4 +116,30 @@ public class StudyService {
             bookRepository.delete(book);
         }
     }
+
+    public StudyDto saveNewStudyDto(Long studyId, StudyDto studyDto) {
+        Study studies = studyRepository.findById(studyId).orElseThrow(null);
+        Book books = studies.getBook();
+        Lecture lectures = studies.getLecture();
+
+        studyDto.setStudyTitle(studies.getStudyTitle());
+        studyDto.setStudyStart(studies.getStudyStart());
+        studyDto.setStudyEnd(studies.getStudyEnd());
+        studyDto.setStudyPeople(studies.getStudyPeople());
+        studyDto.setStudyType(String.valueOf(studies.getStudyType()));
+        studyDto.setStudyTag(studies.getStudyTag());
+        if(studyDto.getStudyType().equals("BOOK")){
+            studyDto.setBookName(books.getBookName());
+            studyDto.setBookPage(books.getBookPage());
+            studyDto.setBookAuthor(books.getBookAuthor());
+            studyDto.setBookPublisher(books.getBookPublisher());
+            studyDto.setBookUrl(books.getBookUrl());
+        } else if(studyDto.getStudyType().equals("LECTURE")){
+            studyDto.setLectureName(lectures.getLectureName());
+            studyDto.setLecturer(lectures.getLecturer());
+            studyDto.setLectureNumber(lectures.getLectureNumber());
+        }
+
+        return studyDto;
+    }
 }

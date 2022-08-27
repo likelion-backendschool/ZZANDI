@@ -5,6 +5,7 @@ import com.ll.zzandi.dto.BoardDetailDto;
 import com.ll.zzandi.dto.BoardListDto;
 import com.ll.zzandi.dto.BoardUpdateFormDto;
 import com.ll.zzandi.repository.BoardRepository;
+import com.ll.zzandi.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,9 +26,10 @@ public class BoardService {
 
     public Page<BoardListDto> findBoardListPaging(int page, Long studyId) {
         PageRequest pageRequest = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "id"));
-        return boardRepository.findBoardList(pageRequest, studyId)
-                .map(board -> new BoardListDto(board.getId(), board.getCategory(), board.getTitle(), board.getUser().getUserNickname(),
-                        board.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd")), board.getViews(), board.getHeart(), page));
+        Page<Board> boardList = boardRepository.findBoardList(pageRequest, studyId);
+
+        return boardList.map(board -> new BoardListDto(board.getId(), board.getCategory(), board.getTitle(), board.getUser().getUserNickname(),
+                        board.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd")), board.getViews(), board.getHeart(), page, board.getComments().size()));
     }
 
     public BoardDetailDto detailBoard(Long boardId, int page) {

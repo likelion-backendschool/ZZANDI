@@ -73,11 +73,7 @@ function createBtnBox(comment, num) {
 // 대댓글 입력창 출력 함수
 function createCommentForm(num) {
     let commentForm = document.querySelector(`.comment-list .comment-form:nth-of-type(${num})`);
-    if (commentForm.classList.contains('hide')) {
-        commentForm.classList.remove('hide');
-    } else {
-        commentForm.classList.add('hide');
-    }
+    commentForm.classList.toggle('hide');
 }
 
 function updateComment() {

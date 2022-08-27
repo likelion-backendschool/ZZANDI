@@ -8,6 +8,9 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
@@ -45,6 +48,9 @@ public class Board extends BaseEntity {
     @JoinColumn(name = "STUDY_ID")
     @OneToOne(fetch = LAZY)
     private Study study;
+
+    @OneToMany(mappedBy = "board")
+    private List<Comment> comments = new ArrayList<>();
 
     public Board(User user, BoardCategory category, String title, String content, int views, int heart, Study study) {
         this.user = user;

@@ -63,7 +63,7 @@ function displayItems(items) {
 function createBoardList(item) {
     return `<tr>
                 <td style="color: mediumpurple;">${item.category}</td>
-                <td><a href="detail/${item.boardId}/${item.pageNum}">${item.title}</a></td>
+                <td><a href="detail/${item.boardId}/${item.pageNum}">${item.title}</a><span style="font-weight: bold; font-size: 12px;">[${item.count}]</span></td>
                 <td>${item.writer}</td>
                 <td>${item.createdDate}</td>
                 <td>${item.views}</td>

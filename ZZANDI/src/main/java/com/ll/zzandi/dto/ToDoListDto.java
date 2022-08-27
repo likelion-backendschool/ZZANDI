@@ -1,6 +1,7 @@
 package com.ll.zzandi.dto;
 
 import com.ll.zzandi.enumtype.ToDoType;
+import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,9 +15,14 @@ public class ToDoListDto {
         private String content;
         private ToDoType type;
 
+        private LocalDateTime createDate;
+
+        private LocalDateTime updateDate;
+
         public ToDoListRequest(String content) {
             this.content = content;
             this.type = ToDoType.DOING;
+            this.createDate = LocalDateTime.now();
         }
     }
     public static class ToDOListResponse {

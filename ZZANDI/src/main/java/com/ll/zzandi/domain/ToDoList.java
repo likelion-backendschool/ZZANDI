@@ -14,7 +14,7 @@ import javax.persistence.*;
 @Table(name = "TO_DO_LIST")
 @NoArgsConstructor
 @ToString
-public class ToDoList {
+public class ToDoList extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

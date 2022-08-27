@@ -54,12 +54,28 @@ public class TeamMateService {
     if(study.getUser() == currentUser) {
       teamMate.setTeamMateStatus(TeamMateStatus.ACCEPTED);
       teamMateRepository.save(teamMate);
+      sendAcceptedEmail(study, teamMate);
     }
 
     Integer teamMateCount = teamMateRepository.countByStudyAndTeamMateStatus(study, TeamMateStatus.ACCEPTED);
     if (teamMateCount == study.getStudyPeople()) {
       studyService.updateStudyStatusRecruitComplete(study);
     }
+  }
+
+  private void sendAcceptedEmail(Study study, TeamMate teamMate) {
+    String message = "안녕하세요. %s님, <br/>".formatted(teamMate.getUser().getUserNickname())
+        + "%s님이 [%s] 스터디 참가 신청을 수락했습니다.<br/>".formatted(study.getUser().getUserNickname(), study.getStudyTitle())
+        + "팀원이 되신 것을 축하드리며, 스터디 시작일은 %s입니다.<br/>".formatted(study.getStudyStart())
+        + "자세한 스터디 세부 정보는 아래의 링크로 접속하셔서 확인하시길 바랍니다. <br/>"
+        + "http://localhost:8080/study/detail/%d".formatted(study.getId());
+
+    EmailMessage emailMessage = EmailMessage.builder()
+        .to(teamMate.getUser().getUserEmail())
+        .subject("ZZANDI, 스터디 신청 수락 알림")
+        .message(message)
+        .build();
+    emailService.sendEmail(emailMessage);
   }
 
   private void sendWaitingEmail(User user, Study study) {

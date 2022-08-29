@@ -71,17 +71,18 @@ function createBoardList(item) {
     } else {
         profile = `<img src="${item.profile}" alt="profile" class="rounded border bg-light" width="30" height="30" style="margin-right: 5px;">`
     }
+
     return `<tr>
                 <td style="color: mediumpurple;">${item.category}</td>
                 <td>
-                    <a href="detail/${item.boardId}/${item.pageNum}">${item.title}</a>
+                    <a href="/${studyId}/board/detail/${item.boardId}/${item.pageNum}">${item.title}</a>
                     <span style="font-weight: bold; font-size: 12px; margin-left: 5px;">[${item.count}]</span>
                 </td>
-                <td class="d-flex justify-content-between" style="font-size: 12px;">
-                <div style="margin-left: 20px;">
-                    ${profile} 
-                    ${item.writer}
-                </div>
+                <td style="font-size: 12px;">
+                    <div class="d-flex" style="margin-left: 20px;">
+                        ${profile} 
+                        <span class="align-self-center">${item.writer}</span>
+                    </div>
                 </td>
                 <td>${item.createdDate}</td>
                 <td>${item.views}</td>

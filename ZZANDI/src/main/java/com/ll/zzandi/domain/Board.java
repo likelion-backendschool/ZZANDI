@@ -1,9 +1,7 @@
 package com.ll.zzandi.domain;
 
 import com.ll.zzandi.enumtype.BoardCategory;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;

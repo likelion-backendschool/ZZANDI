@@ -42,10 +42,10 @@ public class BoardController {
     }
 
     @GetMapping("/detail/{boardId}/{page}")
-    public String detailBoard(@AuthenticationPrincipal User user, @PathVariable Long studyId, @PathVariable Long boardId, @PathVariable int page, Model model) {
+    public String findBoardDetail(@AuthenticationPrincipal User user, @PathVariable Long studyId, @PathVariable Long boardId, @PathVariable int page, Model model) {
         boardService.updateBoardView(boardId);
 
-        model.addAttribute("boardDetail", boardService.detailBoard(boardId, page));
+        model.addAttribute("boardDetail", boardService.findBoardDetail(boardId, page));
         model.addAttribute("userUUID", user.getId());
         model.addAttribute("studyId", studyId);
         return "board/boardDetail";

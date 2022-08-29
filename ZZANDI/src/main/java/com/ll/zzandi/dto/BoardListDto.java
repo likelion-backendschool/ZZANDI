@@ -12,6 +12,7 @@ import lombok.Setter;
 public class BoardListDto {
 
     private Long boardId;
+    private String userId;
     private BoardCategory category;
     private String title;
     private String writer;
@@ -19,5 +20,7 @@ public class BoardListDto {
     private int views; // 조회수
     private int heart; // 좋아요 수
     private int pageNum; // 현재 페이지 번호
+    private int count; // 댓글의 개수
+    private String profile; // 게시글 작성자의 프로필 사진
 
 }

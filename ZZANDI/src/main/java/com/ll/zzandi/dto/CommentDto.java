@@ -25,6 +25,7 @@ public class CommentDto {
         private Long commentId;
         private Long boardId;
         private Long userUUID;
+        private String userId;
         private String writer;
         private String profile;
 

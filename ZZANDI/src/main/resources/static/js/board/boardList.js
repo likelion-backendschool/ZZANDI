@@ -16,6 +16,10 @@ const pagination = document.querySelector('.pagination');
 const currPage = document.querySelector(".page").value; // 현재 페이지 정보
 const studyId = document.querySelector(".study-id").value;
 
+window.jdenticon_config = {
+    replaceMode: "observe"
+};
+
 window.onload = () => {
     findByPage(currPage, studyId);
 }
@@ -61,10 +65,25 @@ function displayItems(items) {
 
 // 게시물 리스트 생성
 function createBoardList(item) {
+    let profile = '';
+    if (item.profile === null) {
+        profile = `<svg width="30" height="30" class="rounded border bg-light" data-jdenticon-value="${item.userId}" style="margin-right: 5px;"></svg>`;
+    } else {
+        profile = `<img src="${item.profile}" alt="profile" class="rounded border bg-light" width="30" height="30" style="margin-right: 5px;">`
+    }
+
     return `<tr>
                 <td style="color: mediumpurple;">${item.category}</td>
-                <td><a href="detail/${item.boardId}/${item.pageNum}">${item.title}</a></td>
-                <td>${item.writer}</td>
+                <td>
+                    <a href="/${studyId}/board/detail/${item.boardId}/${item.pageNum}">${item.title}</a>
+                    <span style="font-weight: bold; font-size: 12px; margin-left: 5px;">[${item.count}]</span>
+                </td>
+                <td style="font-size: 12px;">
+                    <div class="d-flex" style="margin-left: 20px;">
+                        ${profile} 
+                        <span class="align-self-center">${item.writer}</span>
+                    </div>
+                </td>
                 <td>${item.createdDate}</td>
                 <td>${item.views}</td>
                 <td>${item.heart}</td>

@@ -1,21 +1,22 @@
 package com.ll.zzandi.exception;
 
-import com.ll.zzandi.util.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @Slf4j
-@RestControllerAdvice
+@ControllerAdvice
 public class GlobalControllerAdvice {
 
   @ExceptionHandler(UserApplicationException.class)
-  public ResponseEntity<?> applicationHandler(UserApplicationException e) {
+  public String applicationHandler(UserApplicationException e, Model model) {
     log.error("Error occurs {}", e.toString());
-    return ResponseEntity.status(e.getErrorCode().getStatus())
-        .body(Response.error(e.getErrorCode().name()));
+    model.addAttribute("ErrorCode",e.getErrorType().getErrorCode());
+    model.addAttribute("message",e.getErrorType().getMessage());
+    return "error/404";
   }
 
   // 임시로 일단 만들어둔 팀원 예외
@@ -24,4 +25,14 @@ public class GlobalControllerAdvice {
     String message = e.getMessage();
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
   }
+
+  @ExceptionHandler(RuntimeException.class)
+  public String applicationHandler(RuntimeException e,Model model) {
+    log.error("Error occurs {}", e.toString());
+    model.addAttribute("ErrorCode","500");
+    model.addAttribute("message","내부 서버 오류 ");
+    return "error/404";
+  }
+
+
 }

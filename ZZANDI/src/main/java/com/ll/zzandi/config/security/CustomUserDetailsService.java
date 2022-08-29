@@ -1,6 +1,8 @@
 package com.ll.zzandi.config.security;
 
 import com.ll.zzandi.domain.User;
+import com.ll.zzandi.exception.ErrorType;
+import com.ll.zzandi.exception.UserApplicationException;
 import com.ll.zzandi.repository.UserRepository;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +31,7 @@ public class CustomUserDetailsService implements UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
-        User user = userRepository.findByUserId(userId).orElseThrow(() -> new UsernameNotFoundException("존재하지 않는 계정입니다"));
+        User user = userRepository.findByUserId(userId).orElseThrow(() -> new UserApplicationException(ErrorType.NOT_FOUND));
 
         List<GrantedAuthority> authorities = new ArrayList<>();  // 권한 저장
         authorities.add(new SimpleGrantedAuthority(String.valueOf(user.getUserRole())));

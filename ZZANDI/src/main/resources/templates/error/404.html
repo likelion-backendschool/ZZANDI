@@ -3,9 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <link href='https://fonts.googleapis.com/css?family=Arvo' rel='stylesheet'>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;400&display=swap" rel="stylesheet">
 <style>
-  .page_404{ padding:40px 0; background:#fff; font-family: 'Arvo', serif;
+  .page_404{ padding:40px 0; background:#fff; font-family: 'Noto Sans KR', sans-serif;
   }
 
   .page_404  img{ width:100%;}
@@ -41,14 +43,13 @@
       <div class="col-sm-12 ">
         <div class="col-sm-10 col-sm-offset-1  text-center">
           <div class="four_zero_four_bg">
-            <h1 class="text-center ">404</h1>
+            <h1 class="text-center " >[[${ErrorCode}]]</h1>
           </div>
           <div class="contant_box_404">
             <h3 class="h2">
-              Look like you're lost
+              [[${message}]]
             </h3>
-            <p>the page you are looking for not avaible!</p>
-            <a href="" class="link_404">Go to Home</a>
+            <a th:href="@{|/|}" class="link_404">홈으로 돌아가기</a>
           </div>
         </div>
       </div>

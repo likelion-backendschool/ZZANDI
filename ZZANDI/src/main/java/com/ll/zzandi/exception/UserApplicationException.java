@@ -7,11 +7,11 @@ import lombok.Getter;
 @Getter
 public class UserApplicationException extends RuntimeException{
 
-    private ErrorCode errorCode;
+    private ErrorType errorType;
     private String message;
 
-    public UserApplicationException(ErrorCode errorCode) {
-        this.errorCode = errorCode;
+    public UserApplicationException(ErrorType errorType) {
+        this.errorType = errorType;
         this.message = null;
     }
 
@@ -19,9 +19,9 @@ public class UserApplicationException extends RuntimeException{
     @Override
     public String getMessage() {
         if (message == null) {
-            return errorCode.getMessage();
+            return errorType.getMessage();
         }
 
-        return String.format("%s. %s", errorCode.getMessage(), message);
+        return String.format("%s. %s", errorType.getMessage(), message);
     }
 }

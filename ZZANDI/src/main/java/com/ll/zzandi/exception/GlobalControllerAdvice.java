@@ -16,7 +16,7 @@ public class GlobalControllerAdvice {
     log.error("Error occurs {}", e.toString());
     model.addAttribute("ErrorCode",e.getErrorType().getErrorCode());
     model.addAttribute("message",e.getErrorType().getMessage());
-    return "error/404";
+    return "error/globalErrorPage";
   }
 
   // 임시로 일단 만들어둔 팀원 예외
@@ -29,9 +29,10 @@ public class GlobalControllerAdvice {
   @ExceptionHandler(RuntimeException.class)
   public String applicationHandler(RuntimeException e,Model model) {
     log.error("Error occurs {}", e.toString());
-    model.addAttribute("ErrorCode","500");
-    model.addAttribute("message","내부 서버 오류 ");
-    return "error/404";
+
+    model.addAttribute("ErrorCode",ErrorType.INTERNAL_SERVER_ERROR.getErrorCode());
+    model.addAttribute("message",ErrorType.INTERNAL_SERVER_ERROR.getMessage());
+    return "error/globalErrorPage";
   }
 
 

@@ -32,7 +32,7 @@ public class MainController {
     @GetMapping("/test")
     public String test(){
         //강제로 에러 만들기
-        User user=userRepository.findById(999L).orElseThrow(() -> new UserApplicationException(ErrorType.NOT_FOUND));
+        User user=userRepository.findById(999L).orElseThrow(RuntimeException::new);
         return "index";
     }
 }

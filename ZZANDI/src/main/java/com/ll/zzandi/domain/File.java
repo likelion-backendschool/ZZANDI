@@ -6,6 +6,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -13,7 +15,9 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class File {
+@SQLDelete(sql="UPDATE file SET DELETE_DATE = NOW() where id=?")
+@Where(clause="DELETE_DATE is NULL")
+public class File extends BaseEntity {
     @Id
     @GeneratedValue
     private Long id;

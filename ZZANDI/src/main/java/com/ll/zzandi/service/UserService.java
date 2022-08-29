@@ -99,7 +99,11 @@ public class UserService {
 
     @Transactional
     public void updateProfile(MultipartFile multipartFile,Long userUUID) throws IOException {
-        User user1=userRepository.findById(userUUID).orElseThrow(RuntimeException::new);
+        User user=userRepository.findById(userUUID).orElseThrow(RuntimeException::new);
+        if(user.getUserprofileUrl() != null){
+            File file=fileRepository.findByTableId(userUUID);
+            fileRepository.delete(file);
+        }
         String originalName=multipartFile.getOriginalFilename();
         String[] name=originalName.split("\\\\");
         final String ext = name[2].substring(name[2].lastIndexOf('.'));
@@ -115,7 +119,7 @@ public class UserService {
                 .tableType(TableType.USER)
                 .build();
         fileRepository.save(file);
-        user1.setUserprofileUrl(uploadUrl);
+        user.setUserprofileUrl(uploadUrl);
     }
     private static String getUuid() {
         return UUID.randomUUID().toString().replaceAll("-", "");

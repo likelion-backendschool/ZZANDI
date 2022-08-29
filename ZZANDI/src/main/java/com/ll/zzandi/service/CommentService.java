@@ -21,7 +21,7 @@ public class CommentService {
         List<Comment> list = commentRepository.findCommentListByBoardId(boardId);
         List<Response> responseList = new ArrayList<>();
         for (Comment comment : list) {
-            responseList.add(new Response(comment.getId(), comment.getBoard().getId(), comment.getUser().getId(), comment.getUser().getUserNickname(),
+            responseList.add(new Response(comment.getId(), comment.getBoard().getId(), comment.getUser().getId(), comment.getUser().getUserId(), comment.getUser().getUserNickname(),
                     comment.getUser().getUserprofileUrl(), comment.getParentId(), comment.getContent(), comment.getDeleteStatus(), comment.getCreatedDate()));
         }
         return responseList;

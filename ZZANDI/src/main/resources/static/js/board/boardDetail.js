@@ -6,6 +6,10 @@ const commentCount = document.querySelector(".comment-count");
 const commentList = document.querySelector(".comment-list");
 const content = document.querySelector("#content");
 
+window.jdenticon_config = {
+    replaceMode: "observe"
+};
+
 window.onload = () => {
     findCommentList(boardId);
 }
@@ -23,12 +27,19 @@ function findCommentList(boardId) {
 
             commentList.innerHTML = "";
             for (let i = 0; i < count; i++) {
+                let profile = '';
+                if (comment[i].profile === null) {
+                    profile = `<svg width="30" height="30" class="rounded border bg-light" data-jdenticon-value="${comment[i].userId}" style="margin-right: 5px;"></svg>`;
+                } else {
+                    profile = `<img src="${comment[i].profile}" alt="profile" class="rounded border bg-light" width="30" height="30" style="margin-right: 5px;">`
+                }
+
                 let box = createBtnBox(comment[i], i + 1);
                 commentList.innerHTML += `<li class="comment-box mb-2" data-num="${i + 1}" style="border-top: 1px solid #eceff1;">
                                             <div class="d-flex justify-content-between mb-2 mt-2">
                                                 <div class="d-flex">
-                                                    <img src="${comment[i].profile}" alt="profile" width="20" height="20" style="margin-right: 5px;">
-                                                    <div class="align-items-center" style="font-size: 14px;">${comment[i].writer}</div>
+                                                    ${profile}
+                                                    <div class="align-self-center" style="font-size: 14px;">${comment[i].writer}</div>
                                                 </div>
                                                 <div class="d-flex" style="font-size: 12px;">
                                                     ${box}
@@ -84,6 +95,7 @@ function deleteComment() {
 
 }
 
+// 댓글 작성
 function create(){
     const value = content.value;
     const comment = {content: value}

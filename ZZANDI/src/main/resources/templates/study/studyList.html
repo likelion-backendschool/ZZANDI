@@ -22,15 +22,9 @@
                 <td><a href="#" th:href="@{/study/detail/{studyId}(studyId = ${study.getId})}"
                        th:text="${study.studyTitle}"></a></td>
                 <td th:text="${study.user.userId}"></td>
-                <td th:if="${#dates.create(#temporals.year(#temporals.createDate(study.studyStart, 'yyyy-MM-dd')),#temporals.month(#temporals.createDate(study.studyStart, 'yyyy-MM-dd')),#temporals.day(#temporals.createDate(study.studyStart, 'yyyy-MM-dd'))).after(#dates.createNow())}">
-                    모집 중</td>
-                <td th:if="${#dates.create(#temporals.year(#temporals.createDate(study.studyEnd, 'yyyy-MM-dd')),#temporals.month(#temporals.createDate(study.studyEnd, 'yyyy-MM-dd')),#temporals.day(#temporals.createDate(study.studyEnd, 'yyyy-MM-dd'))).after(#dates.createNow()) and
-                             #dates.create(#temporals.year(#temporals.createDate(study.studyStart, 'yyyy-MM-dd')),#temporals.month(#temporals.createDate(study.studyStart, 'yyyy-MM-dd')),#temporals.day(#temporals.createDate(study.studyStart, 'yyyy-MM-dd'))).before(#dates.createNow())}">
-                    진행 중</td>
-                <td th:if="${#dates.create(#temporals.year(#temporals.createDate(study.studyEnd, 'yyyy-MM-dd')),#temporals.month(#temporals.createDate(study.studyEnd, 'yyyy-MM-dd')),#temporals.day(#temporals.createDate(study.studyEnd, 'yyyy-MM-dd'))).before(#dates.createNow())}">
-                    완료</td>
+                <td th:text="${study.studyStatus}"></td>
                 <td><a th:if="${user.userId == study.user.userId}"
-                        th:href="@{/study/delete/{studyId}(studyId = ${study.getId})}" th:text="삭제"></a></td>
+                       th:href="@{/study/delete/{studyId}(studyId = ${study.getId})}" th:text="삭제"></a></td>
                 <td>
                     <a th:if="${#dates.create(#temporals.year(#temporals.createDate(study.studyStart, 'yyyy-MM-dd')),#temporals.month(#temporals.createDate(study.studyStart, 'yyyy-MM-dd')),#temporals.day(#temporals.createDate(study.studyStart, 'yyyy-MM-dd'))).after(#dates.createNow()) and
                                 user.userId == study.user.userId}"

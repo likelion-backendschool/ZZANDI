@@ -4,6 +4,7 @@ import com.ll.zzandi.domain.*;
 import com.ll.zzandi.dto.BookDto;
 import com.ll.zzandi.dto.LectureDto;
 import com.ll.zzandi.dto.StudyDto;
+import com.ll.zzandi.enumtype.StudyStatus;
 import com.ll.zzandi.service.BoardService;
 import com.ll.zzandi.service.BookService;
 import com.ll.zzandi.service.LectureService;
@@ -11,9 +12,13 @@ import com.ll.zzandi.service.StudyService;
 
 import com.ll.zzandi.service.TeamMateService;
 import com.ll.zzandi.service.UserService;
+
 import java.security.Principal;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Objects;
 import java.util.stream.Stream;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -55,10 +60,10 @@ public class StudyController {
         Study study = null;
         if (studyDto.getStudyType().equals("BOOK")) {
             Book book = bookService.save(bookDto);
-            study = studyService.createStudyWithBook(studyDto, book , user);
+            study = studyService.createStudyWithBook(studyDto, book, user);
         } else if (studyDto.getStudyType().equals("LECTURE")) {
             Lecture lecture = lectureService.save(lectureDto);
-            study = studyService.createStudyWithLecture(studyDto, lecture , user);
+            study = studyService.createStudyWithLecture(studyDto, lecture, user);
         }
         teamMateService.createTeamMate(user, study.getId());
         return "redirect:/";
@@ -69,6 +74,8 @@ public class StudyController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         List<Study> studyList = studyService.findAll();
+
+
         model.addAttribute("studyList", studyList);
         model.addAttribute("user", user);
         return "study/studyList";
@@ -93,12 +100,13 @@ public class StudyController {
         model.addAttribute("participation", participation);
         return "study/studyDetail";
     }
+
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/study/delete/{studyId}")
     public String deleteStudy(@PathVariable Long studyId, Principal principal) {
         Study studies = studyService.findByStudyId(studyId).orElseThrow(null);
 
-        if(!studies.getUser().getUserId().equals(principal.getName().split(",")[1].substring(8,principal.getName().split(",")[1].length()))){
+        if (!studies.getUser().getUserId().equals(principal.getName().split(",")[1].substring(8, principal.getName().split(",")[1].length()))) {
             return "study/studyError";
         }
         studyService.deleteStudy(studies);
@@ -112,7 +120,7 @@ public class StudyController {
         Book books = studies.getBook();
         Lecture lectures = studies.getLecture();
         StudyDto newStudyDto = studyService.saveNewStudyDto(studyId, studyDto);
-        model.addAttribute("studies" , studies);
+        model.addAttribute("studies", studies);
         model.addAttribute("lectures", lectures);
         model.addAttribute("books", books);
         model.addAttribute("studyDto", newStudyDto);
@@ -130,11 +138,11 @@ public class StudyController {
         User user = (User) authentication.getPrincipal(); // 현재 로그인 한 유저 정보
         Study studies = studyService.findByStudyId(studyId).orElseThrow(null);
         System.out.println("principal.getName() = " + principal.getName());
-        if(!studies.getUser().getUserId().equals(principal.getName().split(",")[1].substring(8,principal.getName().split(",")[1].length()))){
+        if (!studies.getUser().getUserId().equals(principal.getName().split(",")[1].substring(8, principal.getName().split(",")[1].length()))) {
             return "study/studyError";
         }
         if (studyDto.getStudyType().equals("BOOK")) {
-            studyService.updateStudyWithBook(studyId, studyDto, bookDto , user);
+            studyService.updateStudyWithBook(studyId, studyDto, bookDto, user);
         } else if (studyDto.getStudyType().equals("LECTURE")) {
             studyService.updateStudyWithLecture(studyId, studyDto, lectureDto, user);
         }

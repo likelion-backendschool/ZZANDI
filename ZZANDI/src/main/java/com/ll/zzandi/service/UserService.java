@@ -15,6 +15,7 @@ import com.ll.zzandi.util.aws.ImageUploadService;
 import com.ll.zzandi.util.mail.EmailMessage;
 import com.ll.zzandi.util.mail.EmailService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -33,6 +34,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class UserService {
+    private final String DEFAULT_IMAGE_URL="https://zzandi.s3.ap-northeast-2.amazonaws.com/defaultImage.gif";
 
     private final UserRepository userRepository;
 
@@ -41,7 +43,6 @@ public class UserService {
     private final EmailService emailService;
     private final InterestRepository interestRepository;
 
-    private final AmazonS3Client amazonS3Client;
     private final ImageUploadService imageUploadService;
 
     private final FileRepository fileRepository;
@@ -52,12 +53,25 @@ public class UserService {
             User newUser=userRepository.save(User.of(registerRequest));
             newUser.generateEmailCheckToken();
             sendSignUpConfirmEmail(newUser);
-            for(int i=0;i<registerRequest.getInterests().size();i++){
+            newUser.updateImageUrl(DEFAULT_IMAGE_URL);
+
+            for(String i : registerRequest.getInterests()){
                 Interest interest=new Interest();
-                interest.setInterest(registerRequest.getInterests().get(i));
+                interest.setInterest(i);
                 interest.setUser(newUser);
                 interestRepository.save(interest);
             }
+            //TODO 이부분 하드 코등 추후 변경
+        File file=File.builder()
+                .fileName("defaultImage")
+                .originalName("defaultImage")
+                .fileExt("gif")
+                .fileSize(0L)
+                .fileUrl(DEFAULT_IMAGE_URL)
+                .tableId(newUser.getId())
+                .tableType(TableType.USER)
+                .build();
+            fileRepository.save(file);
             System.out.println("----------로그인 전------------");
             login(newUser);
             System.out.println("----------로그인 후------------");
@@ -119,7 +133,7 @@ public class UserService {
                 .tableType(TableType.USER)
                 .build();
         fileRepository.save(file);
-        user.setUserprofileUrl(uploadUrl);
+        user.updateImageUrl(uploadUrl);
     }
     private static String getUuid() {
         return UUID.randomUUID().toString().replaceAll("-", "");

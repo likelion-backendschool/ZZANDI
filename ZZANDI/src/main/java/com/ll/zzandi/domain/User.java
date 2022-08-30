@@ -10,8 +10,6 @@ import lombok.ToString;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -88,4 +86,7 @@ public class User extends BaseEntity{
         this.userEmailVerified = true;
     }
 
+    public void updateImageUrl(String image_url) {
+        this.userprofileUrl=image_url;
+    }
 }

@@ -36,7 +36,7 @@ function findCommentList(boardId) {
                 }
 
                 const buttonList = commentButtonList(comment[i], i + 1);
-                commentList.innerHTML += `<li class="comment-box mb-2" data-num="${i + 1}" style="border-top: 1px solid #eceff1;">
+                commentList.innerHTML += `<li class="comment-box mb-2" data-num="${i + 1}" style="border-bottom: 1px solid #eceff1;">
                                             <div class="d-flex justify-content-between mb-2 mt-2">
                                                 <div class="d-flex">
                                                     ${profile}

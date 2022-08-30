@@ -63,11 +63,24 @@ function findCommentList(boardId) {
 function commentButtonList(comment, num) {
     let html = "";
     if (parseInt(userUUID) === comment.userUUID) {
-        html = `<button type="button" onclick="updateForm(${num}, '${comment.content}', ${comment.commentId})" style="border: none; outline: none; background-color: transparent;">수정</button>
-               <button type="button" onclick="deleteComment()" style="border: none; outline: none; background-color: transparent;">삭제</button>
-               <button type="button" onclick="createForm(${num})" style="border: none; outline: none; background-color: transparent;">댓글</button>`;
+        html = `
+               <div class="justify-content-between align-self-center mx-2">
+                   <i class="fa-regular fa-thumbs-up mx-2"></i>
+                   <i class="fa-regular fa-thumbs-down"></i>
+               </div>
+               <div class="d-flex justify-content-start">
+                   <button type="button" onclick="updateForm(${num}, '${comment.content}', ${comment.commentId})" style="border: none; outline: none; background-color: transparent;">수정</button>
+                   <button type="button" onclick="deleteComment()" style="border: none; outline: none; background-color: transparent;">삭제</button>
+                   <button type="button" onclick="createForm(${num})" style="border: none; outline: none; background-color: transparent;">댓글</button>
+               </div>`;
+
     } else {
-        html = `<button type="button" onclick="createForm(${num})" style="border: none; outline: none; background-color: transparent;">댓글</button>`;
+        html = `
+                <div class="justify-content-between align-self-center mx-2">
+                   <i class="fa-regular fa-thumbs-up mx-2"></i>
+                   <i class="fa-regular fa-thumbs-down"></i>
+               </div>
+                <button type="button" onclick="createForm(${num})" style="border: none; outline: none; background-color: transparent;">댓글</button>`;
     }
     return html;
 }

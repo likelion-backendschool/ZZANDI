@@ -9,11 +9,11 @@ $(".a1").change(function () {
 
 
 //태그
-var input = document.querySelector('input[name=studyTag]')
-var tagify = new Tagify(input);
+var input = document.querySelector('input[name=studyTag]');
 
-tagify.on('add', function() {
-
+new Tagify(input, {
+    whitelist: ["IT","소설책","영어"], // 화이트리스트 드롭다운 메뉴 설정
+    userInput: false // 입력 제한
 })
 
 //라디오버튼

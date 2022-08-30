@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,23 +30,35 @@ public class StudyService {
     private final BoardRepository boardRepository;
     private final CommentRepository commentRepository;
 
-    public Study createStudyWithBook(@Valid StudyDto studyDto, Book book , User user) {
-        Study study = new Study(user , studyDto.getStudyTitle(), book, null, StudyType.BOOK,
+    public Study createStudyWithBook(@Valid StudyDto studyDto, Book book, User user) {
+        Study study = new Study(user, studyDto.getStudyTitle(), book, null, StudyType.BOOK,
                 studyDto.getStudyStart(),
                 studyDto.getStudyEnd(), studyDto.getStudyPeople(), studyDto.getStudyTag(), 0,
-            StudyStatus.RECRUIT);
+                StudyStatus.RECRUIT);
         return studyRepository.save(study);
     }
 
-    public Study createStudyWithLecture(@Valid StudyDto studyDto, Lecture lecture , User user) {
-        Study study = new Study(user , studyDto.getStudyTitle(), null, lecture, StudyType.LECTURE,
+    public Study createStudyWithLecture(@Valid StudyDto studyDto, Lecture lecture, User user) {
+        Study study = new Study(user, studyDto.getStudyTitle(), null, lecture, StudyType.LECTURE,
                 studyDto.getStudyStart(),
                 studyDto.getStudyEnd(), studyDto.getStudyPeople(), studyDto.getStudyTag(), 0,
-            StudyStatus.RECRUIT);
+                StudyStatus.RECRUIT);
         return studyRepository.save(study);
     }
 
     public List<Study> findAll() {
+        List<Study> studyList = studyRepository.findAll();
+        for (Study study : studyList) {
+            int year = Integer.parseInt(study.getStudyStart().substring(0, 4));
+            int month = Integer.parseInt(study.getStudyStart().substring(5, 7));
+            int day = Integer.parseInt(study.getStudyStart().substring(8, 10));
+            if (LocalDate.now().isAfter(LocalDate.of(year, month, day)) && LocalDate.now().isBefore(LocalDate.of(year, month, day)) || LocalDate.now().isEqual(LocalDate.of(year, month, day))) {
+                study.setStudyStatus(StudyStatus.PROGRESS);
+            } else if (LocalDate.now().isAfter(LocalDate.of(year, month, day))) {
+                study.setStudyStatus(StudyStatus.COMPLETE);
+            }
+            studyRepository.save(study);
+        }
         return studyRepository.findAll();
     }
 
@@ -63,7 +76,7 @@ public class StudyService {
         studyRepository.delete(studies);
     }
 
-    public void updateStudyWithBook(Long studyId, @Valid StudyDto studyDto, BookDto bookDto , User user) {
+    public void updateStudyWithBook(Long studyId, @Valid StudyDto studyDto, BookDto bookDto, User user) {
         Study s1 = studyRepository.findById(studyId).orElseThrow(null);
         Book book;
         if (s1.getBook() != null) {
@@ -128,13 +141,13 @@ public class StudyService {
         studyDto.setStudyPeople(studies.getStudyPeople());
         studyDto.setStudyType(String.valueOf(studies.getStudyType()));
         studyDto.setStudyTag(studies.getStudyTag());
-        if(studyDto.getStudyType().equals("BOOK")){
+        if (studyDto.getStudyType().equals("BOOK")) {
             studyDto.setBookName(books.getBookName());
             studyDto.setBookPage(books.getBookPage());
             studyDto.setBookAuthor(books.getBookAuthor());
             studyDto.setBookPublisher(books.getBookPublisher());
             studyDto.setBookUrl(books.getBookUrl());
-        } else if(studyDto.getStudyType().equals("LECTURE")){
+        } else if (studyDto.getStudyType().equals("LECTURE")) {
             studyDto.setLectureName(lectures.getLectureName());
             studyDto.setLecturer(lectures.getLecturer());
             studyDto.setLectureNumber(lectures.getLectureNumber());

@@ -1,9 +1,7 @@
 package com.ll.zzandi.domain;
 
 import com.ll.zzandi.enumtype.DeleteStatus;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
@@ -15,6 +13,8 @@ import static javax.persistence.FetchType.LAZY;
 @Getter @Setter
 @Table(name = "COMMENT")
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Comment extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,6 +42,10 @@ public class Comment extends BaseEntity {
     @LastModifiedDate
     @Column(name = "DELETED_DATE")
     private LocalDateTime deletedDate; // 삭제일
+
+    public void changeComment(Comment comment) {
+        this.content = comment.getContent();
+    }
 
     public Comment(Board board, User user, Long parentId, String content, DeleteStatus deleteStatus) {
         this.board = board;

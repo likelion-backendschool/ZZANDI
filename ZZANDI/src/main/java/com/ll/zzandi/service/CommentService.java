@@ -1,12 +1,13 @@
 package com.ll.zzandi.service;
 
 import com.ll.zzandi.domain.Comment;
-import com.ll.zzandi.dto.comment.CommentCreateDto;
+import com.ll.zzandi.dto.comment.CommentListDto;
 import com.ll.zzandi.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,12 +18,12 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
 
-    public List<CommentCreateDto> findCommentList(Long boardId) {
+    public List<CommentListDto> findCommentList(Long boardId) {
         List<Comment> commentListByBoardId = commentRepository.findCommentListByBoardId(boardId);
-        List<CommentCreateDto> commentList = new ArrayList<>();
+        List<CommentListDto> commentList = new ArrayList<>();
 
         for (Comment comment : commentListByBoardId) {
-            commentList.add(CommentCreateDto.builder()
+            commentList.add(CommentListDto.builder()
                     .commentId(comment.getId())
                     .boardId(comment.getBoard().getId())
                     .userUUID(comment.getUser().getId())
@@ -32,7 +33,8 @@ public class CommentService {
                     .parentId(comment.getParentId())
                     .content(comment.getContent())
                     .status(comment.getDeleteStatus())
-                    .createdDate(comment.getCreatedDate()).build());
+                    .createdDate(comment.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm")))
+                    .build());
         }
         return commentList;
     }
@@ -41,6 +43,12 @@ public class CommentService {
     public Long createComment(Comment comment) {
         commentRepository.save(comment);
         return comment.getId();
+    }
+
+    @Transactional
+    public void updateComment(Long commentId, Comment updateParam) {
+        Comment comment = commentRepository.findById(commentId).get();
+        comment.changeComment(updateParam);
     }
 
     @Transactional

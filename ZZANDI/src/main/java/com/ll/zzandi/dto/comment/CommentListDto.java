@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CommentCreateDto {
+public class CommentListDto {
 
     private Long commentId;
     private Long boardId;
@@ -21,6 +21,6 @@ public class CommentCreateDto {
     private Long parentId;
     private String content;
     private DeleteStatus status;
-    private LocalDateTime createdDate;
+    private String createdDate;
 
 }

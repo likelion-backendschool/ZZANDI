@@ -160,6 +160,7 @@
                         contentType : false,	// application/x-www-form-urlencoded; 방지
                         success() {
                             console.log('Upload success');
+                            location.replace("/");
                         },
                         error() {
                             console.log('Upload error');

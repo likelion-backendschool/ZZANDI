@@ -1,7 +1,7 @@
 package com.ll.zzandi.service;
 
 import com.ll.zzandi.domain.Comment;
-import com.ll.zzandi.dto.CommentDto.Response;
+import com.ll.zzandi.dto.comment.CommentCreateDto;
 import com.ll.zzandi.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,14 +17,24 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
 
-    public List<Response> findCommentList(Long boardId) {
-        List<Comment> list = commentRepository.findCommentListByBoardId(boardId);
-        List<Response> responseList = new ArrayList<>();
-        for (Comment comment : list) {
-            responseList.add(new Response(comment.getId(), comment.getBoard().getId(), comment.getUser().getId(), comment.getUser().getUserId(), comment.getUser().getUserNickname(),
-                    comment.getUser().getUserprofileUrl(), comment.getParentId(), comment.getContent(), comment.getDeleteStatus(), comment.getCreatedDate()));
+    public List<CommentCreateDto> findCommentList(Long boardId) {
+        List<Comment> commentListByBoardId = commentRepository.findCommentListByBoardId(boardId);
+        List<CommentCreateDto> commentList = new ArrayList<>();
+
+        for (Comment comment : commentListByBoardId) {
+            commentList.add(CommentCreateDto.builder()
+                    .commentId(comment.getId())
+                    .boardId(comment.getBoard().getId())
+                    .userUUID(comment.getUser().getId())
+                    .userId(comment.getUser().getUserId())
+                    .profile(comment.getUser().getUserprofileUrl())
+                    .writer(comment.getUser().getUserNickname())
+                    .parentId(comment.getParentId())
+                    .content(comment.getContent())
+                    .status(comment.getDeleteStatus())
+                    .createdDate(comment.getCreatedDate()).build());
         }
-        return responseList;
+        return commentList;
     }
 
     @Transactional

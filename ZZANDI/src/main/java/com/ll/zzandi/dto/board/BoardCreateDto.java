@@ -1,4 +1,4 @@
-package com.ll.zzandi.dto;
+package com.ll.zzandi.dto.board;
 
 import com.ll.zzandi.enumtype.BoardCategory;
 import lombok.Getter;
@@ -8,7 +8,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Getter @Setter
-public class BoardWriteDto {
+public class BoardCreateDto {
 
     @NotBlank(message = "제목을 입력해주세요.")
     private String title;

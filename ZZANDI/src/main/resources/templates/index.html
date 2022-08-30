@@ -10,14 +10,12 @@
 
     <!-- header -->
     <section th:replace="layout/header.html :: header"></section>
+    <div class="alert alert-warning" role="alert" th:if="${user != null && !user.userEmailVerified}">
+        ZZANDI 가입을 완료하려면 <a href="#" th:href="@{/check-email(email=${user.userEmail})}" class="alert-link">계정 인증 이메일을 확인</a>하세요.
+    </div>
 
     <div class="container" style="height: 700px;">
         <h1> ZZANDI TEST </h1>
-        <div th:if="${user != null && !user.userEmailVerified}">
-            <script type="text/javascript">
-              alert("ZZANDI 가입을 완료하려면 계정 인증 이메일을 확인하세요.");
-            </script>
-        </div>
         <a th:href="@{/user/profile}">
             <div sec:authorize="isAuthenticated()">
                 <svg th:if="${#strings.isEmpty(user?.userprofileUrl)}" th:data-jdenticon-value="${user.userId}"

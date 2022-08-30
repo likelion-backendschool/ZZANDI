@@ -21,9 +21,17 @@
             font-family: "GmarketSansMedium", serif;
         }
 
+        table {
+            font-size: 12px;
+        }
+
+        td {
+            vertical-align: middle;
+        }
+
         a {
             text-decoration: none;
-            color: #01579b;
+            color: #222222;
         }
 
         .page-btn {
@@ -59,7 +67,7 @@
         <tr>
             <th class="text-center">분류</th>
             <th class="text-center">제목</th>
-            <th class="text-center">글쓴이</th>
+            <th class="text-center" style="width: 200px;">글쓴이</th>
             <th class="text-center">날짜</th>
             <th class="text-center">조회</th>
             <th class="text-center">좋아요</th>
@@ -71,7 +79,7 @@
     </table>
 
     <div class="d-flex justify-content-end">
-        <button class="btn btn-primary" type="button" th:onclick="|location.href='@{/{studyId}/board/create (studyId=${studyId})}'|">글 쓰기</button>
+        <button class="btn btn-secondary btn-sm" style="font-size: 12px;" type="button" th:onclick="|location.href='@{/{studyId}/board/create (studyId=${studyId})}'|">글 쓰기</button>
     </div>
 
     <nav class="text-center pb-3">

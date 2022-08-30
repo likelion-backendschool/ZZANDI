@@ -73,12 +73,12 @@ function createBoardList(item) {
     }
 
     return `<tr>
-                <td style="color: mediumpurple;">${item.category}</td>
-                <td>
-                    <a href="/${studyId}/board/detail/${item.boardId}/${item.pageNum}">${item.title}</a>
-                    <span style="font-weight: bold; font-size: 12px; margin-left: 5px;">[${item.count}]</span>
+                <td style="color: mediumpurple; font-weight: bold;">${item.category}</td>
+                <td style="text-align: left;">
+                    <a href="/${studyId}/board/detail/${item.boardId}/${item.pageNum}" style="font-size: 13px;">${item.title}</a>
+                    <span style="font-weight: bold; font-size: 11px; margin-left: 5px; color: #0d47a1;">${item.count}</span>
                 </td>
-                <td style="font-size: 12px;">
+                <td>
                     <div class="d-flex" style="margin-left: 20px;">
                         ${profile} 
                         <span class="align-self-center">${item.writer}</span>

@@ -3,9 +3,9 @@ package com.ll.zzandi.controller;
 import com.ll.zzandi.domain.Board;
 import com.ll.zzandi.domain.Study;
 import com.ll.zzandi.domain.User;
-import com.ll.zzandi.dto.BoardListDto;
-import com.ll.zzandi.dto.BoardUpdateFormDto;
-import com.ll.zzandi.dto.BoardWriteDto;
+import com.ll.zzandi.dto.board.BoardCreateDto;
+import com.ll.zzandi.dto.board.BoardListDto;
+import com.ll.zzandi.dto.board.BoardUpdateFormDto;
 import com.ll.zzandi.service.BoardService;
 import com.ll.zzandi.service.CommentService;
 import com.ll.zzandi.service.StudyService;
@@ -52,19 +52,19 @@ public class BoardController {
     }
 
     @GetMapping("/create")
-    public String createBoardForm(@PathVariable Long studyId, BoardWriteDto boardWriteDto, Model model) {
+    public String createBoardForm(@PathVariable Long studyId, BoardCreateDto boardCreateDto, Model model) {
         model.addAttribute("studyId", studyId);
         return "board/boardWriteForm";
     }
 
     @PostMapping("/create")
-    public String createBoard(@AuthenticationPrincipal User user, @PathVariable Long studyId, @Valid BoardWriteDto boardWriteDto, BindingResult result) {
+    public String createBoard(@AuthenticationPrincipal User user, @PathVariable Long studyId, @Valid BoardCreateDto boardCreateDto, BindingResult result) {
         if (result.hasErrors()) {
             return "/board/boardWriteForm";
         }
 
         Study study = studyService.findByStudyId(studyId).get();
-        Board board = new Board(user, boardWriteDto.getCategory(), boardWriteDto.getTitle(), boardWriteDto.getContent(), 0, 0, study);
+        Board board = new Board(user, boardCreateDto.getCategory(), boardCreateDto.getTitle(), boardCreateDto.getContent(), 0, 0, study);
         Long boardId = boardService.createBoard(board);
 
         return "redirect:/%d/board/detail/%d/0".formatted(studyId, boardId);

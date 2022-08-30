@@ -1,23 +1,19 @@
 package com.ll.zzandi.service;
 
 import com.ll.zzandi.domain.Board;
-import com.ll.zzandi.dto.BoardDetailDto;
-import com.ll.zzandi.dto.BoardListDto;
-import com.ll.zzandi.dto.BoardUpdateFormDto;
+import com.ll.zzandi.dto.board.BoardDetailDto;
+import com.ll.zzandi.dto.board.BoardListDto;
+import com.ll.zzandi.dto.board.BoardUpdateFormDto;
 import com.ll.zzandi.repository.BoardRepository;
-import com.ll.zzandi.repository.CommentRepository;
-import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.util.Optional;
 
 @Service

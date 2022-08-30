@@ -1,4 +1,4 @@
-package com.ll.zzandi.dto;
+package com.ll.zzandi.dto.board;
 
 import lombok.*;
 

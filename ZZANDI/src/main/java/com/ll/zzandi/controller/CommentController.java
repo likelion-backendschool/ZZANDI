@@ -3,16 +3,14 @@ package com.ll.zzandi.controller;
 import com.ll.zzandi.domain.Board;
 import com.ll.zzandi.domain.Comment;
 import com.ll.zzandi.domain.User;
-import com.ll.zzandi.dto.CommentDto.Response;
+import com.ll.zzandi.dto.comment.CommentListDto;
 import com.ll.zzandi.enumtype.DeleteStatus;
 import com.ll.zzandi.service.BoardService;
 import com.ll.zzandi.service.CommentService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,8 +26,8 @@ public class CommentController {
 
     @GetMapping("/list/{boardId}")
     @ResponseBody
-    public Result<List<Response>> findCommentList(@PathVariable Long boardId) {
-        List<Response> responses = commentService.findCommentList(boardId);
+    public Result<List<CommentListDto>> findCommentList(@PathVariable Long boardId) {
+        List<CommentListDto> responses = commentService.findCommentList(boardId);
         return new Result<>(responses.size(), responses);
     }
 
@@ -38,8 +36,21 @@ public class CommentController {
     public void createComment(@AuthenticationPrincipal User user, @PathVariable Long boardId, @RequestBody Comment data) {
         Board board = boardService.findByBoardId(boardId);
 
-        Comment comment = new Comment(board, user, 0L, data.getContent(), DeleteStatus.EXIST);
+        Comment comment = Comment.builder()
+                .board(board)
+                .user(user)
+                .parentId(0L)
+                .content(data.getContent())
+                .deleteStatus(DeleteStatus.EXIST)
+                .build();
+
         commentService.createComment(comment);
+    }
+
+    @PostMapping("/update/{commentId}")
+    @ResponseBody
+    public void updateComment(@PathVariable Long commentId, @RequestBody Comment comment) {
+        commentService.updateComment(commentId, comment);
     }
 
     // 컬렉션 데이터를 한 번 감싸서 반환하기 위한 클래스
@@ -49,5 +60,4 @@ public class CommentController {
         private int count;
         private T comment;
     }
-
 }

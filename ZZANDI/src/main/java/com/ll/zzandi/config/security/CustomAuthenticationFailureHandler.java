@@ -1,5 +1,6 @@
 package com.ll.zzandi.config.security;
 
+import java.nio.charset.StandardCharsets;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
@@ -16,9 +17,9 @@ public class CustomAuthenticationFailureHandler extends SimpleUrlAuthenticationF
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
-        String errorMessage = "아이디 혹은 비밀번호가 일치하지 않습니다.";
+        String errorMessage = exception.getMessage();
 
-        errorMessage = URLEncoder.encode(errorMessage, "UTF-8");
+        errorMessage = URLEncoder.encode(errorMessage, StandardCharsets.UTF_8);
         setDefaultFailureUrl("/user/login?error=true&exception=" + errorMessage);
         super.onAuthenticationFailure(request, response, exception);
     }

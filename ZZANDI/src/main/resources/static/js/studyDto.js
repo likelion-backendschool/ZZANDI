@@ -51,6 +51,7 @@ $(document).ready(function (){
             },
         })
             .done(function (msg) {
+                console.log(msg);
                 $(".card-title").empty();
                 $(".card-author").empty();
                 $(".card-publisher").empty();

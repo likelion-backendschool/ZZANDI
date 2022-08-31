@@ -1,10 +1,7 @@
 package com.ll.zzandi.dto.api;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,11 +11,9 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class SearchDto {
-    public Integer totalResults;
-
     List<Item> item = new ArrayList<>();
-
-    static class Item{
+    @Getter
+    public static class Item{
         public String title;
         public String cover;
         public String author;

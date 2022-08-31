@@ -38,6 +38,10 @@ import java.util.List;
 @Controller
 @RequiredArgsConstructor
 public class StudyController {
+    private final String TTB_KEY = "ttbjhdl01572144001";
+    private final String SEARCH_URL = "https://www.aladin.co.kr/ttb/api/ItemSearch.aspx?&QueryType=Keyword&MaxResults=10&start=1&SearchTarget=Book&output=js&Version=20131101";
+    private final String INFO_URL = "https://www.aladin.co.kr/ttb/api/ItemLookUp.aspx?itemIdType=ISBN13&output=js&Version=20131101&OptResult=Toc";
+
 
     private final StudyService studyService;
     private final BookService bookService;
@@ -45,8 +49,6 @@ public class StudyController {
     private final BoardService boardService;
     private final TeamMateService teamMateService;
     private final UserService userService;
-    private final String TTB_KEY = "ttbjhdl01572144001";
-    private final String INFO_URL = "https://www.aladin.co.kr/ttb/api/ItemLookUp.aspx?itemIdType=ISBN&output=js&Version=20131101&OptResult=Toc";
 
     @GetMapping("/study/create")
     public String createStudy(StudyDto studyDto) {
@@ -171,8 +173,22 @@ public class StudyController {
 
     @GetMapping("/study/search/book")
     @ResponseBody
-    public String searchBook(@RequestParam("query")String bookKeyword){
-        System.out.println("!!!!!!!!!!!!!!"+bookKeyword);
-        return "good";
+    public SearchDto searchBook(@RequestParam("query")String bookKeyword){
+        RestTemplate restTemplate = new RestTemplate();
+        URI targetUrl = UriComponentsBuilder
+                .fromHttpUrl(SEARCH_URL)
+                .queryParam("Query", bookKeyword)
+                .queryParam("ttbkey", TTB_KEY)
+                .build()
+                .encode(StandardCharsets.UTF_8)
+                .toUri();
+        try {
+            SearchDto dtoResponseEntity = restTemplate.getForEntity(targetUrl, SearchDto.class).getBody();
+            System.out.println(dtoResponseEntity.getItem().get(0).getTitle());
+            return dtoResponseEntity;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

@@ -22,9 +22,10 @@ function findCommentList(boardId) {
             const count = data.count;
             const comment = data.comment;
 
-            commentCount.innerHTML = `<div style="border: 1px solid black; border-radius: 5px; padding: 10px;">
-                                        <span style="font-size: 14px; font-weight: bold;">댓글 ${count}개</span>
-                                      </div>`
+            commentCount.innerHTML =
+                `<div style="border: 1px solid black; border-radius: 5px; padding: 10px;">
+                    <span style="font-size: 14px; font-weight: bold;">댓글 ${count}개</span>
+                </div>`;
 
             commentList.innerHTML = "";
             for (let i = 0; i < count; i++) {
@@ -36,21 +37,22 @@ function findCommentList(boardId) {
                 }
 
                 const buttonList = commentButtonList(comment[i], i + 1);
-                commentList.innerHTML += `<li class="comment-box mb-2" data-num="${i + 1}" style="border-bottom: 1px solid #eceff1;">
-                                            <div class="d-flex justify-content-between mb-2 mt-2">
-                                                <div class="d-flex">
-                                                    ${profile}
-                                                    <div class="align-self-center" style="font-size: 14px;">
-                                                        <span style="font-weight: 700;">${comment[i].writer}</span style="font-weight: 700;">
-                                                        <span style="margin-left: 10px; color: #888888; font-size: 11px;">${comment[i].createdDate}</span>
-                                                    </div>
-                                                </div>
-                                                <div class="d-flex" style="font-size: 12px;">${buttonList}</div>
-                                            </div>
-                                            <div style="font-size: 12px; margin-bottom: 5px;">${comment[i].content}</div>
-                                          </li>
-                                          <!-- 대댓글 & 댓글 수정 입력창 -->
-                                          <div class="comment-form mb-3 hide"></div>`;
+                commentList.innerHTML +=
+                    `<li class="comment-box mb-2" data-num="${i + 1}" style="border-bottom: 1px solid #eceff1;">
+                        <div class="d-flex justify-content-between mb-2 mt-2">
+                            <div class="d-flex">
+                                ${profile}
+                                <div class="align-self-center" style="font-size: 14px;">
+                                    <span style="font-weight: 700;">${comment[i].writer}</span style="font-weight: 700;">
+                                    <span style="margin-left: 10px; color: #888888; font-size: 11px;">${comment[i].createdDate}</span>
+                                </div>
+                            </div>
+                            <div class="d-flex" style="font-size: 12px;">${buttonList}</div>
+                        </div>
+                        <div style="font-size: 12px; margin-bottom: 5px;">${comment[i].content}</div>
+                    </li>
+                    <!-- 대댓글 & 댓글 수정 입력창 -->
+                    <div class="comment-form mb-3 hide"></div>`;
             }
         });
 }
@@ -63,8 +65,8 @@ function findCommentList(boardId) {
 function commentButtonList(comment, num) {
     let html = "";
     if (parseInt(userUUID) === comment.userUUID) {
-        html = `
-               <div class="justify-content-between align-self-center mx-2">
+        html =
+               `<div class="justify-content-between align-self-center mx-2">
                    <i class="fa-regular fa-thumbs-up mx-2"></i>
                    <i class="fa-regular fa-thumbs-down"></i>
                </div>
@@ -75,12 +77,12 @@ function commentButtonList(comment, num) {
                </div>`;
 
     } else {
-        html = `
-                <div class="justify-content-between align-self-center mx-2">
-                   <i class="fa-regular fa-thumbs-up mx-2"></i>
-                   <i class="fa-regular fa-thumbs-down"></i>
-               </div>
-                <button type="button" onclick="createForm(${num})" style="border: none; outline: none; background-color: transparent;">댓글</button>`;
+        html =
+            `<div class="justify-content-between align-self-center mx-2">
+                <i class="fa-regular fa-thumbs-up mx-2"></i>
+                <i class="fa-regular fa-thumbs-down"></i>
+            </div>
+            <button type="button" onclick="createForm(${num})" style="border: none; outline: none; background-color: transparent;">댓글</button>`;
     }
     return html;
 }
@@ -90,14 +92,14 @@ function createForm(num) {
     const form = document.querySelector(`.comment-list .comment-form:nth-of-type(${num})`);
     form.classList.toggle("hide");
 
-    form.innerHTML = ` <div>
+    form.innerHTML = `<div>
                         <i class="bi bi-arrow-return-right"></i>
                             <span style="font-size: 12px;">댓글 쓰기</span>
                           </div>
                           <div class="box d-flex justify-content-between">
                             <textarea name="content" class="form-control" placeholder="따듯한 댓글 부탁드립니다." style="height: 100px;"></textarea>
                             <div class="align-self-center" style="width: 70px; height: 30px; border-radius: 50%; margin-left: 10px;">
-                                <button class="btn btn-primary" onclick="update()" style="font-size: 14px;">등록</button>
+                                <button class="btn btn-primary" onclick="create()" style="font-size: 14px;">등록</button>
                             </div>
                         </div>`;
 }
@@ -106,6 +108,7 @@ function createForm(num) {
 function updateForm(num, content, commentId) {
     const form = document.querySelector(`.comment-list .comment-form:nth-of-type(${num})`);
     form.classList.toggle("hide");
+    content = content.replace(/(<br>)/g, '\r\n');
 
     form.innerHTML = ` <div>
                         <i class="bi bi-arrow-return-right"></i>
@@ -125,7 +128,8 @@ function deleteComment() {
 
 // Create Comment!
 function create(){
-    const value = content.value;
+    let value = content.value;
+    value = value.replace(/(\n|\r\n)/g, '<br>');
     const comment = {content: value}
 
     const url = `/comment/create/${boardId}`;
@@ -143,7 +147,8 @@ function create(){
 
 // Update Comment!
 function update(commentId) {
-    const updateParam = document.querySelector(".update-content").value;
+    let updateParam = document.querySelector(".update-content").value;
+    updateParam = updateParam.replace(/(\n|\r\n)/g, '<br>');
     const comment = {"content": updateParam};
 
     const url = `/comment/update/${commentId}`;

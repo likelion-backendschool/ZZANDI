@@ -23,6 +23,7 @@ public class CommentService {
         List<CommentListDto> commentList = new ArrayList<>();
 
         for (Comment comment : commentListByBoardId) {
+            String content = comment.getContent().replace("\r\n", "<br>");
             commentList.add(CommentListDto.builder()
                     .commentId(comment.getId())
                     .boardId(comment.getBoard().getId())
@@ -31,7 +32,7 @@ public class CommentService {
                     .profile(comment.getUser().getUserprofileUrl())
                     .writer(comment.getUser().getUserNickname())
                     .parentId(comment.getParentId())
-                    .content(comment.getContent())
+                    .content(content)
                     .status(comment.getDeleteStatus())
                     .createdDate(comment.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm")))
                     .build());

@@ -1,20 +1,18 @@
 package com.ll.zzandi.controller;
 
-import com.amazonaws.AmazonClientException;
-import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.amazonaws.services.s3.transfer.TransferManager;
-import com.amazonaws.services.s3.transfer.Upload;
+import com.ll.zzandi.domain.TeamMate;
 import com.ll.zzandi.domain.User;
 import com.ll.zzandi.dto.UserDto;
+import com.ll.zzandi.exception.ErrorType;
+import com.ll.zzandi.exception.UserApplicationException;
 import com.ll.zzandi.repository.UserRepository;
+import com.ll.zzandi.service.TeamMateService;
 import com.ll.zzandi.service.UserService;
 import com.ll.zzandi.util.validator.RegisterFormValidator;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,13 +23,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.transaction.Transactional;
 import javax.validation.Valid;
-import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.UUID;
 
 @Controller
 @RequestMapping("/user")
@@ -41,7 +35,7 @@ public class UserController {
 
     private final UserService userService;
     private final UserRepository userRepository;
-
+    private final TeamMateService teamMateService;
 
     @InitBinder("registerRequest")
     public void initBinder(WebDataBinder webDataBinder) {
@@ -137,5 +131,21 @@ public class UserController {
     public String updateProfileImage(@RequestParam("croppedImage") MultipartFile multipartFile, @AuthenticationPrincipal User user) throws IOException {
         userService.updateProfile(multipartFile,user.getId());
         return  "1";
+    }
+
+    @GetMapping("/mypage")
+    public String showMyPage(@AuthenticationPrincipal User user, @RequestParam("userNickname") String userNickname, Model model) {
+        User currentUser = userRepository.findByUserId(user.getUserId()).orElseThrow(() -> new UserApplicationException(
+            ErrorType.NOT_FOUND));
+
+        User pageUser = userRepository.findByUserNickname(userNickname).orElseThrow(() -> new UserApplicationException(
+            ErrorType.NOT_FOUND));
+
+        List<TeamMate> teamMateList = teamMateService.findAllByUser(pageUser);
+
+        model.addAttribute("currentUser", currentUser);
+        model.addAttribute("user", pageUser);
+        model.addAttribute("teamMateList", teamMateList);
+        return "/user/mypage";
     }
 }

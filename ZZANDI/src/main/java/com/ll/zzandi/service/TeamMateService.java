@@ -11,7 +11,7 @@ import com.ll.zzandi.repository.TeamMateRepository;
 import com.ll.zzandi.repository.UserRepository;
 import com.ll.zzandi.util.mail.EmailMessage;
 import com.ll.zzandi.util.mail.EmailService;
-import jdk.jshell.spi.ExecutionControl.UserException;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -63,6 +63,22 @@ public class TeamMateService {
     }
   }
 
+  public boolean deleteTeamMate(User user, Long studyId, Long teamMateId) {
+    User currentUser = userRepository.findByUserId(user.getUserId()).orElseThrow(RuntimeException::new);
+    Study study = studyRepository.findById(studyId).orElseThrow(RuntimeException::new);
+    TeamMate teamMate = teamMateRepository.findById(teamMateId).orElseThrow(RuntimeException::new);
+
+    boolean isLeader = false;
+
+    if(study.getUser() == currentUser) {
+      teamMateRepository.delete(teamMate);
+      isLeader = true;
+    } else if (currentUser == teamMate.getUser()) {
+      teamMateRepository.delete(teamMate);
+    }
+    return isLeader;
+  }
+
   private void sendAcceptedEmail(Study study, TeamMate teamMate) {
     String message = "안녕하세요. %s님, <br/>".formatted(teamMate.getUser().getUserNickname())
         + "%s님이 [%s] 스터디 참가 신청을 수락했습니다.<br/>".formatted(study.getUser().getUserNickname(), study.getStudyTitle())
@@ -91,5 +107,9 @@ public class TeamMateService {
         .message(message)
         .build();
     emailService.sendEmail(emailMessage);
+  }
+
+  public List<TeamMate> findAllByUser(User user) {
+    return teamMateRepository.findAllByUser(user);
   }
 }

@@ -44,6 +44,6 @@ public class TeamMateController {
     if (isLeader) {
       return "redirect:/study/detail/%d".formatted(studyId);
     }
-    return "redirect:/user/mypage/%d".formatted(user.getId());
+    return "redirect:/user/mypage?userNickname=%s".formatted(user.getUserNickname());
   }
 }

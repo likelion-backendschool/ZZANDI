@@ -27,8 +27,19 @@
             </div>
         </div>
     </div>
+    <div class="border-bottom my-3 py-2 w-50">모집 중인 스터디 목록</div>
+    <div class = "card my-3 w-50" th:each="teamMate : ${teamMateList}" th:if = "${teamMate.study.studyStatus.name() == 'RECRUIT'}">
+        <div class = "card-body">
+            <a th:href = "@{|/study/detail/${teamMate.study.id}|}">
+                <span th:text = "${teamMate.study.studyTitle}"></span>
+                <span th:text = "${teamMate.study.studyStart}"></span>
+                <span th:text = "${teamMate.study.studyTag}"></span>
+                <span th:text = "${teamMate.study.studyStatus}"></span>
+            </a>
+        </div>
+    </div>
     <div class="border-bottom my-3 py-2 w-50">진행 중인 스터디 목록</div>
-    <div class = "card my-3 w-50" th:each="teamMate : ${teamMateList}" th:if = "${teamMate.study.studyStatus.name() == 'PROGRESS'}">
+    <div class = "card my-3 w-50" th:each="teamMate : ${teamMateList}" th:if = "${teamMate.study.studyStatus.name() == 'PROGRESS'} or ${teamMate.teamMateStatus.name() == 'ACCEPTED'}">
         <div class = "card-body">
             <a th:href = "@{|/study/detail/${teamMate.study.id}|}">
                 <span th:text = "${teamMate.study.studyTitle}"></span>

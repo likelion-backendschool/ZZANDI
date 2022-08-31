@@ -133,12 +133,12 @@ public class UserController {
         return  "1";
     }
 
-    @GetMapping("/mypage/{userId}")
-    public String showMyPage(@AuthenticationPrincipal User user,@PathVariable Long userId, Model model) {
+    @GetMapping("/mypage")
+    public String showMyPage(@AuthenticationPrincipal User user, @RequestParam("userNickname") String userNickname, Model model) {
         User currentUser = userRepository.findByUserId(user.getUserId()).orElseThrow(() -> new UserApplicationException(
             ErrorType.NOT_FOUND));
 
-        User pageUser = userRepository.findById(userId).orElseThrow(() -> new UserApplicationException(
+        User pageUser = userRepository.findByUserNickname(userNickname).orElseThrow(() -> new UserApplicationException(
             ErrorType.NOT_FOUND));
 
         List<TeamMate> teamMateList = teamMateService.findAllByUser(pageUser);

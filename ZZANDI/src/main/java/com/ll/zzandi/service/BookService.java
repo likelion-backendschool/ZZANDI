@@ -22,7 +22,7 @@ public class BookService {
         b1.setBookPage(bookDto.getBookPage());
         b1.setBookAuthor(bookDto.getBookAuthor());
         b1.setBookPublisher(bookDto.getBookPublisher());
-        b1.setBookUrl(bookDto.getBookUrl());
+        b1.setBookIsbn(bookDto.getBookIsbn());
         return bookRepository.save(b1);
     }
 
@@ -37,7 +37,7 @@ public class BookService {
         b1.setBookPage(bookDto.getBookPage());
         b1.setBookAuthor(bookDto.getBookAuthor());
         b1.setBookPublisher(bookDto.getBookPublisher());
-        b1.setBookUrl(bookDto.getBookUrl());
+        b1.setBookIsbn(bookDto.getBookIsbn());
         return bookRepository.save(b1);
     }
 

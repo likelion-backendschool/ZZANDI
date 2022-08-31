@@ -33,7 +33,7 @@ public class StudyDto {
     private Integer bookPage;
     private String bookAuthor;
     private String bookPublisher;
-    private String bookUrl;
+    private String bookIsbn;
     private String lectureName;
     private String lecturer;
     private Integer lectureNumber;

@@ -25,7 +25,7 @@
           </a>
           <ul>
             <li sec:authorize="isAuthenticated()">
-              <a href="#">My Page</a>
+              <a th:href="@{|/user/mypage/${user.id}|}">My Page</a>
             </li>
             <li sec:authorize="isAuthenticated()">
               <a th:href="@{/user/profile}">프로필 수정</a>

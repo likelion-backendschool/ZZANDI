@@ -1,13 +1,11 @@
 package com.ll.zzandi.controller;
 
-import com.ll.zzandi.domain.TeamMate;
 import com.ll.zzandi.domain.User;
 import com.ll.zzandi.service.TeamMateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,11 +36,14 @@ public class TeamMateController {
   }
 
   /*
-  (팀장) 스터디 참가 취소(거절)
+  스터디 참가 거절 및 취소
    */
   @PostMapping("/delete/{teamMateId}")
   public String deleteTeamMate(@AuthenticationPrincipal User user, @PathVariable Long studyId, @PathVariable Long teamMateId) {
-    teamMateService.deleteTeamMate(user, studyId, teamMateId);
-    return "redirect:/study/detail/%d".formatted(studyId);
+    boolean isLeader = teamMateService.deleteTeamMate(user, studyId, teamMateId);
+    if (isLeader) {
+      return "redirect:/study/detail/%d".formatted(studyId);
+    }
+    return "redirect:/user/mypage/%d".formatted(user.getId());
   }
 }

@@ -11,7 +11,7 @@ import com.ll.zzandi.repository.TeamMateRepository;
 import com.ll.zzandi.repository.UserRepository;
 import com.ll.zzandi.util.mail.EmailMessage;
 import com.ll.zzandi.util.mail.EmailService;
-import jdk.jshell.spi.ExecutionControl.UserException;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -63,15 +63,20 @@ public class TeamMateService {
     }
   }
 
-  public void deleteTeamMate(User user, Long studyId, Long teamMateId) {
+  public boolean deleteTeamMate(User user, Long studyId, Long teamMateId) {
     User currentUser = userRepository.findByUserId(user.getUserId()).orElseThrow(RuntimeException::new);
     Study study = studyRepository.findById(studyId).orElseThrow(RuntimeException::new);
     TeamMate teamMate = teamMateRepository.findById(teamMateId).orElseThrow(RuntimeException::new);
 
-    // 팀장만 거절 가능
+    boolean isLeader = false;
+
     if(study.getUser() == currentUser) {
       teamMateRepository.delete(teamMate);
+      isLeader = true;
+    } else if (currentUser == teamMate.getUser()) {
+      teamMateRepository.delete(teamMate);
     }
+    return isLeader;
   }
 
   private void sendAcceptedEmail(Study study, TeamMate teamMate) {
@@ -102,5 +107,9 @@ public class TeamMateService {
         .message(message)
         .build();
     emailService.sendEmail(emailMessage);
+  }
+
+  public List<TeamMate> findAllByUser(User user) {
+    return teamMateRepository.findAllByUser(user);
   }
 }

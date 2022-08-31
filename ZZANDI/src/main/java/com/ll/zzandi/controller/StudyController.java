@@ -21,6 +21,7 @@ import java.security.Principal;
 
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -38,9 +39,14 @@ import java.util.List;
 @Controller
 @RequiredArgsConstructor
 public class StudyController {
-    private final String TTB_KEY = "ttbjhdl01572144001";
-    private final String SEARCH_URL = "https://www.aladin.co.kr/ttb/api/ItemSearch.aspx?&QueryType=Keyword&MaxResults=10&start=1&SearchTarget=Book&output=js&Version=20131101";
-    private final String INFO_URL = "https://www.aladin.co.kr/ttb/api/ItemLookUp.aspx?itemIdType=ISBN13&output=js&Version=20131101&OptResult=Toc";
+    @Value("${aladin.key}")
+    private  String TTB_KEY;
+
+    @Value("${aladin.searchUrl}")
+    private  String SEARCH_URL;
+
+    @Value("${aladin.detailUrl}")
+    private  String DETAIL_URL;
 
 
     private final StudyService studyService;
@@ -66,7 +72,7 @@ public class StudyController {
         if (studyDto.getStudyType().equals("BOOK")) {
             RestTemplate restTemplate = new RestTemplate();
             URI targetUrl = UriComponentsBuilder
-                    .fromHttpUrl(INFO_URL)
+                    .fromHttpUrl(DETAIL_URL)
                     .queryParam("ItemId", bookDto.getBookIsbn().substring(0, 10))
                     .queryParam("ttbkey", TTB_KEY)
                     .build()

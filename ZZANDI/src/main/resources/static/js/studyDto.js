@@ -45,12 +45,9 @@ $(document).ready(function (){
         $('#button2').show();
         $.ajax({
             method: "GET",
-            url: "https://dapi.kakao.com/v3/search/book",
+            url: "http://localhost:8080/study/search/book",
             data: {
                 query: $("#bookSearch").val(),
-            },
-            headers: {
-                Authorization: "KakaoAK 0163571ea7d58eb3365436dd1b25066f"
             },
         })
             .done(function (msg) {

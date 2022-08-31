@@ -5,7 +5,8 @@ import com.ll.zzandi.dto.BookDto;
 import com.ll.zzandi.dto.BookInfoDto;
 import com.ll.zzandi.dto.LectureDto;
 import com.ll.zzandi.dto.StudyDto;
-import com.ll.zzandi.enumtype.StudyStatus;
+
+import com.ll.zzandi.dto.api.SearchDto;
 import com.ll.zzandi.service.BoardService;
 import com.ll.zzandi.service.BookService;
 import com.ll.zzandi.service.LectureService;
@@ -17,10 +18,7 @@ import com.ll.zzandi.service.UserService;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.security.Principal;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.util.Objects;
-import java.util.stream.Stream;
+
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -30,9 +28,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -171,5 +167,12 @@ public class StudyController {
         }
 
         return "redirect:/";
+    }
+
+    @GetMapping("/study/search/book")
+    @ResponseBody
+    public String searchBook(@RequestParam("query")String bookKeyword){
+        System.out.println("!!!!!!!!!!!!!!"+bookKeyword);
+        return "good";
     }
 }

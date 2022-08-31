@@ -94,8 +94,8 @@ public class StudyController {
     public String studyList(Model model, @RequestParam(defaultValue = "") String kw) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
-        List<Study> studyList = studyService.findAll();
 
+        List<Study> studyList = studyService.getList(kw);
 
         model.addAttribute("studyList", studyList);
         model.addAttribute("user", user);

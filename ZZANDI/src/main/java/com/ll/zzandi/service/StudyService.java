@@ -161,4 +161,12 @@ public class StudyService {
         study.setStudyStatus(StudyStatus.RECRUIT_COMPLETE);
         studyRepository.save(study);
     }
+
+    public List<Study> findAllByStudyTitleContainsOrUser_userIdContains(String kw) {
+        return studyRepository.findAllByStudyTitleContainsOrUser_userIdContains(kw, kw);
+    }
+
+    public List<Study> getList(String kw) {
+        return (kw == null) ? findAll() : findAllByStudyTitleContainsOrUser_userIdContains(kw);
+    }
 }

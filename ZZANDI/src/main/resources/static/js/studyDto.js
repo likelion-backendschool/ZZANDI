@@ -51,34 +51,36 @@ $(document).ready(function (){
             },
         })
             .done(function (msg) {
-                console.log(msg);
+                console.log(msg.item[0].title);
+                console.log(msg.item[0].isbn13);
+
                 $(".card-title").empty();
                 $(".card-author").empty();
                 $(".card-publisher").empty();
                 $(".thumbnail").empty();
-                $(".card-title").append("제목: " + msg.documents[0].title);
-                $(".card-author").append("저자: " + msg.documents[0].authors);
-                $(".card-publisher").append("출판사: " + msg.documents[0].publisher);
-                $(".thumbnail").append('<img src="' + msg.documents[0].thumbnail + '"/>');
+                $(".card-title").append("제목: " + msg.item[0].title);
+                $(".card-author").append("저자: " + msg.item[0].author);
+                $(".card-publisher").append("출판사: " + msg.item[0].publisher);
+                $(".thumbnail").append('<img src="' + msg.item[0].cover + '"/>');
                 $(".card-title2").empty();
                 $(".card-author2").empty();
                 $(".card-publisher2").empty();
                 $(".thumbnail2").empty();
-                $(".card-title2").append("제목: " + msg.documents[1].title);
-                $(".card-author2").append("저자: " + msg.documents[1].authors);
-                $(".card-publisher2").append("출판사: " + msg.documents[1].publisher);
-                $(".thumbnail2").append('<img src="' + msg.documents[1].thumbnail + '"/>');
+                $(".card-title2").append("제목: " + msg.item[1].title);
+                $(".card-author2").append("저자: " + msg.item[1].author);
+                $(".card-publisher2").append("출판사: " +msg.item[1].publisher);
+                $(".thumbnail2").append('<img src="' + msg.item[1].cover + '"/>');
                 $("#button1").on('click', function () {
-                    $('input[name=bookName]').attr('value', msg.documents[0].title);
-                    $('input[name=bookAuthor]').attr('value', msg.documents[0].authors);
-                    $('input[name=bookPublisher]').attr('value', msg.documents[0].publisher);
-                    $('input[name=bookIsbn]').attr('value', msg.documents[0].isbn);
+                    $('input[name=bookName]').attr('value', msg.item[0].title);
+                    $('input[name=bookAuthor]').attr('value', msg.item[0].author);
+                    $('input[name=bookPublisher]').attr('value', msg.item[0].publisher);
+                    $('input[name=bookIsbn]').attr('value', msg.item[0].isbn13);
                 });
                 $("#button2").on('click', function () {
-                    $('input[name=bookName]').attr('value', msg.documents[0].title);
-                    $('input[name=bookAuthor]').attr('value', msg.documents[1].authors);
-                    $('input[name=bookPublisher]').attr('value', msg.documents[1].publisher);
-                    $('input[name=bookIsbn]').attr('value', msg.documents[1].isbn);
+                    $('input[name=bookName]').attr('value', msg.item[1].title);
+                    $('input[name=bookAuthor]').attr('value', msg.item[1].author);
+                    $('input[name=bookPublisher]').attr('value', msg.item[1].publisher);
+                    $('input[name=bookIsbn]').attr('value', msg.item[1].isbn13);
                 });
             });
     });

@@ -21,11 +21,13 @@ public class BookInfoDto {
         public String cover;
         public String author;
         public String isbn13;
-        public String description;
+        public String publisher;
         public BookInfoDto.subInfo subInfo;
     }
     @Getter
     public static class subInfo{
+        @JsonProperty
+        String originalTitle;
         @JsonProperty
         String subTitle;
         @JsonProperty

@@ -11,15 +11,14 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class SearchDto {
-    List<Item> item = new ArrayList<>();
+    List<SearchDto.Item> item = new ArrayList<>();
     @Getter
     public static class Item{
-        public String title;
-        public String cover;
-        public String author;
-        public String isbn13;
-        public String description;
-        public String categoryName;
+        private String title;
+        private String cover;
+        private String author;
+        private String isbn13;
+        private String publisher;
     }
 }
 

@@ -73,20 +73,14 @@ public class StudyController {
             RestTemplate restTemplate = new RestTemplate();
             URI targetUrl = UriComponentsBuilder
                     .fromHttpUrl(DETAIL_URL)
-                    .queryParam("ItemId", bookDto.getBookIsbn().substring(0, 10))
+                    .queryParam("ItemId", bookDto.getBookIsbn())
                     .queryParam("ttbkey", TTB_KEY)
                     .build()
                     .encode(StandardCharsets.UTF_8)
                     .toUri();
 
             BookInfoDto bookInfoDto = restTemplate.getForEntity(targetUrl, BookInfoDto.class).getBody();
-
-            Book book = bookService.save(bookDto);
-            try {
-                book.setBookPage(bookInfoDto.getItem().get(0).subInfo.getItemPage());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            Book book = bookService.save(bookInfoDto);
             study = studyService.createStudyWithBook(studyDto, book, user);
         } else if (studyDto.getStudyType().equals("LECTURE")) {
             Lecture lecture = lectureService.save(lectureDto);

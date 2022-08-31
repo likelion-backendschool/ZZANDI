@@ -82,14 +82,14 @@ public class StudyService {
         if (s1.getBook() != null) {
             book = bookService.modify(s1.getBook().getId(), bookDto);
         } else {
-            book = bookService.save(bookDto);
+           // book = bookService.save(bookDto);
         }
 
         Lecture lecture = s1.getLecture();
         s1.setUser(user);
         s1.setId(studyId);
         s1.setStudyTitle(studyDto.getStudyTitle());
-        s1.setBook(book);
+        //s1.setBook(book);
         s1.setLecture(null);
         s1.setStudyType(StudyType.BOOK);
         s1.setStudyStart(studyDto.getStudyStart());

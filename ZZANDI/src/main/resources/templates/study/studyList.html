@@ -6,6 +6,13 @@
 </head>
 <body>
 <div class="container">
+    <h1> Study List </h1>
+    <div>
+        <form>
+            <input type="text" name="kw" th:value="${param.kw}" placeholder="검색어">
+            <button type="submit">검색</button>
+        </form>
+    </div>
     <div>
         <table>
             <thead>

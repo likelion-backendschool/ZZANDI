@@ -163,7 +163,17 @@ public class StudyController {
             return "study/studyError";
         }
         if (studyDto.getStudyType().equals("BOOK")) {
-            studyService.updateStudyWithBook(studyId, studyDto, bookDto, user);
+            RestTemplate restTemplate = new RestTemplate();
+            URI targetUrl = UriComponentsBuilder
+                    .fromHttpUrl(DETAIL_URL)
+                    .queryParam("ItemId", bookDto.getBookIsbn())
+                    .queryParam("ttbkey", TTB_KEY)
+                    .build()
+                    .encode(StandardCharsets.UTF_8)
+                    .toUri();
+
+            BookInfoDto bookInfoDto = restTemplate.getForEntity(targetUrl, BookInfoDto.class).getBody();
+            studyService.updateStudyWithBook(studyId, studyDto, bookInfoDto, user);
         } else if (studyDto.getStudyType().equals("LECTURE")) {
             studyService.updateStudyWithLecture(studyId, studyDto, lectureDto, user);
         }

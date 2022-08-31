@@ -25,6 +25,6 @@ public class Book {
     private String bookAuthor;
     @Column(name = "BOOK_PUBLISHER")
     private String bookPublisher;
-    @Column(name = "BOOK_URL")
-    private String bookUrl;
+    @Column(name = "BOOK_ISBN")
+    private String bookIsbn;
 }

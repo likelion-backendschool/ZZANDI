@@ -146,7 +146,7 @@ public class StudyService {
             studyDto.setBookPage(books.getBookPage());
             studyDto.setBookAuthor(books.getBookAuthor());
             studyDto.setBookPublisher(books.getBookPublisher());
-            studyDto.setBookUrl(books.getBookUrl());
+            studyDto.setBookIsbn(books.getBookIsbn());
         } else if (studyDto.getStudyType().equals("LECTURE")) {
             studyDto.setLectureName(lectures.getLectureName());
             studyDto.setLecturer(lectures.getLecturer());

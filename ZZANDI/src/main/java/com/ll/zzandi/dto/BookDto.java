@@ -14,7 +14,7 @@ public class BookDto {
     private Integer bookPage;
     private String bookAuthor;
     private String bookPublisher;
-    private String bookUrl;
+    private String bookIsbn;
 }
 
 

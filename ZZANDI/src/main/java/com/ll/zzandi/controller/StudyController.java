@@ -2,6 +2,7 @@ package com.ll.zzandi.controller;
 
 import com.ll.zzandi.domain.*;
 import com.ll.zzandi.dto.BookDto;
+import com.ll.zzandi.dto.BookInfoDto;
 import com.ll.zzandi.dto.LectureDto;
 import com.ll.zzandi.dto.StudyDto;
 import com.ll.zzandi.enumtype.StudyStatus;
@@ -13,6 +14,8 @@ import com.ll.zzandi.service.StudyService;
 import com.ll.zzandi.service.TeamMateService;
 import com.ll.zzandi.service.UserService;
 
+import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.security.Principal;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -30,6 +33,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -44,6 +49,8 @@ public class StudyController {
     private final BoardService boardService;
     private final TeamMateService teamMateService;
     private final UserService userService;
+    private final String TTB_KEY = "ttbjhdl01572144001";
+    private final String INFO_URL = "https://www.aladin.co.kr/ttb/api/ItemLookUp.aspx?itemIdType=ISBN&output=js&Version=20131101&OptResult=Toc";
 
     @GetMapping("/study/create")
     public String createStudy(StudyDto studyDto) {
@@ -59,7 +66,23 @@ public class StudyController {
         User user = (User) authentication.getPrincipal(); // 현재 로그인 한 유저 정보
         Study study = null;
         if (studyDto.getStudyType().equals("BOOK")) {
+            RestTemplate restTemplate = new RestTemplate();
+            URI targetUrl = UriComponentsBuilder
+                    .fromHttpUrl(INFO_URL)
+                    .queryParam("ItemId", bookDto.getBookIsbn().substring(0, 10))
+                    .queryParam("ttbkey", TTB_KEY)
+                    .build()
+                    .encode(StandardCharsets.UTF_8)
+                    .toUri();
+
+            BookInfoDto bookInfoDto = restTemplate.getForEntity(targetUrl, BookInfoDto.class).getBody();
+
             Book book = bookService.save(bookDto);
+            try {
+                book.setBookPage(bookInfoDto.getItem().get(0).subInfo.getItemPage());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             study = studyService.createStudyWithBook(studyDto, book, user);
         } else if (studyDto.getStudyType().equals("LECTURE")) {
             Lecture lecture = lectureService.save(lectureDto);

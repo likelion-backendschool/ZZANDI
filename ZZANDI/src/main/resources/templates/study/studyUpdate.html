@@ -59,9 +59,9 @@
                     <input th:unless="${studyDto.studyType.toString().equals('BOOK')}" type="text" id="bookPublisher" name="bookPublisher" placeholder="출판사를 입력하세요.">
                 </div>
                 <div>
-                    <label for="bookUrl"> </label>
-                    <input th:if="${studyDto.studyType.toString().equals('BOOK')}" type="text" id="bookUrl" name="bookUrl" th:field="*{bookUrl}" placeholder="책 판매페이지를 입력하세요.">
-                    <input th:unless="${studyDto.studyType.toString().equals('BOOK')}" type="text" id="bookUrl" name="bookUrl" placeholder="책 판매페이지를 입력하세요.">
+                    <label for="bookIsbn"> </label>
+                    <input th:if="${studyDto.studyType.toString().equals('BOOK')}" type="text" id="bookIsbn" name="bookIsbn" th:field="*{bookIsbn}" placeholder="책 고유번호를 입력하세요.">
+                    <input th:unless="${studyDto.studyType.toString().equals('BOOK')}" type="text" id="bookIsbn" name="bookIsbn" placeholder="책 고유번호를 입력하세요.">
                 </div>
             </div>
             <div id="lecture">

@@ -38,6 +38,11 @@ public class TeamMateController {
   }
 
   /*
-  스터디 참가 취소
+  (팀장) 스터디 참가 취소(거절)
    */
+  @PostMapping("/delete/{teamMateId}")
+  public String deleteTeamMate(@AuthenticationPrincipal User user, @PathVariable Long studyId, @PathVariable Long teamMateId) {
+    teamMateService.deleteTeamMate(user, studyId, teamMateId);
+    return "redirect:/study/detail/%d".formatted(studyId);
+  }
 }

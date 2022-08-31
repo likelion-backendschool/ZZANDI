@@ -67,6 +67,9 @@
                             <form th:action="@{|/${studyId}/teamMate/update/${teamMate.id}|}" method="post" style="display: inline;">
                                 <button type="submit" onclick = "if (!confirm('참가 신청을 수락하시겠습니까?')) return false;" class = "btn btn-outline-secondary">수락</button>
                             </form>
+                            <form th:action="@{|/${studyId}/teamMate/delete/${teamMate.id}|}" method="post" style="display: inline;">
+                                <button type="submit" onclick = "if (!confirm('참가 신청을 거절하시겠습니까?')) return false;" class = "btn btn-outline-secondary">거절</button>
+                            </form>
                         </span>
                     </div>
                 </div>

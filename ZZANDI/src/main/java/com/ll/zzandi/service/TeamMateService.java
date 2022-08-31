@@ -63,6 +63,17 @@ public class TeamMateService {
     }
   }
 
+  public void deleteTeamMate(User user, Long studyId, Long teamMateId) {
+    User currentUser = userRepository.findByUserId(user.getUserId()).orElseThrow(RuntimeException::new);
+    Study study = studyRepository.findById(studyId).orElseThrow(RuntimeException::new);
+    TeamMate teamMate = teamMateRepository.findById(teamMateId).orElseThrow(RuntimeException::new);
+
+    // 팀장만 거절 가능
+    if(study.getUser() == currentUser) {
+      teamMateRepository.delete(teamMate);
+    }
+  }
+
   private void sendAcceptedEmail(Study study, TeamMate teamMate) {
     String message = "안녕하세요. %s님, <br/>".formatted(teamMate.getUser().getUserNickname())
         + "%s님이 [%s] 스터디 참가 신청을 수락했습니다.<br/>".formatted(study.getUser().getUserNickname(), study.getStudyTitle())

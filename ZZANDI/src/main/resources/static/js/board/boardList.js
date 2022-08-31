@@ -109,12 +109,12 @@ function createPageList(items) {
     pageHTML +=
         `<li class="page-item">
             <button class="page-btn" onClick="findByPage(0, ${studyId});" ${prevDisabled} aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
+                <i class="fa-solid fa-angles-left"></i>
             </button>
         </li>
         <li class="page-item">
             <button class="page-btn" onClick="findByPage(${nowPage - 1}, ${studyId});" ${prevDisabled} aria-label="Previous">
-                <span aria-hidden="true">&lsaquo;</span>
+                <i class="fa-solid fa-angle-left"></i>
             </button>
         </li>`;
 
@@ -130,12 +130,12 @@ function createPageList(items) {
     pageHTML +=
         `<li class="page-item">
             <button class="page-btn" onClick="findByPage(${nowPage + 1}, ${studyId});" ${nextDisabled} aria-label="Next">
-                <span aria-hidden="true">&rsaquo;</span>
+                <i class="fa-solid fa-angle-right"></i>
             </button>
         </li>
         <li class="page-item">
             <button class="page-btn" onClick="findByPage(${totalPage - 1}, ${studyId});" ${nextDisabled}  aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
+                <i class="fa-solid fa-angles-right"></i>
             </button>
         </li>`;
 

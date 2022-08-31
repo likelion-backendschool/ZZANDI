@@ -2,6 +2,7 @@ package com.ll.zzandi.service;
 
 import com.ll.zzandi.domain.*;
 import com.ll.zzandi.dto.BookDto;
+import com.ll.zzandi.dto.BookInfoDto;
 import com.ll.zzandi.dto.LectureDto;
 import com.ll.zzandi.dto.StudyDto;
 import com.ll.zzandi.enumtype.StudyStatus;
@@ -76,7 +77,7 @@ public class StudyService {
         studyRepository.delete(studies);
     }
 
-    public void updateStudyWithBook(Long studyId, @Valid StudyDto studyDto, BookDto bookDto, User user) {
+    public void updateStudyWithBook(Long studyId, @Valid StudyDto studyDto, BookInfoDto bookDto, User user) {
         Study s1 = studyRepository.findById(studyId).orElseThrow(null);
         Book book;
         if (s1.getBook() != null) {

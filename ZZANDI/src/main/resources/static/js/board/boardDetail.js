@@ -23,7 +23,7 @@ function findCommentList(boardId) {
             const comment = data.comment;
 
             commentCount.innerHTML =
-                `<div style="border: 1px solid black; border-radius: 5px; padding: 10px;">
+                `<div class="border rounded-1 p-3">
                     <span style="font-size: 14px; font-weight: bold;">댓글 ${count}개</span>
                 </div>`;
 
@@ -36,9 +36,16 @@ function findCommentList(boardId) {
                     profile = `<img src="${comment[i].profile}" alt="profile" class="rounded border bg-light" width="30" height="30" style="margin-right: 5px;">`
                 }
 
+                let icon = '';
+                if (comment[i].step !== 0) {
+                    icon = `<i class="fa-solid fa-reply fa-rotate-180 position-absolute" style="top: 10px; left: -15px; color: #ccc; font-size: 11px;"></i>`;
+                }
+
                 const buttonList = commentButtonList(comment[i], i + 1);
+                const ml = comment[i].step * 2; // 들여쓰기 깊이 계산
                 commentList.innerHTML +=
-                    `<li class="comment-box mb-2" data-num="${i + 1}" style="border-bottom: 1px solid #eceff1;">
+                    `<li class="comment-box mb-2 border-bottom" data-num="${i + 1}" style="margin-left:${ml}%; position: relative;">
+                        ${icon}
                         <div class="d-flex justify-content-between mb-2 mt-2">
                             <div class="d-flex">
                                 ${profile}
@@ -52,16 +59,11 @@ function findCommentList(boardId) {
                         <div style="font-size: 12px; margin-bottom: 5px;">${comment[i].content}</div>
                     </li>
                     <!-- 대댓글 & 댓글 수정 입력창 -->
-                    <div class="comment-form mb-3 hide"></div>`;
+                    <div class="comment-form mb-3 hide" style="margin-left: ${ml}%;"></div>`;
             }
         });
 }
 
-/*
-    수정 / 삭제 / 댓글 박스 생성 함수
-    본인이 작성한 댓글인 경우만 수정 / 삭제 / 댓글 버튼 표시
-    다른 사람이 작성한 댓글인 경우에는 댓글 버튼만 표시
- */
 function commentButtonList(comment, num) {
     let html = "";
     if (parseInt(userUUID) === comment.userUUID) {
@@ -82,7 +84,7 @@ function commentButtonList(comment, num) {
                 <i class="fa-regular fa-thumbs-up mx-2"></i>
                 <i class="fa-regular fa-thumbs-down"></i>
             </div>
-            <button type="button" onclick="createForm(${num})" style="border: none; outline: none; background-color: transparent;">댓글</button>`;
+            <button type="button" onclick="createForm(${num}, ${comment.commentId})" style="border: none; outline: none; background-color: transparent;">댓글</button>`;
     }
     return html;
 }
@@ -97,10 +99,12 @@ function createForm(num, commentId) {
                             <span style="font-size: 12px;">댓글 쓰기</span>
                           </div>
                           <div class="box d-flex justify-content-between">
-                            <textarea name="content" class="form-control" placeholder="따듯한 댓글 부탁드립니다." style="height: 70px; font-size: 12px;"></textarea>
-                            <button class="btn btn-secondary btn-sm" onclick="create(${commentId})" style="font-size: 12px; width: 100px; margin-left: 5px;">등록</button>
+                            <textarea class="form-control reply-content" placeholder="따듯한 댓글 부탁드립니다." style="height: 70px; font-size: 12px;"></textarea>
+                            <button class="btn btn-secondary btn-sm" onclick="createReply(${commentId})" style="font-size: 12px; width: 100px; margin-left: 5px;">등록</button>
                           </div>
                         </div>`;
+
+    document.querySelector(".reply-content").focus();
 }
 
 // Create Comment Update Form!
@@ -115,24 +119,50 @@ function updateForm(num, content, commentId) {
                             <span style="font-size: 12px;">댓글 수정</span>
                         </div>
                         <div class="d-flex justify-content-between">
-                            <textarea class="form-control update-content" placeholder="따듯한 댓글 부탁드립니다." style="height: 70px; font-size: 12px;">${content}</textarea>                            
+                            <textarea class="form-control update-content" placeholder="따듯한 댓글 부탁드립니다." style="height: 70px; font-size: 12px;" autofocus>${content}</textarea>                            
                             <button class="btn btn-secondary btn-sm" onclick="update(${commentId})" style="font-size: 12px; width: 100px; margin-left: 5px;">등록</button>
                         </div>`;
+
+    const taValue = document.querySelector(".update-content").value;
+    const ta = document.querySelector(".update-content");
+
+    ta.focus();
+    ta.value = '';
+    ta.value = taValue;
 }
 
-
-
 function deleteComment() {
-
+    alert("구현중...");
 }
 
 // Create Comment!
-function create(commentId){
+function create(){
     let value = content.value;
     value = value.replace(/(\n|\r\n)/g, '<br>');
     const comment = {
-        id : commentId,
         content: value
+    }
+
+    const url = `/comment/create/${boardId}`;
+    fetch(url, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(comment)
+    }).then(() => {
+        content.value = "";
+        findCommentList(boardId);
+    });
+}
+
+// 대댓글 입력 폼
+function createReply(commentId){
+    let reply = document.querySelector(".reply-content").value;
+    reply = reply.replace(/(\n|\r\n)/g, '<br>');
+    const comment = {
+        id : commentId,
+        content: reply
     }
 
     const url = `/comment/create/${boardId}`;

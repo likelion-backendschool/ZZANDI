@@ -12,6 +12,7 @@ import com.ll.zzandi.repository.BookRepository;
 import com.ll.zzandi.repository.CommentRepository;
 import com.ll.zzandi.repository.StudyRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,18 +49,6 @@ public class StudyService {
     }
 
     public List<Study> findAll() {
-        List<Study> studyList = studyRepository.findAll();
-        for (Study study : studyList) {
-            int year = Integer.parseInt(study.getStudyStart().substring(0, 4));
-            int month = Integer.parseInt(study.getStudyStart().substring(5, 7));
-            int day = Integer.parseInt(study.getStudyStart().substring(8, 10));
-            if (LocalDate.now().isAfter(LocalDate.of(year, month, day)) && LocalDate.now().isBefore(LocalDate.of(year, month, day)) || LocalDate.now().isEqual(LocalDate.of(year, month, day))) {
-                study.setStudyStatus(StudyStatus.PROGRESS);
-            } else if (LocalDate.now().isAfter(LocalDate.of(year, month, day))) {
-                study.setStudyStatus(StudyStatus.COMPLETE);
-            }
-            studyRepository.save(study);
-        }
         return studyRepository.findAll();
     }
 
@@ -168,5 +157,31 @@ public class StudyService {
 
     public List<Study> getList(String kw) {
         return (kw == null) ? findAll() : findAllByStudyTitleContainsOrUser_userIdContains(kw);
+    }
+
+    /*
+    매일 12시 스터디 상태 업데이트
+     */
+    @Scheduled(cron = "0 0 0 * * *")
+    public void updateStudyStatus() {
+        List<Study> studyList = studyRepository.findAll();
+        for (Study study : studyList) {
+            int startYear = Integer.parseInt(study.getStudyStart().substring(0, 4));
+            int startMonth = Integer.parseInt(study.getStudyStart().substring(5, 7));
+            int startDay = Integer.parseInt(study.getStudyStart().substring(8, 10));
+
+            int endYear = Integer.parseInt(study.getStudyEnd().substring(0, 4));
+            int endMonth = Integer.parseInt(study.getStudyEnd().substring(5, 7));
+            int endDay = Integer.parseInt(study.getStudyEnd().substring(8, 10));
+
+            if (LocalDate.now().isEqual(LocalDate.of(startYear, startMonth, startDay))) {
+                study.setStudyStatus(StudyStatus.PROGRESS);
+            }
+
+            if (LocalDate.now().isAfter(LocalDate.of(endYear, endMonth, endDay))) {
+                study.setStudyStatus(StudyStatus.COMPLETE);
+            }
+            studyRepository.save(study);
+        }
     }
 }

@@ -73,7 +73,7 @@ function commentButtonList(comment, num) {
                <div class="d-flex justify-content-start">
                    <button type="button" onclick="updateForm(${num}, '${comment.content}', ${comment.commentId})" style="border: none; outline: none; background-color: transparent;">수정</button>
                    <button type="button" onclick="deleteComment()" style="border: none; outline: none; background-color: transparent;">삭제</button>
-                   <button type="button" onclick="createForm(${num})" style="border: none; outline: none; background-color: transparent;">댓글</button>
+                   <button type="button" onclick="createForm(${num}, ${comment.commentId})" style="border: none; outline: none; background-color: transparent;">댓글</button>
                </div>`;
 
     } else {
@@ -88,7 +88,7 @@ function commentButtonList(comment, num) {
 }
 
 // Create Sub-Comment Form!
-function createForm(num) {
+function createForm(num, commentId) {
     const form = document.querySelector(`.comment-list .comment-form:nth-of-type(${num})`);
     form.classList.toggle("hide");
 
@@ -97,10 +97,9 @@ function createForm(num) {
                             <span style="font-size: 12px;">댓글 쓰기</span>
                           </div>
                           <div class="box d-flex justify-content-between">
-                            <textarea name="content" class="form-control" placeholder="따듯한 댓글 부탁드립니다." style="height: 100px;"></textarea>
-                            <div class="align-self-center" style="width: 70px; height: 30px; border-radius: 50%; margin-left: 10px;">
-                                <button class="btn btn-primary" onclick="create()" style="font-size: 14px;">등록</button>
-                            </div>
+                            <textarea name="content" class="form-control" placeholder="따듯한 댓글 부탁드립니다." style="height: 70px; font-size: 12px;"></textarea>
+                            <button class="btn btn-secondary btn-sm" onclick="create(${commentId})" style="font-size: 12px; width: 100px; margin-left: 5px;">등록</button>
+                          </div>
                         </div>`;
 }
 
@@ -110,27 +109,31 @@ function updateForm(num, content, commentId) {
     form.classList.toggle("hide");
     content = content.replace(/(<br>)/g, '\r\n');
 
-    form.innerHTML = ` <div>
-                        <i class="bi bi-arrow-return-right"></i>
+    form.innerHTML = ` 
+                        <div>
+                            <i class="bi bi-arrow-return-right"></i>
                             <span style="font-size: 12px;">댓글 수정</span>
-                          </div>
-                          <div class="box d-flex justify-content-between">
-                            <textarea class="form-control update-content" placeholder="따듯한 댓글 부탁드립니다." style="height: 100px; font-size: 12px;">${content}</textarea>
-                            <div class="align-self-center" style="width: 70px; height: 30px; border-radius: 50%; margin-left: 10px;">
-                                <button class="btn btn-primary" onclick="update(${commentId})" style="font-size: 14px;">등록</button>
-                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <textarea class="form-control update-content" placeholder="따듯한 댓글 부탁드립니다." style="height: 70px; font-size: 12px;">${content}</textarea>                            
+                            <button class="btn btn-secondary btn-sm" onclick="update(${commentId})" style="font-size: 12px; width: 100px; margin-left: 5px;">등록</button>
                         </div>`;
 }
+
+
 
 function deleteComment() {
 
 }
 
 // Create Comment!
-function create(){
+function create(commentId){
     let value = content.value;
     value = value.replace(/(\n|\r\n)/g, '<br>');
-    const comment = {content: value}
+    const comment = {
+        id : commentId,
+        content: value
+    }
 
     const url = `/comment/create/${boardId}`;
     fetch(url, {

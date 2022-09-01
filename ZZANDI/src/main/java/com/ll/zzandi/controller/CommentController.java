@@ -1,11 +1,8 @@
 package com.ll.zzandi.controller;
 
-import com.ll.zzandi.domain.Board;
 import com.ll.zzandi.domain.Comment;
 import com.ll.zzandi.domain.User;
 import com.ll.zzandi.dto.comment.CommentListDto;
-import com.ll.zzandi.enumtype.DeleteStatus;
-import com.ll.zzandi.service.BoardService;
 import com.ll.zzandi.service.CommentService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,7 +19,6 @@ import java.util.List;
 public class CommentController {
 
     private final CommentService commentService;
-    private final BoardService boardService;
 
     @GetMapping("/list/{boardId}")
     @ResponseBody
@@ -33,18 +29,8 @@ public class CommentController {
 
     @PostMapping("/create/{boardId}")
     @ResponseBody
-    public void createComment(@AuthenticationPrincipal User user, @PathVariable Long boardId, @RequestBody Comment data) {
-        Board board = boardService.findByBoardId(boardId);
-
-        Comment comment = Comment.builder()
-                .board(board)
-                .user(user)
-                .parentId(0L)
-                .content(data.getContent())
-                .deleteStatus(DeleteStatus.EXIST)
-                .build();
-
-        commentService.createComment(comment);
+    public void createComment(@AuthenticationPrincipal User user, @PathVariable Long boardId, @RequestBody Comment comment) {
+        commentService.createComment(comment, boardId, user);
     }
 
     @PostMapping("/update/{commentId}")

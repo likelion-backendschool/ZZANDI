@@ -1,24 +1,9 @@
 'use strict'
-/*
-    -> 페이징 구현에 필요한 데이터
-    현재 페이지 번호(nowPage) : Pageable.pageNumber (0부터 시작)
-    페이지 시작 번호(startPage) : ((현재 페이지  - 1) / pageSize) * 10 + 1
-    페이지 끝 번호(endPage) : (시작 번호 + pageSize) - 1;
-    다음 페이지 번호(nextPage) : 현재 페이지 + 1;
-    이전 페이지 번호(prevPage) : 현재 페이지 - 1;
-    이전 페이지 존재 여부(hasPrev) : (pageable.first == true) ? "이전 페이지 존재 X" : "이전 페이지 존재"
-    다음 페이지 존재 여부(hasNext) : (pageable.last == true) ? "다음 페이지 존재 X" : "다음 페이지 존재"
-    전체 게시물 데이터 개수(totalElements)
-    전체 페이지 개수(totalPages)
-*/
+
 const list = document.querySelector(".list");
 const pagination = document.querySelector('.pagination');
 const currPage = document.querySelector(".page").value; // 현재 페이지 정보
 const studyId = document.querySelector(".study-id").value;
-
-window.jdenticon_config = {
-    replaceMode: "observe"
-};
 
 window.onload = () => {
     findByPage(currPage, studyId);
@@ -65,13 +50,6 @@ function displayItems(items) {
 
 // 게시물 리스트 생성
 function createBoardList(item) {
-    let profile = '';
-    if (item.profile === null) {
-        profile = `<svg width="30" height="30" class="rounded border bg-light" data-jdenticon-value="${item.userId}" style="margin-right: 5px;"></svg>`;
-    } else {
-        profile = `<img src="${item.profile}" alt="profile" class="rounded border bg-light" width="30" height="30" style="margin-right: 5px;">`
-    }
-
     return `<tr>
                 <td style="color: mediumpurple; font-weight: bold;">${item.category}</td>
                 <td style="text-align: left;">
@@ -80,7 +58,7 @@ function createBoardList(item) {
                 </td>
                 <td>
                     <div class="d-flex" style="margin-left: 20px;">
-                        ${profile} 
+                        <img src="${item.profile}" alt="profile" class="rounded border bg-light" width="30" height="30" style="margin-right: 5px;"> 
                         <span class="align-self-center">${item.writer}</span>
                     </div>
                 </td>

@@ -6,10 +6,6 @@ const commentCount = document.querySelector(".comment-count");
 const commentList = document.querySelector(".comment-list");
 const content = document.querySelector("#content");
 
-window.jdenticon_config = {
-    replaceMode: "observe"
-};
-
 window.onload = () => {
     findCommentList(boardId);
 }
@@ -29,13 +25,6 @@ function findCommentList(boardId) {
 
             commentList.innerHTML = "";
             for (let i = 0; i < count; i++) {
-                let profile = '';
-                if (comment[i].profile === null) {
-                    profile = `<svg width="30" height="30" class="rounded border bg-light" data-jdenticon-value="${comment[i].userId}" style="margin-right: 5px;"></svg>`;
-                } else {
-                    profile = `<img src="${comment[i].profile}" alt="profile" class="rounded border bg-light" width="30" height="30" style="margin-right: 5px;">`
-                }
-
                 let icon = '';
                 if (comment[i].step !== 0) {
                     icon = `<i class="fa-solid fa-reply fa-rotate-180 position-absolute" style="top: 10px; left: -15px; color: #ccc; font-size: 11px;"></i>`;
@@ -48,7 +37,7 @@ function findCommentList(boardId) {
                         ${icon}
                         <div class="d-flex justify-content-between mb-2 mt-2">
                             <div class="d-flex">
-                                ${profile}
+                                <img src="${comment[i].profile}" alt="profile" class="rounded border bg-light" width="30" height="30" style="margin-right: 5px;">
                                 <div class="align-self-center" style="font-size: 14px;">
                                     <span style="font-weight: 700;">${comment[i].writer}</span style="font-weight: 700;">
                                     <span style="margin-left: 10px; color: #888888; font-size: 11px;">${comment[i].createdDate}</span>
@@ -73,9 +62,9 @@ function commentButtonList(comment, num) {
                    <i class="fa-regular fa-thumbs-down"></i>
                </div>
                <div class="d-flex justify-content-start">
-                   <button type="button" onclick="updateForm(${num}, '${comment.content}', ${comment.commentId})" style="border: none; outline: none; background-color: transparent;">수정</button>
-                   <button type="button" onclick="deleteComment()" style="border: none; outline: none; background-color: transparent;">삭제</button>
-                   <button type="button" onclick="createForm(${num}, ${comment.commentId})" style="border: none; outline: none; background-color: transparent;">댓글</button>
+                   <button type="button" onclick="updateForm(${num}, '${comment.content}', ${comment.commentId})" style="border: none; outline: none; background-color: transparent; color: #666666;">수정</button>
+                   <button type="button" onclick="deleteComment()" style="border: none; outline: none; background-color: transparent; color: #666666;">삭제</button>
+                   <button type="button" onclick="createForm(${num}, ${comment.commentId})" style="border: none; outline: none; background-color: transparent; color: #666666;">댓글</button>
                </div>`;
 
     } else {
@@ -95,7 +84,7 @@ function createForm(num, commentId) {
     form.classList.toggle("hide");
 
     form.innerHTML = `<div>
-                        <i class="bi bi-arrow-return-right"></i>
+                        <i class="fa-solid fa-reply fa-rotate-180" style="color: #ccc; font-size: 11px;"></i>
                             <span style="font-size: 12px;">댓글 쓰기</span>
                           </div>
                           <div class="box d-flex justify-content-between">
@@ -115,7 +104,7 @@ function updateForm(num, content, commentId) {
 
     form.innerHTML = ` 
                         <div>
-                            <i class="bi bi-arrow-return-right"></i>
+                            <i class="fa-solid fa-reply fa-rotate-180" style="color: #ccc; font-size: 11px;"></i>
                             <span style="font-size: 12px;">댓글 수정</span>
                         </div>
                         <div class="d-flex justify-content-between">
@@ -129,10 +118,6 @@ function updateForm(num, content, commentId) {
     ta.focus();
     ta.value = '';
     ta.value = taValue;
-}
-
-function deleteComment() {
-    alert("구현중...");
 }
 
 // Create Comment!
@@ -194,6 +179,10 @@ function update(commentId) {
     }).then(() => {
         findCommentList(boardId);
     })
+}
+
+function deleteComment() {
+    alert("구현중...");
 }
 
 // Alert Delete Comment!

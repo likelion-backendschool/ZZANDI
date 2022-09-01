@@ -6,6 +6,7 @@ import com.ll.zzandi.exception.UserApplicationException;
 import com.ll.zzandi.repository.UserRepository;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -31,7 +32,7 @@ public class CustomUserDetailsService implements UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
-        User user = userRepository.findByUserId(userId).orElseThrow(() -> new UserApplicationException(ErrorType.NOT_FOUND));
+        User user = userRepository.findByUserId(userId).orElseThrow(() -> new BadCredentialsException("아이디 혹은 비밀번호가 일치하지 않습니다."));
 
         List<GrantedAuthority> authorities = new ArrayList<>();  // 권한 저장
         authorities.add(new SimpleGrantedAuthority(String.valueOf(user.getUserRole())));

@@ -1,9 +1,14 @@
 package com.ll.zzandi.service;
 
+import com.ll.zzandi.domain.Board;
 import com.ll.zzandi.domain.Comment;
+import com.ll.zzandi.domain.User;
 import com.ll.zzandi.dto.comment.CommentListDto;
+import com.ll.zzandi.enumtype.DeleteStatus;
+import com.ll.zzandi.repository.BoardRepository;
 import com.ll.zzandi.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +22,7 @@ import java.util.List;
 public class CommentService {
 
     private final CommentRepository commentRepository;
+    private final BoardRepository boardRepository;
 
     public List<CommentListDto> findCommentList(Long boardId) {
         List<Comment> commentListByBoardId = commentRepository.findCommentListByBoardId(boardId);
@@ -33,6 +39,7 @@ public class CommentService {
                     .writer(comment.getUser().getUserNickname())
                     .parentId(comment.getParentId())
                     .content(content)
+                    .step(comment.getStep())
                     .status(comment.getDeleteStatus())
                     .createdDate(comment.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm")))
                     .build());
@@ -41,9 +48,60 @@ public class CommentService {
     }
 
     @Transactional
-    public Long createComment(Comment comment) {
-        commentRepository.save(comment);
-        return comment.getId();
+    public Comment createComment(Comment comment, Long boardId, @AuthenticationPrincipal User user) {
+        Board board = boardRepository.findById(boardId).orElseThrow(() -> new IllegalArgumentException("작성할 게시글이 없습니다."));
+
+        Long commentRef = commentRepository.findByNvlRef(boardId);
+
+        if (comment.getId() == null) {
+            return commentRepository.save(Comment.builder()
+                    .content(comment.getContent())
+                    .user(user)
+                    .board(board)
+                    .ref(commentRef + 1L)
+                    .step(0L)
+                    .refOrder(0L)
+                    .count(0L)
+                    .parentId(0L)
+                    .deleteStatus(DeleteStatus.EXIST)
+                    .build());
+        } else {
+            Comment parentComment = commentRepository.findById(comment.getId()).orElseThrow(() -> new IllegalArgumentException("가져올 댓글이 없습니다."));
+            Long refOrderResult = refOrderAndUpdate(parentComment);
+
+            commentRepository.updateCount(parentComment.getId(), parentComment.getCount());
+            return commentRepository.save(Comment.builder()
+                    .content(comment.getContent())
+                    .user(user)
+                    .board(board)
+                    .ref(parentComment.getRef())
+                    .step(parentComment.getStep() + 1L)
+                    .refOrder(refOrderResult)
+                    .count(0L)
+                    .parentId(comment.getId())
+                    .deleteStatus(DeleteStatus.EXIST)
+                    .build());
+        }
+    }
+
+    private Long refOrderAndUpdate(Comment parentComment) {
+        Long saveStep = parentComment.getStep() + 1L;
+        Long refOrder = parentComment.getRefOrder();
+        Long count = parentComment.getCount();
+        Long ref = parentComment.getRef();
+
+        Long countSum = commentRepository.findBySumAnswerNum(ref);
+        Long maxStep = commentRepository.findByNvlMaxStep(ref);
+
+        if (saveStep < maxStep) {
+            return countSum + 1L;
+        } else if (saveStep.equals(maxStep)) {
+            commentRepository.updateRefOrderPlus(ref, refOrder + count);
+            return refOrder + count + 1L;
+        } else {
+            commentRepository.updateRefOrderPlus(ref, refOrder);
+            return refOrder + 1L;
+        }
     }
 
     @Transactional

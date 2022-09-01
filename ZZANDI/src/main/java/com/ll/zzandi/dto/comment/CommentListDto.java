@@ -20,6 +20,7 @@ public class CommentListDto {
     private String writer;
     private Long parentId;
     private String content;
+    private Long step;
     private DeleteStatus status;
     private String createdDate;
 

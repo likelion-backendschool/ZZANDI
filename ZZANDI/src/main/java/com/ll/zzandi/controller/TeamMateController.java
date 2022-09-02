@@ -46,4 +46,13 @@ public class TeamMateController {
     }
     return "redirect:/user/mypage?userNickname=%s".formatted(user.getUserNickname());
   }
+
+  /*
+스터디 탈퇴
+ */
+  @PostMapping("/quit")
+  public String quitTeamMate(@AuthenticationPrincipal User user, @PathVariable Long studyId) {
+    teamMateService.quitTeamMate(user, studyId);
+    return "redirect:/study/detail/%d".formatted(studyId);
+  }
 }

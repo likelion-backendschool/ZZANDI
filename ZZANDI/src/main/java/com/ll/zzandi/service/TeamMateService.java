@@ -11,6 +11,7 @@ import com.ll.zzandi.repository.TeamMateRepository;
 import com.ll.zzandi.repository.UserRepository;
 import com.ll.zzandi.util.mail.EmailMessage;
 import com.ll.zzandi.util.mail.EmailService;
+import java.util.Arrays;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -79,6 +80,22 @@ public class TeamMateService {
     return isLeader;
   }
 
+  public void quitTeamMate(User user, Long studyId) {
+    User currentUser = userRepository.findByUserId(user.getUserId()).orElseThrow(RuntimeException::new);
+    Study study = studyRepository.findById(studyId).orElseThrow(RuntimeException::new);
+    TeamMate teamMate = teamMateRepository.findByUserAndAndStudy(currentUser, study)
+        .orElseThrow(RuntimeException::new);
+
+    if((study.getStudyStatus() == StudyStatus.RECRUIT
+        || study.getStudyStatus() == StudyStatus.RECRUIT_COMPLETE) && study.getUser() != currentUser) {
+      teamMateRepository.delete(teamMate);
+      studyService.updateRecruitStudyStatus(study);
+    }
+
+    // 팀장의 경우 추가 예정
+    // PROGRESS의 경우, 달성률 관련 개발 진행 후 추가 예정
+  }
+
   private void sendAcceptedEmail(Study study, TeamMate teamMate) {
     String message = "안녕하세요. %s님, <br/>".formatted(teamMate.getUser().getUserNickname())
         + "%s님이 [%s] 스터디 참가 신청을 수락했습니다.<br/>".formatted(study.getUser().getUserNickname(), study.getStudyTitle())
@@ -111,5 +128,21 @@ public class TeamMateService {
 
   public List<TeamMate> findAllByUser(User user) {
     return teamMateRepository.findAllByUser(user);
+  }
+
+  public List<Boolean> checkTeamMate(List<TeamMate> teamMateList, User user) {
+
+    boolean isParticipation =false;
+    boolean isTeamMate =false;
+
+    for(TeamMate teamMate : teamMateList) {
+      if(teamMate.getUser().getId().equals(user.getId())) {
+        isParticipation =true;
+        if(teamMate.getTeamMateStatus().equals(TeamMateStatus.ACCEPTED)) {
+          isTeamMate =true;
+        }
+      }
+    }
+    return Arrays.asList(isParticipation, isTeamMate);
   }
 }

@@ -7,6 +7,12 @@ import com.ll.zzandi.dto.LectureDto;
 import com.ll.zzandi.dto.StudyDto;
 import com.ll.zzandi.enumtype.StudyStatus;
 import com.ll.zzandi.enumtype.StudyType;
+import com.ll.zzandi.enumtype.TeamMateStatus;
+import com.ll.zzandi.repository.BoardRepository;
+import com.ll.zzandi.repository.BookRepository;
+import com.ll.zzandi.repository.CommentRepository;
+import com.ll.zzandi.repository.StudyRepository;
+import com.ll.zzandi.repository.TeamMateRepository;
 import com.ll.zzandi.enumtype.TableType;
 import com.ll.zzandi.repository.*;
 
@@ -38,6 +44,7 @@ public class StudyService {
     private final CommentRepository commentRepository;
     private final ImageUploadService imageUploadService;
     private final FileRepository fileRepository;
+    private final TeamMateRepository teamMateRepository;
 
     public Study createStudyWithBook(@Valid StudyDto studyDto, Book book, User user) {
         Study study = new Study(user, studyDto.getStudyTitle(), book, null, StudyType.BOOK,
@@ -208,6 +215,17 @@ public class StudyService {
     }
     private static String getUuid() {
         return UUID.randomUUID().toString().replaceAll("-", "");
+    }
+
+    public void updateRecruitStudyStatus(Study study) {
+        Integer teamMateCount = teamMateRepository.countByStudyAndTeamMateStatus(study, TeamMateStatus.ACCEPTED);
+        if(teamMateCount == study.getStudyPeople()) {
+            study.setStudyStatus(StudyStatus.RECRUIT_COMPLETE);
+            studyRepository.save(study);
+        }else if(teamMateCount < study.getStudyPeople()) {
+            study.setStudyStatus(StudyStatus.RECRUIT);
+            studyRepository.save(study);
+        }
     }
 
     /*

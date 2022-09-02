@@ -62,4 +62,8 @@ public class File extends BaseEntity {
         this.fileUrl = fileUrl;
         this.fileStatus=DeleteStatus.EXIST;
     }
+
+    public void deleteFileStatus(){
+        this.fileStatus=DeleteStatus.DELETE;
+    }
 }

@@ -130,6 +130,7 @@ public class UserService {
                 .tableId(userUUID)
                 .tableType(TableType.USER)
                 .build();
+        file.deleteFileStatus();
         fileRepository.save(file);
         user.updateImageUrl(uploadUrl);
     }

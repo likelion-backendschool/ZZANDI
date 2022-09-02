@@ -26,7 +26,7 @@ public class GlobalControllerAdvice {
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
   }
 
-  @ExceptionHandler(RuntimeException.class)
+  //@ExceptionHandler(RuntimeException.class)
   public String applicationHandler(RuntimeException e,Model model) {
     log.error("Error occurs {}", e.toString());
 

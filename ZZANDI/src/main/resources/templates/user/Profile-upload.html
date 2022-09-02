@@ -20,8 +20,6 @@
                 </div>
                 <div id="current-profile-image" class="mt-3">
                     <div sec:authorize="isAuthenticated()">
-                        <svg th:if="${#strings.isEmpty(user?.userprofileUrl)}" th:data-jdenticon-value="${user.userId}"
-                             width="150" height="150" class="rounded border bg-light"></svg>
                         <img th:if="${!#strings.isEmpty(user?.userprofileUrl)}" th:src="${user.userprofileUrl}"
                              width="150" height="150" class="rounded border"/>
                     </div>
@@ -30,7 +28,7 @@
                 <div id="new-profile-image" class="mt-3"></div>
                 <div class="card-body">
                     <div class="custom-file">
-                        <input type="file" class="form-control"id="profile-image-file" name="imageFile">
+                        <input type="file" class="form-control"id="profile-image-file" name="imageFile" accept=".gif, .jpg, .png, .jpeg, .PNG">
                     </div>
                     <div id="new-profile-image-control" class="mt-3">
                         <button class="btn btn-outline-primary btn-block" id="cut-button">자르기</button>
@@ -49,9 +47,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.js" integrity="sha512-n/4gHW3atM3QqRcbCn6ewmpxcLAHGaDjpEBu4xZd47N0W2oQ+6q7oc3PXstrJYXcbNU1OHdQ1T7pAP+gi5Yu8g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cropper/1.0.1/jquery-cropper.js" integrity="sha512-7H4tikIFoyAdYD31w/uNYvvAUL6gyunWXLwTQ7ZXkyjD+brw+PfJpLxFkANnbkKnSJzU89YpnF3fJKbpvV+QYg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.0/js/bootstrap.bundle.min.js" integrity="sha512-9GacT4119eY3AcosfWtHMsT5JyZudrexyEVzTBWV3viP/YfB9e2pEy3N7WXL3SV6ASXpTU0vzzSxsbfsuUH4sQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="https://cdn.jsdelivr.net/npm/jdenticon@3.2.0/dist/jdenticon.min.js" async
-        integrity="sha384-yBhgDqxM50qJV5JPdayci8wCfooqvhFYbIKhv0hTtLvfeeyJMJCscRfFNKIxt43M" crossorigin="anonymous">
-</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropper/4.1.0/cropper.min.js" integrity="sha512-E+gDQcIvNXE60SjCS38ysf1mGh4ObBpKcUOp0oEaHQHQAdaN2p7GelOpgEdpTuCLoIJyLkNXiqFZbyD9Ak/Ygw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.0/js/bootstrap.min.js"></script>
 <footer th:replace="layout/footer.html :: footer"></footer>
@@ -84,23 +79,48 @@
                             alert("이미지 파일을 선택하세요.");
                             return;
                         }
-
+                        const fileInput = document.getElementById("profile-image-file");
                         let img = document.createElement("img");
                         img.id = 'new-profile';
                         img.src = e.target.result;
                         img.setAttribute('width', '100%');
-
                         $newProfileImage.html(img);
                         $newProfileImage.show();
                         $currentProfileImage.hide();
+                        if(fileInput.files[0].type ==="image/gif"){
+                            var fileName = $('#profile-image-file').val();
+                            $confirmBtn.show();
+                            $resetBtn.show();
+                            $confirmBtn.click(function () {
+                                const formData = new FormData();
+                                formData.append("croppedImage", fileInput.files[0],fileName);
+                                    $.ajax('/user/profile', {
+                                        method: 'POST',
+                                        data: formData,//앞에서 생성한 formData
+                                        processData : false,	// data 파라미터 강제 string 변환 방지
+                                        contentType : false,	// application/x-www-form-urlencoded; 방지
+                                        success() {
+                                            console.log('Upload success');
+                                            location.replace("/");
+                                        },
+                                        error() {
+                                            console.log('Upload error');
+                                        },
+                                    });
+                                });
+                                $newProfileImage.html(newImage);
+                                $cutBtn.hide();
+                                $confirmBtn.hide();
+                                $profileImage.val(dataUrl);
+                        }else {
+                            let $newImage = $(img);
+                            $newImage.cropper({aspectRatio: 1});
+                            cropper = $newImage.data('cropper');
 
-                        let $newImage = $(img);
-                        $newImage.cropper({aspectRatio: 1});
-                        cropper = $newImage.data('cropper');
-
-                        $cutBtn.show();
-                        $confirmBtn.hide();
-                        $resetBtn.show();
+                            $cutBtn.show();
+                            $confirmBtn.hide();
+                            $resetBtn.show();
+                        }
                     }
                 };
 

@@ -72,9 +72,6 @@ public class UserService {
                 .tableType(TableType.USER)
                 .build();
             fileRepository.save(file);
-            System.out.println("----------로그인 전------------");
-            login(newUser);
-            System.out.println("----------로그인 후------------");
             return newUser;
     }
 
@@ -119,6 +116,7 @@ public class UserService {
             fileRepository.delete(file);
         }
         String originalName=multipartFile.getOriginalFilename();
+        System.out.println("!!!!!!!!!!!!!!!오리지널"+originalName);
         String[] name=originalName.split("\\\\");
         final String ext = name[2].substring(name[2].lastIndexOf('.'));
         final String saveFileName = getUuid() + ext;
@@ -132,6 +130,7 @@ public class UserService {
                 .tableId(userUUID)
                 .tableType(TableType.USER)
                 .build();
+        file.deleteFileStatus();
         fileRepository.save(file);
         user.updateImageUrl(uploadUrl);
     }

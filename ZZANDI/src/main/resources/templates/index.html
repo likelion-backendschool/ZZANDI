@@ -18,8 +18,6 @@
         <h1> ZZANDI TEST </h1>
         <a th:href="@{/user/profile}">
             <div sec:authorize="isAuthenticated()">
-                <svg th:if="${#strings.isEmpty(user?.userprofileUrl)}" th:data-jdenticon-value="${user.userId}"
-                     width="70" height="70" class="rounded border bg-light"></svg>
                 <img th:if="${!#strings.isEmpty(user?.userprofileUrl)}" th:src="${user.userprofileUrl}"
                      width="70" height="70" class="rounded border"/>
                 <div th:text="${user.userNickname}"></div>
@@ -60,8 +58,6 @@
     <!-- tail -->
     <div th:replace="layout/tail.html :: tail"></div>
 
-    <script src="https://cdn.jsdelivr.net/npm/jdenticon@3.2.0/dist/jdenticon.min.js" async
-            integrity="sha384-yBhgDqxM50qJV5JPdayci8wCfooqvhFYbIKhv0hTtLvfeeyJMJCscRfFNKIxt43M" crossorigin="anonymous">
-    </script>
+
 </body>
 </html>

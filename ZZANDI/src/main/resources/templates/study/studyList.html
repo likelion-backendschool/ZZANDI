@@ -9,6 +9,16 @@
     <h1> Study List </h1>
     <div>
         <form>
+            <select th:name="st">
+                <option th:value="BOOK" value="BOOK">BOOK</option>
+                <option th:value="LECTURE">LECTURE</option>
+                <option th:value="ALL" th:selected="${param.st} == null">ALL</option>
+            </select>
+            <select name="ss">
+                <option th:value="RECRUIT">모집 중</option>
+                <option th:value="PROGRESS">모집 완료</option>
+                <option th:value="ALL" th:selected="${param.ss} == null">ALL</option>
+            </select>
             <input type="text" name="kw" th:value="${param.kw}" placeholder="검색어">
             <button type="submit">검색</button>
         </form>

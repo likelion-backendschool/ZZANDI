@@ -72,9 +72,6 @@ public class UserService {
                 .tableType(TableType.USER)
                 .build();
             fileRepository.save(file);
-            System.out.println("----------로그인 전------------");
-            login(newUser);
-            System.out.println("----------로그인 후------------");
             return newUser;
     }
 

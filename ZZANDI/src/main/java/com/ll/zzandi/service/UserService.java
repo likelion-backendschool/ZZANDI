@@ -119,6 +119,7 @@ public class UserService {
             fileRepository.delete(file);
         }
         String originalName=multipartFile.getOriginalFilename();
+        System.out.println("!!!!!!!!!!!!!!!오리지널"+originalName);
         String[] name=originalName.split("\\\\");
         final String ext = name[2].substring(name[2].lastIndexOf('.'));
         final String saveFileName = getUuid() + ext;

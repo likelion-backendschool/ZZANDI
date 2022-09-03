@@ -45,7 +45,7 @@ function findCommentList(boardId) {
                             </div>
                             <div class="d-flex" style="font-size: 12px;">${buttonList}</div>
                         </div>
-                        <div style="font-size: 12px; margin-bottom: 5px;">${comment[i].content}</div>
+                        <div style="font-size: 12px; margin-bottom: 5px; overflow: auto;">${comment[i].content}</div>
                     </li>
                     <!-- 대댓글 & 댓글 수정 입력창 -->
                     <div class="comment-form mb-3 hide" style="margin-left: ${ml}%;"></div>`;
@@ -108,7 +108,7 @@ function updateForm(num, content, commentId) {
                             <span style="font-size: 12px;">댓글 수정</span>
                         </div>
                         <div class="d-flex justify-content-between">
-                            <textarea class="form-control update-content" placeholder="따듯한 댓글 부탁드립니다." style="height: 70px; font-size: 12px;" autofocus>${content}</textarea>                            
+                            <textarea class="form-control update-content" placeholder="따듯한 댓글 부탁드립니다." style="height: 70px; font-size: 12px;">${content}</textarea>                            
                             <button class="btn btn-secondary btn-sm" onclick="update(${commentId})" style="font-size: 12px; width: 100px; margin-left: 5px;">등록</button>
                         </div>`;
 

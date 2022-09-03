@@ -39,6 +39,12 @@ public class CommentController {
         commentService.updateComment(commentId, comment);
     }
 
+    @PostMapping("/delete/{commentId}")
+    @ResponseBody
+    public void deleteComment(@PathVariable Long commentId) {
+        commentService.deleteCommentByCommentId(commentId);
+    }
+
     // 컬렉션 데이터를 한 번 감싸서 반환하기 위한 클래스
     @Data
     @AllArgsConstructor

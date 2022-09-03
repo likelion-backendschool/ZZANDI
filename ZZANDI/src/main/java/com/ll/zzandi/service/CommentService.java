@@ -40,11 +40,16 @@ public class CommentService {
                     .parentId(comment.getParentId())
                     .content(content)
                     .step(comment.getStep())
+                    .count(comment.getCount())
                     .status(comment.getDeleteStatus())
                     .createdDate(comment.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm")))
                     .build());
         }
         return commentList;
+    }
+
+    public Comment findById(Long commentId) {
+        return commentRepository.findById(commentId).orElseThrow(() -> new IllegalArgumentException("해당되는 댓글이 없습니다!"));
     }
 
     @Transactional
@@ -111,7 +116,23 @@ public class CommentService {
     }
 
     @Transactional
-    public void deleteComment(Long boardId) {
+    public void deleteCommentByCommentId(Long commentId) {
+        Comment findComment = commentRepository.findById(commentId).orElseThrow(() -> new IllegalArgumentException("댓글을 찾을 수 없습니다."));
+        Long childCommentCount = findComment.getCount();
+
+        if(childCommentCount > 0) {
+            commentRepository.updateSingleCommentByCommentId(DeleteStatus.DELETE, commentId);
+        } else {
+            if (findComment.getParentId() > 0) {
+                Comment parentComment = commentRepository.findById(findComment.getParentId()).orElseThrow(() -> new IllegalArgumentException("부모 댓글을 찾을 수 없습니다."));
+                parentComment.reduceCount();
+            }
+            commentRepository.deleteSingleCommentByCommentId(commentId);
+        }
+    }
+
+    @Transactional
+    public void deleteCommentByBoardId(Long boardId) {
         commentRepository.deleteCommentByBoardId(boardId);
     }
 }

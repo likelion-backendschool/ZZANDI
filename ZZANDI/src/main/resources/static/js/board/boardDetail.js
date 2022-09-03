@@ -6,9 +6,7 @@ const commentCount = document.querySelector(".comment-count");
 const commentList = document.querySelector(".comment-list");
 const content = document.querySelector("#content");
 
-window.onload = () => {
-    findCommentList(boardId);
-}
+window.onload = () => findCommentList(boardId);
 
 // ✨ Print Comment List!
 function findCommentList(boardId) {
@@ -55,15 +53,15 @@ function findCommentList(boardId) {
 
 function commentButtonList(comment, num) {
     let html = "";
-    if (parseInt(userUUID) === comment.userUUID) {
+    if (parseInt(userUUID) === comment.userUUID && comment.status === 'EXIST') {
         html =
                `<div class="justify-content-between align-self-center mx-2">
                    <i class="fa-regular fa-thumbs-up mx-2"></i>
                    <i class="fa-regular fa-thumbs-down"></i>
                </div>
                <div class="d-flex justify-content-start">
-                   <button type="button" onclick="updateForm(${num}, '${comment.content}', ${comment.commentId})" style="border: none; outline: none; background-color: transparent; color: #666666;">수정</button>
-                   <button type="button" onclick="deleteComment()" style="border: none; outline: none; background-color: transparent; color: #666666;">삭제</button>
+                   <button type="button" onclick="updateForm(${num}, '${comment.content}', ${comment.commentId}, ${comment.count})" style="border: none; outline: none; background-color: transparent; color: #666666;">수정</button>
+                   <button type="button" onclick="deleteComment(${comment.commentId}, ${comment.count})" style="border: none; outline: none; background-color: transparent; color: #666666;">삭제</button>
                    <button type="button" onclick="createForm(${num}, ${comment.commentId})" style="border: none; outline: none; background-color: transparent; color: #666666;">댓글</button>
                </div>`;
 
@@ -97,7 +95,8 @@ function createForm(num, commentId) {
 }
 
 // Create Comment Update Form!
-function updateForm(num, content, commentId) {
+function updateForm(num, content, commentId, count) {
+    console.log(content);
     const form = document.querySelector(`.comment-list .comment-form:nth-of-type(${num})`);
     form.classList.toggle("hide");
     content = content.replace(/(<br>)/g, '\r\n');
@@ -109,15 +108,10 @@ function updateForm(num, content, commentId) {
                         </div>
                         <div class="d-flex justify-content-between">
                             <textarea class="form-control update-content" placeholder="따듯한 댓글 부탁드립니다." style="height: 70px; font-size: 12px;">${content}</textarea>                            
-                            <button class="btn btn-secondary btn-sm" onclick="update(${commentId})" style="font-size: 12px; width: 100px; margin-left: 5px;">등록</button>
+                            <button class="btn btn-secondary btn-sm" onclick="update(${commentId}, ${count})" style="font-size: 12px; width: 100px; margin-left: 5px;">등록</button>
                         </div>`;
 
-    const taValue = document.querySelector(".update-content").value;
-    const ta = document.querySelector(".update-content");
-
-    ta.focus();
-    ta.value = '';
-    ta.value = taValue;
+    document.querySelector(".update-content").focus();
 }
 
 // Create Comment!
@@ -141,10 +135,9 @@ function create(){
     });
 }
 
-// 대댓글 입력 폼
+// Create Reply
 function createReply(commentId){
-    let reply = document.querySelector(".reply-content").value;
-    reply = reply.replace(/(\n|\r\n)/g, '<br>');
+    const reply = document.querySelector(".reply-content").value.replace(/(\n|\r\n)/g, '<br>');
     const comment = {
         id : commentId,
         content: reply
@@ -164,9 +157,14 @@ function createReply(commentId){
 }
 
 // Update Comment!
-function update(commentId) {
-    let updateParam = document.querySelector(".update-content").value;
-    updateParam = updateParam.replace(/(\n|\r\n)/g, '<br>');
+function update(commentId, count) {
+    if(count > 0) {
+        alert("대댓글이 있으면 수정하실 수 없습니다.");
+        findCommentList(boardId);
+        return false;
+    }
+
+    const updateParam = document.querySelector(".update-content").value.replace(/(\n|\r\n)/g, '<br>');
     const comment = {"content": updateParam};
 
     const url = `/comment/update/${commentId}`;
@@ -181,8 +179,15 @@ function update(commentId) {
     })
 }
 
-function deleteComment() {
-    alert("구현중...");
+function deleteComment(commentId) {
+    if (confirm("정말로 삭제하시겠습니까?")) {
+        const url = `/comment/delete/${commentId}`;
+        fetch(url, {
+            method: "POST"
+        }).then(() => {
+            findCommentList(boardId);
+        });
+    }
 }
 
 // Alert Delete Comment!

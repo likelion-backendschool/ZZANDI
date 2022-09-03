@@ -21,6 +21,7 @@ public class CommentListDto {
     private Long parentId;
     private String content;
     private Long step;
+    private Long count;
     private DeleteStatus status;
     private String createdDate;
 

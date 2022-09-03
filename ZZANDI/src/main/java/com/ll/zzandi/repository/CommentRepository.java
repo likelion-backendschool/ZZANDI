@@ -1,6 +1,7 @@
 package com.ll.zzandi.repository;
 
 import com.ll.zzandi.domain.Comment;
+import com.ll.zzandi.enumtype.DeleteStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -29,6 +30,14 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     @Modifying
     @Query(value = "update comment set cm_count = :count + 1 where cm_id = :commentId", nativeQuery = true)
     void updateCount(@Param("commentId") Long commentId, @Param("count") Long count);
+
+    @Modifying
+    @Query("delete from Comment c where c.id = :commentId")
+    void deleteSingleCommentByCommentId(@Param("commentId") Long commentId);
+
+    @Modifying
+    @Query("update Comment c set c.content = '[삭제된 댓글입니다.]' , c.deleteStatus = :status, c.deletedDate = current_timestamp where c.id = :commentId")
+    void updateSingleCommentByCommentId(@Param("status") DeleteStatus deleteStatus, @Param("commentId") Long commentId);
 
     @Modifying
     @Query("delete from Comment c where c.board.id = :boardId")

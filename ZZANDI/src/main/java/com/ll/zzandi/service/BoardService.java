@@ -50,7 +50,7 @@ public class BoardService {
                 .content(board.getContent())
                 .views(board.getViews())
                 .heart(board.getHeart())
-                .count(0)
+                .count(board.getComments().size())
                 .page(page)
                 .prev(prev)
                 .next(next)

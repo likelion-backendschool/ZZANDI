@@ -2,13 +2,12 @@
 
 const boardId = document.querySelector('.board-id').value;
 const userUUID = document.querySelector(".user-uuid").value;
-const commentCount = document.querySelector(".comment-count");
+const commentCount = document.querySelectorAll(".comment-count");
 const commentList = document.querySelector(".comment-list");
 const content = document.querySelector("#content");
 
 window.onload = () => findCommentList(boardId);
 
-// ✨ Print Comment List!
 function findCommentList(boardId) {
     fetch(`/comment/list/${boardId}`)
         .then(response => response.json())
@@ -16,10 +15,9 @@ function findCommentList(boardId) {
             const count = data.count;
             const comment = data.comment;
 
-            commentCount.innerHTML =
-                `<div class="border rounded-1 p-3">
-                    <span style="font-size: 14px; font-weight: bold;">댓글 ${count}개</span>
-                </div>`;
+            for(let countBox of commentCount) {
+                countBox.innerHTML = `<span style="font-size: 14px; font-weight: bold;">댓글 ${count}개</span>`;
+            }
 
             commentList.innerHTML = "";
             for (let i = 0; i < count; i++) {
@@ -76,7 +74,6 @@ function commentButtonList(comment, num) {
     return html;
 }
 
-// Create Sub-Comment Form!
 function createForm(num, commentId) {
     const form = document.querySelector(`.comment-list .comment-form:nth-of-type(${num})`);
     form.classList.toggle("hide");
@@ -94,7 +91,6 @@ function createForm(num, commentId) {
     document.querySelector(".reply-content").focus();
 }
 
-// Create Comment Update Form!
 function updateForm(num, content, commentId, count) {
     console.log(content);
     const form = document.querySelector(`.comment-list .comment-form:nth-of-type(${num})`);
@@ -114,7 +110,6 @@ function updateForm(num, content, commentId, count) {
     document.querySelector(".update-content").focus();
 }
 
-// Create Comment!
 function create(){
     let value = content.value;
     value = value.replace(/(\n|\r\n)/g, '<br>');
@@ -135,7 +130,6 @@ function create(){
     });
 }
 
-// Create Reply
 function createReply(commentId){
     const reply = document.querySelector(".reply-content").value.replace(/(\n|\r\n)/g, '<br>');
     const comment = {
@@ -156,7 +150,6 @@ function createReply(commentId){
     });
 }
 
-// Update Comment!
 function update(commentId, count) {
     if(count > 0) {
         alert("대댓글이 있으면 수정하실 수 없습니다.");
@@ -190,7 +183,6 @@ function deleteComment(commentId) {
     }
 }
 
-// Alert Delete Comment!
 function deleteBoard() {
     if (confirm("정말로 삭제하시겠습니까?") === false) {
         return false;

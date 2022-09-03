@@ -49,10 +49,10 @@
             <img th:if="${!#strings.isEmpty(boardDetail.profile)}" th:src="${boardDetail.profile}" alt="profile" width="30" height="30" class="rounded border bg-light" />
             <p class="align-self-center" th:text="${boardDetail.writer}" style="margin-left: 5px; margin-bottom: 0; font-size: 14px;">작성자</p>
         </div>
-        <div class="d-flex justify-content-evenly">
-            <p class="mx-1">조회 수 <span th:text="${boardDetail.views}"></span></p>
-            <p class="mx-1">좋아요 수 <span th:text="${boardDetail.heart}"></span></p>
-            <p class="mx-1">댓글 <span th:text="${boardDetail.count}"></span></p>
+        <div class="d-flex justify-content-evenly mb-0 align-items-center">
+            <p class="mx-1"><span th:text="|조회수 ${boardDetail.views}|" style="font-size: 14px; font-weight: bold;"></span></p>
+            <p class="mx-1"><span th:text="|좋아요 ${boardDetail.heart}|" style="font-size: 14px; font-weight: bold;"></span></p>
+            <p class="comment-count mx-1"></p>
         </div>
     </div>
 
@@ -74,7 +74,7 @@
 
     <!-- 댓글 입력 폼 -->
     <div class="comment w-100 mt-4">
-        <div class="comment-count mb-2"></div>
+        <div class="comment-count mb-2 border rounded-1 p-3"></div>
         <ul class="comment-list p-0">
             <!-- 댓글 리스트 들어가는 부분-->
         </ul>

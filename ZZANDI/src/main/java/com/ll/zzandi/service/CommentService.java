@@ -8,6 +8,10 @@ import com.ll.zzandi.enumtype.DeleteStatus;
 import com.ll.zzandi.repository.BoardRepository;
 import com.ll.zzandi.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,6 +50,26 @@ public class CommentService {
                     .build());
         }
         return commentList;
+    }
+
+    public Page<CommentListDto> findCommentList2(Long boardId, int page) {
+        PageRequest pageRequest = PageRequest.of(page, 30, Sort.by(Sort.Direction.ASC, "id"));
+        Page<Comment> commentList = commentRepository.findCommentList(pageRequest, boardId);
+
+        return commentList.map(comment -> CommentListDto.builder()
+                .commentId(comment.getId())
+                .boardId(comment.getBoard().getId())
+                .userUUID(comment.getUser().getId())
+                .userId(comment.getUser().getUserId())
+                .profile(comment.getUser().getUserprofileUrl())
+                .writer(comment.getUser().getUserNickname())
+                .parentId(comment.getParentId())
+                .content(comment.getContent().replace("\r\n", "<br>"))
+                .step(comment.getStep())
+                .count(comment.getCount())
+                .status(comment.getDeleteStatus())
+                .createdDate(comment.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm")))
+                .build());
     }
 
     public Comment findById(Long commentId) {

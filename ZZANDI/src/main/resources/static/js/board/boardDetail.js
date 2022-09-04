@@ -1,33 +1,40 @@
 'use strict';
 
+const content = document.querySelector("#content");
 const boardId = document.querySelector('.board-id').value;
 const userUUID = document.querySelector(".user-uuid").value;
 const commentCount = document.querySelectorAll(".comment-count");
 const commentList = document.querySelector(".comment-list");
-const content = document.querySelector("#content");
+const pagination = document.querySelector('.pagination');
+let lastPage = 0;
+let currPage = 0;
 
-window.onload = () => findCommentList(boardId);
+window.onload = () => findCommentList(boardId, 0);
 
-function findCommentList(boardId) {
-    fetch(`/comment/list/${boardId}`)
+function findCommentList(boardId, page) {
+    fetch(`/comment/list-json/${boardId}/${page}`)
         .then(response => response.json())
-        .then(data => {
-            const count = data.count;
-            const comment = data.comment;
+        .then(comments => {
+            const count = comments.totalElements;
+            const comment = comments.content;
+            lastPage = comments.totalPages - 1; // 마지막 페이지 번호
+            currPage = comments.pageable.pageNumber;
 
             for(let countBox of commentCount) {
                 countBox.innerHTML = `<span style="font-size: 14px; font-weight: bold;">댓글 ${count}개</span>`;
             }
 
+            pagination.innerHTML = commentPageList(comments);
+
             commentList.innerHTML = "";
             for (let i = 0; i < count; i++) {
                 let icon = '';
-                if (comment[i].step !== 0) {
+                if (comment[i].step > 0) {
                     icon = `<i class="fa-solid fa-reply fa-rotate-180 position-absolute" style="top: 10px; left: -15px; color: #ccc; font-size: 11px;"></i>`;
                 }
 
                 const buttonList = commentButtonList(comment[i], i + 1);
-                const ml = comment[i].step * 2; // 들여쓰기 깊이 계산
+                const ml = comment[i].step * 3; // 들여쓰기 깊이 계산
                 commentList.innerHTML +=
                     `<li class="comment-box mb-2 border-bottom" data-num="${i + 1}" style="margin-left:${ml}%; position: relative;">
                         ${icon}
@@ -47,6 +54,54 @@ function findCommentList(boardId) {
                     <div class="comment-form mb-3 hide" style="margin-left: ${ml}%;"></div>`;
             }
         });
+
+}
+
+function commentPageList(comments) {
+    let nowPage = comments.pageable.pageNumber;
+    let totalPage = comments.totalPages;
+
+    let startPage = Math.floor(nowPage / 10) * 10;
+    let endPage = startPage + 10 - 1;
+    if(endPage > totalPage) {
+        endPage = totalPage;
+    }
+    let hasPrev = comments.first;
+    let hasNext = comments.last;
+
+    let pageHTML = '';
+    const prevDisabled = hasPrev ? "disabled='disabled'" : '';
+    pageHTML +=
+        `<li class="page-item">
+            <button class="page-btn" onClick="findCommentList(${boardId}, 0);" ${prevDisabled} aria-label="Previous">
+                <i class="fa-solid fa-angles-left"></i>
+            </button>
+        </li>
+        <li class="page-item">
+            <button class="page-btn" onClick="findCommentList(${boardId}, ${nowPage - 1});" ${prevDisabled} aria-label="Previous">
+                <i class="fa-solid fa-angle-left"></i>
+            </button>
+        </li>`;
+
+    for (let i = startPage; i < endPage; i++) {
+        const active = (i === nowPage) ? 'active' : '';
+        pageHTML += `<li class="page-item"><button class="page-btn page-num ${active}" onclick="findCommentList(${boardId}, ${i})">${i + 1}</button></li>`;
+    }
+
+    const nextDisabled = hasNext ? "disabled='disabled'" : '';
+    pageHTML +=
+        `<li class="page-item">
+            <button class="page-btn" onClick="findCommentList(${boardId}, ${nowPage + 1});" ${nextDisabled} aria-label="Next">
+                <i class="fa-solid fa-angle-right"></i>
+            </button>
+        </li>
+        <li class="page-item">
+            <button class="page-btn" onClick="findCommentList(${boardId}, ${totalPage - 1});" ${nextDisabled}  aria-label="Next">
+                <i class="fa-solid fa-angles-right"></i>
+            </button>
+        </li>`;
+
+    return pageHTML;
 }
 
 function commentButtonList(comment, num) {
@@ -92,7 +147,6 @@ function createForm(num, commentId) {
 }
 
 function updateForm(num, content, commentId, count) {
-    console.log(content);
     const form = document.querySelector(`.comment-list .comment-form:nth-of-type(${num})`);
     form.classList.toggle("hide");
     content = content.replace(/(<br>)/g, '\r\n');
@@ -110,7 +164,7 @@ function updateForm(num, content, commentId, count) {
     document.querySelector(".update-content").focus();
 }
 
-function create(){
+function create() {
     let value = content.value;
     value = value.replace(/(\n|\r\n)/g, '<br>');
     const comment = {
@@ -126,7 +180,7 @@ function create(){
         body: JSON.stringify(comment)
     }).then(() => {
         content.value = "";
-        findCommentList(boardId);
+        findCommentList(boardId, lastPage);
     });
 }
 
@@ -146,14 +200,14 @@ function createReply(commentId){
         body: JSON.stringify(comment)
     }).then(() => {
         content.value = "";
-        findCommentList(boardId);
+        findCommentList(boardId, currPage);
     });
 }
 
 function update(commentId, count) {
     if(count > 0) {
         alert("대댓글이 있으면 수정하실 수 없습니다.");
-        findCommentList(boardId);
+        findCommentList(boardId, currPage);
         return false;
     }
 
@@ -168,7 +222,7 @@ function update(commentId, count) {
         },
         body: JSON.stringify(comment)
     }).then(() => {
-        findCommentList(boardId);
+        findCommentList(boardId, currPage);
     })
 }
 
@@ -178,7 +232,7 @@ function deleteComment(commentId) {
         fetch(url, {
             method: "POST"
         }).then(() => {
-            findCommentList(boardId);
+            findCommentList(boardId, currPage);
         });
     }
 }

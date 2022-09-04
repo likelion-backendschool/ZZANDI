@@ -85,7 +85,7 @@ public class BoardController {
 
     @PostMapping("/delete/{boardId}")
     public String deleteBoard(@PathVariable Long studyId, @PathVariable Long boardId) {
-        commentService.deleteComment(boardId);
+        commentService.deleteCommentByBoardId(boardId);
         boardService.deleteBoard(boardId);
         return "redirect:/%d/board/list".formatted(studyId);
     }

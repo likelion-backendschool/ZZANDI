@@ -30,6 +30,20 @@
         .hide {
             display: none;
         }
+
+        .page-btn {
+            background-color: transparent;
+            font-size: 11px;
+            border: none;
+            outline: none;
+        }
+
+        .active {
+            background-color: #c5e1a5;
+            color: white;
+            border-radius: 3px;
+            pointer-events: none;
+        }
     </style>
 </head>
 <body>
@@ -49,10 +63,10 @@
             <img th:if="${!#strings.isEmpty(boardDetail.profile)}" th:src="${boardDetail.profile}" alt="profile" width="30" height="30" class="rounded border bg-light" />
             <p class="align-self-center" th:text="${boardDetail.writer}" style="margin-left: 5px; margin-bottom: 0; font-size: 14px;">작성자</p>
         </div>
-        <div class="d-flex justify-content-evenly">
-            <p class="mx-1">조회 수 <span th:text="${boardDetail.views}"></span></p>
-            <p class="mx-1">좋아요 수 <span th:text="${boardDetail.heart}"></span></p>
-            <p class="mx-1">댓글 <span th:text="${boardDetail.count}"></span></p>
+        <div class="d-flex justify-content-evenly mb-0 align-items-center">
+            <p class="mx-1"><span th:text="|조회수 ${boardDetail.views}|" style="font-size: 14px; font-weight: bold;"></span></p>
+            <p class="mx-1"><span th:text="|좋아요 ${boardDetail.heart}|" style="font-size: 14px; font-weight: bold;"></span></p>
+            <p class="comment-count mx-1"></p>
         </div>
     </div>
 
@@ -72,16 +86,16 @@
         </form>
     </div>
 
-    <!-- 댓글 입력 폼 -->
     <div class="comment w-100 mt-4">
-        <div class="comment-count mb-2"></div>
-        <ul class="comment-list p-0">
-            <!-- 댓글 리스트 들어가는 부분-->
-        </ul>
+        <div class="comment-count mb-2 border rounded-1 p-3"></div>
+        <ul class="comment-list p-0"></ul>
+
+        <nav class="d-flex justify-content-center">
+            <ul class="pagination mt-2"></ul>
+        </nav>
 
         <div class="comment-form">
             <span style="font-size: 14px;">댓글 쓰기</span>
-
             <div class="d-flex justify-content-between">
                 <textarea id="content" name="content" class="form-control" placeholder="따듯한 댓글 부탁드립니다." style="height: 70px; font-size: 12px;"></textarea>
                 <button class="btn btn-secondary btn-sm" th:onclick="create()" style="font-size: 12px; width: 100px; margin-left: 5px;">등록</button>

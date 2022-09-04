@@ -8,6 +8,10 @@ import com.ll.zzandi.enumtype.DeleteStatus;
 import com.ll.zzandi.repository.BoardRepository;
 import com.ll.zzandi.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,11 +44,36 @@ public class CommentService {
                     .parentId(comment.getParentId())
                     .content(content)
                     .step(comment.getStep())
+                    .count(comment.getCount())
                     .status(comment.getDeleteStatus())
                     .createdDate(comment.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm")))
                     .build());
         }
         return commentList;
+    }
+
+    public Page<CommentListDto> findCommentList2(Long boardId, int page) {
+        PageRequest pageRequest = PageRequest.of(page, 30, Sort.by(Sort.Direction.ASC, "id"));
+        Page<Comment> commentList = commentRepository.findCommentList(pageRequest, boardId);
+
+        return commentList.map(comment -> CommentListDto.builder()
+                .commentId(comment.getId())
+                .boardId(comment.getBoard().getId())
+                .userUUID(comment.getUser().getId())
+                .userId(comment.getUser().getUserId())
+                .profile(comment.getUser().getUserprofileUrl())
+                .writer(comment.getUser().getUserNickname())
+                .parentId(comment.getParentId())
+                .content(comment.getContent().replace("\r\n", "<br>"))
+                .step(comment.getStep())
+                .count(comment.getCount())
+                .status(comment.getDeleteStatus())
+                .createdDate(comment.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm")))
+                .build());
+    }
+
+    public Comment findById(Long commentId) {
+        return commentRepository.findById(commentId).orElseThrow(() -> new IllegalArgumentException("해당되는 댓글이 없습니다!"));
     }
 
     @Transactional
@@ -111,7 +140,23 @@ public class CommentService {
     }
 
     @Transactional
-    public void deleteComment(Long boardId) {
+    public void deleteCommentByCommentId(Long commentId) {
+        Comment findComment = commentRepository.findById(commentId).orElseThrow(() -> new IllegalArgumentException("댓글을 찾을 수 없습니다."));
+        Long childCommentCount = findComment.getCount();
+
+        if(childCommentCount > 0) {
+            commentRepository.updateSingleCommentByCommentId(DeleteStatus.DELETE, commentId);
+        } else {
+            if (findComment.getParentId() > 0) {
+                Comment parentComment = commentRepository.findById(findComment.getParentId()).orElseThrow(() -> new IllegalArgumentException("부모 댓글을 찾을 수 없습니다."));
+                parentComment.reduceCount();
+            }
+            commentRepository.deleteSingleCommentByCommentId(commentId);
+        }
+    }
+
+    @Transactional
+    public void deleteCommentByBoardId(Long boardId) {
         commentRepository.deleteCommentByBoardId(boardId);
     }
 }

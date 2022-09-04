@@ -1,3 +1,4 @@
+<meta charset="UTF-8">
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
@@ -9,6 +10,16 @@
     <h1> Study List </h1>
     <div>
         <form>
+            <select th:name="st">
+                <option th:value="BOOK" value="BOOK" th:selected="${#strings.equals(param.st, 'BOOK')}">BOOK</option>
+                <option th:value="LECTURE" th:selected="${#strings.equals(param.st, 'LECTURE')}">LECTURE</option>
+                <option th:value="ALL" th:selected="${param.st} == null or ${#strings.equals(param.st, 'ALL')}">ALL</option>
+            </select>
+            <select name="ss">
+                <option th:value="RECRUIT" th:selected="${#strings.equals(param.ss, 'RECRUIT')}">모집 중</option>
+                <option th:value="PROGRESS" th:selected="${#strings.equals(param.ss, 'PROGRESS')}">모집 완료</option>
+                <option th:value="ALL" th:selected="${param.ss} == null or ${#strings.equals(param.ss, 'ALL')}">ALL</option>
+            </select>
             <input type="text" name="kw" th:value="${param.kw}" placeholder="검색어">
             <button type="submit">검색</button>
         </form>

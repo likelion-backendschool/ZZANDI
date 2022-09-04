@@ -91,11 +91,12 @@ public class StudyController {
     }
 
     @GetMapping("/study/list")
-    public String studyList(Model model, @RequestParam(defaultValue = "") String kw) {
+    public String studyList(Model model,@RequestParam(defaultValue = "ALL") String st,@RequestParam(defaultValue = "ALL") String ss, @RequestParam(defaultValue = "") String kw) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
 
-        List<Study> studyList = studyService.getList(kw);
+        List<Study> studyList = studyService.getList(st, ss, kw);
+
 
         model.addAttribute("studyList", studyList);
         model.addAttribute("user", user);

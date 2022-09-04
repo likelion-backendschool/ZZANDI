@@ -11,6 +11,7 @@ import com.ll.zzandi.repository.BoardRepository;
 import com.ll.zzandi.repository.BookRepository;
 import com.ll.zzandi.repository.CommentRepository;
 import com.ll.zzandi.repository.StudyRepository;
+import java.util.ArrayList;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -155,8 +156,24 @@ public class StudyService {
         return studyRepository.findAllByStudyTitleContainsOrUser_userIdContains(kw, kw);
     }
 
-    public List<Study> getList(String kw) {
-        return (kw == null) ? findAll() : findAllByStudyTitleContainsOrUser_userIdContains(kw);
+    public List<Study> getList(String st, String ss, String kw) {
+
+        if (st.equals("ALL")) {
+            if (ss.equals("ALL")) {
+                return studyRepository.findAllByStudyTitleContainsOrUser_userIdContains(kw, kw);
+            }
+            else {
+                return studyRepository.findAllByStudyTitleContainsAndStudyStatusOrUser_userIdContainsAndStudyStatus(kw, StudyStatus.valueOf(ss), kw, StudyStatus.valueOf(ss));
+            }
+        }
+        else {
+            if(ss.equals("ALL")) {
+                return studyRepository.findAllByUser_userIdContainsAndStudyTypeOrStudyTitleContainsAndStudyType(kw, StudyType.valueOf(st), kw, StudyType.valueOf(st));
+            }
+            else {
+                return studyRepository.findAllByStudyTypeAndStudyStatusAndStudyTitleContainsOrStudyTypeAndStudyStatusAndUser_userIdContains(StudyType.valueOf(st), StudyStatus.valueOf(ss),kw, StudyType.valueOf(st), StudyStatus.valueOf(ss), kw);
+            }
+        }
     }
 
     /*

@@ -42,6 +42,9 @@
                             <p th:text="${lectures.lecturer}"></p>
                             <p th:text="${lectures.lectureNumber}"></p>
                         </td>
+                        <td> <a th:href="@{/study/coverUpload/{studyId}(studyId = ${studies.getId})}" th:text="'스터디 대표이미지 생성'">
+                        </a>
+                        </td>
                     </tbody>
                 </table>
                 <div class="d-flex justify-content-start">

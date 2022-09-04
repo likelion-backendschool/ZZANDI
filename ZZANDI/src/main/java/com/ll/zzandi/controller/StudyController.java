@@ -52,7 +52,6 @@ public class StudyController {
     private final StudyService studyService;
     private final BookService bookService;
     private final LectureService lectureService;
-    private final BoardService boardService;
     private final TeamMateService teamMateService;
     private final UserService userService;
 
@@ -96,6 +95,7 @@ public class StudyController {
         User user = (User) authentication.getPrincipal();
 
         List<Study> studyList = studyService.getList(st, ss, kw);
+
 
 
         model.addAttribute("studyList", studyList);

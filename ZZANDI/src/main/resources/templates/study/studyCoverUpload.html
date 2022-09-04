@@ -1,0 +1,59 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title> SpringBoot & AWS S3</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <script
+            src="https://code.jquery.com/jquery-3.3.1.js"
+            integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+            crossorigin="anonymous"></script>
+</head>
+<body>
+<h1>
+    스터디 대표이미지 설정
+</h1>
+<div class="col-md-12">
+    <div class="col-md-2">
+        <div class="form-group">
+            <label for="studyCoverUrl">파일 업로드</label>
+            <input type="file" id="studyCoverUrl" name="studyCoverUrl" accept=".gif, .jpg, .png, .jpeg, .PNG">
+            <input type="hidden" id="study-id" th:value="${studyId}">
+        </div>
+        <button type="button" class="btn btn-primary" id="btn-save">저장</button>
+    </div>
+</div>
+<script >
+    $("#studyCoverUrl").change(function(e) {
+
+        let studyId = document.getElementById("study-id").value;
+        const fileInput = document.getElementById("studyCoverUrl");
+        const reader = new FileReader();
+        let img = document.createElement("img");
+        img.id='studyCoverImg';
+        img.src=e.target.result;
+        const formData = new FormData()
+        var fileName = $('#studyCoverUrl').val();
+        formData.append("coverImage", fileInput.files[0],fileName);
+        console.log(studyId);
+        console.log(formData);
+        $.ajax("/study/coverUpload/" + studyId,{
+            method: 'POST',
+            data: formData,
+            processData : false,	// data 파라미터 강제 string 변환 방지
+            contentType : false,	// application/x-www-form-urlencoded; 방지
+            success() {
+                console.log('Upload success');
+                location.replace("/");
+            },
+            error() {
+                console.log('Upload error');
+            },
+
+        });
+        reader.readAsDataURL(e.target.files[0]);
+
+    });
+
+
+</script>
+</body>

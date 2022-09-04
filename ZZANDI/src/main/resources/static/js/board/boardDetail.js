@@ -17,7 +17,7 @@ function findCommentList(boardId, page) {
         .then(comments => {
             const count = comments.totalElements;
             const comment = comments.content;
-            lastPage = comments.totalPages - 1; // 마지막 페이지 번호
+            lastPage = (comments.totalPages - 1 > 0) ? comments.totalPages - 1 : 0;
             currPage = comments.pageable.pageNumber;
 
             for(let countBox of commentCount) {

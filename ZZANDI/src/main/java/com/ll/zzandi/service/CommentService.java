@@ -52,7 +52,7 @@ public class CommentService {
         return commentList;
     }
 
-    public Page<CommentListDto> findCommentList2(Long boardId, int page) {
+    public Page<CommentListDto> findCommentList(Long boardId, int page) {
         PageRequest pageRequest = PageRequest.of(page, 30, Sort.by(Sort.Direction.ASC, "id"));
         Page<Comment> commentList = commentRepository.findCommentList(pageRequest, boardId);
 

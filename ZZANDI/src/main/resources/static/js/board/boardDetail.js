@@ -12,7 +12,7 @@ let currPage = 0;
 window.onload = () => findCommentList(boardId, 0);
 
 function findCommentList(boardId, page) {
-    fetch(`/comment/list-json/${boardId}/${page}`)
+    fetch(`/comment/list/${boardId}/${page}`)
         .then(response => response.json())
         .then(comments => {
             const count = comments.totalElements;

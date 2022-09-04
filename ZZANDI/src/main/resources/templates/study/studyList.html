@@ -41,6 +41,8 @@
                        th:text="${study.studyTitle}"></a></td>
                 <td th:text="${study.user.userId}"></td>
                 <td th:text="${study.studyStatus}"></td>
+                <td><img th:if="${!#strings.isEmpty(study?.studyCoverUrl)}"
+                         th:src="${study.studyCoverUrl}" style="width: 100px; height: 100px;"></td>
                 <td><a th:if="${user.userId == study.user.userId}"
                        th:href="@{/study/delete/{studyId}(studyId = ${study.getId})}" th:text="삭제"></a></td>
                 <td>

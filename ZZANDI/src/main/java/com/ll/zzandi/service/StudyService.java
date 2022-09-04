@@ -7,20 +7,24 @@ import com.ll.zzandi.dto.LectureDto;
 import com.ll.zzandi.dto.StudyDto;
 import com.ll.zzandi.enumtype.StudyStatus;
 import com.ll.zzandi.enumtype.StudyType;
-import com.ll.zzandi.repository.BoardRepository;
-import com.ll.zzandi.repository.BookRepository;
-import com.ll.zzandi.repository.CommentRepository;
-import com.ll.zzandi.repository.StudyRepository;
+import com.ll.zzandi.enumtype.TableType;
+import com.ll.zzandi.repository.*;
+
+import java.io.IOException;
 import java.util.ArrayList;
+
+import com.ll.zzandi.util.aws.ImageUploadService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -32,12 +36,15 @@ public class StudyService {
     private final BookRepository bookRepository;
     private final BoardRepository boardRepository;
     private final CommentRepository commentRepository;
+    private final ImageUploadService imageUploadService;
+    private final FileRepository fileRepository;
 
     public Study createStudyWithBook(@Valid StudyDto studyDto, Book book, User user) {
         Study study = new Study(user, studyDto.getStudyTitle(), book, null, StudyType.BOOK,
                 studyDto.getStudyStart(),
                 studyDto.getStudyEnd(), studyDto.getStudyPeople(), studyDto.getStudyTag(), 0,
                 StudyStatus.RECRUIT);
+        study.setStudyCoverUrl("https://cdn-icons-png.flaticon.com/512/2436/2436636.png");
         return studyRepository.save(study);
     }
 
@@ -46,6 +53,7 @@ public class StudyService {
                 studyDto.getStudyStart(),
                 studyDto.getStudyEnd(), studyDto.getStudyPeople(), studyDto.getStudyTag(), 0,
                 StudyStatus.RECRUIT);
+        study.setStudyCoverUrl("https://cdn-icons-png.flaticon.com/512/2436/2436636.png");
         return studyRepository.save(study);
     }
 
@@ -174,6 +182,32 @@ public class StudyService {
                 return studyRepository.findAllByStudyTypeAndStudyStatusAndStudyTitleContainsOrStudyTypeAndStudyStatusAndUser_userIdContains(StudyType.valueOf(st), StudyStatus.valueOf(ss),kw, StudyType.valueOf(st), StudyStatus.valueOf(ss), kw);
             }
         }
+    }
+
+    public void updateCoverImg(MultipartFile multipartFile, long studyUUID) throws IOException {
+        Study study=studyRepository.findById(studyUUID).orElseThrow(RuntimeException::new);
+
+        String originalName=multipartFile.getOriginalFilename();
+        System.out.println("!!!!!!!!!!!!!!!오리지널"+originalName);
+        String[] name=originalName.split("\\\\");
+        final String ext = name[2].substring(name[2].lastIndexOf('.'));
+        final String saveFileName = getUuid() + ext;
+        String studyCoverUrl=imageUploadService.upload(saveFileName,multipartFile);
+        File file=File.builder()
+                .fileName(saveFileName)
+                .originalName(name[2])
+                .fileExt(ext)
+                .fileSize(multipartFile.getSize())
+                .fileUrl(studyCoverUrl)
+                .tableId(studyUUID)
+                .tableType(TableType.STUDY)
+                .build();
+        file.deleteFileStatus();
+        fileRepository.save(file);
+        study.getStudyCoverUrl(studyCoverUrl);
+    }
+    private static String getUuid() {
+        return UUID.randomUUID().toString().replaceAll("-", "");
     }
 
     /*

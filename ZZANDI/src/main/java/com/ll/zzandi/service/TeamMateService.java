@@ -113,6 +113,38 @@ public class TeamMateService {
     }
   }
 
+  public void delegateTeamMateAccept(User user, Long studyId) {
+    User currentUser = userRepository.findByUserId(user.getUserId()).orElseThrow(RuntimeException::new);
+    Study study = studyRepository.findById(studyId).orElseThrow(RuntimeException::new);
+    User prev = study.getUser();
+    TeamMate teamMate = teamMateRepository.findByUserAndAndStudy(prev, study)
+        .orElseThrow(RuntimeException::new);
+
+    teamMateRepository.delete(teamMate);
+    studyService.updateRecruitStudyStatus(study);
+    study.setUser(currentUser);
+    List<TeamMate> teamMateList = teamMateRepository.findByStudy(study);
+    for (TeamMate teamMate1 : teamMateList) {
+      teamMate1.setTeamMateDelegate(TeamMateDelegate.NONE);
+      teamMateRepository.save(teamMate1);
+    }
+    studyRepository.save(study);
+    sendDelegateAcceptEmail(prev, study, currentUser);
+  }
+
+  private void sendDelegateAcceptEmail(User user, Study study, User delegateUser) {
+    String message = "안녕하세요. %s님, <br/>".formatted(user.getUserNickname())
+        + "%s님이 [%s] 스터디 팀장 권한 위임을 수락하셨습니다.<br/>".formatted(delegateUser.getUserNickname(), study.getStudyTitle())
+        + "따라서, 해당 스터디에서의 탈퇴가 정상적으로 처리되었습니다.";
+
+    EmailMessage emailMessage = EmailMessage.builder()
+        .to(user.getUserEmail())
+        .subject("ZZANDI, 스터디 팀장 권한 위임 수락 알림")
+        .message(message)
+        .build();
+    emailService.sendEmail(emailMessage);
+  }
+
   private void sendDelegateEmail(Study study, User user, User delegateUser) {
     String message = "안녕하세요. %s님, <br/>".formatted(delegateUser.getUserNickname())
         + "%s님이 [%s] 스터디 팀장 권한 위임을 신청하셨습니다.<br/>".formatted(user.getUserNickname(), study.getStudyTitle())

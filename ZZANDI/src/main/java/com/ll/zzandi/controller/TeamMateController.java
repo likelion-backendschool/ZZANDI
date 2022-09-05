@@ -64,4 +64,14 @@ public class TeamMateController {
     teamMateService.delegateTeamMate(user, studyId, teamMateId);
     return "redirect:/study/detail/%d".formatted(studyId);
   }
+
+  /*
+  팀장 위임 수락
+   */
+  @PostMapping("/delegate")
+  public String delegateTeamMateAccept(@AuthenticationPrincipal User user, @PathVariable Long studyId) {
+    teamMateService.delegateTeamMateAccept(user, studyId);
+    System.out.println(user.getUserNickname());
+    return "redirect:/study/detail/%d".formatted(studyId);
+  }
 }

@@ -55,5 +55,6 @@ public class TeamMate extends BaseEntity{
     this.study = study;
     this.teamRate = teamRate;
     this.teamMateStatus = teamMateStatus;
+    this.teamMateDelegate = TeamMateDelegate.NONE;
   }
 }

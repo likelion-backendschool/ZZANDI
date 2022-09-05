@@ -44,7 +44,7 @@ public class SecurityConfig{
             .and()
             .authorizeRequests()
             .antMatchers("/images/**", "/js/**", "/bootstrap/**").permitAll()
-            .antMatchers("/", "/user/join","/test", "/h2-console/**", "/user/login/**", "/user/check-email-token/**", "/user/denied/**").permitAll()
+            .antMatchers("/", "/user/join","/test", "/h2-console/**", "/user/login/**", "/user/check-email-token/**", "/user/denied/**", "/comment/**").permitAll()
             .antMatchers("/admin/**").hasRole("ADMIN")
             .anyRequest().authenticated()
             .and()

@@ -29,7 +29,6 @@ public class Comment extends BaseEntity {
     @Column(name = "CM_STATUS")
     private DeleteStatus deleteStatus; // 댓글 삭제 여부
 
-    @LastModifiedDate
     @Column(name = "DELETED_DATE")
     private LocalDateTime deletedDate; // 삭제일
 
@@ -58,5 +57,8 @@ public class Comment extends BaseEntity {
 
     public void changeComment(Comment comment) {
         this.content = comment.getContent();
+    }
+    public void reduceCount() {
+        --count;
     }
 }

@@ -53,6 +53,9 @@ public class Study {
     @Column(name = "STUDY_RATE")
     private int studyRate;
 
+    @Column(name = "STUDY_COVER_URL")
+    private String studyCoverUrl;
+
     @Column(name = "STUDY_STATUS")
     @Enumerated(EnumType.STRING)
     private StudyStatus studyStatus;
@@ -76,6 +79,9 @@ public class Study {
         this.studyTag = studyTag;
         this.studyRate = studyRate;
         this.studyStatus = studyStatus;
+    }
+    public void getStudyCoverUrl(String studyCoverUrl) {
+        this.studyCoverUrl=studyCoverUrl;
     }
 }
 

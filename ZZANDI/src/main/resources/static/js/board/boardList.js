@@ -5,9 +5,7 @@ const pagination = document.querySelector('.pagination');
 const currPage = document.querySelector(".page").value; // 현재 페이지 정보
 const studyId = document.querySelector(".study-id").value;
 
-window.onload = () => {
-    findByPage(currPage, studyId);
-}
+window.onload = () => findByPage(currPage, studyId);
 
 // 뒤로가기 / 앞으로가기 처리
 window.addEventListener('popstate', (e) => {

@@ -1,37 +1,40 @@
 'use strict';
 
+const content = document.querySelector("#content");
 const boardId = document.querySelector('.board-id').value;
 const userUUID = document.querySelector(".user-uuid").value;
-const commentCount = document.querySelector(".comment-count");
+const commentCount = document.querySelectorAll(".comment-count");
 const commentList = document.querySelector(".comment-list");
-const content = document.querySelector("#content");
+const pagination = document.querySelector('.pagination');
+let lastPage = 0;
+let currPage = 0;
 
-window.onload = () => {
-    findCommentList(boardId);
-}
+window.onload = () => findCommentList(boardId, 0);
 
-// ✨ Print Comment List!
-function findCommentList(boardId) {
-    fetch(`/comment/list/${boardId}`)
+function findCommentList(boardId, page) {
+    fetch(`/comment/list/${boardId}/${page}`)
         .then(response => response.json())
-        .then(data => {
-            const count = data.count;
-            const comment = data.comment;
+        .then(comments => {
+            const count = comments.totalElements;
+            const comment = comments.content;
+            lastPage = comments.totalPages - 1; // 마지막 페이지 번호
+            currPage = comments.pageable.pageNumber;
 
-            commentCount.innerHTML =
-                `<div class="border rounded-1 p-3">
-                    <span style="font-size: 14px; font-weight: bold;">댓글 ${count}개</span>
-                </div>`;
+            for(let countBox of commentCount) {
+                countBox.innerHTML = `<span style="font-size: 14px; font-weight: bold;">댓글 ${count}개</span>`;
+            }
+
+            pagination.innerHTML = commentPageList(comments);
 
             commentList.innerHTML = "";
             for (let i = 0; i < count; i++) {
                 let icon = '';
-                if (comment[i].step !== 0) {
+                if (comment[i].step > 0) {
                     icon = `<i class="fa-solid fa-reply fa-rotate-180 position-absolute" style="top: 10px; left: -15px; color: #ccc; font-size: 11px;"></i>`;
                 }
 
                 const buttonList = commentButtonList(comment[i], i + 1);
-                const ml = comment[i].step * 2; // 들여쓰기 깊이 계산
+                const ml = comment[i].step * 3; // 들여쓰기 깊이 계산
                 commentList.innerHTML +=
                     `<li class="comment-box mb-2 border-bottom" data-num="${i + 1}" style="margin-left:${ml}%; position: relative;">
                         ${icon}
@@ -45,25 +48,73 @@ function findCommentList(boardId) {
                             </div>
                             <div class="d-flex" style="font-size: 12px;">${buttonList}</div>
                         </div>
-                        <div style="font-size: 12px; margin-bottom: 5px;">${comment[i].content}</div>
+                        <div style="font-size: 12px; margin-bottom: 5px; overflow: auto;">${comment[i].content}</div>
                     </li>
                     <!-- 대댓글 & 댓글 수정 입력창 -->
                     <div class="comment-form mb-3 hide" style="margin-left: ${ml}%;"></div>`;
             }
         });
+
+}
+
+function commentPageList(comments) {
+    let nowPage = comments.pageable.pageNumber;
+    let totalPage = comments.totalPages;
+
+    let startPage = Math.floor(nowPage / 10) * 10;
+    let endPage = startPage + 10 - 1;
+    if(endPage > totalPage) {
+        endPage = totalPage;
+    }
+    let hasPrev = comments.first;
+    let hasNext = comments.last;
+
+    let pageHTML = '';
+    const prevDisabled = hasPrev ? "disabled='disabled'" : '';
+    pageHTML +=
+        `<li class="page-item">
+            <button class="page-btn" onClick="findCommentList(${boardId}, 0);" ${prevDisabled} aria-label="Previous">
+                <i class="fa-solid fa-angles-left"></i>
+            </button>
+        </li>
+        <li class="page-item">
+            <button class="page-btn" onClick="findCommentList(${boardId}, ${nowPage - 1});" ${prevDisabled} aria-label="Previous">
+                <i class="fa-solid fa-angle-left"></i>
+            </button>
+        </li>`;
+
+    for (let i = startPage; i < endPage; i++) {
+        const active = (i === nowPage) ? 'active' : '';
+        pageHTML += `<li class="page-item"><button class="page-btn page-num ${active}" onclick="findCommentList(${boardId}, ${i})">${i + 1}</button></li>`;
+    }
+
+    const nextDisabled = hasNext ? "disabled='disabled'" : '';
+    pageHTML +=
+        `<li class="page-item">
+            <button class="page-btn" onClick="findCommentList(${boardId}, ${nowPage + 1});" ${nextDisabled} aria-label="Next">
+                <i class="fa-solid fa-angle-right"></i>
+            </button>
+        </li>
+        <li class="page-item">
+            <button class="page-btn" onClick="findCommentList(${boardId}, ${totalPage - 1});" ${nextDisabled}  aria-label="Next">
+                <i class="fa-solid fa-angles-right"></i>
+            </button>
+        </li>`;
+
+    return pageHTML;
 }
 
 function commentButtonList(comment, num) {
     let html = "";
-    if (parseInt(userUUID) === comment.userUUID) {
+    if (parseInt(userUUID) === comment.userUUID && comment.status === 'EXIST') {
         html =
                `<div class="justify-content-between align-self-center mx-2">
                    <i class="fa-regular fa-thumbs-up mx-2"></i>
                    <i class="fa-regular fa-thumbs-down"></i>
                </div>
                <div class="d-flex justify-content-start">
-                   <button type="button" onclick="updateForm(${num}, '${comment.content}', ${comment.commentId})" style="border: none; outline: none; background-color: transparent; color: #666666;">수정</button>
-                   <button type="button" onclick="deleteComment()" style="border: none; outline: none; background-color: transparent; color: #666666;">삭제</button>
+                   <button type="button" onclick="updateForm(${num}, '${comment.content}', ${comment.commentId}, ${comment.count})" style="border: none; outline: none; background-color: transparent; color: #666666;">수정</button>
+                   <button type="button" onclick="deleteComment(${comment.commentId}, ${comment.count})" style="border: none; outline: none; background-color: transparent; color: #666666;">삭제</button>
                    <button type="button" onclick="createForm(${num}, ${comment.commentId})" style="border: none; outline: none; background-color: transparent; color: #666666;">댓글</button>
                </div>`;
 
@@ -78,7 +129,6 @@ function commentButtonList(comment, num) {
     return html;
 }
 
-// Create Sub-Comment Form!
 function createForm(num, commentId) {
     const form = document.querySelector(`.comment-list .comment-form:nth-of-type(${num})`);
     form.classList.toggle("hide");
@@ -96,8 +146,7 @@ function createForm(num, commentId) {
     document.querySelector(".reply-content").focus();
 }
 
-// Create Comment Update Form!
-function updateForm(num, content, commentId) {
+function updateForm(num, content, commentId, count) {
     const form = document.querySelector(`.comment-list .comment-form:nth-of-type(${num})`);
     form.classList.toggle("hide");
     content = content.replace(/(<br>)/g, '\r\n');
@@ -108,20 +157,14 @@ function updateForm(num, content, commentId) {
                             <span style="font-size: 12px;">댓글 수정</span>
                         </div>
                         <div class="d-flex justify-content-between">
-                            <textarea class="form-control update-content" placeholder="따듯한 댓글 부탁드립니다." style="height: 70px; font-size: 12px;" autofocus>${content}</textarea>                            
-                            <button class="btn btn-secondary btn-sm" onclick="update(${commentId})" style="font-size: 12px; width: 100px; margin-left: 5px;">등록</button>
+                            <textarea class="form-control update-content" placeholder="따듯한 댓글 부탁드립니다." style="height: 70px; font-size: 12px;">${content}</textarea>                            
+                            <button class="btn btn-secondary btn-sm" onclick="update(${commentId}, ${count})" style="font-size: 12px; width: 100px; margin-left: 5px;">등록</button>
                         </div>`;
 
-    const taValue = document.querySelector(".update-content").value;
-    const ta = document.querySelector(".update-content");
-
-    ta.focus();
-    ta.value = '';
-    ta.value = taValue;
+    document.querySelector(".update-content").focus();
 }
 
-// Create Comment!
-function create(){
+function create() {
     let value = content.value;
     value = value.replace(/(\n|\r\n)/g, '<br>');
     const comment = {
@@ -137,14 +180,12 @@ function create(){
         body: JSON.stringify(comment)
     }).then(() => {
         content.value = "";
-        findCommentList(boardId);
+        findCommentList(boardId, lastPage);
     });
 }
 
-// 대댓글 입력 폼
 function createReply(commentId){
-    let reply = document.querySelector(".reply-content").value;
-    reply = reply.replace(/(\n|\r\n)/g, '<br>');
+    const reply = document.querySelector(".reply-content").value.replace(/(\n|\r\n)/g, '<br>');
     const comment = {
         id : commentId,
         content: reply
@@ -159,14 +200,18 @@ function createReply(commentId){
         body: JSON.stringify(comment)
     }).then(() => {
         content.value = "";
-        findCommentList(boardId);
+        findCommentList(boardId, currPage);
     });
 }
 
-// Update Comment!
-function update(commentId) {
-    let updateParam = document.querySelector(".update-content").value;
-    updateParam = updateParam.replace(/(\n|\r\n)/g, '<br>');
+function update(commentId, count) {
+    if(count > 0) {
+        alert("대댓글이 있으면 수정하실 수 없습니다.");
+        findCommentList(boardId, currPage);
+        return false;
+    }
+
+    const updateParam = document.querySelector(".update-content").value.replace(/(\n|\r\n)/g, '<br>');
     const comment = {"content": updateParam};
 
     const url = `/comment/update/${commentId}`;
@@ -177,15 +222,21 @@ function update(commentId) {
         },
         body: JSON.stringify(comment)
     }).then(() => {
-        findCommentList(boardId);
+        findCommentList(boardId, currPage);
     })
 }
 
-function deleteComment() {
-    alert("구현중...");
+function deleteComment(commentId) {
+    if (confirm("정말로 삭제하시겠습니까?")) {
+        const url = `/comment/delete/${commentId}`;
+        fetch(url, {
+            method: "POST"
+        }).then(() => {
+            findCommentList(boardId, currPage);
+        });
+    }
 }
 
-// Alert Delete Comment!
 function deleteBoard() {
     if (confirm("정말로 삭제하시겠습니까?") === false) {
         return false;

@@ -16,3 +16,10 @@ function dis() {
         $('#lecture').hide();
     }
 }
+
+function delegate() {
+    let delegates = document.querySelectorAll('.delegate');
+    delegates.forEach(delegate => {
+        delegate.style.display = 'inline';
+    });
+}

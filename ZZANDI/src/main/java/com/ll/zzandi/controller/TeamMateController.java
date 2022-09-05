@@ -32,7 +32,7 @@ public class TeamMateController {
   @PostMapping("/update/{teamMateId}")
   public String updateTeamMate(@AuthenticationPrincipal User user, @PathVariable Long studyId, @PathVariable Long teamMateId, Model model) {
     teamMateService.updateTeamMate(user, studyId, teamMateId);
-    return"redirect:/study/detail/%d".formatted(studyId);
+    return "redirect:/study/detail/%d".formatted(studyId);
   }
 
   /*
@@ -53,6 +53,15 @@ public class TeamMateController {
   @PostMapping("/quit")
   public String quitTeamMate(@AuthenticationPrincipal User user, @PathVariable Long studyId) {
     teamMateService.quitTeamMate(user, studyId);
+    return "redirect:/study/detail/%d".formatted(studyId);
+  }
+
+  /*
+  팀원에게 위임 신청
+   */
+  @PostMapping("/delegate/{teamMateId}")
+  public String delegateTeamMate(@AuthenticationPrincipal User user, @PathVariable Long studyId, @PathVariable Long teamMateId) {
+    teamMateService.delegateTeamMate(user, studyId, teamMateId);
     return "redirect:/study/detail/%d".formatted(studyId);
   }
 }

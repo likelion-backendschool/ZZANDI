@@ -4,6 +4,7 @@ import com.ll.zzandi.domain.Study;
 import com.ll.zzandi.domain.TeamMate;
 import com.ll.zzandi.domain.User;
 import com.ll.zzandi.enumtype.StudyStatus;
+import com.ll.zzandi.enumtype.TeamMateDelegate;
 import com.ll.zzandi.enumtype.TeamMateStatus;
 import com.ll.zzandi.exception.TeamMateException;
 import com.ll.zzandi.repository.StudyRepository;
@@ -94,6 +95,36 @@ public class TeamMateService {
 
     // 팀장의 경우 추가 예정
     // PROGRESS의 경우, 달성률 관련 개발 진행 후 추가 예정
+  }
+
+  public void delegateTeamMate(User user, Long studyId, Long teamMateId) {
+    User currentUser = userRepository.findByUserId(user.getUserId()).orElseThrow(RuntimeException::new);
+    Study study = studyRepository.findById(studyId).orElseThrow(RuntimeException::new);
+    TeamMate teamMate = teamMateRepository.findByUserAndAndStudy(currentUser, study)
+        .orElseThrow(RuntimeException::new);
+    TeamMate delegateTeamMate = teamMateRepository.findById(teamMateId).orElseThrow(RuntimeException::new);
+    User delegateUser = delegateTeamMate.getUser();
+
+    if (study.getUser() == currentUser && study.getUser() != delegateUser) {
+      teamMate.setTeamMateDelegate(TeamMateDelegate.DELEGATE);
+      delegateTeamMate.setTeamMateDelegate(TeamMateDelegate.WAITING);
+      sendDelegateEmail(study, currentUser, delegateUser);
+      teamMateRepository.saveAll(Arrays.asList(teamMate, delegateTeamMate));
+    }
+  }
+
+  private void sendDelegateEmail(Study study, User user, User delegateUser) {
+    String message = "안녕하세요. %s님, <br/>".formatted(delegateUser.getUserNickname())
+        + "%s님이 [%s] 스터디 팀장 권한 위임을 신청하셨습니다.<br/>".formatted(user.getUserNickname(), study.getStudyTitle())
+        + "ZZANDI로 접속하여 %s님 신청을 수락 및 거절해주길 바랍니다.<br/>".formatted(user.getUserNickname())
+        + "http://localhost:8080/study/detail/%d".formatted(study.getId());
+
+    EmailMessage emailMessage = EmailMessage.builder()
+        .to(delegateUser.getUserEmail())
+        .subject("ZZANDI, 스터디 팀장 권한 위임 알림")
+        .message(message)
+        .build();
+    emailService.sendEmail(emailMessage);
   }
 
   private void sendAcceptedEmail(Study study, TeamMate teamMate) {

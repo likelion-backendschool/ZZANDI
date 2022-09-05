@@ -2,6 +2,7 @@ package com.ll.zzandi.domain;
 
 import static javax.persistence.FetchType.LAZY;
 
+import com.ll.zzandi.enumtype.TeamMateDelegate;
 import com.ll.zzandi.enumtype.TeamMateStatus;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -43,6 +44,10 @@ public class TeamMate extends BaseEntity{
   @Enumerated(EnumType.STRING)
   @Column(name = "TEAMMATE_STATUS")
   private TeamMateStatus teamMateStatus;
+
+  @Enumerated(EnumType.STRING)
+  @Column(name = "TEAMMATE_DELEGATE")
+  private TeamMateDelegate teamMateDelegate;
 
   public TeamMate(User user, Study study, Integer teamRate,
       TeamMateStatus teamMateStatus) {

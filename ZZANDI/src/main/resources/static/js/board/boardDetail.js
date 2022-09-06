@@ -9,6 +9,7 @@ const pagination = document.querySelector('.pagination');
 let lastPage = 0;
 let currPage = 0;
 
+document.title = document.querySelector(".title").innerHTML;
 window.onload = () => findCommentList(boardId, 0);
 
 function findCommentList(boardId, page) {

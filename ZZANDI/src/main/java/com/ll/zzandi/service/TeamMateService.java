@@ -55,6 +55,7 @@ public class TeamMateService {
       teamMate.setTeamMateStatus(TeamMateStatus.ACCEPTED);
       teamMateRepository.save(teamMate);
       sendAcceptedEmail(study, teamMate);
+      study.setAcceptedStudyMember(study.getAcceptedStudyMember()+1);
     }
 
     Integer teamMateCount = teamMateRepository.countByStudyAndTeamMateStatus(study, TeamMateStatus.ACCEPTED);
@@ -75,6 +76,7 @@ public class TeamMateService {
       isLeader = true;
     } else if (currentUser == teamMate.getUser()) {
       teamMateRepository.delete(teamMate);
+      study.setAcceptedStudyMember(study.getAcceptedStudyMember()-1);
     }
     return isLeader;
   }

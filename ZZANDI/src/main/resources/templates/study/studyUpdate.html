@@ -30,7 +30,7 @@
             </div>
             <div>
                 <label for="studyPeople"> </label>
-                <input type="number" id="studyPeople" th:field="*{studyPeople}" min="1" placeholder="스터디 인원 수를 입력하세요">
+                <input type="number" id="studyPeople" th:field="*{studyPeople}" th:min="${studies.acceptedStudyMember}" placeholder="스터디 인원 수를 입력하세요">
             </div>
             <div>
                 <label for="studyType" > </label>

@@ -197,6 +197,8 @@ public class TeamMateService {
 
     boolean isParticipation =false;
     boolean isTeamMate =false;
+    boolean isDelete = false;
+    int cnt = 0;
 
     for(TeamMate teamMate : teamMateList) {
       if(teamMate.getUser().getId().equals(user.getId())) {
@@ -205,7 +207,14 @@ public class TeamMateService {
           isTeamMate =true;
         }
       }
+      if (teamMate.getTeamMateStatus().equals(TeamMateStatus.ACCEPTED)) {
+        cnt += 1;
+      }
     }
-    return Arrays.asList(isParticipation, isTeamMate);
+
+    if (cnt == 1) {
+      isDelete = true;
+    }
+    return Arrays.asList(isParticipation, isTeamMate, isDelete);
   }
 }

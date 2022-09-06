@@ -121,6 +121,7 @@ public class StudyController {
         model.addAttribute("user", user);
         model.addAttribute("isParticipation", checkList.get(0));
         model.addAttribute("isTeamMate", checkList.get(1));
+        model.addAttribute("isDelete", checkList.get(2));
         return"study/studyDetail";
     }
 

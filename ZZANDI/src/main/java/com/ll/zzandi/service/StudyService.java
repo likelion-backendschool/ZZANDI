@@ -43,8 +43,8 @@ public class StudyService {
         Study study = new Study(user, studyDto.getStudyTitle(), book, null, StudyType.BOOK,
                 studyDto.getStudyStart(),
                 studyDto.getStudyEnd(), studyDto.getStudyPeople(), studyDto.getStudyTag(), 0,
-                StudyStatus.RECRUIT);
-        study.setStudyCoverUrl("https://cdn-icons-png.flaticon.com/512/2436/2436636.png");
+                StudyStatus.RECRUIT , 1);
+        study.setStudyCoverUrl("https://cdn-icons-png.flaticon.com/512/4683/4683425.png");
         return studyRepository.save(study);
     }
 
@@ -52,8 +52,8 @@ public class StudyService {
         Study study = new Study(user, studyDto.getStudyTitle(), null, lecture, StudyType.LECTURE,
                 studyDto.getStudyStart(),
                 studyDto.getStudyEnd(), studyDto.getStudyPeople(), studyDto.getStudyTag(), 0,
-                StudyStatus.RECRUIT);
-        study.setStudyCoverUrl("https://cdn-icons-png.flaticon.com/512/2436/2436636.png");
+                StudyStatus.RECRUIT , 1);
+        study.setStudyCoverUrl("https://cdn-icons-png.flaticon.com/512/2112/2112961.png");
         return studyRepository.save(study);
     }
 
@@ -75,14 +75,9 @@ public class StudyService {
         studyRepository.delete(studies);
     }
 
-    public void updateStudyWithBook(Long studyId, @Valid StudyDto studyDto, BookInfoDto bookDto, User user) {
+    public void updateStudyWithBook(Long studyId, @Valid StudyDto studyDto, BookDto bookDto, User user) {
         Study s1 = studyRepository.findById(studyId).orElseThrow(null);
-        Book book;
-        if (s1.getBook() != null) {
-            book = bookService.modify(s1.getBook().getId(), bookDto);
-        } else {
-            book = bookService.save(bookDto);
-        }
+        Book book = bookService.modify(s1.getBook().getId(), bookDto);
 
         Lecture lecture = s1.getLecture();
         s1.setUser(user);

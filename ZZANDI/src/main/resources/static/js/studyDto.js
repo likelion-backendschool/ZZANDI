@@ -7,15 +7,6 @@ $(".a1").change(function () {
     $(".a2").attr("min", val);
 });
 
-
-//태그
-var input = document.querySelector('input[name=studyTag]');
-
-new Tagify(input, {
-    whitelist: ["IT","소설책","영어"], // 화이트리스트 드롭다운 메뉴 설정
-    userInput: false // 입력 제한
-})
-
 //라디오버튼
 
 $(document).ready(function(){
@@ -33,6 +24,23 @@ $(document).ready(function(){
             $('#lecture').show();
         }
     });
+});
+
+$("#submit").on('click', function () {
+    var searchName = document.getElementById("bookSearch").value;
+    var bookName = document.getElementById("bookName").value;
+    if($("input[name='studyType']:checked").val() == 'BOOK') {
+        if (searchName == '') {
+            alert("책 제목을 입력해주십시오.");
+            $('#bookSearch').focus();
+            return false;
+        }
+        if (bookName == '') {
+            alert("책을 선택해주세요.");
+            $('#bookSearch').focus();
+            return false;
+        }
+    }
 });
 
 //책 검색
@@ -58,6 +66,7 @@ $(document).ready(function (){
                 $(".card-author").empty();
                 $(".card-publisher").empty();
                 $(".thumbnail").empty();
+                $(".card-page").empty();
                 $(".card-title").append("제목: " + msg.item[0].title);
                 $(".card-author").append("저자: " + msg.item[0].author);
                 $(".card-publisher").append("출판사: " + msg.item[0].publisher);
@@ -66,6 +75,7 @@ $(document).ready(function (){
                 $(".card-author2").empty();
                 $(".card-publisher2").empty();
                 $(".thumbnail2").empty();
+                $(".card-page2").empty();
                 $(".card-title2").append("제목: " + msg.item[1].title);
                 $(".card-author2").append("저자: " + msg.item[1].author);
                 $(".card-publisher2").append("출판사: " +msg.item[1].publisher);

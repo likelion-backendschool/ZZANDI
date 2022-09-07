@@ -53,6 +53,9 @@ public class Study {
     @Column(name = "STUDY_RATE")
     private int studyRate;
 
+    @Column(name = "ACCEPTED_STUDY_MEMBER")
+    private int acceptedStudyMember;
+
     @Column(name = "STUDY_COVER_URL")
     private String studyCoverUrl;
 
@@ -67,7 +70,7 @@ public class Study {
     @OneToMany(mappedBy = "study", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TeamMate> teamMateList = new ArrayList<>();
 
-    public Study(User user , String studyTitle, Book book, Lecture lecture, StudyType studyType, String studyStart, String studyEnd, int studyPeople, String studyTag, int studyRate, StudyStatus studyStatus) {
+    public Study(User user , String studyTitle, Book book, Lecture lecture, StudyType studyType, String studyStart, String studyEnd, int studyPeople, String studyTag, int studyRate, StudyStatus studyStatus, int acceptedStudyMember) {
         this.user = user;
         this.studyTitle = studyTitle;
         this.book = book;
@@ -79,10 +82,12 @@ public class Study {
         this.studyTag = studyTag;
         this.studyRate = studyRate;
         this.studyStatus = studyStatus;
+        this.acceptedStudyMember = acceptedStudyMember;
     }
     public void getStudyCoverUrl(String studyCoverUrl) {
         this.studyCoverUrl=studyCoverUrl;
     }
+
 }
 
 

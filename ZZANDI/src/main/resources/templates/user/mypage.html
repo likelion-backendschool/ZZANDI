@@ -38,6 +38,9 @@
                     <button type="submit" onclick = "if (!confirm('팀장 권한 위임을 수락하시겠습니까?')) return false; else alert('해당 스터디의 팀장이 되신 것을 축하드립니다.')"
                             class = "btn btn-outline-secondary">수락</button>
                 </form>
+                <form th:action="@{|/${teamMate.study.id}/teamMate/delegate/refuse|}" method="post" style="display: inline;">
+                    <button type="submit" onclick = "if (!confirm('팀장 권한 위임을 거절하시겠습니까?')) return false;" class = "btn btn-outline-secondary">거절</button>
+                </form>
             </div>
         </div>
     </div>

@@ -132,6 +132,15 @@ public class TeamMateService {
     sendDelegateAcceptEmail(prev, study, currentUser);
   }
 
+  public void delegateRefuse(User user, Long studyId) {
+    User currentUser = userRepository.findByUserId(user.getUserId()).orElseThrow(RuntimeException::new);
+    Study study = studyRepository.findById(studyId).orElseThrow(RuntimeException::new);
+    TeamMate teamMate = teamMateRepository.findByUserAndAndStudy(currentUser, study)
+        .orElseThrow(RuntimeException::new);
+    teamMate.setTeamMateDelegate(TeamMateDelegate.NONE);
+    teamMateRepository.save(teamMate);
+  }
+
   private void sendDelegateAcceptEmail(User user, Study study, User delegateUser) {
     String message = "안녕하세요. %s님, <br/>".formatted(user.getUserNickname())
         + "%s님이 [%s] 스터디 팀장 권한 위임을 수락하셨습니다.<br/>".formatted(delegateUser.getUserNickname(), study.getStudyTitle())

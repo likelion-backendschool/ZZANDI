@@ -31,6 +31,7 @@ public class Board extends BaseEntity {
     private String title;
 
     @Column(name = "CONTENT")
+    @Lob
     private String content;
 
     @Column(name = "VIEWS")

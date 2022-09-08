@@ -4,6 +4,7 @@ import com.ll.zzandi.enumtype.BoardCategory;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.Lob;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -15,5 +16,7 @@ public class BoardCreateDto {
 
     @NotNull(message = "카테고리 설정은 필수입니다!")
     private BoardCategory category;
+
+    @Lob
     private String content;
 }

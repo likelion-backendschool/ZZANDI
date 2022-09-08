@@ -29,14 +29,14 @@ public class BookService {
         return bookRepository.findById(bookId);
     }
 
-    public Book modify(Long bookId, BookInfoDto bookDto) {
+    public Book modify(Long bookId, BookDto bookDto) {
         Book b1 = new Book();
         b1.setId(bookId);
-        b1.setBookName(bookDto.getItem().get(0).title);
-        b1.setBookPage(bookDto.getItem().get(0).subInfo.getItemPage());
-        b1.setBookAuthor(bookDto.getItem().get(0).author);
-        b1.setBookPublisher(bookDto.getItem().get(0).publisher);
-        b1.setBookIsbn(bookDto.getItem().get(0).isbn13);
+        b1.setBookName(bookDto.getBookName());
+        b1.setBookPage(bookDto.getBookPage());
+        b1.setBookAuthor(bookDto.getBookAuthor());
+        b1.setBookPublisher(bookDto.getBookPublisher());
+        b1.setBookIsbn(bookDto.getBookIsbn());
         return bookRepository.save(b1);
     }
 

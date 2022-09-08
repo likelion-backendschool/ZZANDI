@@ -15,4 +15,6 @@ public interface TeamMateRepository extends JpaRepository<TeamMate, Long> {
   Integer countByStudyAndTeamMateStatus(Study study, TeamMateStatus teamMateStatus);
 
   List<TeamMate> findAllByUser(User user);
+
+  List<TeamMate> findByStudy(Study study);
 }

@@ -32,7 +32,7 @@ public class TeamMateController {
   @PostMapping("/update/{teamMateId}")
   public String updateTeamMate(@AuthenticationPrincipal User user, @PathVariable Long studyId, @PathVariable Long teamMateId, Model model) {
     teamMateService.updateTeamMate(user, studyId, teamMateId);
-    return"redirect:/study/detail/%d".formatted(studyId);
+    return "redirect:/study/detail/%d".formatted(studyId);
   }
 
   /*
@@ -45,5 +45,41 @@ public class TeamMateController {
       return "redirect:/study/detail/%d".formatted(studyId);
     }
     return "redirect:/user/mypage?userNickname=%s".formatted(user.getUserNickname());
+  }
+
+  /*
+스터디 탈퇴
+ */
+  @PostMapping("/quit")
+  public String quitTeamMate(@AuthenticationPrincipal User user, @PathVariable Long studyId) {
+    teamMateService.quitTeamMate(user, studyId);
+    return "redirect:/study/detail/%d".formatted(studyId);
+  }
+
+  /*
+  팀원에게 위임 신청
+   */
+  @PostMapping("/delegate/{teamMateId}")
+  public String delegateTeamMate(@AuthenticationPrincipal User user, @PathVariable Long studyId, @PathVariable Long teamMateId) {
+    teamMateService.delegateTeamMate(user, studyId, teamMateId);
+    return "redirect:/study/detail/%d".formatted(studyId);
+  }
+
+  /*
+  팀장 위임 수락
+   */
+  @PostMapping("/delegate")
+  public String delegateTeamMateAccept(@AuthenticationPrincipal User user, @PathVariable Long studyId) {
+    teamMateService.delegateTeamMateAccept(user, studyId);
+    return "redirect:/study/detail/%d".formatted(studyId);
+  }
+
+  /*
+  팀장 위임 거절
+   */
+  @PostMapping("/delegate/refuse")
+  public String delegateRefuse(@AuthenticationPrincipal User user, @PathVariable Long studyId) {
+    teamMateService.delegateRefuse(user, studyId);
+    return "redirect:/study/detail/%d".formatted(studyId);
   }
 }

@@ -26,6 +26,6 @@ function validSubmit() {
         return false;
     }
 
-    document.querySelector(".editorContent").value = editor.getHTML();
+    document.querySelector(".editorContent").value = editor.getMarkdown();
     document.forms["form"].submit();
 }

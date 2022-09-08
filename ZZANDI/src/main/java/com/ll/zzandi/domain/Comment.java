@@ -58,7 +58,8 @@ public class Comment extends BaseEntity {
     public void changeComment(Comment comment) {
         this.content = comment.getContent();
     }
+
     public void reduceCount() {
-        --count;
+        this.count -= 1;
     }
 }

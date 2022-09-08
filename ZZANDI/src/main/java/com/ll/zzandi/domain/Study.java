@@ -54,7 +54,7 @@ public class Study {
     private int studyRate;
 
     @Column(name = "ACCEPTED_STUDY_MEMBER")
-    private int acceptedStudyMember;
+    private Integer acceptedStudyMember;
 
     @Column(name = "STUDY_COVER_URL")
     private String studyCoverUrl;

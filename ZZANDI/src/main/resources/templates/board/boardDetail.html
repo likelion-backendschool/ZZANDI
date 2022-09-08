@@ -6,7 +6,18 @@
       rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
       crossorigin="anonymous">
     <script src="https://kit.fontawesome.com/585d621f74.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css"/>
+
+    <!-- 토스트 UI 에디터, css 코어 -->
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.css"/>
+    <!-- 토스트 UI 에디터, 자바스크립트 코어 -->
+    <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+
+    <!-- 토스트 UI Syntax Highlight css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css"/>
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor-plugin-code-syntax-highlight/latest/toastui-editor-plugin-code-syntax-highlight.min.css"/>
+
+    <!-- 토스트 UI Syntax Highlight 자바스크립트 -->
+    <script src="https://uicdn.toast.com/editor-plugin-code-syntax-highlight/latest/toastui-editor-plugin-code-syntax-highlight-all.min.js"></script>
 
     <script defer type="text/javascript" th:src="@{/js/board/boardDetail.js}"></script>
     <script defer type="text/javascript" th:src="@{/js/comment/comment.js}"></script>
@@ -54,10 +65,9 @@
 </div>
 
 <div class="container w-75 mx-auto mt-5">
-    <input type="hidden" class="board-id" th:value="${boardDetail.boardId}"> <!-- 현재 게시글 번호 -->
     <input type="hidden" class="user-uuid" th:value="${userUUID}"> <!-- 현재 로그인 한 유저 식별자 -->
-
-    <div class="test"></div>
+    <input type="hidden" class="board-id" th:value="${boardDetail.boardId}"> <!-- 현재 게시글 번호 -->
+    <input type="hidden" class="board-content" th:value="${boardDetail.content}">
 
     <div class="d-flex justify-content-between align-self-baseline">
         <h3 class="title" th:text="${boardDetail.title}">제목1</h3>
@@ -76,7 +86,8 @@
         </div>
     </div>
 
-    <section class="mt-4" th:utext="${boardDetail.content}"></section>
+    <!-- Toast Viewer -->
+    <div id="viewer"></div>
 
     <div class="d-flex justify-content-between" style="margin-top: 30px;">
         <button class="btn btn-secondary btn-sm invisible" th:if="${boardDetail.prev == null}">이전글</button>

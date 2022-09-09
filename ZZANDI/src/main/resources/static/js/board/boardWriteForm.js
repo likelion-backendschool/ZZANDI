@@ -8,7 +8,7 @@ const editor = new Editor({
     initialEditType: 'markdown',
     previewStyle: 'vertical',
     previewHighlight: false,
-    plugins: [Editor.plugin.codeSyntaxHighlight]
+    plugins: [Editor.plugin.codeSyntaxHighlight, Editor.plugin.colorSyntax]
 });
 
 // form 데이터 유효성 검사

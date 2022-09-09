@@ -5,7 +5,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
         rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
         crossorigin="anonymous">
-    <script type="text/javascript" th:src="@{/js/studyDetail.js}"></script>
+    <link rel="stylesheet" th:href="@{/css/progressRate.css}">
     <div th:replace="layout/head.html :: head"></div>
 </head>
     <body>
@@ -110,11 +110,37 @@
                     <span style="display: none;" class= "delegate" th:if = "${studies.user.id != teamMate.user.id} and ${teamMate.teamMateDelegate.name() == 'WAITING'}">신청 완료</span>
                 </div>
             </div>
-        </div>
-        <script src="https://cdn.jsdelivr.net/npm/jdenticon@3.2.0/dist/jdenticon.min.js" async
-                integrity="sha384-yBhgDqxM50qJV5JPdayci8wCfooqvhFYbIKhv0hTtLvfeeyJMJCscRfFNKIxt43M" crossorigin="anonymous">
-        </script>
 
+<!--            진도율 표시 부분(시작)-->
+            <div class="container">
+                <span> ZZANDI </span>
+                <div class="progress">
+                    <div class="zzandi shadow leaf"></div>
+                </div>
+                <span> MEMBER1 </span>
+                <div class="progress">
+                    <div class="bar shadow overlap"></div>
+                </div>
+                <span> MEMBER2 </span>
+                <div class="progress">
+                    <div class="bar shadow bars"></div>
+                </div>
+                <span> MEMBER3 </span>
+                <div class="progress">
+                    <div class="bar shadow lines"></div>
+                </div>
+                <span> MEMBER4 </span>
+                <div class="progress">
+                    <div class="bar shadow wiggle"></div>
+                </div>
+            </div>
+<!--            진도율 표시 부분 (끝)-->
+        </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/jdenticon@3.2.0/dist/jdenticon.min.js" async
+            integrity="sha384-yBhgDqxM50qJV5JPdayci8wCfooqvhFYbIKhv0hTtLvfeeyJMJCscRfFNKIxt43M" crossorigin="anonymous">
+    </script>
+    <script type="text/javascript" th:src="@{/js/studyDetail.js}"></script>
 
     </body>
 </html>

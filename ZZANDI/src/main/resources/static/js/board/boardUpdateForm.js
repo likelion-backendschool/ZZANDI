@@ -1,11 +1,14 @@
 'use strict';
 
+const editorContent = document.querySelector(".editorContent");
+
 const Editor = toastui.Editor;
 const editor = new Editor({
     el: document.querySelector('#editor'),
     height: '700px',
     initialEditType: 'markdown',
     previewStyle: 'vertical',
+    initialValue: editorContent.value,
     previewHighlight: false,
     plugins: [Editor.plugin.codeSyntaxHighlight,
                 Editor.plugin.colorSyntax,
@@ -27,6 +30,6 @@ function validSubmit() {
         return false;
     }
 
-    document.querySelector(".editorContent").value = editor.getMarkdown();
+    editorContent.value = editor.getMarkdown();
     document.forms["form"].submit();
 }

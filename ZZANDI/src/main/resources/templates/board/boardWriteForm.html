@@ -9,14 +9,23 @@
     <!-- 토스트 UI 에디터, css 코어 -->
     <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.css"/>
     <!-- 토스트 UI 에디터, 자바스크립트 코어 -->
-    <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+    <script defer src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
 
     <!-- 토스트 UI Syntax Highlight css -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css"/>
     <link rel="stylesheet" href="https://uicdn.toast.com/editor-plugin-code-syntax-highlight/latest/toastui-editor-plugin-code-syntax-highlight.min.css"/>
 
     <!-- 토스트 UI Syntax Highlight 자바스크립트 -->
-    <script src="https://uicdn.toast.com/editor-plugin-code-syntax-highlight/latest/toastui-editor-plugin-code-syntax-highlight-all.min.js"></script>
+    <script defer src="https://uicdn.toast.com/editor-plugin-code-syntax-highlight/latest/toastui-editor-plugin-code-syntax-highlight-all.min.js"></script>
+
+    <link rel="stylesheet" href="https://uicdn.toast.com/tui-color-picker/latest/tui-color-picker.min.css"/>
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor-plugin-color-syntax/latest/toastui-editor-plugin-color-syntax.min.css"/>
+
+    <script defer src="https://uicdn.toast.com/tui-color-picker/latest/tui-color-picker.min.js"></script>
+    <script defer src="https://uicdn.toast.com/editor-plugin-color-syntax/latest/toastui-editor-plugin-color-syntax.min.js"></script>
+
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor-plugin-table-merged-cell/latest/toastui-editor-plugin-table-merged-cell.min.css"/>
+    <script defer src="https://uicdn.toast.com/editor-plugin-table-merged-cell/latest/toastui-editor-plugin-table-merged-cell.min.js"></script>
 
     <script defer th:src="@{/js/board/boardWriteForm.js}"></script>
     <title>글 작성</title>
@@ -32,16 +41,6 @@
             background-color: #ffffff;
             font-family: "GmarketSansMedium", serif;
         }
-
-        /* BindingResult 에러 처리 문구 */
-        .fieldError {
-            border-color: #bd2130;
-        }
-
-        .error-message {
-            font-weight: bold;
-            color: darkred;
-        }
     </style>
 </head>
 <body>
@@ -49,8 +48,6 @@
      style="height: 100px; background-color: #c5e1a5;">
     <h2 class="mx-3 my-0" style="font-weight: bold;">ZZANDI</h2>
 </div>
-
-<div class="test"></div>
 
 <div class="container w-75 mx-auto my-4">
     <h3>글 작성 페이지</h3>
@@ -73,7 +70,7 @@
         </div>
 
         <!-- Toast Editor -->
-        <div id="editor" class="mt-3 mb-3"></div>
+        <div id="editor" class="my-2"></div>
         <!-- Toast Editor Content-->
         <input type="hidden" class="editorContent" name="content">
 

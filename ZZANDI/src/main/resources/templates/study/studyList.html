@@ -1,16 +1,33 @@
-<meta charset="UTF-8">
+
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="ko">
-<head>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script type="text/javascript" th:src="@{/js/studyDetail.js}"></script>
-    <div th:replace="layout/head.html :: head"></div>
-</head>
+<html lang="en">
+
+<!-- head -->
+<div th:replace="layout/head.html :: head"></div>
+
 <body>
+
+<!-- header -->
 <section th:replace="layout/header.html :: header"></section>
-<div class="container">
-    <h1> Study List </h1>
-    <div>
+
+<main id="main">
+
+    <!-- ======= Breadcrumbs ======= -->
+    <div class="breadcrumbs">
+        <div class="page-header d-flex align-items-center" style="background-image: url('');">
+            <div class="container position-relative">
+                <div class="row d-flex justify-content-center">
+                    <div class="col-lg-6 text-center">
+                        <h2>Study List</h2>
+                        <p>진행 중인 스터디를 찾아 마음껏 참여해보세요!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- End Breadcrumbs -->
+
+    <!-- ======= Blog Section ======= -->
+    <div class="container">
         <form>
             <select th:name="st">
                 <option th:value="BOOK" value="BOOK" th:selected="${#strings.equals(param.st, 'BOOK')}">BOOK</option>
@@ -26,40 +43,34 @@
             <button type="submit">검색</button>
         </form>
     </div>
-    <div>
-        <table>
-            <thead>
-            <tr>
-                <th>#</th>
-                <th>스터디명</th>
-                <th>글쓴이</th>
-                <th>모집 상태</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="study : ${studyList}">
-                <td th:text="${study.getId}"></td>
-                <td><a href="#" th:href="@{/study/detail/{studyId}(studyId = ${study.getId})}"
-                       th:text="${study.studyTitle}"></a></td>
-                <td th:text="${study.user.userId}"></td>
-                <td th:text="${study.studyStatus}"></td>
-                <td><img th:if="${!#strings.isEmpty(study?.studyCoverUrl)}"
-                         th:src="${study.studyCoverUrl}" style="width: 100px; height: 100px;"></td>
-                <td><a th:if="${user.userId == study.user.userId}"
-                       th:href="@{/study/delete/{studyId}(studyId = ${study.getId})}" th:text="삭제"></a></td>
-                <td>
-                    <a th:if="${#dates.create(#temporals.year(#temporals.createDate(study.studyStart, 'yyyy-MM-dd')),#temporals.month(#temporals.createDate(study.studyStart, 'yyyy-MM-dd')),#temporals.day(#temporals.createDate(study.studyStart, 'yyyy-MM-dd'))).after(#dates.createNow()) and
-                                user.userId == study.user.userId}"
-                       th:href="@{/study/update/{studyId}(studyId = ${study.getId})}"
-                       th:text="수정">
-                    </a>
-                </td>
+    <section>
+        <div id="studyList" class="container">
+            <div id="post" th:each="study : ${studyList}">
+                <div>
+                    <article>
+                        <div class="post-img" id="studyBox">
+                            <img id="studyCover" th:src="${study.studyCoverUrl}">
+                            <div>
+                                <p id="studyType" class="post-category" th:text="${study.studyType}"></p>
 
-            </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
+                                <p class="title">
+                                    <a  th:href="@{/study/detail/{studyId}(studyId = ${study.getId})}"
+                                        th:text="${study.studyTitle}"></a>
+                                </p>
+                                <p id="studyStart" th:text="${study.studyStart}"></p>
+                                <p id="studyEnd_List" th:text="'~' + ${study.studyEnd}"></p>
+                            </div>
+
+                        </div>
+                    </article>
+                </div><!-- End post list item -->
+
+            </div><!-- End blog posts list -->
+
+        </div>
+    </section><!-- End Blog Section -->
+
+</main><!-- End #main -->
 <!-- footer -->
 <div th:replace="layout/footer.html :: footer"></div>
 
@@ -67,4 +78,5 @@
 <div th:replace="layout/tail.html :: tail"></div>
 
 </body>
+
 </html>

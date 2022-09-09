@@ -3,6 +3,7 @@
 const content = document.querySelector("#content");
 const boardId = document.querySelector('.board-id').value;
 const userUUID = document.querySelector(".user-uuid").value;
+const writer = document.querySelector(".writer").innerText;
 const commentCount = document.querySelectorAll(".comment-count");
 const commentList = document.querySelector(".comment-list");
 const pagination = document.querySelector('.pagination');
@@ -21,11 +22,13 @@ function findCommentList(boardId, page) {
             lastPage = (comments.totalPages - 1 > 0) ? comments.totalPages - 1 : 0;
             currPage = comments.pageable.pageNumber;
 
-            for(let countBox of commentCount) {
+            for (let countBox of commentCount) {
                 countBox.innerHTML = `<span style="font-size: 14px; font-weight: bold;">댓글 ${count}개</span>`;
             }
 
-            pagination.innerHTML = commentPageList(comments);
+            if (comment.length !== 0) {
+                pagination.innerHTML = commentPageList(comments);
+            }
 
             commentList.innerHTML = "";
             for (let i = 0; i < count; i++) {
@@ -34,6 +37,7 @@ function findCommentList(boardId, page) {
                     icon = `<i class="fa-solid fa-reply fa-rotate-180 position-absolute" style="top: 10px; left: -15px; color: #ccc; font-size: 11px;"></i>`;
                 }
 
+                const urlText = urlFilter(comment[i].content);
                 const buttonList = commentButtonList(comment[i], i + 1);
                 const ml = comment[i].step * 3; // 들여쓰기 깊이 계산
                 commentList.innerHTML +=
@@ -49,13 +53,18 @@ function findCommentList(boardId, page) {
                             </div>
                             <div class="d-flex" style="font-size: 12px;">${buttonList}</div>
                         </div>
-                        <div style="font-size: 12px; margin-bottom: 5px; overflow: auto;">${comment[i].content}</div>
+                        
+                        <div style="font-size: 11px; margin-bottom: 5px; word-break:break-all; white-space: pre-line; color: ${comment[i].writer === writer ? '#045CDF' : '#333333'};">${urlText}</div>
                     </li>
                     <!-- 대댓글 & 댓글 수정 입력창 -->
                     <div class="comment-form mb-3 hide" style="margin-left: ${ml}%;"></div>`;
             }
         });
+}
 
+function urlFilter(content) {
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    return content.replace(urlRegex,(url) => `<a href="${url}" target=_blank>${url}</a>`);
 }
 
 function commentPageList(comments) {

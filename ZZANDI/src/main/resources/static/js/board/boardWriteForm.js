@@ -1,6 +1,5 @@
 'use strict';
 
-// Toast UI Editor
 const Editor = toastui.Editor;
 const editor = new Editor({
     el: document.querySelector('#editor'),
@@ -8,7 +7,9 @@ const editor = new Editor({
     initialEditType: 'markdown',
     previewStyle: 'vertical',
     previewHighlight: false,
-    plugins: [Editor.plugin.codeSyntaxHighlight, Editor.plugin.colorSyntax]
+    plugins: [Editor.plugin.codeSyntaxHighlight,
+                Editor.plugin.colorSyntax,
+                Editor.plugin.tableMergedCell]
 });
 
 // form 데이터 유효성 검사

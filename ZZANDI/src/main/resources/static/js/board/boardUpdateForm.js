@@ -10,7 +10,9 @@ const editor = new Editor({
     previewStyle: 'vertical',
     initialValue: editorContent.value,
     previewHighlight: false,
-    plugins: [Editor.plugin.codeSyntaxHighlight, Editor.plugin.colorSyntax]
+    plugins: [Editor.plugin.codeSyntaxHighlight,
+                Editor.plugin.colorSyntax,
+                Editor.plugin.tableMergedCell]
 });
 
 // form 데이터 유효성 검사

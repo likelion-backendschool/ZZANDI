@@ -64,12 +64,14 @@ public class StudyController {
     }
 
     @PostMapping("/study/create")
-    public String createStudy(@Valid StudyDto studyDto, BindingResult bindingResult, BookDto bookDto, LectureDto lectureDto) {
+    public String createStudy(@Valid StudyDto studyDto, BindingResult bindingResult, BookDto bookDto, LectureDto lectureDto, Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal(); // 현재 로그인 한 유저 정보
+        model.addAttribute("user", user);
+
         if (bindingResult.hasErrors()) {
             return "study/studyForm";
         }
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal(); // 현재 로그인 한 유저 정보
         Study study = null;
         if (studyDto.getStudyType().equals("BOOK")) {
             RestTemplate restTemplate = new RestTemplate();

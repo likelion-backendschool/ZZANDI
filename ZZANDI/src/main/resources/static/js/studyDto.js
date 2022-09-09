@@ -1,10 +1,9 @@
 
 
 //달력
-$(".a1").change(function () {
+$("#studyStart").change(function () {
     const val = $(this).val();
-    console.log(val);
-    $(".a2").attr("min", val);
+    $("#studyEnd").attr("min", val);
 });
 
 //라디오버튼

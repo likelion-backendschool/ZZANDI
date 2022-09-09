@@ -4,81 +4,123 @@
 
 <head th:replace="layout/head.html :: head">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropper/4.1.0/cropper.min.css" integrity="sha512-vmXqikRa5kmI3gOQygzml5nV+5NGxG8rt8KWHKj8JYYK12JUl2L8RBfWinFGTzvpwwsIRcINy9mhLyodnmzjig==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
-<body>
 <section th:replace="layout/header.html :: header"></section>
+<body>
+<style>
+    .profile-user-img-img{
+        width: 150px;
+        height: 150px;
+        border-radius: 70%;
+        overflow: hidden;
+    }
+    .profile-user-img{
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+</style>
 
-<div class = "container">
-    <div th:if = "${user.id == currentUser.id}">
-        <div class="border-bottom my-3 py-2 w-50">대기 중인 스터디 목록</div>
-        <div class = "card my-3 w-50" th:each="teamMate : ${teamMateList}" th:if = "${teamMate.teamMateStatus.name() == 'WAITING'}">
-            <div class = "card-body">
-                <a th:href = "@{|/study/detail/${teamMate.study.id}|}">
-                    <span th:text = "${teamMate.study.studyTitle}"></span>
-                    <span th:text = "${teamMate.study.studyStart}"></span>
-                    <span th:text = "${teamMate.study.studyTag}"></span>
-                    <span th:text = "${teamMate.study.studyStatus}"></span>
-                </a>
-                <form th:action="@{|/${teamMate.study.id}/teamMate/delete/${teamMate.id}|}" method="post" style="display: inline;">
-                    <button type="submit" onclick = "if (!confirm('참가 신청을 취소하시겠습니까?')) return false;" class = "btn btn-outline-secondary">취소</button>
-                </form>
+<div class="wrapper d-flex align-items-stretch">
+    <nav id="sidebar">
+        <div class="custom-menu">
+            <button type="button" id="sidebarCollapse" class="btn btn-primary">
+                <i class="fa fa-bars"></i>
+                <span class="sr-only">Toggle Menu</span>
+            </button>
+        </div>
+        <div class="p-4 pt-5">
+            <h1><a th:href="@{/}" class="logo">ZZANDI</a></h1>
+            <ul class="list-unstyled components mb-5">
+                <li class="active">
+                    <a th:href="@{|/user/mypage?userNickname=${currentUser.userNickname}|}" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">회원정보수정</a>
+                </li>
+                <li>
+                    <a th:href="@{/user/mystudy}" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">스터디관리</a>
+                </li>
+                <li>
+                    <a href="#">기타 등등</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Content  -->
+        <div class="container-fluid" >
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="join-title"><h1>회원 정보 수정</h1></div>
+                            <a th:href="@{/user/profile}">
+                                <div id="profile-user-img" class="center-block">
+                                    <img class="profile-user-img-img" th:if="${!#strings.isEmpty(currentUser?.userprofileUrl)}" th:src="${currentUser.userprofileUrl}"/>
+                                </div>
+                            </a>
+                            <form name="join_form" action="#" th:action="@{/user/join}" th:object="${currentUser}" method="post">
+                                <div class="form-group">
+                                    <i class="fa-solid fa-id-badge"></i></i><label for="userId">아이디</label>
+                                    <input type="text" th:value="currentUser.userId" th:field="*{userId}" class="form-control" id="id"
+                                           placeholder="회원 아이디(ID)는 띄어쓰기 없이 5~20자리의 영문자와 숫자 조합만 가능합니다." onchange="check_id()" aria-describedby="idHelp" required />&nbsp;<span id="check_id"></span>
+                                    <!--                                <smail th:if="${#fields.hasErrors('userId')} " th:errors="*{userId}" class="fieldError" >userId Error</smail>-->
+                                </div>
+                                <div class="form-group">
+                                    <i class="fa-solid fa-key"></i><label for="userPassword">비밀번호</label>
+                                    <input type="password" th:value="currentUser.userPassword" th:field="*{userPassword}" class="form-control"
+                                           placeholder="8~16자의 영문 소문자, 숫자와 특수기호 ~!;@#$%^&*()+|= 만 사용가능합니다." aria-describedby="passwordHelp"  id="pw" onchange="check_pw()" required />&nbsp;<span id="check_pw"></span>
+                                    <!--                                <smail th:if="${#fields.hasErrors('userPassword')}" th:errors="*{userPassword}">userPassword Error</smail>-->
+                                </div>
+                                <div class="form-group">
+                                    <i class="fa-solid fa-circle-check"></i><label for="userPassword">비밀번호 확인</label>
+                                    <input type="password"  class="form-control"
+                                           placeholder="비밀번호를 한번더 입력해주세요." aria-describedby="passwordHelp"  id="pw2"  required />&nbsp;<span id="check_repwd"></span>
+                                </div>
+                                <div class="form-group">
+                                    <i class="fa-solid fa-envelope"></i><label for="userEmail">이메일</label>
+                                    <input type="email" th:value="currentUser.userEmail" th:field="*{userEmail}"  class="form-control"
+                                           placeholder="이메일을 입력해주세요." aria-describedby="emailHelp" required />
+                                    <!--                                <smail th:if="${#fields.hasErrors('userEmail')}" th:errors="*{userEmail}">userEmail Error</smail>-->
+                                </div>
+                                <div class="form-group">
+                                    <i class="fa-solid fa-id-card-clip"></i><label for="userNickname">닉네임</label>
+                                    <input type="text" th:value="currentUser.userNickname" th:field="*{userNickname}" class="form-control"
+                                           placeholder="사용할 닉네임을 입력해주세요.(추후 변경이 가능합니다.)" aria-describedby="nicknameHelp" required />
+                                    <!--                                <smail th:if="${#fields.hasErrors('userNickname')}" th:errors="*{userNickname}">userNickname Error</smail>-->
+                                </div>
+                                <div>
+                                    <div>관심사</div>
+                                    <div th:each="intrest : ${interests}" class="form-check form-check-inline">
+                                        <input type="checkbox" th:field="*{interests}" th:value="${intrest.key}"
+                                               class="form-check-input">
+                                        <label th:for="${#ids.prev('interests')}"
+                                               th:text="${intrest.value}" class="form-check-label">서울</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col text-center">
+                                        <button class="btn btn-outline-primary btn-lg" type="button" onclick="joinform_check();">회원 수정</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-
-        <div class="border-bottom my-3 py-2 w-50">팀장 권한 위임 신청 목록</div>
-        <div class = "card my-3 w-50" th:each="teamMate : ${teamMateList}" th:if = "${teamMate.teamMateDelegate != null} and ${teamMate.teamMateDelegate.name() == 'WAITING'}">
-            <div class = "card-body">
-                <a th:href = "@{|/study/detail/${teamMate.study.id}|}">
-                    <span th:text = "${teamMate.study.studyTitle}"></span>
-                    <span th:text = "${teamMate.study.user.userNickname}"></span>
-                </a>
-                <form th:action="@{|/${teamMate.study.id}/teamMate/delegate|}" method="post" style="display: inline;">
-                    <button type="submit" onclick = "if (!confirm('팀장 권한 위임을 수락하시겠습니까?')) return false; else alert('해당 스터디의 팀장이 되신 것을 축하드립니다.')"
-                            class = "btn btn-outline-secondary">수락</button>
-                </form>
-                <form th:action="@{|/${teamMate.study.id}/teamMate/delegate/refuse|}" method="post" style="display: inline;">
-                    <button type="submit" onclick = "if (!confirm('팀장 권한 위임을 거절하시겠습니까?')) return false;" class = "btn btn-outline-secondary">거절</button>
-                </form>
-            </div>
-        </div>
-    </div>
-    <div class="border-bottom my-3 py-2 w-50">모집 중인 스터디 목록</div>
-    <div class = "card my-3 w-50" th:each="teamMate : ${teamMateList}" th:if = "${teamMate.study.studyStatus.name() == 'RECRUIT'} and ${teamMate.getUser == teamMate.study.user}">
-        <div class = "card-body">
-            <a th:href = "@{|/study/detail/${teamMate.study.id}|}">
-                <span th:text = "${teamMate.study.studyTitle}"></span>
-                <span th:text = "${teamMate.study.studyStart}"></span>
-                <span th:text = "${teamMate.study.studyTag}"></span>
-                <span th:text = "${teamMate.study.studyStatus}"></span>
-            </a>
-        </div>
-    </div>
-    <div class="border-bottom my-3 py-2 w-50">진행 중인 스터디 목록</div>
-    <div class = "card my-3 w-50" th:each="teamMate : ${teamMateList}" th:if = "${teamMate.study.studyStatus.name() == 'PROGRESS'} or ${teamMate.teamMateStatus.name() == 'ACCEPTED'}">
-        <div class = "card-body">
-            <a th:href = "@{|/study/detail/${teamMate.study.id}|}">
-                <span th:text = "${teamMate.study.studyTitle}"></span>
-                <span th:text = "${teamMate.study.studyStart}"></span>
-                <span th:text = "${teamMate.study.studyTag}"></span>
-                <span th:text = "${teamMate.study.studyStatus}"></span>
-            </a>
-        </div>
-    </div>
-
-    <div class="border-bottom my-3 py-2 w-50">완료한 스터디 목록</div>
-    <div class = "card my-3 w-50" th:each="teamMate : ${teamMateList}" th:if = "${teamMate.study.studyStatus.name()  == 'COMPLETE'}">
-        <div class = "card-body">
-            <a th:href = "@{|/study/detail/${teamMate.study.id}|}">
-                <span th:text = "${teamMate.study.studyTitle}"></span>
-                <span th:text = "${teamMate.study.studyStart}"></span>
-                <span th:text = "${teamMate.study.studyTag}"></span>
-                <span th:text = "${teamMate.study.studyStatus}"></span>
-            </a>
-        </div>
-    </div>
 </div>
 
+<script src="js/jquery.min.js"></script>
+<script src="js/popper.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/main.js"></script>
 </body>
+<!-- footer -->
+<div th:replace="layout/footer.html :: footer"></div>
+
+<!-- tail -->
+<div th:replace="layout/tail.html :: tail"></div>
 </html>

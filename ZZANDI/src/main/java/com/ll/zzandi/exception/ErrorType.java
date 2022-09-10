@@ -9,6 +9,9 @@ public enum ErrorType {
     DUPLICATED_USER_NAME("404", "User name is duplicated"),
     NOT_FOUND("404", "페이지를 찾을수 없습니다."),
     INTERNAL_SERVER_ERROR("500", "내부 서버에 문제가 있습니다."),
+
+    DUPLICATED_TEAMMATE("409", "이미 신청한 스터디입니다."),
+    FULL_STUDY("409", "팀원이 모두 모집되어 신청할 수 없습니다."),
     ;
 
 

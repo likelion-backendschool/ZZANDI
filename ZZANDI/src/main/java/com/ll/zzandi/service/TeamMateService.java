@@ -6,7 +6,10 @@ import com.ll.zzandi.domain.User;
 import com.ll.zzandi.enumtype.StudyStatus;
 import com.ll.zzandi.enumtype.TeamMateDelegate;
 import com.ll.zzandi.enumtype.TeamMateStatus;
+import com.ll.zzandi.exception.ErrorType;
+import com.ll.zzandi.exception.StudyException;
 import com.ll.zzandi.exception.TeamMateException;
+import com.ll.zzandi.exception.UserApplicationException;
 import com.ll.zzandi.repository.StudyRepository;
 import com.ll.zzandi.repository.TeamMateRepository;
 import com.ll.zzandi.repository.UserRepository;
@@ -28,8 +31,9 @@ public class TeamMateService {
   private final StudyService studyService;
 
   public void createTeamMate(User user, Long studyId) {
-    User currentUser = userRepository.findByUserId(user.getUserId()).orElseThrow(RuntimeException::new);
-    Study study = studyRepository.findById(studyId).orElseThrow(RuntimeException::new);
+    User currentUser = userRepository.findByUserId(user.getUserId()).orElseThrow(()-> new UserApplicationException(
+        ErrorType.NOT_FOUND));
+    Study study = studyRepository.findById(studyId).orElseThrow(()-> new StudyException(ErrorType.NOT_FOUND));
     TeamMate teamMate = teamMateRepository.findByUserAndAndStudy(currentUser, study).orElse(null);
 
     // 팀장과 일치하는 경우, Accepted인 상태로 팀원에 팀장 추가
@@ -39,18 +43,18 @@ public class TeamMateService {
       teamMateRepository.save(new TeamMate(user, study, 0, TeamMateStatus.WAITING));
       sendWaitingEmail(currentUser, study);
     } else {
-      throw new TeamMateException("이미 신청한 스터디입니다.");
+      throw new TeamMateException(ErrorType.DUPLICATED_TEAMMATE);
     }
 
     if (study.getStudyStatus().equals(StudyStatus.RECRUIT_COMPLETE)) {
-      throw new TeamMateException("팀원이 모두 모집되어 신청할 수 없습니다.");
+      throw new TeamMateException(ErrorType.FULL_STUDY);
     }
   }
 
   public void updateTeamMate(User user, Long studyId, Long teamMateId) {
-    User currentUser = userRepository.findByUserId(user.getUserId()).orElseThrow(RuntimeException::new);
-    Study study = studyRepository.findById(studyId).orElseThrow(RuntimeException::new);
-    TeamMate teamMate = teamMateRepository.findById(teamMateId).orElseThrow(RuntimeException::new);
+    User currentUser = userRepository.findByUserId(user.getUserId()).orElseThrow(()->new UserApplicationException(ErrorType.NOT_FOUND));
+    Study study = studyRepository.findById(studyId).orElseThrow(()->new StudyException(ErrorType.NOT_FOUND));
+    TeamMate teamMate = teamMateRepository.findById(teamMateId).orElseThrow(()-> new UserApplicationException(ErrorType.NOT_FOUND));
 
     // 팀장만 수락이 가능
     if(study.getUser() == currentUser) {
@@ -67,9 +71,9 @@ public class TeamMateService {
   }
 
   public boolean deleteTeamMate(User user, Long studyId, Long teamMateId) {
-    User currentUser = userRepository.findByUserId(user.getUserId()).orElseThrow(RuntimeException::new);
-    Study study = studyRepository.findById(studyId).orElseThrow(RuntimeException::new);
-    TeamMate teamMate = teamMateRepository.findById(teamMateId).orElseThrow(RuntimeException::new);
+    User currentUser = userRepository.findByUserId(user.getUserId()).orElseThrow(()->new UserApplicationException(ErrorType.NOT_FOUND));
+    Study study = studyRepository.findById(studyId).orElseThrow(()->new StudyException(ErrorType.NOT_FOUND));
+    TeamMate teamMate = teamMateRepository.findById(teamMateId).orElseThrow(()-> new UserApplicationException(ErrorType.NOT_FOUND));
 
     boolean isLeader = false;
 
@@ -84,10 +88,9 @@ public class TeamMateService {
   }
 
   public void quitTeamMate(User user, Long studyId) {
-    User currentUser = userRepository.findByUserId(user.getUserId()).orElseThrow(RuntimeException::new);
-    Study study = studyRepository.findById(studyId).orElseThrow(RuntimeException::new);
-    TeamMate teamMate = teamMateRepository.findByUserAndAndStudy(currentUser, study)
-        .orElseThrow(RuntimeException::new);
+    User currentUser = userRepository.findByUserId(user.getUserId()).orElseThrow(()-> new UserApplicationException(ErrorType.NOT_FOUND));
+    Study study = studyRepository.findById(studyId).orElseThrow(()-> new StudyException(ErrorType.NOT_FOUND));
+    TeamMate teamMate = teamMateRepository.findByUserAndAndStudy(currentUser, study).orElseThrow(()-> new TeamMateException(ErrorType.NOT_FOUND));
 
     if((study.getStudyStatus() == StudyStatus.RECRUIT
         || study.getStudyStatus() == StudyStatus.RECRUIT_COMPLETE) && study.getUser() != currentUser) {
@@ -100,11 +103,10 @@ public class TeamMateService {
   }
 
   public void delegateTeamMate(User user, Long studyId, Long teamMateId) {
-    User currentUser = userRepository.findByUserId(user.getUserId()).orElseThrow(RuntimeException::new);
-    Study study = studyRepository.findById(studyId).orElseThrow(RuntimeException::new);
-    TeamMate teamMate = teamMateRepository.findByUserAndAndStudy(currentUser, study)
-        .orElseThrow(RuntimeException::new);
-    TeamMate delegateTeamMate = teamMateRepository.findById(teamMateId).orElseThrow(RuntimeException::new);
+    User currentUser = userRepository.findByUserId(user.getUserId()).orElseThrow(()-> new UserApplicationException(ErrorType.NOT_FOUND));
+    Study study = studyRepository.findById(studyId).orElseThrow(()-> new StudyException(ErrorType.NOT_FOUND));
+    TeamMate teamMate = teamMateRepository.findByUserAndAndStudy(currentUser, study).orElseThrow(()-> new TeamMateException(ErrorType.NOT_FOUND));
+    TeamMate delegateTeamMate = teamMateRepository.findById(teamMateId).orElseThrow(()-> new TeamMateException(ErrorType.NOT_FOUND));
     User delegateUser = delegateTeamMate.getUser();
 
     if (study.getUser() == currentUser && study.getUser() != delegateUser) {
@@ -116,11 +118,10 @@ public class TeamMateService {
   }
 
   public void delegateTeamMateAccept(User user, Long studyId) {
-    User currentUser = userRepository.findByUserId(user.getUserId()).orElseThrow(RuntimeException::new);
-    Study study = studyRepository.findById(studyId).orElseThrow(RuntimeException::new);
+    User currentUser = userRepository.findByUserId(user.getUserId()).orElseThrow(()-> new UserApplicationException(ErrorType.NOT_FOUND));
+    Study study = studyRepository.findById(studyId).orElseThrow(()-> new StudyException(ErrorType.NOT_FOUND));
     User prev = study.getUser();
-    TeamMate teamMate = teamMateRepository.findByUserAndAndStudy(prev, study)
-        .orElseThrow(RuntimeException::new);
+    TeamMate teamMate = teamMateRepository.findByUserAndAndStudy(prev, study).orElseThrow(()-> new TeamMateException(ErrorType.NOT_FOUND));
 
     teamMateRepository.delete(teamMate);
     studyService.updateRecruitStudyStatus(study);
@@ -135,10 +136,9 @@ public class TeamMateService {
   }
 
   public void delegateRefuse(User user, Long studyId) {
-    User currentUser = userRepository.findByUserId(user.getUserId()).orElseThrow(RuntimeException::new);
-    Study study = studyRepository.findById(studyId).orElseThrow(RuntimeException::new);
-    TeamMate teamMate = teamMateRepository.findByUserAndAndStudy(currentUser, study)
-        .orElseThrow(RuntimeException::new);
+    User currentUser = userRepository.findByUserId(user.getUserId()).orElseThrow(()-> new UserApplicationException(ErrorType.NOT_FOUND));
+    Study study = studyRepository.findById(studyId).orElseThrow(()-> new StudyException(ErrorType.NOT_FOUND));
+    TeamMate teamMate = teamMateRepository.findByUserAndAndStudy(currentUser, study).orElseThrow(()-> new TeamMateException(ErrorType.NOT_FOUND));
     teamMate.setTeamMateDelegate(TeamMateDelegate.NONE);
     teamMateRepository.save(teamMate);
   }

@@ -1,5 +1,7 @@
 'use strict';
 
+const studyId = document.querySelector('.study-id').value;
+
 const Editor = toastui.Editor;
 const editor = new Editor({
     el: document.querySelector('#editor'),
@@ -9,10 +11,23 @@ const editor = new Editor({
     previewHighlight: false,
     plugins: [Editor.plugin.codeSyntaxHighlight,
                 Editor.plugin.colorSyntax,
-                Editor.plugin.tableMergedCell]
+                Editor.plugin.tableMergedCell],
+
+    hooks: {
+        addImageBlobHook: (image, callback) => {
+            const formData = new FormData();
+            formData.append('image', image);
+
+            fetch('/change/url', {
+                method: 'POST',
+                body: formData,
+            })
+                .then(response => response.text())
+                .then(url => callback(url, "대체 텍스트"));
+        }
+    }
 });
 
-// form 데이터 유효성 검사
 function validSubmit() {
     const category = document.querySelector(".category");
     const title = document.querySelector(".title");

@@ -37,7 +37,7 @@ function findCommentList(boardId, page) {
                     icon = `<i class="fa-solid fa-reply fa-rotate-180 position-absolute" style="top: 10px; left: -15px; color: #ccc; font-size: 11px;"></i>`;
                 }
 
-                const urlText = urlFilter(comment[i].content);
+                const content = urlFilter(comment[i].content);
                 const buttonList = commentButtonList(comment[i], i + 1);
                 const ml = comment[i].step * 3; // 들여쓰기 깊이 계산
                 commentList.innerHTML +=
@@ -54,7 +54,10 @@ function findCommentList(boardId, page) {
                             <div class="d-flex" style="font-size: 12px;">${buttonList}</div>
                         </div>
                         
-                        <div style="font-size: 11px; margin-bottom: 5px; word-break:break-all; white-space: pre-line; color: ${comment[i].writer === writer ? '#045CDF' : '#333333'};">${urlText}</div>
+                        <div style="font-size: 11px; margin-bottom: 5px;">
+                            <span style="display: ${comment[i].parentId === 0 ? 'none' : 'inline'}; color: #AAAAAA;">${comment[i].parentWriter}</span>
+                            <span style="word-break:break-all; white-space: pre-line; color: ${comment[i].writer === writer ? '#045CDF' : '#333333'};">${content}</span>
+                        </div>
                     </li>
                     <!-- 대댓글 & 댓글 수정 입력창 -->
                     <div class="comment-form mb-3 hide" style="margin-left: ${ml}%;"></div>`;
@@ -134,7 +137,7 @@ function commentButtonList(comment, num) {
                 <i class="fa-regular fa-thumbs-up mx-2"></i>
                 <i class="fa-regular fa-thumbs-down"></i>
             </div>
-            <button type="button" onclick="createForm(${num}, ${comment.commentId})" style="border: none; outline: none; background-color: transparent;">댓글</button>`;
+            <button type="button" onclick="createForm(${num}, ${comment.commentId})" style="border: none; outline: none; background-color: transparent; color: #666666;">댓글</button>`;
     }
     return html;
 }

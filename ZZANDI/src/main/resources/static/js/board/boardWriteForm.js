@@ -1,6 +1,7 @@
 'use strict';
 
 const studyId = document.querySelector('.study-id').value;
+
 const Editor = toastui.Editor;
 const editor = new Editor({
     el: document.querySelector('#editor'),
@@ -17,7 +18,7 @@ const editor = new Editor({
             const formData = new FormData();
             formData.append('image', image);
 
-            fetch('/change-url', {
+            fetch('/change/url', {
                 method: 'POST',
                 body: formData,
             })
@@ -27,7 +28,6 @@ const editor = new Editor({
     }
 });
 
-// form 데이터 유효성 검사
 function validSubmit() {
     const category = document.querySelector(".category");
     const title = document.querySelector(".title");

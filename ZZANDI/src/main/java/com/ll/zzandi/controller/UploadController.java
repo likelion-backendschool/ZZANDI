@@ -21,7 +21,7 @@ public class UploadController {
     private final StudyService studyService;
     private final ImageUploadService imageUploadService;
 
-    @PostMapping("/change-url")
+    @PostMapping("/change/url")
     @ResponseBody
     public String findImageUrl(@RequestParam("image") MultipartFile imageFile) throws IOException {
         String originalFilename = imageFile.getOriginalFilename();

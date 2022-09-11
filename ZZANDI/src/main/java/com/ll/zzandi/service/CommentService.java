@@ -10,15 +10,12 @@ import com.ll.zzandi.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -28,13 +25,15 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final BoardRepository boardRepository;
 
-    public List<CommentListDto> findCommentList(Long boardId) {
-        List<Comment> commentListByBoardId = commentRepository.findCommentListByBoardId(boardId);
-        List<CommentListDto> commentList = new ArrayList<>();
+    public Page<CommentListDto> findCommentList(Long boardId, int page) {
+        PageRequest pageRequest = PageRequest.of(page, 30, Sort.by(Sort.Direction.ASC, "id"));
+        Page<Comment> commentList = commentRepository.findCommentList(pageRequest, boardId);
 
-        for (Comment comment : commentListByBoardId) {
-            String content = comment.getContent().replace("\r\n", "<br>");
-            commentList.add(CommentListDto.builder()
+        return commentList.map(comment -> {
+            String parentWriter = (comment.getParentId() > 0) ?
+                    commentRepository.findCommentByParentId(comment.getParentId()).getUser().getUserNickname() : null;
+
+            return CommentListDto.builder()
                     .commentId(comment.getId())
                     .boardId(comment.getBoard().getId())
                     .userUUID(comment.getUser().getId())
@@ -42,34 +41,14 @@ public class CommentService {
                     .profile(comment.getUser().getUserprofileUrl())
                     .writer(comment.getUser().getUserNickname())
                     .parentId(comment.getParentId())
-                    .content(content)
+                    .parentWriter(parentWriter)
+                    .content(comment.getContent().replace("\r\n", "<br>"))
                     .step(comment.getStep())
                     .count(comment.getCount())
                     .status(comment.getDeleteStatus())
                     .createdDate(comment.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm")))
-                    .build());
-        }
-        return commentList;
-    }
-
-    public Page<CommentListDto> findCommentList(Long boardId, int page) {
-        PageRequest pageRequest = PageRequest.of(page, 30, Sort.by(Sort.Direction.ASC, "id"));
-        Page<Comment> commentList = commentRepository.findCommentList(pageRequest, boardId);
-
-        return commentList.map(comment -> CommentListDto.builder()
-                .commentId(comment.getId())
-                .boardId(comment.getBoard().getId())
-                .userUUID(comment.getUser().getId())
-                .userId(comment.getUser().getUserId())
-                .profile(comment.getUser().getUserprofileUrl())
-                .writer(comment.getUser().getUserNickname())
-                .parentId(comment.getParentId())
-                .content(comment.getContent().replace("\r\n", "<br>"))
-                .step(comment.getStep())
-                .count(comment.getCount())
-                .status(comment.getDeleteStatus())
-                .createdDate(comment.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm")))
-                .build());
+                    .build();
+        });
     }
 
     public Comment findById(Long commentId) {

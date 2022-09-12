@@ -64,10 +64,7 @@ public class TeamMateService {
       study.setAcceptedStudyMember(study.getAcceptedStudyMember()+1);
     }
 
-    Integer teamMateCount = teamMateRepository.countByStudyAndTeamMateStatus(study, TeamMateStatus.ACCEPTED);
-    if (teamMateCount == study.getStudyPeople()) {
-      studyService.updateStudyStatusRecruitComplete(study);
-    }
+    studyService.updateRecruitStudyStatus(study);
   }
 
   public boolean deleteTeamMate(User user, Long studyId, Long teamMateId) {
@@ -82,7 +79,6 @@ public class TeamMateService {
       isLeader = true;
     } else if (currentUser == teamMate.getUser()) {
       teamMateRepository.delete(teamMate);
-      study.setAcceptedStudyMember(study.getAcceptedStudyMember()-1);
     }
     return isLeader;
   }
@@ -95,6 +91,7 @@ public class TeamMateService {
     if((study.getStudyStatus() == StudyStatus.RECRUIT
         || study.getStudyStatus() == StudyStatus.RECRUIT_COMPLETE) && study.getUser() != currentUser) {
       teamMateRepository.delete(teamMate);
+      study.setAcceptedStudyMember(study.getAcceptedStudyMember()-1);
       studyService.updateRecruitStudyStatus(study);
     }
 
@@ -124,14 +121,14 @@ public class TeamMateService {
     TeamMate teamMate = teamMateRepository.findByUserAndAndStudy(prev, study).orElseThrow(()-> new TeamMateException(ErrorType.NOT_FOUND));
 
     teamMateRepository.delete(teamMate);
-    studyService.updateRecruitStudyStatus(study);
+    study.setAcceptedStudyMember(study.getAcceptedStudyMember()-1);
     study.setUser(currentUser);
     List<TeamMate> teamMateList = teamMateRepository.findByStudy(study);
     for (TeamMate teamMate1 : teamMateList) {
       teamMate1.setTeamMateDelegate(TeamMateDelegate.NONE);
       teamMateRepository.save(teamMate1);
     }
-    studyRepository.save(study);
+    studyService.updateRecruitStudyStatus(study);
     sendDelegateAcceptEmail(prev, study, currentUser);
   }
 

@@ -157,11 +157,6 @@ public class StudyService {
         return studyDto;
     }
 
-    public void updateStudyStatusRecruitComplete(Study study) {
-        study.setStudyStatus(StudyStatus.RECRUIT_COMPLETE);
-        studyRepository.save(study);
-    }
-
     public List<Study> findAllByStudyTitleContainsOrUser_userIdContains(String kw) {
         return studyRepository.findAllByStudyTitleContainsOrUser_userIdContains(kw, kw);
     }
@@ -213,11 +208,10 @@ public class StudyService {
     }
 
     public void updateRecruitStudyStatus(Study study) {
-        Integer teamMateCount = teamMateRepository.countByStudyAndTeamMateStatus(study, TeamMateStatus.ACCEPTED);
-        if(teamMateCount == study.getStudyPeople()) {
+        if(study.getAcceptedStudyMember() == study.getStudyPeople()) {
             study.setStudyStatus(StudyStatus.RECRUIT_COMPLETE);
             studyRepository.save(study);
-        }else if(teamMateCount < study.getStudyPeople()) {
+        }else if(study.getAcceptedStudyMember() < study.getStudyPeople()) {
             study.setStudyStatus(StudyStatus.RECRUIT);
             studyRepository.save(study);
         }

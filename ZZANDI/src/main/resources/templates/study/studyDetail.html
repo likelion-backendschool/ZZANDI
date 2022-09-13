@@ -5,7 +5,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
         rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
         crossorigin="anonymous">
-    <script type="text/javascript" th:src="@{/js/studyDetail.js}"></script>
+    <link rel="stylesheet" th:href="@{/css/progressRate.css}">
     <div th:replace="layout/head.html :: head"></div>
 </head>
     <body>
@@ -52,8 +52,16 @@
                 <div class="d-flex justify-content-start">
                     <form th:action="@{|/${studies.id}/teamMate/create|}" method="post">
                         <button type = "submit" onclick="if (!confirm('스터디에 참가 신청하시겠습니까?')) return false; else alert('신청이 완료되었습니다.')" class = "btn btn-outline-secondary"
-                                th:if ="!${participation} and ${studies.studyStatus.name() == 'RECRUIT'}">참가 신청</button>
+                                th:if ="!${isParticipation} and ${studies.studyStatus.name() == 'RECRUIT'}">참가 신청</button>
                     </form>
+                    <form th:action = "@{|/${studies.id}/teamMate/quit|}" method="post">
+                    <button type= "submit" onclick = "if(!confirm('스터디에서 탈퇴하시겠습니까?')) return false; else alert('탈퇴가 완료되었습니다.')" class= "btn btn-outline-secondary"
+                    th:if = "${isTeamMate} and (${studies.studyStatus.name() == 'RECRUIT'} or ${studies.studyStatus.name() == 'RECRUIT_COMPLETE'}) and ${user.id != studies.user.id}">탈퇴하기</button>
+                    </form>
+                    <button type= "submit" onclick = "if(!confirm('스터디에서 탈퇴하시려면, 다른 팀원에게 권한을 위임해주세요.\n팀원이 수락한 후 탈퇴가 완료됩니다.')) return false; else delegate()" class= "btn btn-outline-secondary"
+                            th:if = "${isTeamMate} and !${isDelete} and (${studies.studyStatus.name() == 'RECRUIT'} or ${studies.studyStatus.name() == 'RECRUIT_COMPLETE'}) and ${user.id == studies.user.id}">탈퇴하기</button>
+                    <a th:href="@{/study/delete/{studyId}(studyId = ${studies.getId})}" class= "btn btn-outline-secondary"
+                            th:if = "${isTeamMate} and ${isDelete} and (${studies.studyStatus.name() == 'RECRUIT'} or ${studies.studyStatus.name() == 'RECRUIT_COMPLETE'}) and ${user.id == studies.user.id}">삭제</a>
                     <a class="btn btn-danger mx-2" th:href="@{/study/list}">스터디 리스트</a>
                     <a class="btn btn-primary" th:href="@{/{studyId}/board/list (studyId=${studies.getId})}">게시판 이동</a>
                 </div>
@@ -94,13 +102,45 @@
                             <span th:text="${teamMate.user.getUserNickname}"></span>
                         </span>
                     </a>
+                    <form th:action="@{|/${studies.id}/teamMate/delegate/${teamMate.id}|}" method="post"  style="display: none;" class= "delegate"
+                        th:if = "${studies.user.id != teamMate.user.id} and ${teamMate.teamMateDelegate.name() != 'WAITING'}">
+                        <button type="submit" onclick = "if (!confirm('권한을 위임하시겠습니까?')) return false;
+                        else alert('신청이 완료되었습니다. 해당 팀원이 수락한 후 탈퇴가 완료됩니다.')" class = "btn btn-outline-secondary">위임 신청</button>
+                    </form>
+                    <span style="display: none;" class= "delegate" th:if = "${studies.user.id != teamMate.user.id} and ${teamMate.teamMateDelegate.name() == 'WAITING'}">신청 완료</span>
                 </div>
             </div>
-        </div>
-        <script src="https://cdn.jsdelivr.net/npm/jdenticon@3.2.0/dist/jdenticon.min.js" async
-                integrity="sha384-yBhgDqxM50qJV5JPdayci8wCfooqvhFYbIKhv0hTtLvfeeyJMJCscRfFNKIxt43M" crossorigin="anonymous">
-        </script>
 
+<!--            진도율 표시 부분(시작)-->
+            <div class="container">
+                <span> ZZANDI </span>
+                <div class="progress">
+                    <div class="zzandi shadow leaf"></div>
+                </div>
+                <span> MEMBER1 </span>
+                <div class="progress">
+                    <div class="bar shadow overlap"></div>
+                </div>
+                <span> MEMBER2 </span>
+                <div class="progress">
+                    <div class="bar shadow bars"></div>
+                </div>
+                <span> MEMBER3 </span>
+                <div class="progress">
+                    <div class="bar shadow lines"></div>
+                </div>
+                <span> MEMBER4 </span>
+                <div class="progress">
+                    <div class="bar shadow wiggle"></div>
+                </div>
+            </div>
+<!--            진도율 표시 부분 (끝)-->
+        </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/jdenticon@3.2.0/dist/jdenticon.min.js" async
+            integrity="sha384-yBhgDqxM50qJV5JPdayci8wCfooqvhFYbIKhv0hTtLvfeeyJMJCscRfFNKIxt43M" crossorigin="anonymous">
+    </script>
+    <script type="text/javascript" th:src="@{/js/studyDetail.js}"></script>
 
     </body>
 </html>

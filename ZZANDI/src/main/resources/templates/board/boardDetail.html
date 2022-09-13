@@ -6,8 +6,22 @@
       rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
       crossorigin="anonymous">
     <script src="https://kit.fontawesome.com/585d621f74.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css"/>
+
+    <!-- 토스트 UI 에디터, css 코어 -->
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.css"/>
+    <!-- 토스트 UI 에디터, 자바스크립트 코어 -->
+    <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+
+    <!-- 토스트 UI Syntax Highlight css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css"/>
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor-plugin-code-syntax-highlight/latest/toastui-editor-plugin-code-syntax-highlight.min.css"/>
+
+    <!-- 토스트 UI Syntax Highlight 자바스크립트 -->
+    <script src="https://uicdn.toast.com/editor-plugin-code-syntax-highlight/latest/toastui-editor-plugin-code-syntax-highlight-all.min.js"></script>
+
     <script defer type="text/javascript" th:src="@{/js/board/boardDetail.js}"></script>
+    <script defer type="text/javascript" th:src="@{/js/comment/comment.js}"></script>
+
     <title>ZZANDI</title>
     <style>
         @font-face {
@@ -20,11 +34,19 @@
         body {
             background-color: #ffffff;
             font-family: "GmarketSansMedium", serif;
-            margin: 20px auto;
         }
 
         li {
             list-style: none;
+        }
+
+        .comment-box a {
+            text-decoration: none;
+            color: #333333;
+        }
+
+        .comment-box a:hover {
+            text-decoration: underline;
         }
 
         .hide {
@@ -47,21 +69,24 @@
     </style>
 </head>
 <body>
-<div class="container w-50 mx-auto mt-5">
-    <input type="hidden" class="board-id" th:value="${boardDetail.boardId}"> <!-- 현재 게시글 번호 -->
-    <input type="hidden" class="user-uuid" th:value="${userUUID}"> <!-- 현재 로그인 한 유저 식별자 -->
+<div class="w-100 d-flex justify-content-center align-items-center text-black" style="height: 100px; background-color: #c5e1a5;">
+    <h2 class="mx-3 my-0" style="font-weight: bold;">ZZANDI</h2>
+</div>
 
-    <div class="test"></div>
+<div class="container w-75 mx-auto my-4">
+    <input type="hidden" class="user-uuid" th:value="${userUUID}"> <!-- 현재 로그인 한 유저 식별자 -->
+    <input type="hidden" class="board-id" th:value="${boardDetail.boardId}"> <!-- 현재 게시글 번호 -->
+    <input type="hidden" class="board-content" th:value="${boardDetail.content}">
 
     <div class="d-flex justify-content-between align-self-baseline">
-        <h3 th:text="${boardDetail.title}">제목1</h3>
+        <h3 class="title" th:text="${boardDetail.title}">제목1</h3>
         <p th:text="${boardDetail.createdDate}">날짜</p>
     </div>
 
     <div class="d-flex border-bottom justify-content-between">
         <div class="d-flex align-items-center" sec:authorize="isAuthenticated()">
             <img th:if="${!#strings.isEmpty(boardDetail.profile)}" th:src="${boardDetail.profile}" alt="profile" width="30" height="30" class="rounded border bg-light" />
-            <p class="align-self-center" th:text="${boardDetail.writer}" style="margin-left: 5px; margin-bottom: 0; font-size: 14px;">작성자</p>
+            <p class="align-self-center writer" th:text="${boardDetail.writer}" style="margin-left: 5px; margin-bottom: 0; font-size: 14px;">작성자</p>
         </div>
         <div class="d-flex justify-content-evenly mb-0 align-items-center">
             <p class="mx-1"><span th:text="|조회수 ${boardDetail.views}|" style="font-size: 14px; font-weight: bold;"></span></p>
@@ -70,7 +95,8 @@
         </div>
     </div>
 
-    <section class="mt-4" th:text="${boardDetail.content}"></section>
+    <!-- Toast Viewer -->
+    <div id="viewer" class="my-2"></div>
 
     <div class="d-flex justify-content-between" style="margin-top: 30px;">
         <button class="btn btn-secondary btn-sm invisible" th:if="${boardDetail.prev == null}">이전글</button>

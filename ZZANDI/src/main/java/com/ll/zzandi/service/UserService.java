@@ -137,15 +137,6 @@ public class UserService {
     private static String getUuid() {
         return UUID.randomUUID().toString().replaceAll("-", "");
     }
-
-    public boolean participation(List<TeamMate> teamMateList, User user) {
-        for (TeamMate teamMate : teamMateList) {
-            if (teamMate.getUser().getId().equals(user.getId())) {
-                return true;
-            }
-        }
-        return false;
-    }
 }
 
 

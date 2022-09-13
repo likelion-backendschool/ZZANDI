@@ -2,7 +2,6 @@ package com.ll.zzandi.service;
 
 import com.ll.zzandi.domain.*;
 import com.ll.zzandi.dto.BookDto;
-import com.ll.zzandi.dto.BookInfoDto;
 import com.ll.zzandi.dto.LectureDto;
 import com.ll.zzandi.dto.StudyDto;
 import com.ll.zzandi.enumtype.StudyStatus;
@@ -17,7 +16,7 @@ import com.ll.zzandi.enumtype.TableType;
 import com.ll.zzandi.repository.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.time.Period;
 
 import com.ll.zzandi.util.aws.ImageUploadService;
 import lombok.RequiredArgsConstructor;
@@ -247,5 +246,25 @@ public class StudyService {
             }
             studyRepository.save(study);
         }
+    }
+
+    public int getStudyDays(Long studyId) {
+        Study studies = findByStudyId(studyId).orElseThrow(null);
+
+        LocalDate studyStart = LocalDate.parse(studies.getStudyStart());
+        LocalDate studyEnd= LocalDate.parse(studies.getStudyEnd());
+
+        return Period.between(studyStart, studyEnd).getDays();
+    }
+
+    public int getStudyRecommend(Long studyId) {
+        Study studies = findByStudyId(studyId).orElseThrow(null);
+
+        int studyDays = getStudyDays(studyId);
+
+        int total = (studies.getStudyType().equals(StudyType.BOOK))
+            ? studies.getBook().getBookPage() : studies.getLecture().getLectureNumber();
+
+        return (int) Math.ceil(total / studyDays);
     }
 }

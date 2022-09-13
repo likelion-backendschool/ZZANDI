@@ -110,32 +110,39 @@
                     <span style="display: none;" class= "delegate" th:if = "${studies.user.id != teamMate.user.id} and ${teamMate.teamMateDelegate.name() == 'WAITING'}">신청 완료</span>
                 </div>
             </div>
-
-<!--            진도율 표시 부분(시작)-->
-            <div class="container">
-                <span> ZZANDI </span>
-                <div class="progress">
-                    <div class="zzandi shadow leaf"></div>
-                </div>
-                <span> MEMBER1 </span>
-                <div class="progress">
-                    <div class="bar shadow overlap"></div>
-                </div>
-                <span> MEMBER2 </span>
-                <div class="progress">
-                    <div class="bar shadow bars"></div>
-                </div>
-                <span> MEMBER3 </span>
-                <div class="progress">
-                    <div class="bar shadow lines"></div>
-                </div>
-                <span> MEMBER4 </span>
-                <div class="progress">
-                    <div class="bar shadow wiggle"></div>
-                </div>
-            </div>
-<!--            진도율 표시 부분 (끝)-->
         </div>
+    <!--            진도율 표시 부분(시작)-->
+    <div class="container">
+        <div class="badge bg-primary text-wrap fs-4" style="width: 50%;" th:if = "${books != null}">
+            하루 권장 진도율은 [[${studyRecommend}]] 페이지 입니다.
+        </div>
+        <div class="badge bg-primary text-wrap fs-3" style="width: 50%;" th:if = "${lectures != null}">
+            하루 권장 진도율은 [[${studyRecommend}]] 에서 [[${studyRecommend}+1]] 강 입니다.
+        </div>
+        <div></div>
+        <span> ZZANDI </span>
+        <div class="progress">
+            <div class="zzandi shadow leaf"></div>
+        </div>
+        <span> MEMBER1 </span>
+        <div class="progress">
+            <div class="bar shadow overlap"></div>
+        </div>
+        <span> MEMBER2 </span>
+        <div class="progress">
+            <div class="bar shadow bars"></div>
+        </div>
+        <span> MEMBER3 </span>
+        <div class="progress">
+            <div class="bar shadow lines"></div>
+        </div>
+        <span> MEMBER4 </span>
+        <div class="progress">
+            <div class="bar shadow wiggle"></div>
+        </div>
+
+    </div>
+    <!--            진도율 표시 부분 (끝)-->
 
     <script src="https://cdn.jsdelivr.net/npm/jdenticon@3.2.0/dist/jdenticon.min.js" async
             integrity="sha384-yBhgDqxM50qJV5JPdayci8wCfooqvhFYbIKhv0hTtLvfeeyJMJCscRfFNKIxt43M" crossorigin="anonymous">

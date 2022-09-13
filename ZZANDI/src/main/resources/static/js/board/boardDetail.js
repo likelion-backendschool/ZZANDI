@@ -6,7 +6,34 @@ const viewer = new Editor.factory({
     el: document.querySelector('#viewer'),
     initialValue: document.querySelector(".board-content").value,
     viewer: true,
-    plugins: [Editor.plugin.codeSyntaxHighlight]
+    plugins: [Editor.plugin.codeSyntaxHighlight],
+    customHTMLRenderer: {
+        htmlBlock: {
+            iframe(node) {
+                const link = node.attrs.src;
+                return [
+                    {
+                        type: 'openTag',
+                        tagName: 'iframe',
+                        outerNewLine: true,
+                        classNames: ['youtube'],
+                        attributes: {
+                            src: link
+                        },
+                    },
+                    {
+                        type: 'html',
+                        content: node.childrenHTML
+                    },
+                    {
+                        type: 'closeTag',
+                        tagName: 'iframe',
+                        outerNewLine: true
+                    },
+                ];
+            },
+        },
+    },
 });
 
 function deleteBoard() {

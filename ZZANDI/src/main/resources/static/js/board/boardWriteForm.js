@@ -12,7 +12,6 @@ const editor = new Editor({
     plugins: [Editor.plugin.codeSyntaxHighlight,
                 Editor.plugin.colorSyntax,
                 Editor.plugin.tableMergedCell],
-
     hooks: {
         addImageBlobHook: (image, callback) => {
             const formData = new FormData();
@@ -25,7 +24,36 @@ const editor = new Editor({
                 .then(response => response.text())
                 .then(url => callback(url, "대체 텍스트"));
         }
-    }
+    },
+    customHTMLRenderer: {
+        htmlBlock: {
+            iframe(node) {
+                const link = node.attrs.src;
+                return [
+                    {
+                        type: 'openTag',
+                        tagName: 'iframe',
+                        outerNewLine: true,
+                        classNames: ['youtube'],
+                        attributes: {
+                            width: 400,
+                            height: 300,
+                            src: link
+                        },
+                    },
+                    {
+                        type: 'html',
+                        content: node.childrenHTML
+                    },
+                    {
+                        type: 'closeTag',
+                        tagName: 'iframe',
+                        outerNewLine: true
+                    },
+                ];
+            },
+        },
+    },
 });
 
 function validSubmit() {

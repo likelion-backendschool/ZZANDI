@@ -23,7 +23,7 @@ function findCommentList(boardId, page) {
             currPage = comments.pageable.pageNumber;
 
             for (let countBox of commentCount) {
-                countBox.innerHTML = `<span style="font-size: 14px; font-weight: bold;">댓글 ${count}개</span>`;
+                countBox.innerHTML = `<span style="font-size: 13px;">댓글 ${count}개</span>`;
             }
 
             if (comment.length !== 0) {
@@ -46,15 +46,15 @@ function findCommentList(boardId, page) {
                         <div class="d-flex justify-content-between mb-2 mt-2">
                             <div class="d-flex">
                                 <img src="${comment[i].profile}" alt="profile" class="rounded border bg-light" width="30" height="30" style="margin-right: 5px;">
-                                <div class="align-self-center" style="font-size: 14px;">
-                                    <span style="font-weight: 700;">${comment[i].writer}</span style="font-weight: 700;">
-                                    <span style="margin-left: 10px; color: #888888; font-size: 11px;">${comment[i].createdDate}</span>
+                                <div class="align-self-center" style="font-size: 13px;">
+                                    <span style="font-weight: bold;">${comment[i].writer}</span>
+                                    <span style="margin-left: 10px; color: #888888;">${comment[i].createdDate}</span>
                                 </div>
                             </div>
                             <div class="d-flex" style="font-size: 12px;">${buttonList}</div>
                         </div>
                         
-                        <div style="font-size: 11px; margin-bottom: 5px;">
+                        <div style="font-size: 13px; margin-bottom: 5px;">
                             <span style="display: ${comment[i].parentId === 0 ? 'none' : 'inline'}; color: #AAAAAA;">${comment[i].parentWriter}</span>
                             <span style="word-break:break-all; white-space: pre-line; color: ${comment[i].writer === writer ? '#045CDF' : '#333333'};">${content}</span>
                         </div>

@@ -32,17 +32,18 @@
         }
 
         body {
+            font-family: "Apple SD Gothic Neo", "Malgun Gothic", "맑은 고딕", arial, sans-serif; "GmarketSansMedium";
             background-color: #ffffff;
-            font-family: "GmarketSansMedium", serif;
         }
 
         .title {
-            font-size: 15px;
+            font-size: 21px;
             font-weight: bold;
+            line-height: 18px;
         }
 
         .date {
-            font-size: 12px;
+            font-size: 13px;
         }
 
         li {
@@ -91,18 +92,13 @@
     <h2 class="mx-3 my-0" style="font-weight: bold;">ZZANDI</h2>
 </div>
 
-<div class="container w-50 mx-auto my-4">
+<div class="container w-75 mx-auto my-4">
     <input type="hidden" class="user-uuid" th:value="${userUUID}"> <!-- 현재 로그인 한 유저 식별자 -->
     <input type="hidden" class="board-id" th:value="${boardDetail.boardId}"> <!-- 현재 게시글 번호 -->
     <input type="hidden" class="board-content" th:value="${boardDetail.content}">
 
-    <div class="d-flex justify-content-start border-bottom" style="font-weight: bold; color: mediumpurple;">
-        <span style="font-size: 13px;">SBS -</span>
-        <span class="align-self-center mx-1" style="font-size: 11px;">정보</span>
-    </div>
-
     <div class="d-flex justify-content-between mt-2">
-        <p class="title align-self-center mb-0" th:text="${boardDetail.title}">제목1</p>
+        <h3 class="title align-self-center mb-0" th:text="${boardDetail.title}">제목1</h3>
         <p class="align-self-center mb-0 date" th:text="${boardDetail.createdDate}">날짜</p>
     </div>
 
@@ -111,9 +107,9 @@
             <img th:if="${!#strings.isEmpty(boardDetail.profile)}" th:src="${boardDetail.profile}" alt="profile" width="30" height="30"  class="rounded border bg-light"/>
             <p class="align-self-center writer" th:text="${boardDetail.writer}" style="margin-left: 5px; margin-bottom: 0; font-size: 14px;">작성자</p>
         </div>
-        <div class="d-flex justify-content-between align-items-baseline align-self-center">
-            <p class="mx-1 my-0"><span th:text="|조회수 ${boardDetail.views}|" style="font-size: 14px; font-weight: bold;"></span></p>
-            <p class="mx-1 my-0"><span th:text="|좋아요 ${boardDetail.heart}|" style="font-size: 14px; font-weight: bold;"></span></p>
+        <div class="d-flex justify-content-between align-items-baseline align-self-center" style="font-size: 13px;">
+            <p class="mx-1 my-0"><span th:text="|조회수 ${boardDetail.views}|"></span></p>
+            <p class="mx-1 my-0"><span th:text="|좋아요 ${boardDetail.heart}|"></span></p>
             <p class="comment-count ml-1 my-0"></p>
         </div>
     </div>

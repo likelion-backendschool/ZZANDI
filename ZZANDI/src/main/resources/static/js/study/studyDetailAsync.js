@@ -2,6 +2,7 @@
 
 const studyDetail_left = document.querySelector(".studyDetail-left");
 const studyDetail_top = document.querySelector(".studyDetail-top");
+const studyDetail_center = document.querySelector(".studyDetail-center");
 const studyId = document.querySelector(".studyId").value;
 const userNickname = document.querySelector(".userNickname").value;
 
@@ -88,10 +89,34 @@ function displayStudy(data) {
 
   studyDetail_top.innerHTML = html;
   // StudyDetail-top [end]
+
+  // studyDetail-center[start]
+  html = '';
+  if (data.studyType == 'BOOK') {
+    html += `
+      <i class="bi bi-book-half" style="font-size: 2rem;"></i>
+      <p>책 이름 : ${data.bookName}</p>
+      <p>작가 : ${data.bookAuthor}</p>
+      <p>출판사 : ${data.bookPublisher}</p>
+      <p>책 쪽수 : ${data.bookPage} 페이지</p>
+      <p>ISBN : ${data.bookIsbn}</p>
+    `;
+  } else {
+    html += `
+      <i class="bi bi-play-btn" style="font-size: 2rem;"></i>
+      <p>강의 이름 : ${data.lectureName}</p>
+      <p>강사진 : ${data.lecturer}</p>
+      <p>강의 개수 : ${data.lectureNumber} 강</p>
+    `;
+  }
+
+  studyDetail_center.innerHTML = html;
+  // studyDetail-center[end]
 }
 
 function dis(data) {
   console.log("dis 실행");
+
 }
 
 function findTeamMateList(studyId) {

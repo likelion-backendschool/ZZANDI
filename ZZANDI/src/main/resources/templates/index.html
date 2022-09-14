@@ -7,57 +7,144 @@
 <div th:replace="layout/head.html :: head"></div>
 
 <body>
-
+<div style="margin-left: 200px">
+    <!--quick menu-->
+    <aside id="quick">
+        <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" onchange="dis()">
+            <img src="https://cdn-icons-png.flaticon.com/512/3176/3176366.png" style="width: 20px; height: 20px">
+            <label class="form-check-label" for="flexSwitchCheckChecked">To do List</label>
+        </div>
+        <div class="form-check" id="toDoListContent">
+            <div id="toDoList" th:each="toDoList : ${toDoList}">
+                <input class="form-check-input" type="checkbox" id="flexCheckDefault" name="checkTodo">
+                <p th:text="${toDoList.content}"></p>
+            </div>
+            <a th:href="@{/todo/list}" style="font-size: 8px; margin-left: 0px">
+                <img src="https://cdn-icons-png.flaticon.com/512/900/900834.png" style="width: 15px; height: 15px">
+            </a>
+        </div>
+    </aside>
     <!-- header -->
     <section th:replace="layout/header.html :: header"></section>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <div class="alert alert-warning" role="alert" th:if="${user != null && !user.userEmailVerified}">
         ZZANDI 가입을 완료하려면 <a href="#" th:href="@{/check-email(email=${user.userEmail})}" class="alert-link">계정 인증 이메일을 확인</a>하세요.
     </div>
 
-    <div class="container" style="height: 700px;">
-        <h1> ZZANDI TEST </h1>
-        <a th:href="@{/user/profile}">
-            <div sec:authorize="isAuthenticated()">
-                <img th:if="${!#strings.isEmpty(user?.userprofileUrl)}" th:src="${user.userprofileUrl}"
-                     width="70" height="70" class="rounded border"/>
-                <div th:text="${user.userNickname}"></div>
+
+
+
+
+    <!-- ======= Testimonials Section ======= -->
+    <section id="testimonials" class="testimonials">
+        <div class="container">
+            <div class="slides-3 swiper">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <div class="testimonial-item">
+                            <img src="https://shopping-phinf.pstatic.net/main_3300583/33005838635.20220626070123.jpg?type=w300" class="testimonial-img" alt="">
+                        </div>
+                    </div><!-- End testimonial item -->
+
+                    <div class="swiper-slide">
+                        <div class="testimonial-item">
+                            <img src="https://shopping-phinf.pstatic.net/main_3246352/32463526779.20220527042908.jpg?type=w300" class="testimonial-img" alt="">
+                        </div>
+                    </div><!-- End testimonial item -->
+
+                    <div class="swiper-slide">
+                        <div class="testimonial-item">
+                            <img src="https://shopping-phinf.pstatic.net/main_3245543/32455430639.20220527070644.jpg?type=w300" class="testimonial-img" alt="">
+                        </div>
+                    </div><!-- End testimonial item -->
+
+                    <div class="swiper-slide">
+                        <div class="testimonial-item">
+                            <img src="https://shopping-phinf.pstatic.net/main_3247767/32477674953.20220527044845.jpg?type=w300" class="testimonial-img" alt="">
+                        </div>
+                    </div><!-- End testimonial item -->
+
+                    <div class="swiper-slide">
+                        <div class="testimonial-item">
+                            <img src="https://shopping-phinf.pstatic.net/main_3246926/32469262578.20220527022446.jpg?type=w300" class="testimonial-img" alt="">
+                        </div>
+                    </div><!-- End testimonial item -->
+
+                </div>
+                <div class="swiper-pagination"></div>
+
+            </div>
+
         </div>
-        </a>
+    </section><!-- End Testimonials Section -->
 
-        <div>
-            <a href="/study/create"> Create Study </a>
+    <section>
+        <div id="studyList" class="container">
+            <p style="margin-right: 10px">New study</p>
+            <p>
+                <a th:href="@{study/list}" style="font-size: 8px" >more></a>
+            </p>
+            <div id="latest-post">
+                <div id="post1" th:if="${studyList.size() >= 3}" th:each="i: ${#numbers.sequence(studyList.size()-1, studyList.size()-3, -1)}">
+
+                    <div>
+                        <article>
+                            <div class="post-img" id="studyBox1">
+                                <img id="studyCover1" th:src="${studyList[i].studyCoverUrl}">
+                                <div>
+                                    <p id="studyType1" class="post-category" th:text="${studyList[i].studyType}"></p>
+
+                                    <p class="title">
+                                        <a  th:href="@{/study/detail/{studyId}(studyId = ${studyList[i].getId})}"
+                                            th:text="${studyList[i].studyTitle}"></a>
+                                    </p>
+                                    <p id="studyStart1" th:text="${studyList[i].studyStart}"></p>
+                                    <p id="studyEnd_List1" th:text="'~' + ${studyList[i].studyEnd}"></p>
+                                </div>
+
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </div>
+            <p style="margin-right: 10px">Popular Study</p>
+            <p>
+                <a th:href="@{study/list}" style="font-size: 8px" >more></a>
+            </p>
+            <div id="all-post">
+                <div id="post" th:each="i: ${#numbers.sequence(studyList.size()-1, 0, -1)}">
+                    <div>
+                        <article>
+                            <div class="post-img" id="studyBox">
+                                <img id="studyCover" th:src="${studyList[i].studyCoverUrl}">
+                                <div>
+                                    <p id="studyType" class="post-category" th:text="${studyList[i].studyType}"></p>
+
+                                    <p class="title">
+                                        <a  th:href="@{/study/detail/{studyId}(studyId = ${studyList[i].getId})}"
+                                            th:text="${studyList[i].studyTitle}"></a>
+                                    </p>
+                                    <p id="studyStart" th:text="${studyList[i].studyStart}"></p>
+                                    <p id="studyEnd_List" th:text="'~' + ${studyList[i].studyEnd}"></p>
+                                </div>
+
+                            </div>
+                        </article>
+                    </div><!-- End post list item -->
+
+                </div><!-- End blog posts list -->
+            </div>
         </div>
+    </section><!-- End Blog Section -->
+</div>
+<!-- footer -->
+<div th:replace="layout/footer.html :: footer"></div>
 
-        <div>
-            <a href="/study/list"> Study List </a>
-        </div>
-        <div>
-            <a href="/todo/list">ToDoList</a>
-        </div>
-
-        <div sec:authorize="isAnonymous()">
-            <a href="/user/login">로그인</a>
-        </div>
-
-        <div sec:authorize="isAnonymous()">
-            <a href="/user/join">회원 가입</a>
-        </div>
-
-        <div sec:authorize="isAuthenticated()">
-            <a href="/user/logout">로그아웃</a>
-        </div>
-
-        <div sec:authorize="hasAuthority('ROLE_ADMIN')">
-            <a href="/admin">관리자</a>
-        </div>
-    </div>
-
-    <!-- footer -->
-    <div th:replace="layout/footer.html :: footer"></div>
-
-    <!-- tail -->
-    <div th:replace="layout/tail.html :: tail"></div>
-
+<!-- tail -->
+<div th:replace="layout/tail.html :: tail"></div>
 
 </body>
+
+
 </html>

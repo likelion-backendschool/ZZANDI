@@ -5,6 +5,13 @@ const pagination = document.querySelector('.pagination');
 const currPage = document.querySelector(".page").value; // 현재 페이지 정보
 const studyId = document.querySelector(".study-id").value;
 
+const colors = new Map();
+colors.set('공지', '#d50000');
+colors.set('자유', '#7b1fa2');
+colors.set('정보', '#00acc1');
+colors.set('질문', '#2e7d32');
+colors.set('자랑', '#003c8f');
+
 window.onload = () => findByPage(currPage, studyId);
 
 // 뒤로가기 / 앞으로가기 처리
@@ -49,8 +56,9 @@ function displayItems(items) {
 // 게시물 리스트 생성
 function createBoardList(item) {
     const title = (item.title.length > 50) ? `${item.title.substr(0, 50)}...` : `${item.title}`;
+    const color = colors.get(item.category);
     return `<tr>
-                <td style="color: mediumpurple; font-weight: bold;">${item.category}</td>
+                <td style="color: ${color}; font-weight: bold;">${item.category}</td>
                 <td style="text-align: left;">
                     <a href="/${studyId}/board/detail/${item.boardId}/${item.pageNum}" style="font-size: 13px;">${title}</a>
                     <span style="font-weight: bold; font-size: 11px; margin-left: 5px; color: #0d47a1;">${item.count}</span>

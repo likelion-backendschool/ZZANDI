@@ -53,7 +53,7 @@ public class SecurityConfig{
             .loginProcessingUrl("/user/login_proc")
             .usernameParameter("userId")
             .passwordParameter("userPassword")
-            .defaultSuccessUrl("/")
+            .defaultSuccessUrl("/",false)
             .successHandler(customAuthenticationSuccessHandler)
             .failureHandler(customAuthenticationFailureHandler)
             .permitAll()

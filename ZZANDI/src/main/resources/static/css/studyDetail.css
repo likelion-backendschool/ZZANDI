@@ -1,0 +1,67 @@
+
+/*
+참가 신청 버튼
+ */
+.participationbtn{
+  display: block;
+  width: 100px;
+  color: #519259;
+  border-color: #519259;
+}
+.participationbtn:hover{
+  background-color: #519259;
+  color : #ffffff;
+}
+
+/*--------------------------------------------------------------
+# Testimonials Section
+--------------------------------------------------------------*/
+.studyDetailBox {
+  width : 850px;
+  box-sizing: content-box;
+  padding: 30px 50px;
+  margin: 100px auto;
+  box-shadow: 0px 0 15px rgba(0, 0, 0, 0.13);
+  position: relative;
+  background: #fff;
+  border-radius: 10px;
+}
+
+.studyDetailBox .studyCover {
+  width: 100px;
+  margin-right: 15px;
+  margin-top: 10px;
+}
+
+.studyDetailBox h3 {
+  font-size: 20px;
+  font-weight: bold;
+  color: #000;
+}
+
+/*.testimonial-item h4 {*/
+/*  font-size: 14px;*/
+/*  color: #999;*/
+/*  margin: 0;*/
+/*}*/
+
+/*.testimonial-item p {*/
+/*  font-style: italic;*/
+/*  margin: 15px auto 15px auto;*/
+/*}*/
+
+@media (max-width: 767px) {
+  .testimonial-wrap {
+    padding-left: 0;
+  }
+
+  .testimonial-item {
+    padding: 30px;
+    margin: 15px;
+  }
+
+  .testimonial-item .testimonial-img {
+    position: static;
+    left: auto;
+  }
+}

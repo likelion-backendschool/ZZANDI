@@ -7,6 +7,7 @@ import com.ll.zzandi.dto.LectureDto;
 import com.ll.zzandi.dto.StudyDto;
 
 import com.ll.zzandi.dto.api.SearchDto;
+import com.ll.zzandi.dto.study.StudyDetailDto;
 import com.ll.zzandi.service.BoardService;
 import com.ll.zzandi.service.BookService;
 import com.ll.zzandi.service.LectureService;
@@ -128,6 +129,19 @@ public class StudyController {
         model.addAttribute("isTeamMate", checkList.get(1));
         model.addAttribute("isDelete", checkList.get(2));
         return"study/studyDetail";
+    }
+
+    @GetMapping("/study/detail/{studyId}/study-data")
+    @ResponseBody
+    public StudyDetailDto findStudyDetail(@PathVariable Long studyId) {
+        return studyService.findStudyDetail(studyId);
+    }
+
+    @GetMapping("/study/detail/{studyId}/test")
+    public String testStudyDetail(@AuthenticationPrincipal User user, @PathVariable Long studyId, Model model) {
+        model.addAttribute("studyId", studyId);
+        model.addAttribute("user", user);
+        return "study/studyDetailAsync";
     }
 
     @PreAuthorize("isAuthenticated()")

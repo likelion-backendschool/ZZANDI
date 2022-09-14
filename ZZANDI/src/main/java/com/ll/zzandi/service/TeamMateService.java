@@ -3,6 +3,7 @@ package com.ll.zzandi.service;
 import com.ll.zzandi.domain.Study;
 import com.ll.zzandi.domain.TeamMate;
 import com.ll.zzandi.domain.User;
+import com.ll.zzandi.dto.teamMate.TeamMateDto;
 import com.ll.zzandi.enumtype.StudyStatus;
 import com.ll.zzandi.enumtype.TeamMateDelegate;
 import com.ll.zzandi.enumtype.TeamMateStatus;
@@ -17,6 +18,7 @@ import com.ll.zzandi.util.mail.EmailMessage;
 import com.ll.zzandi.util.mail.EmailService;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -199,6 +201,16 @@ public class TeamMateService {
 
   public List<TeamMate> findAllByUser(User user) {
     return teamMateRepository.findAllByUser(user);
+  }
+
+  public List<TeamMateDto> findByStudy(Long studyId) {
+    Study study = studyRepository.findById(studyId)
+        .orElseThrow(() -> new StudyException(ErrorType.NOT_FOUND));
+
+    return teamMateRepository.findByStudy(study).stream().map(
+            teamMate -> new TeamMateDto(teamMate.getId(), teamMate.getUser().getUserNickname(),
+                teamMate.getTeamRate(), teamMate.getTeamMateStatus(), teamMate.getTeamMateDelegate()))
+        .collect(Collectors.toList());
   }
 
   public List<Boolean> checkTeamMate(List<TeamMate> teamMateList, User user) {

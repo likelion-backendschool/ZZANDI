@@ -1,0 +1,51 @@
+<!--메인 페이지-->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<!-- head -->
+<div th:replace="layout/head.html :: head"></div>
+<script defer type="text/javascript" th:src="@{/js/study/studyDetailAsync.js}"></script>
+<link rel="stylesheet" th:href="@{/css/studyDetail.css}">
+<body>
+
+<!-- header -->
+<section th:replace="layout/header.html :: header"></section>
+<input type="hidden" class = "studyId" th:value="${studyId}">
+<input type="hidden" class="userNickname" th:value="${user.userNickname}"> <!-- 현재 로그인 한 유저 식별자 -->
+<input id="test" th:value>
+
+<!--스터디 상세 정보란-->
+<div class="container" style="height: 700px;">
+  <div class="studyDetailBox">
+    <div class="studyDetail d-flex align-items-center">
+<!--      <div>-->
+<!--        <img id="studyCover" src="${data.studyCoverUrl}">-->
+<!--      </div>-->
+<!--      <img src="assets/img/testimonials/testimonials-1.jpg" class="testimonial-img flex-shrink-0" alt="">-->
+<!--      <div>-->
+<!--        <h3>Saul Goodman</h3>-->
+<!--        <h4>Ceo &amp; Founder</h4>-->
+<!--        <div class="stars">-->
+<!--          <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>-->
+<!--        </div>-->
+<!--      </div>-->
+    </div>
+<!--    <p>-->
+<!--      <i class="bi bi-quote quote-icon-left"></i>-->
+<!--      Proin iaculis purus consequat sem cure digni ssim donec porttitora entum suscipit rhoncus. Accusantium quam, ultricies eget id, aliquam eget nibh et. Maecen aliquam, risus at semper.-->
+<!--      <i class="bi bi-quote quote-icon-right"></i>-->
+<!--    </p>-->
+  </div>
+</div>
+
+<!-- footer -->
+<div th:replace="layout/footer.html :: footer"></div>
+
+<!-- tail -->
+<div th:replace="layout/tail.html :: tail"></div>
+
+
+</body>
+
+</html>

@@ -5,9 +5,12 @@ import com.ll.zzandi.dto.BookDto;
 import com.ll.zzandi.dto.BookInfoDto;
 import com.ll.zzandi.dto.LectureDto;
 import com.ll.zzandi.dto.StudyDto;
+import com.ll.zzandi.dto.study.StudyDetailDto;
 import com.ll.zzandi.enumtype.StudyStatus;
 import com.ll.zzandi.enumtype.StudyType;
 import com.ll.zzandi.enumtype.TeamMateStatus;
+import com.ll.zzandi.exception.ErrorType;
+import com.ll.zzandi.exception.StudyException;
 import com.ll.zzandi.repository.BoardRepository;
 import com.ll.zzandi.repository.BookRepository;
 import com.ll.zzandi.repository.CommentRepository;
@@ -215,6 +218,31 @@ public class StudyService {
             study.setStudyStatus(StudyStatus.RECRUIT);
             studyRepository.save(study);
         }
+    }
+
+    public StudyDetailDto findStudyDetail(Long studyId) {
+        Study study = studyRepository.findById(studyId)
+            .orElseThrow(() -> new StudyException(ErrorType.NOT_FOUND));
+        Book book = study.getBook();
+        Lecture lecture = study.getLecture();
+        StudyDetailDto studyDetailDto = null;
+        if (book != null) {
+            book = bookService.findByid(book.getId()).orElseThrow(null);
+            studyDetailDto = new StudyDetailDto(study.getStudyTitle(), study.getUser().getUserNickname(),
+                study.getAcceptedStudyMember(), study.getStudyPeople(), study.getStudyStart(), study.getStudyEnd(),
+                study.getStudyTag(), String.valueOf(study.getStudyType()), study.getStudyRate(), study.getStudyCoverUrl(), String.valueOf(study.getStudyStatus()),
+                book.getBookName(), book.getBookPage(), book.getBookAuthor(), book.getBookPublisher(), book.getBookIsbn(),
+                null, null, null);
+        } else if (lecture != null) {
+            lecture = lectureService.findById(lecture.getId()).orElseThrow(null);
+            studyDetailDto = new StudyDetailDto(study.getStudyTitle(), study.getUser().getUserNickname(),
+                study.getAcceptedStudyMember(), study.getStudyPeople(), study.getStudyStart(), study.getStudyEnd(),
+                study.getStudyTag(), String.valueOf(study.getStudyType()), study.getStudyRate(), study.getStudyCoverUrl(), String.valueOf(study.getStudyStatus()),
+                null, null, null, null, null,
+                lecture.getLectureName(), lecture.getLecturer(), lecture.getLectureNumber());
+        }
+
+        return studyDetailDto;
     }
 
     /*

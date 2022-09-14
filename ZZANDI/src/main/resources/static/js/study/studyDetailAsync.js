@@ -1,11 +1,13 @@
 'use strict'
 
-const studyDetail = document.querySelector(".studyDetail");
+const studyDetail_left = document.querySelector(".studyDetail-left");
+const studyDetail_top = document.querySelector(".studyDetail-top");
 const studyId = document.querySelector(".studyId").value;
 const userNickname = document.querySelector(".userNickname").value;
 
-window.onload = () => {
-  findTeamMateList(studyId, userNickname);
+window.onload = async () => {
+  const teamMateList = await findTeamMateList(studyId, userNickname);
+  checkTeamMate(teamMateList);
   findStudyDetail(studyId);
 }
 
@@ -24,122 +26,85 @@ function findStudyDetail(studyId) {
   });
 }
 
-// <form th:action="@{|/${studies.id}/teamMate/create|}" method="post">
-//   // <button type="submit"
-//              onClick="if (!confirm('스터디에 참가 신청하시겠습니까?')) return false; else alert('신청이 완료되었습니다.')"
-//              className="btn btn-outline-secondary"
-//     //     th:if ="!${isParticipation} and ${studies.studyStatus.name() == 'RECRUIT'}">참가 신청</button>
-//     // </form>
 function displayStudy(data) {
   console.log("displayStudy 실행");
-
+  // StudyDetail-left [start]
   let html = '';
   html += `
     <div>
-      <h3># ${data.studyTag}</h3>
+      <p id = "studyTag"># ${data.studyTag}</p>
       <a href="/study/coverUpload/${studyId}">
         <img class="studyCover flex-shrink-0" src="${data.studyCoverUrl}">
       </a>
   `;
 
-  console.log(isParticipation);
+  console.log("isParticipation : " + isParticipation);
+  // 팀원이 아니며 아직 모집 중일 때,
   if (!isParticipation && data.studyStatus == 'RECRUIT') {
     html += `
       <button onclick = "create()" class="participationbtn btn btn-outline-primary mt-3">참가 신청</button>
     `;
   }
 
+  // 팀원이지만 팀장이 아니며, 아직 진행 중이 아닌 경우,
+  if(isTeamMate && (userNickname != data.leader) && (data.studyStatus == 'RECRUIT' || data.studyStatus == 'RECRUIT_COMPLETE')){
+    html += `
+      <button onclick = "quit()" class="quitbtn btn btn-outline-secondary mt-3">탈퇴하기</button>
+    `;
+  }
+
   html += `</div>`
-  studyDetail.innerHTML = html;
-  // studyDetail.innerHTML = `
-  // <table>
-  //   <thead>
-  //     <tr>
-  //       <th>대표 이미지</th>
-  //       <th>스터디 이름</th>
-  //       <th>스터디 팀장</th>
-  //       <th>스터디 모집된 팀원 수</th>
-  //       <th>스터디 인원 수</th>
-  //       <th>스터디 시작일</th>
-  //       <th>스터디 종료일</th>
-  //       <th>스터디 태그</th>
-  //       <th>스터디 달성률</th>
-  //     </tr>
-  //     </thead>
-  //     <tbody>
-  //     <td>
-  //       <img id="studyCover" src="${data.studyCoverUrl}">
-  //       <div>
-  //         <a href="/study/coverUpload/${studyId}">스터디 대표이미지 생성</a>
-  //       </div>
-  //     </td>
-  //     <td>${data.studyTitle}</td>
-  //     <td>${data.leader}</td>
-  //     <td>${data.acceptedStudyMember}</td>
-  //     <td>${data.studyPeople}</td>
-  //     <td>${data.studyStart}</td>
-  //     <td>${data.studyEnd}</td>
-  //     <td>${data.studyTag}</td>
-  //     <td>${data.studyRate}</td>
-  //     </tbody>
-  //     <thead>
-  //     <tr class = "studyType-th">
-  //     </tr>
-  //     </thead>
-  //     <tbody class="studyType-td">
-  //     </tbody>
-  //   </table>
-  // `;
+  studyDetail_left.innerHTML = html;
+  // StudyDetail-left [end]
+
+  // StudyDetail-top [start]
+  html = '';
+  html += `
+    <div id = "studyTitle">${data.studyTitle}</div>`;
+
+  if ((data.studyStatus == 'RECRUIT' || data.studyStatus == 'RECRUIT_COMPLETE')
+      && userNickname == data.leader) {
+    html += `<a id = "studyUpdate" href="/study/update/${studyId}">수정</a>`
+  }
+
+  html += `
+    <div class = "status">
+      <div class = "people">
+          <i id="people-icon" class="bi bi-people-fill"></i>
+          <span>인원 : ${data.acceptedStudyMember} / ${data.studyPeople}명</span>
+      </div>
+   `;
+
+  if (data.studyStatus == 'RECRUIT') {
+    html += `<p id = "recruit">모집 중</p>`;
+  }else if (data.studyStatus == 'RECRUIT_COMPLETE') {
+    html += `<p id = "recruit">모집 완료</p>`;
+  }else if (data.studyStatus == 'PROGRESS') {
+    html += `<p id = "progress">진행 중</p>`;
+  } else {
+    html += `<p id = "complete">완료</p>`;
+  }
+  html += `</div>`;
+
+  studyDetail_top.innerHTML = html;
+  // StudyDetail-top [end]
 }
 
 function dis(data) {
   console.log("dis 실행");
-  // const studyType_th = document.querySelector('.studyType-th');
-  // const studyType_td = document.querySelector('.studyType-td');
-  // if (data.studyType == 'BOOK') {
-  //   studyType_th.innerHTML = `
-  //     <th>스터디 타입</th>
-  //     <th>책 이름</th>
-  //     <th>책 쪽수</th>
-  //     <th>책 작가</th>
-  //     <th>책 출판사</th>
-  //     <th>책 ISBN</th>
-  //   `;
-  //
-  //   studyType_td.innerHTML = `
-  //     <td>${data.studyType}</td>
-  //     <td>${data.bookName}</td>
-  //     <td>${data.bookPage}</td>
-  //     <td>${data.bookAuthor}</td>
-  //     <td>${data.bookPublisher}</td>
-  //     <td>${data.bookIsbn}</td>
-  //   `;
-  // } else {
-  //   studyType_th.innerHTML = `
-  //     <th>스터디 타입</th>
-  //     <th>강의 이름</th>
-  //     <th>강사 이름</th>
-  //     <th>강의 개수</th>
-  //   `;
-  //   studyType_td.innerHTML = `
-  //     <td>${data.studyType}</td>
-  //     <td>${data.lectureName}</td>
-  //     <td>${data.lecturer}</td>
-  //     <td>${data.lectureNumber}</td>
-  //   `;
-
 }
 
 function findTeamMateList(studyId) {
   console.log("findTeamMateList 실행");
-  fetch(`/${studyId}/teamMate/data`)
-  .then(response => response.json())
-  .then(teamMateList => {
-    checkTeamMate(teamMateList)
-  })
+  return fetch(`/${studyId}/teamMate/data`)
+  .then(response => response.json());
 }
 
 function checkTeamMate(teamMateList) {
+  isParticipation = false;
+  isTeamMate = false;
+  isDelete = false;
+  cnt = 0;
   console.log("checkTeamMate 실행");
   for(let i = 0; i < teamMateList.length; i++){
     if(teamMateList[i].userNickname == userNickname) {   // 현재 유저가 팀원이라면, isParticipation은 true
@@ -155,6 +120,10 @@ function checkTeamMate(teamMateList) {
   if (cnt == 1) {    // 팀원이 오직 나 하나뿐이라면, 바로 탈퇴가 가능하다.
     isDelete = true;
   }
+  console.log("isParticipation : " + isParticipation);
+  console.log("isTeamMate : " + isTeamMate);
+  console.log("isDelete : " + isDelete);
+
 }
 
 function create() {
@@ -169,10 +138,31 @@ function create() {
         "Content-Type": "application/json"
       }
     })
-    .then(()=>{
-      findTeamMateList(studyId, userNickname);
+    .then(async () => {
+      const teamMateList = await findTeamMateList(studyId, userNickname);
+      checkTeamMate(teamMateList);
       findStudyDetail(studyId);
     })
     alert('신청이 완료되었습니다.')
+  }
+}
+
+function quit() {
+  console.log("quit 실행");
+  if(!confirm('스터디에서 탈퇴하시겠습니까?')) {
+    return false;
+  } else {
+    fetch(`/${studyId}/teamMate/quit`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+    .then(async () => {
+      const teamMateList = await findTeamMateList(studyId, userNickname);
+      checkTeamMate(teamMateList);
+      findStudyDetail(studyId);
+    })
+    alert('탈퇴가 완료되었습니다.');
   }
 }

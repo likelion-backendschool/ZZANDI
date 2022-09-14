@@ -248,7 +248,7 @@ public class StudyService {
         }
     }
 
-    public int getStudyDays(Long studyId) {
+    public int getStudyPeriod(Long studyId) {
         Study studies = findByStudyId(studyId).orElseThrow(null);
 
         LocalDate studyStart = LocalDate.parse(studies.getStudyStart());
@@ -260,11 +260,20 @@ public class StudyService {
     public int getStudyRecommend(Long studyId) {
         Study studies = findByStudyId(studyId).orElseThrow(null);
 
-        int studyDays = getStudyDays(studyId);
+        int studyDays = getStudyPeriod(studyId);
 
         int total = (studies.getStudyType().equals(StudyType.BOOK))
             ? studies.getBook().getBookPage() : studies.getLecture().getLectureNumber();
 
         return (int) Math.ceil(total / studyDays);
+    }
+
+    public int getStudyDays(Long studyId) {
+        Study studies = findByStudyId(studyId).orElseThrow(null);
+
+        LocalDate studyStart = LocalDate.parse(studies.getStudyStart());
+        LocalDate today = LocalDate.now();
+
+        return Period.between(studyStart, today).getDays();
     }
 }

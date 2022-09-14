@@ -122,6 +122,10 @@ public class StudyController {
         // 상세검색 기능 (종료)
 
         // 권장 진도율 계산 (시작)
+        int studyDays = studyService.getStudyDays(studyId);
+        model.addAttribute("studyDays", studyDays);
+        int studyPeriod = studyService.getStudyPeriod(studyId);
+        model.addAttribute("studyPeriod", studyPeriod);
         int studyRecommend = studyService.getStudyRecommend(studyId);
         model.addAttribute("studyRecommend", studyRecommend);
         // 권장 진도율 계산 (종료)

@@ -122,7 +122,7 @@
             종료된 스터디 입니다.
         </div>
     </div>
-    <div class="container" th:if="${studies.getStudyStatus().name() == 'PROGRESS'}">
+    <div class="container">
         <div class="badge bg-primary text-wrap fs-4" style="width: 50%;" th:if = "${books != null}">
             하루 권장 진도율은 [[${studyRecommend}]] 페이지 입니다.
         </div>
@@ -134,23 +134,20 @@
         <div class="progress">
             <div class="zzandi shadow leaf"></div>
         </div>
-        <span> MEMBER1 </span>
-        <div class="progress">
-            <div class="bar shadow overlap"></div>
+        <div class = "my-3 w-50" th:each="teamMate : ${studies.teamMateList}" th:if = "${teamMate.teamMateStatus.name() == 'ACCEPTED'}">
+            <div>
+                    <span>
+                        <svg th:if="${#strings.isEmpty(teamMate.user?.userprofileUrl)}" th:data-jdenticon-value="${teamMate.user.getUserNickname}"
+                             width="30" height="30" class="rounded border bg-light"></svg>
+                        <img th:if="${!#strings.isEmpty(teamMate.user?.userprofileUrl)}" th:src="${teamMate.user.userprofileUrl}"
+                             width="30" height="30" class="rounded border"/>
+                        <span th:text="${teamMate.user.getUserNickname}"></span>
+                    </span>
+            </div>
+            <div class="progress">
+                <div class="bar shadow overlap"></div>
+            </div>
         </div>
-        <span> MEMBER2 </span>
-        <div class="progress">
-            <div class="bar shadow bars"></div>
-        </div>
-        <span> MEMBER3 </span>
-        <div class="progress">
-            <div class="bar shadow lines"></div>
-        </div>
-        <span> MEMBER4 </span>
-        <div class="progress">
-            <div class="bar shadow wiggle"></div>
-        </div>
-
     </div>
     <!--            진도율 표시 부분 (끝)-->
 

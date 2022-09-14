@@ -48,7 +48,7 @@ public class UploadController {
     @PostMapping("/study/delete")
     @ResponseBody
     public String deleteFile(@RequestParam("ImageUrl") String fileUrl){
-        imageUploadService.deletefile(fileUrl);
+        imageUploadService.deleteFile(fileUrl);
     return "success";
     }
 }

@@ -44,4 +44,11 @@ public class UploadController {
         studyService.updateCoverImg(multipartFile, studyId);
         return "1";
     }
+
+    @PostMapping("/study/delete")
+    @ResponseBody
+    public String deleteFile(@RequestParam("ImageUrl") String fileUrl){
+        imageUploadService.deleteFile(fileUrl);
+    return "success";
+    }
 }

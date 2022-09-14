@@ -39,7 +39,7 @@ public class SecurityConfig{
         http
             .cors().disable()		//cors방지
             .csrf().disable()		//csrf방지
-//                .formLogin().disable()	//기본 로그인 페이지 없애기
+            .formLogin().disable()	//기본 로그인 페이지 없애기
             .headers().frameOptions().disable()
             .and()
             .authorizeRequests()

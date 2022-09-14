@@ -44,8 +44,8 @@ body {
 
 a {
   color: var(--color-back);
-  /*text-decoration: none;*/
-  font-style: italic;
+  text-decoration: none;
+  /*font-style: italic;*/
 }
 
 a:hover {

@@ -114,11 +114,23 @@ public class StudyController {
         Study studies = studyService.findByStudyId(studyId).orElseThrow(null);
         Book books = studies.getBook();
         Lecture lectures = studies.getLecture();
+
+        // 상세검색 기능 (시작)
         if (books != null) {
             books = bookService.findByid(books.getId()).orElseThrow(null);
         } else if (lectures != null) {
             lectures = lectureService.findById(lectures.getId()).orElseThrow(null);
         }
+        // 상세검색 기능 (종료)
+
+        // 권장 진도율 계산 (시작)
+        int studyDays = studyService.getStudyDays(studyId);
+        model.addAttribute("studyDays", studyDays);
+        int studyPeriod = studyService.getStudyPeriod(studyId);
+        model.addAttribute("studyPeriod", studyPeriod);
+        int studyRecommend = studyService.getStudyRecommend(studyId);
+        model.addAttribute("studyRecommend", studyRecommend);
+        // 권장 진도율 계산 (종료)
 
         List<Boolean> checkList = teamMateService.checkTeamMate(studies.getTeamMateList(), user);
         model.addAttribute("studies", studies);

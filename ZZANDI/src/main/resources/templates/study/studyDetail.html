@@ -122,7 +122,7 @@
             종료된 스터디 입니다.
         </div>
     </div>
-    <div class="container">
+    <div class="container" th:if="${studies.getStudyStatus().name() == 'PROGRESS'}">
         <div class="badge bg-primary text-wrap fs-4" style="width: 50%;" th:if = "${books != null}">
             하루 권장 진도율은 [[${studyRecommend}]] 페이지 입니다.
         </div>

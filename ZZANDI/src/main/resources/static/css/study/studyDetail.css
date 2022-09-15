@@ -1,22 +1,26 @@
 @font-face {
-  font-family: 'GmarketSansMedium';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
+  font-family: 'adobaonlyR';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2205@1.0/adobaonlyR.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
 }
 
 body{
-  font-family: "GmarketSansMedium", serif;
+  font-family: "adobaonlyR", serif;
+}
+
+.container {
+  margin: 0 auto;
+  max-width : 830px;
 }
 
 /*-------------------------------------------------------------
 스터디 상세 정보 박스
  -------------------------------------------------------------*/
 .studyDetailBox {
-  width : 830px;
   box-sizing: content-box;
   padding: 30px 50px;
-  margin: 100px auto;
+  margin: 100px auto 25px auto;
   box-shadow: 0px 0 15px rgba(0, 0, 0, 0.13);
   position: relative;
   background: #fff;
@@ -130,8 +134,6 @@ body{
   margin-bottom : 5px;
 }
 
-
-
 /*
 스터디 타입별 상세 정보
  */
@@ -145,23 +147,19 @@ body{
   margin-bottom: 15px;
   color : dimgray;
 }
-#typeIcon span{
-  margin-left : 8px;
-  font-weight: bold;
-}
 
 /*
 스터디 신청자 목록
  */
 .studyDetailBox .studyDetail .studyDetail-right{
   margin-left: 15px;
-  min-width: 230px;
   text-align: center;
 }
 
 #waitingList{
   border-left: 1px dashed dimgray;
-  height : 100%
+  height : 100%;
+  min-width: 200px;
 }
 
 #waitingNickname{
@@ -170,6 +168,7 @@ body{
 
 #waitingProfile{
   width : 30px;
+  height : 30px;
   border-radius: 0.1em;
 }
 
@@ -188,34 +187,50 @@ td{
   padding : 2px;
 }
 
-/*.studyDetailBox h3 {*/
-/*  font-size: 20px;*/
-/*  font-weight: bold;*/
-/*  color: #000;*/
-/*}*/
-/*.testimonial-item h4 {*/
-/*  font-size: 14px;*/
-/*  color: #999;*/
-/*  margin: 0;*/
-/*}*/
+/*-------------------------------------------------------------
+게시판 이동 & 달성률 등록
+-------------------------------------------------------------*/
+.navbar > ul > li > .menu {
+  color : #519259;
+  font-family: "adobaonlyR", serif;
+  display : flex;
+  align-items: flex-start;
+}
 
-/*.testimonial-item p {*/
-/*  font-style: italic;*/
-/*  margin: 15px auto 15px auto;*/
-/*}*/
+/*-------------------------------------------------------------
+팀원 목록 & 위임 신청 & 달성률 진행 바
+-------------------------------------------------------------*/
+.acceptedTeamMate {
+  padding : 20px;
+}
 
-@media (max-width: 767px) {
-  .testimonial-wrap {
-    padding-left: 0;
-  }
+#acceptedProfile {
+  width : 45px;
+  height : 45px;
+  border-radius: 0.3em;
+}
 
-  .testimonial-item {
-    padding: 30px;
-    margin: 15px;
-  }
+#delegatebtn{
+  width: 60px;
+  color: #519259;
+  border-color: #519279;
+  font-size : 14px;
+  padding : 0px;
+  margin-left : 10px;
+  display: none;
+}
 
-  .testimonial-item .testimonial-img {
-    position: static;
-    left: auto;
-  }
+#delegatebtn:hover{
+  background-color: #519259;
+  color : #ffffff;
+}
+
+#completebtn{
+  width: 60px;
+  color : dimgray;
+  border-color: dimgray;
+  font-size : 14px;
+  padding : 0px;
+  margin-left : 10px;
+  display: none;
 }

@@ -8,6 +8,8 @@ import com.ll.zzandi.dto.StudyDto;
 
 import com.ll.zzandi.dto.api.SearchDto;
 import com.ll.zzandi.dto.study.StudyDetailDto;
+import com.ll.zzandi.exception.ErrorType;
+import com.ll.zzandi.exception.StudyException;
 import com.ll.zzandi.service.BoardService;
 import com.ll.zzandi.service.BookService;
 import com.ll.zzandi.service.LectureService;
@@ -151,6 +153,7 @@ public class StudyController {
 
     @GetMapping("/study/detail/{studyId}/test")
     public String testStudyDetail(@AuthenticationPrincipal User user, @PathVariable Long studyId, Model model) {
+        Study study = studyService.findByStudyId(studyId).orElseThrow(() -> new StudyException(ErrorType.NOT_FOUND));
         model.addAttribute("studyId", studyId);
         model.addAttribute("user", user);
         return "study/studyDetailAsync";

@@ -5,6 +5,7 @@
 
 <!-- head -->
 <div th:replace="layout/head.html :: head"></div>
+<script src="https://kit.fontawesome.com/86ddd041a9.js" crossorigin="anonymous"></script>
 <script defer type="text/javascript" th:src="@{/js/study/studyDetailAsync.js}"></script>
 <link rel="stylesheet" th:href="@{/css/study/studyDetail.css}">
 <body>
@@ -18,39 +19,34 @@
 <!--스터디 상세 정보란-->
 <div class="container" style="height: 700px;">
   <div class="studyDetailBox d-flex align-content-center">
-      <div class = "studyDetail-left">
+    <div class = "studyDetail-left">
 <!--        스터디 태그 & 스터디 대표 이미지 & 참가신청 및 탈퇴 버튼-->
-      </div>
-      <div class = "studyDetail">
-        <div class = "studyDetail-top">
-<!--        스터디 이름 & 수정 버튼 & 스터디 상태 & 모집인원          -->
-        </div>
-        <hr class = "mt-0">
-        <div class = "d-flex w-100">
-          <div class = "studyDetail-center">
-          </div>
-          <div class = "studyDetail-right">
-          </div>
-        </div>
-      </div>
-
-<!--      <div>-->
-<!--        <img id="studyCover" src="${data.studyCoverUrl}">-->
-<!--      </div>-->
-<!--      <img src="assets/img/testimonials/testimonials-1.jpg" class="testimonial-img flex-shrink-0" alt="">-->
-<!--      <div>-->
-<!--        <h3>Saul Goodman</h3>-->
-<!--        <h4>Ceo &amp; Founder</h4>-->
-<!--        <div class="stars">-->
-<!--          <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>-->
-<!--        </div>-->
-<!--      </div>-->
     </div>
-<!--    <p>-->
-<!--      <i class="bi bi-quote quote-icon-left"></i>-->
-<!--      Proin iaculis purus consequat sem cure digni ssim donec porttitora entum suscipit rhoncus. Accusantium quam, ultricies eget id, aliquam eget nibh et. Maecen aliquam, risus at semper.-->
-<!--      <i class="bi bi-quote quote-icon-right"></i>-->
-<!--    </p>-->
+    <div class = "studyDetail">
+      <div class = "studyDetail-top">
+<!--        스터디 이름 & 수정 버튼 & 스터디 상태 & 모집인원          -->
+      </div>
+      <hr class = "mt-0">
+      <div class = "d-flex w-100">
+        <div class = "studyDetail-center">
+<!--            스터디 상세 정보 & 권장 진도율-->
+        </div>
+        <div class = "studyDetail-right">
+<!--            참여 신청자 목록(수락 및 거절)-->
+        </div>
+      </div>
+    </div>
+  </div>
+  <nav class="navbar">
+    <ul>
+      <li><a class = "menu" th:href="@{|/${studyId}/board/list|}">
+        <i class="bi bi-chat-left-text" style="font-size: 1.3rem; margin-right : 5px;"></i>게시판 이동</a></li>
+      <li><a class = "menu" href="#">
+        <i class="bi bi-pencil-square" style="font-size: 1.3rem; margin-right : 5px;"></i>달성률 등록</a></li>
+    </ul>
+  </nav>
+  <div class = "acceptedTeamMate">
+<!--    팀원 목록-->
   </div>
 </div>
 

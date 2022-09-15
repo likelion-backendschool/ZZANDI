@@ -123,6 +123,9 @@
         </div>
     </div>
     <div class="container" th:if="${studies.getStudyStatus().name() == 'PROGRESS'}">
+        <input type="hidden" id="studyperiod" th:value="${studyPeriod}"/>
+        <input type="hidden" id="studydays" th:value="${studyDays}"/>
+
         <div class="badge bg-primary text-wrap fs-4" style="width: 50%;" th:if = "${books != null}">
             하루 권장 진도율은 [[${studyRecommend}]] 페이지 입니다.
         </div>

@@ -1,11 +1,14 @@
 package com.ll.zzandi.controller;
 
 import com.ll.zzandi.domain.Study;
+import com.ll.zzandi.domain.User;
 import com.ll.zzandi.service.StudyService;
 import com.ll.zzandi.util.aws.ImageUploadService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -33,6 +36,9 @@ public class UploadController {
 
     @GetMapping("/study/coverUpload/{studyId}")
     public String StudyCover(@PathVariable long studyId, Model model){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal(); // 현재 로그인 한 유저 정보
+        model.addAttribute("user", user);
         model.addAttribute("studyId", studyId);
         return "/study/studyCoverUpload";
     }

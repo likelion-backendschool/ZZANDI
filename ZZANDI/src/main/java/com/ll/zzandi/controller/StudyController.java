@@ -149,6 +149,9 @@ public class StudyController {
         Book books = studies.getBook();
         Lecture lectures = studies.getLecture();
         StudyDto newStudyDto = studyService.saveNewStudyDto(studyId, studyDto);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal(); // 현재 로그인 한 유저 정보
+        model.addAttribute("user", user);
         model.addAttribute("studies", studies);
         model.addAttribute("lectures", lectures);
         model.addAttribute("books", books);

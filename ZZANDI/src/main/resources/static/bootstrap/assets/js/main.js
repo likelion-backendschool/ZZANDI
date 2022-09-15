@@ -356,3 +356,34 @@ $(document).ready(function() {
     }
   });
 });
+
+//업로드
+$("#studyCoverUrl").change(function(e) {
+
+  let studyId = document.getElementById("study-id").value;
+  const fileInput = document.getElementById("studyCoverUrl");
+  const reader = new FileReader();
+  let img = document.createElement("img");
+  img.id='studyCoverImg';
+  img.src=e.target.result;
+  const formData = new FormData()
+  var fileName = $('#studyCoverUrl').val();
+  formData.append("coverImage", fileInput.files[0],fileName);
+  console.log(studyId);
+  console.log(formData);
+  $.ajax("/study/coverUpload/" + studyId,{
+    method: 'POST',
+    data: formData,
+    processData : false,	// data 파라미터 강제 string 변환 방지
+    contentType : false,	// application/x-www-form-urlencoded; 방지
+    success() {
+      console.log('Upload success');
+      location.replace("/");
+    },
+    error() {
+      console.log('Upload error');
+    },
+
+  });
+  reader.readAsDataURL(e.target.files[0]);
+});

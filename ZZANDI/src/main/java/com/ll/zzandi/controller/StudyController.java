@@ -156,6 +156,13 @@ public class StudyController {
         Study study = studyService.findByStudyId(studyId).orElseThrow(() -> new StudyException(ErrorType.NOT_FOUND));
         model.addAttribute("studyId", studyId);
         model.addAttribute("user", user);
+
+        int studyDays = studyService.getStudyDays(studyId);
+        model.addAttribute("studyDays", studyDays);
+        int studyPeriod = studyService.getStudyPeriod(studyId);
+        model.addAttribute("studyPeriod", studyPeriod);
+        int studyRecommend = studyService.getStudyRecommend(studyId);
+        model.addAttribute("studyRecommend", studyRecommend);
         return "study/studyDetailAsync";
     }
 

@@ -4,9 +4,15 @@ const studyDetail_left = document.querySelector(".studyDetail-left");
 const studyDetail_top = document.querySelector(".studyDetail-top");
 const studyDetail_center = document.querySelector(".studyDetail-center");
 const studyDetail_right = document.querySelector(".studyDetail-right");
+const studyDetail_bottom = document.querySelector(".studyDetail-bottom");
 const acceptedTeamMate = document.querySelector(".acceptedTeamMate");
+
 const studyId = document.querySelector(".studyId").value;
 const userNickname = document.querySelector(".userNickname").value;
+const studyDays = document.querySelector(".studyDays").value;
+const studyPeriod = document.querySelector(".studyPeriod").value;
+const studyRecommend = document.querySelector(".studyRecommend").value;
+
 let teamMateList;
 let studyDetail;
 
@@ -108,6 +114,7 @@ function displayStudy(data, teamMateList) {
       <div id = "typeIcon">
         <i class="bi bi-book-half" style="font-size: 1.5rem; margin-right : 5px;"></i>
         상세 정보
+        ( ${data.studyStart} <i class="bi bi-arrow-right-short" style="font-size: 1.5rem;"></i> ${data.studyEnd} )
       </div>
       <p>책 이름 : ${data.bookName}</p>
       <p>작가 : ${data.bookAuthor}</p>
@@ -165,6 +172,26 @@ function displayStudy(data, teamMateList) {
   `;
   studyDetail_right.innerHTML = html;
   // studyDetail-right[end]
+
+  // studyDetail-bottom[start]
+  html = '';
+  html += ``;
+  if (data.studyStatus == 'PROGRESS') {
+    if (data.studyType == 'BOOK') {
+      html += `<p class = "recommend"><i class="bi bi-bar-chart-fill" style="font-size: 1.3rem; margin-right : 5px;"></i>오늘의 권장 진도율 : ~ p.${studyRecommend}</p>`;
+    } else {
+      html += `<p class = "recommend"><i class="bi bi-bar-chart-fill" style="font-size: 1.3rem; margin-right : 5px;"></i>오늘의 권장 진도율 : ~ ${studyRecommend}강</p>`;
+    }
+
+    html += `
+    <p class = "fw-bold">< 달성률 ></p>
+    <div class="progress">
+      <div class="zzandi shadow leaf"></div>
+    </div>
+    `;
+  }
+  studyDetail_bottom.innerHTML = html;
+  // studyDetail-bottom[end]
 
   // acceptedTeamMate[start]
   html = ``;

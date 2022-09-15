@@ -14,7 +14,9 @@
 <section th:replace="layout/header.html :: header"></section>
 <input type="hidden" class = "studyId" th:value="${studyId}">
 <input type="hidden" class="userNickname" th:value="${user.userNickname}"> <!-- 현재 로그인 한 유저 식별자 -->
-<input id="test" th:value>
+<input type="hidden" class="studyDays" th:value="${studyDays}">
+<input type="hidden" class="studyPeriod" th:value="${studyPeriod}">
+<input type="hidden" class="studyRecommend" th:value="${studyRecommend}">
 
 <!--스터디 상세 정보란-->
 <div class="container" style="height: 700px;">
@@ -34,6 +36,9 @@
         <div class = "studyDetail-right">
 <!--            참여 신청자 목록(수락 및 거절)-->
         </div>
+      </div>
+      <div class = "studyDetail-bottom">
+<!--        스터디 권장 진도율 & 총 달성률-->
       </div>
     </div>
   </div>

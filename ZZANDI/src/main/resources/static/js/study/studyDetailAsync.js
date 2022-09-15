@@ -184,9 +184,9 @@ function displayStudy(data, teamMateList) {
     }
 
     html += `
-    <p class = "fw-bold">< 달성률 ></p>
+    <p class = "fw-bold">< 달성률 - ${data.studyRate}% ></p>
     <div class="progress">
-      <div class="zzandi shadow leaf"></div>
+      <div class="zzandi shadow jupiter"></div>
     </div>
     `;
   }
@@ -219,8 +219,19 @@ function displayStudy(data, teamMateList) {
             <i class="bi bi-send" style="font-size: 1.1rem; margin-right : 3px;"></i>완료</button>
           `;
         }
-        html += `</div>`;
       }
+      html += `
+        </div>
+      `;
+
+      html += `
+        <div class = "d-flex mt-3 mb-5 align-items-center">
+          <div class="progress">
+            <div class="bar shadow leaf"></div>
+          </div>
+          <p class = "mb-0 ms-3">${teamMateList[i].teamRate}%</p>
+        </div>
+      `;
     }
 
     acceptedTeamMate.innerHTML = html;

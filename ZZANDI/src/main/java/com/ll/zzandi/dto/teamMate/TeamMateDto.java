@@ -17,6 +17,7 @@ public class TeamMateDto {
 
   private Long id;
   private String userNickname;
+  private String userprofileUrl;
   private Integer teamRate;
   private TeamMateStatus teamMateStatus;
   private TeamMateDelegate teamMateDelegate;

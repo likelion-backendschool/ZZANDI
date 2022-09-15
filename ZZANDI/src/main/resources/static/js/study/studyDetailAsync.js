@@ -3,11 +3,13 @@
 const studyDetail_left = document.querySelector(".studyDetail-left");
 const studyDetail_top = document.querySelector(".studyDetail-top");
 const studyDetail_center = document.querySelector(".studyDetail-center");
+const studyDetail_right = document.querySelector(".studyDetail-right");
 const studyId = document.querySelector(".studyId").value;
 const userNickname = document.querySelector(".userNickname").value;
+let teamMateList;
 
 window.onload = async () => {
-  const teamMateList = await findTeamMateList(studyId, userNickname);
+  teamMateList = await findTeamMateList(studyId, userNickname);
   checkTeamMate(teamMateList);
   findStudyDetail(studyId);
 }
@@ -22,12 +24,11 @@ function findStudyDetail(studyId) {
   fetch(`/study/detail/${studyId}/study-data`)
   .then(response => response.json())
   .then(data => {
-    displayStudy(data);
-    dis(data);
+    displayStudy(data, teamMateList);
   });
 }
 
-function displayStudy(data) {
+function displayStudy(data, teamMateList) {
   console.log("displayStudy 실행");
   // StudyDetail-left [start]
   let html = '';
@@ -43,14 +44,14 @@ function displayStudy(data) {
   // 팀원이 아니며 아직 모집 중일 때,
   if (!isParticipation && data.studyStatus == 'RECRUIT') {
     html += `
-      <button onclick = "create()" class="participationbtn btn btn-outline-primary mt-3">참가 신청</button>
+      <button onclick = "create()" id = "participationbtn" class="btn btn-outline-primary mt-3">참가 신청</button>
     `;
   }
 
   // 팀원이지만 팀장이 아니며, 아직 진행 중이 아닌 경우,
   if(isTeamMate && (userNickname != data.leader) && (data.studyStatus == 'RECRUIT' || data.studyStatus == 'RECRUIT_COMPLETE')){
     html += `
-      <button onclick = "quit()" class="quitbtn btn btn-outline-secondary mt-3">탈퇴하기</button>
+      <button onclick = "quit()" id="quitbtn" class="btn btn-outline-secondary mt-3">탈퇴하기</button>
     `;
   }
 
@@ -94,7 +95,10 @@ function displayStudy(data) {
   html = '';
   if (data.studyType == 'BOOK') {
     html += `
-      <i class="bi bi-book-half" style="font-size: 2rem;"></i>
+      <div id = "typeIcon">
+        <i class="bi bi-book-half" style="font-size: 1.5rem;"></i>
+        <span>상세 정보</span>
+      </div>
       <p>책 이름 : ${data.bookName}</p>
       <p>작가 : ${data.bookAuthor}</p>
       <p>출판사 : ${data.bookPublisher}</p>
@@ -103,7 +107,10 @@ function displayStudy(data) {
     `;
   } else {
     html += `
-      <i class="bi bi-play-btn" style="font-size: 2rem;"></i>
+      <div id = "typeIcon">
+        <i class="bi bi-play-btn" style="font-size: 1.5rem;"></i>
+        <span>상세 정보</span>
+      </div>
       <p>강의 이름 : ${data.lectureName}</p>
       <p>강사진 : ${data.lecturer}</p>
       <p>강의 개수 : ${data.lectureNumber} 강</p>
@@ -112,11 +119,41 @@ function displayStudy(data) {
 
   studyDetail_center.innerHTML = html;
   // studyDetail-center[end]
-}
 
-function dis(data) {
-  console.log("dis 실행");
+  // studyDetail-right[start]
+  html = '';
 
+  if (userNickname == data.leader && data.studyStatus == 'RECRUIT') {
+    html += `
+      <div id = "waitingList">< 참여 신청자 목록 >
+      <table>
+    `;
+    for (let i = 0; i < teamMateList.length; i++) {
+      if (teamMateList[i].teamMateStatus == 'WAITING') {
+        html += `
+          <tr>
+            <td>
+              <a id="waitingNickname" href="/user/mypage?userNickname=${teamMateList[i].userNickname}" style="margin-right: 5px;">
+                <img id = "waitingProfile" src="${teamMateList[i].userprofileUrl}">
+                ${teamMateList[i].userNickname}
+              </a>
+            </td>
+            <td>
+              <button onclick = "updateTeamMate(${teamMateList[i].id})" id = "updatebtn" class="btn btn-outline-secondary">수락</button>
+              <button onclick = "deleteTeamMate(${teamMateList[i].id})" id = "updatebtn" class="btn btn-outline-secondary">거절</button>
+            </td>
+          </tr>
+        `;
+      }
+    }
+
+  }
+  html += `
+      </div>
+    </table>
+  `;
+  studyDetail_right.innerHTML = html;
+  // studyDetail-right[end]
 }
 
 function findTeamMateList(studyId) {
@@ -151,6 +188,7 @@ function checkTeamMate(teamMateList) {
 
 }
 
+// onclick
 function create() {
   console.log("create 실행");
   if (!confirm('스터디에 참가 신청하시겠습니까?')) {
@@ -164,7 +202,7 @@ function create() {
       }
     })
     .then(async () => {
-      const teamMateList = await findTeamMateList(studyId, userNickname);
+      teamMateList = await findTeamMateList(studyId, userNickname);
       checkTeamMate(teamMateList);
       findStudyDetail(studyId);
     })
@@ -184,10 +222,46 @@ function quit() {
       }
     })
     .then(async () => {
-      const teamMateList = await findTeamMateList(studyId, userNickname);
+      teamMateList = await findTeamMateList(studyId, userNickname);
       checkTeamMate(teamMateList);
       findStudyDetail(studyId);
     })
     alert('탈퇴가 완료되었습니다.');
+  }
+}
+
+function updateTeamMate(data) {
+  if (!confirm('참가 신청을 수락하시겠습니까?')){
+    return false;
+  }else {
+    fetch(`/${studyId}/teamMate/update/${data}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+    .then(async () => {
+      teamMateList = await findTeamMateList(studyId, userNickname);
+      checkTeamMate(teamMateList);
+      findStudyDetail(studyId);
+    })
+  }
+}
+
+function deleteTeamMate(data){
+  if (!confirm('참가 신청을 거절하시겠습니까?')) {
+    return false;
+  } else {
+    fetch(`/${studyId}/teamMate/delete/${data}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+    .then(async () => {
+      teamMateList = await findTeamMateList(studyId, userNickname);
+      checkTeamMate(teamMateList);
+      findStudyDetail(studyId);
+    })
   }
 }

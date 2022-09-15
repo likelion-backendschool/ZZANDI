@@ -209,7 +209,8 @@ public class TeamMateService {
 
     return teamMateRepository.findByStudy(study).stream().map(
             teamMate -> new TeamMateDto(teamMate.getId(), teamMate.getUser().getUserNickname(),
-                teamMate.getTeamRate(), teamMate.getTeamMateStatus(), teamMate.getTeamMateDelegate()))
+                teamMate.getUser().getUserprofileUrl(), teamMate.getTeamRate(),
+                teamMate.getTeamMateStatus(), teamMate.getTeamMateDelegate()))
         .collect(Collectors.toList());
   }
 

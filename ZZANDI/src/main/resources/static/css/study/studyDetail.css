@@ -42,19 +42,19 @@ body{
   margin-top: 10px;
 }
 
-.participationbtn{
+#participationbtn{
   display: block;
   width: 100px;
   color: #519259;
   border-color: #519259;
 }
 
-.participationbtn:hover{
+#participationbtn:hover{
   background-color: #519259;
   color : #ffffff;
 }
 
-.quitbtn {
+#quitbtn {
   display: block;
   width: 100px;
 }
@@ -75,6 +75,8 @@ body{
 #studyTitle {
   font-size : 25px;
   font-weight: bold;
+  max-width : 400px;
+  word-wrap: break-word;
 }
 
 #studyUpdate{
@@ -134,17 +136,57 @@ body{
 스터디 타입별 상세 정보
  */
 .studyDetailBox .studyDetail .studyDetail-center{
+  line-height: 18px;
+}
 
+#typeIcon{
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  color : dimgray;
+}
+#typeIcon span{
+  margin-left : 8px;
+  font-weight: bold;
 }
 
 /*
 스터디 신청자 목록
  */
 .studyDetailBox .studyDetail .studyDetail-right{
-  background-color: pink;
-  margin-left: auto;
+  margin-left: 15px;
+  min-width: 230px;
+  text-align: center;
 }
 
+#waitingList{
+  border-left: 1px dashed dimgray;
+  height : 100%
+}
+
+#waitingNickname{
+  word-wrap:break-word;
+}
+
+#waitingProfile{
+  width : 30px;
+  border-radius: 0.1em;
+}
+
+table{
+  margin: 15px auto 15px auto;
+  text-align: left;
+}
+
+td{
+  max-width: 130px;
+}
+
+#updatebtn{
+  width: 40px;
+  font-size: 10px;
+  padding : 2px;
+}
 
 /*.studyDetailBox h3 {*/
 /*  font-size: 20px;*/

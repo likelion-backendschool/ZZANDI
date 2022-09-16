@@ -6,6 +6,7 @@ const studyDetail_center = document.querySelector(".studyDetail-center");
 const studyDetail_right = document.querySelector(".studyDetail-right");
 const studyDetail_bottom = document.querySelector(".studyDetail-bottom");
 const acceptedTeamMate = document.querySelector(".acceptedTeamMate");
+const studyView = document.querySelector(".studyView");
 
 const studyId = document.querySelector(".studyId").value;
 const userNickname = document.querySelector(".userNickname").value;
@@ -115,27 +116,32 @@ function displayStudy(data, teamMateList) {
   html = '';
   if (data.studyType == 'BOOK') {
     html += `
-      <div id = "typeIcon">
+      <button id = "typeIcon" onclick = "showStudyContent()">
         <i class="bi bi-book-half" style="font-size: 1.5rem; margin-right : 5px;"></i>
         상세 정보
         ( ${data.studyStart} <i class="bi bi-arrow-right-short" style="font-size: 1.5rem;"></i> ${data.studyEnd} )
+      </button>
+      <div class = "study-content">
+        <p>책 이름 : ${data.bookName}</p>
+        <p>작가 : ${data.bookAuthor}</p>
+        <p>출판사 : ${data.bookPublisher}</p>
+        <p>책 쪽수 : ${data.bookPage} 페이지</p>
+        <p>ISBN : ${data.bookIsbn}</p>
       </div>
-      <p>책 이름 : ${data.bookName}</p>
-      <p>작가 : ${data.bookAuthor}</p>
-      <p>출판사 : ${data.bookPublisher}</p>
-      <p>책 쪽수 : ${data.bookPage} 페이지</p>
-      <p>ISBN : ${data.bookIsbn}</p>
+      
     `;
   } else {
     html += `
-      <div id = "typeIcon">
+      <button id = "typeIcon" onclick = "showStudyContent()">
         <i class="bi bi-play-btn" style="font-size: 1.5rem; margin-right : 5px;"></i>
         상세 정보 
         ( ${data.studyStart} <i class="bi bi-arrow-right-short" style="font-size: 1.5rem;"></i> ${data.studyEnd} )
+      </button>
+      <div class = "study-content">
+        <p>강의 이름 : ${data.lectureName}</p>
+        <p>강사진 : ${data.lecturer}</p>
+        <p>강의 개수 : ${data.lectureNumber} 강</p>
       </div>
-      <p>강의 이름 : ${data.lectureName}</p>
-      <p>강사진 : ${data.lecturer}</p>
-      <p>강의 개수 : ${data.lectureNumber} 강</p>
     `;
   }
 
@@ -182,28 +188,41 @@ function displayStudy(data, teamMateList) {
   html += ``;
   if (data.studyStatus == 'PROGRESS') {
     if (data.studyType == 'BOOK') {
-      html += `<p class = "recommend"><i class="bi bi-bar-chart-fill" style="font-size: 1.3rem; margin-right : 5px;"></i>오늘의 권장 진도율 : ~ p.${studyRecommend}</p>`;
+      html += `<p class = "recommend"><i class="bi bi-bar-chart-fill" style="font-size: 1.3rem; margin-right : 5px;"></i>오늘의 권장 진도율</p>`;
     } else {
       html += `<p class = "recommend"><i class="bi bi-bar-chart-fill" style="font-size: 1.3rem; margin-right : 5px;"></i>오늘의 권장 진도율 : ~ ${studyRecommend}강</p>`;
     }
 
     html += `
-    <p class = "fw-bold">< 달성률 - ${data.studyRate}% ></p>
-    <div class="progress">
-      <div class="zzandi shadow jupiter"></div>
+    <div class = "d-flex mt-3 mb-3 align-items-center">
+      <div class="progress">
+        <div class="zzandi shadow jupiter"></div>
+      </div>
+      <p class = "mb-0 ms-3">${studyRecommend}</p>
+    </div>
+    
+    <p class = "studyRate"><i class="bi bi-bar-chart-fill" style="font-size: 1.3rem; margin-right : 5px;"></i>우리의 달성률</p>
+    <div class = "d-flex mt-3 mb-3 align-items-center">
+      <div class="progress">
+        <div class="zzandi shadow jupiter2"></div>
+      </div>
+      <p class = "mb-0 ms-3">${data.studyRate}%</p>
     </div>
     `;
   }
 
+  studyDetail_bottom.innerHTML = html;
+  // studyDetail-bottom[end]
+
+  html = '';
+
   html += `
-  <div class = "mt-3 float-end" style = "color : dimgray;">
+  <div style = "color : dimgray;">
     <i class="bi bi-eye"></i>
     ${data.views}
   </div>
   `;
-  studyDetail_bottom.innerHTML = html;
-  // studyDetail-bottom[end]
-
+  studyView.innerHTML = html;
   // acceptedTeamMate[start]
   html = ``;
 
@@ -416,4 +435,12 @@ function showDelegatebtn() {
   completebtnList.forEach(completebtn => {
     completebtn.style.display = 'inline';
   });
+}
+
+function showStudyContent() {
+  if ($('.study-content').css('display') == 'none') {
+    $('.study-content').show();
+  } else {
+    $('.study-content').hide();
+  }
 }

@@ -36,6 +36,15 @@
             font-family: "GmarketSansMedium", serif;
         }
 
+        .title {
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .date {
+            font-size: 12px;
+        }
+
         li {
             list-style: none;
         }
@@ -66,6 +75,15 @@
             border-radius: 3px;
             pointer-events: none;
         }
+
+        .youtube {
+            width: 100%;
+            height: 550px;
+        }
+
+        .toastui-editor-contents {
+            font-size: 16px;
+        }
     </style>
 </head>
 <body>
@@ -73,25 +91,25 @@
     <h2 class="mx-3 my-0" style="font-weight: bold;">ZZANDI</h2>
 </div>
 
-<div class="container w-75 mx-auto my-4">
+<div class="container w-50 mx-auto my-4">
     <input type="hidden" class="user-uuid" th:value="${userUUID}"> <!-- 현재 로그인 한 유저 식별자 -->
     <input type="hidden" class="board-id" th:value="${boardDetail.boardId}"> <!-- 현재 게시글 번호 -->
     <input type="hidden" class="board-content" th:value="${boardDetail.content}">
 
-    <div class="d-flex justify-content-between align-self-baseline">
-        <h3 class="title" th:text="${boardDetail.title}">제목1</h3>
-        <p th:text="${boardDetail.createdDate}">날짜</p>
+    <div class="d-flex justify-content-between">
+        <p class="title align-self-center mb-0" th:text="${boardDetail.title}">제목1</p>
+        <p class="align-self-center mb-0 date" th:text="${boardDetail.createdDate}">날짜</p>
     </div>
 
     <div class="d-flex border-bottom justify-content-between">
-        <div class="d-flex align-items-center" sec:authorize="isAuthenticated()">
+        <div class="d-flex align-items-center my-2" sec:authorize="isAuthenticated()">
             <img th:if="${!#strings.isEmpty(boardDetail.profile)}" th:src="${boardDetail.profile}" alt="profile" width="30" height="30" class="rounded border bg-light" />
             <p class="align-self-center writer" th:text="${boardDetail.writer}" style="margin-left: 5px; margin-bottom: 0; font-size: 14px;">작성자</p>
         </div>
-        <div class="d-flex justify-content-evenly mb-0 align-items-center">
-            <p class="mx-1"><span th:text="|조회수 ${boardDetail.views}|" style="font-size: 14px; font-weight: bold;"></span></p>
-            <p class="mx-1"><span th:text="|좋아요 ${boardDetail.heart}|" style="font-size: 14px; font-weight: bold;"></span></p>
-            <p class="comment-count mx-1"></p>
+        <div class="d-flex justify-content-between align-items-baseline align-self-center">
+            <p class="mx-1 my-0"><span th:text="|조회수 ${boardDetail.views}|" style="font-size: 14px; font-weight: bold;"></span></p>
+            <p class="mx-1 my-0"><span th:text="|좋아요 ${boardDetail.heart}|" style="font-size: 14px; font-weight: bold;"></span></p>
+            <p class="comment-count ml-1 my-0"></p>
         </div>
     </div>
 

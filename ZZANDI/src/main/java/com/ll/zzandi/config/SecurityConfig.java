@@ -39,12 +39,12 @@ public class SecurityConfig{
         http
             .cors().disable()		//cors방지
             .csrf().disable()		//csrf방지
-//                .formLogin().disable()	//기본 로그인 페이지 없애기
+            .formLogin().disable()	//기본 로그인 페이지 없애기
             .headers().frameOptions().disable()
             .and()
             .authorizeRequests()
-            .antMatchers("/images/**", "/js/**", "/bootstrap/**").permitAll()
-            .antMatchers("/", "/user/join", "/h2-console/**", "/user/login/**", "/user/check-email-token/**", "/user/denied/**", "/comment/**").permitAll()
+            .antMatchers("/images/**", "/js/**", "/bootstrap/**", "/css/**").permitAll()
+            .antMatchers("/", "/user/join","/test", "/h2-console/**", "/user/login/**", "/user/check-email-token/**", "/user/denied/**", "/comment/**", "/study/list").permitAll()
             .antMatchers("/admin/**").hasRole("ADMIN")
             .anyRequest().authenticated()
             .and()

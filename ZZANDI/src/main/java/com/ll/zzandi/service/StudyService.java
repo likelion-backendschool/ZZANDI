@@ -4,9 +4,12 @@ import com.ll.zzandi.domain.*;
 import com.ll.zzandi.dto.BookDto;
 import com.ll.zzandi.dto.LectureDto;
 import com.ll.zzandi.dto.StudyDto;
+import com.ll.zzandi.dto.study.StudyDetailDto;
 import com.ll.zzandi.enumtype.StudyStatus;
 import com.ll.zzandi.enumtype.StudyType;
 import com.ll.zzandi.enumtype.TeamMateStatus;
+import com.ll.zzandi.exception.ErrorType;
+import com.ll.zzandi.exception.StudyException;
 import com.ll.zzandi.repository.BoardRepository;
 import com.ll.zzandi.repository.BookRepository;
 import com.ll.zzandi.repository.CommentRepository;
@@ -47,18 +50,16 @@ public class StudyService {
 
     public Study createStudyWithBook(@Valid StudyDto studyDto, Book book, User user) {
         Study study = new Study(user, studyDto.getStudyTitle(), book, null, StudyType.BOOK,
-                studyDto.getStudyStart(),
-                studyDto.getStudyEnd(), studyDto.getStudyPeople(), studyDto.getStudyTag(), 0,
-                StudyStatus.RECRUIT , 1);
+            studyDto.getStudyStart(), studyDto.getStudyEnd(), studyDto.getStudyPeople(),
+            studyDto.getStudyTag(), StudyStatus.RECRUIT);
         study.setStudyCoverUrl("https://cdn-icons-png.flaticon.com/512/4683/4683425.png");
         return studyRepository.save(study);
     }
 
     public Study createStudyWithLecture(@Valid StudyDto studyDto, Lecture lecture, User user) {
         Study study = new Study(user, studyDto.getStudyTitle(), null, lecture, StudyType.LECTURE,
-                studyDto.getStudyStart(),
-                studyDto.getStudyEnd(), studyDto.getStudyPeople(), studyDto.getStudyTag(), 0,
-                StudyStatus.RECRUIT , 1);
+            studyDto.getStudyStart(), studyDto.getStudyEnd(), studyDto.getStudyPeople(),
+            studyDto.getStudyTag(), StudyStatus.RECRUIT);
         study.setStudyCoverUrl("https://cdn-icons-png.flaticon.com/512/2112/2112961.png");
         return studyRepository.save(study);
     }
@@ -156,11 +157,6 @@ public class StudyService {
         return studyDto;
     }
 
-    public void updateStudyStatusRecruitComplete(Study study) {
-        study.setStudyStatus(StudyStatus.RECRUIT_COMPLETE);
-        studyRepository.save(study);
-    }
-
     public List<Study> findAllByStudyTitleContainsOrUser_userIdContains(String kw) {
         return studyRepository.findAllByStudyTitleContainsOrUser_userIdContains(kw, kw);
     }
@@ -212,14 +208,40 @@ public class StudyService {
     }
 
     public void updateRecruitStudyStatus(Study study) {
-        Integer teamMateCount = teamMateRepository.countByStudyAndTeamMateStatus(study, TeamMateStatus.ACCEPTED);
-        if(teamMateCount == study.getStudyPeople()) {
+        if(study.getAcceptedStudyMember() == study.getStudyPeople()) {
             study.setStudyStatus(StudyStatus.RECRUIT_COMPLETE);
             studyRepository.save(study);
-        }else if(teamMateCount < study.getStudyPeople()) {
+        }else if(study.getAcceptedStudyMember() < study.getStudyPeople()) {
             study.setStudyStatus(StudyStatus.RECRUIT);
             studyRepository.save(study);
         }
+    }
+
+    public StudyDetailDto findStudyDetail(Long studyId) {
+        Study study = studyRepository.findById(studyId)
+            .orElseThrow(() -> new StudyException(ErrorType.NOT_FOUND));
+        Book book = study.getBook();
+        Lecture lecture = study.getLecture();
+        StudyDetailDto studyDetailDto = null;
+        if (book != null) {
+            book = bookService.findByid(book.getId()).orElseThrow(null);
+            studyDetailDto = new StudyDetailDto(study.getStudyTitle(), study.getUser().getUserNickname(),
+                study.getAcceptedStudyMember(), study.getStudyPeople(), study.getStudyStart(), study.getStudyEnd(),
+                study.getStudyTag(), String.valueOf(study.getStudyType()), study.getStudyRate(), study.getViews(),
+                study.getStudyCoverUrl(), String.valueOf(study.getStudyStatus()),
+                book.getBookName(), book.getBookPage(), book.getBookAuthor(), book.getBookPublisher(), book.getBookIsbn(),
+                null, null, null);
+        } else if (lecture != null) {
+            lecture = lectureService.findById(lecture.getId()).orElseThrow(null);
+            studyDetailDto = new StudyDetailDto(study.getStudyTitle(), study.getUser().getUserNickname(),
+                study.getAcceptedStudyMember(), study.getStudyPeople(), study.getStudyStart(), study.getStudyEnd(),
+                study.getStudyTag(), String.valueOf(study.getStudyType()), study.getStudyRate(), study.getViews(),
+                study.getStudyCoverUrl(), String.valueOf(study.getStudyStatus()),
+                null, null, null, null, null,
+                lecture.getLectureName(), lecture.getLecturer(), lecture.getLectureNumber());
+        }
+
+        return studyDetailDto;
     }
 
     /*
@@ -275,5 +297,12 @@ public class StudyService {
         LocalDate today = LocalDate.now();
 
         return Period.between(studyStart, today).getDays();
+    }
+
+    public void updateViews(Long studyId) {
+        Study study = studyRepository.findById(studyId)
+            .orElseThrow(() -> new StudyException(ErrorType.NOT_FOUND));
+        study.setViews(study.getViews() + 1);
+        studyRepository.save(study);
     }
 }

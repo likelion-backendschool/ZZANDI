@@ -7,6 +7,10 @@ import com.ll.zzandi.dto.LectureDto;
 import com.ll.zzandi.dto.StudyDto;
 
 import com.ll.zzandi.dto.api.SearchDto;
+import com.ll.zzandi.dto.study.StudyDetailDto;
+import com.ll.zzandi.exception.ErrorType;
+import com.ll.zzandi.exception.StudyException;
+import com.ll.zzandi.service.BoardService;
 import com.ll.zzandi.service.BookService;
 import com.ll.zzandi.service.LectureService;
 import com.ll.zzandi.service.StudyService;
@@ -94,14 +98,8 @@ public class StudyController {
     }
 
     @GetMapping("/study/list")
-    public String studyList(Model model,@RequestParam(defaultValue = "ALL") String st,@RequestParam(defaultValue = "ALL") String ss, @RequestParam(defaultValue = "") String kw) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal();
-
+    public String studyList(@AuthenticationPrincipal User user, Model model,@RequestParam(defaultValue = "ALL") String st,@RequestParam(defaultValue = "ALL") String ss, @RequestParam(defaultValue = "") String kw) {
         List<Study> studyList = studyService.getList(st, ss, kw);
-
-
-
         model.addAttribute("studyList", studyList);
         model.addAttribute("user", user);
         return "study/studyList";
@@ -139,6 +137,27 @@ public class StudyController {
         model.addAttribute("isTeamMate", checkList.get(1));
         model.addAttribute("isDelete", checkList.get(2));
         return"study/studyDetail";
+    }
+
+    @GetMapping("/study/detail/{studyId}/study-data")
+    @ResponseBody
+    public StudyDetailDto findStudyDetail(@PathVariable Long studyId) {
+        return studyService.findStudyDetail(studyId);
+    }
+
+    @GetMapping("/study/detail/{studyId}/test")
+    public String testStudyDetail(@AuthenticationPrincipal User user, @PathVariable Long studyId, Model model) {
+        studyService.updateViews(studyId);
+        model.addAttribute("studyId", studyId);
+        model.addAttribute("user", user);
+
+        int studyDays = studyService.getStudyDays(studyId);
+        model.addAttribute("studyDays", studyDays);
+        int studyPeriod = studyService.getStudyPeriod(studyId);
+        model.addAttribute("studyPeriod", studyPeriod);
+        int studyRecommend = studyService.getStudyRecommend(studyId);
+        model.addAttribute("studyRecommend", studyRecommend);
+        return "study/studyDetailAsync";
     }
 
     @PreAuthorize("isAuthenticated()")

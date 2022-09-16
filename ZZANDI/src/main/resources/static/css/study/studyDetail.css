@@ -1,0 +1,317 @@
+@font-face {
+  font-family: 'adobaonlyR';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2205@1.0/adobaonlyR.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body{
+  font-family: "adobaonlyR", serif;
+}
+
+.studyDetail-main {
+  margin: 0 auto;
+  max-width : 830px;
+  min-height: 700px;
+}
+
+/*-------------------------------------------------------------
+스터디 상세 정보 박스
+ -------------------------------------------------------------*/
+.studyDetailBox {
+  box-sizing: content-box;
+  padding: 30px 50px;
+  margin: 100px auto 25px auto;
+  box-shadow: 0px 0 15px rgba(0, 0, 0, 0.13);
+  position: relative;
+  background: #fff;
+  border-radius: 10px;
+}
+
+/*
+스터디 태그 & 스터디 대표 이미지 & 참가 신청 & 탈퇴
+ */
+.studyDetailBox .studyDetail-left{
+  width : 120px;
+  margin-right: 15px;
+}
+
+#studyTag {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.studyDetailBox .studyCover {
+  width: 100px;
+  margin-right: 15px;
+  margin-top: 10px;
+}
+
+#participationbtn{
+  display: block;
+  width: 100px;
+  color: #519259;
+  border-color: #519259;
+}
+
+#participationbtn:hover{
+  background-color: #519259;
+  color : #ffffff;
+}
+
+#quitbtn {
+  display: block;
+  width: 100px;
+}
+
+.studyDetailBox .studyDetail{
+  width : 100%;
+  position : relative;
+}
+
+/*
+스터디 제목 & 수정 버튼 & 스터디 상태 & 인원 수
+ */
+.studyDetailBox .studyDetail .studyDetail-top{
+  width : 100%;
+  display: flex;
+  align-items: flex-end;
+}
+
+#studyTitle {
+  font-size : 25px;
+  font-weight: bold;
+  max-width : 400px;
+  word-wrap: break-word;
+}
+
+#studyUpdate{
+  color : dimgray;
+  font-size: 15px;
+  margin : 3px 10px;
+}
+
+.status {
+  margin-left: auto;
+  display: flex;
+  align-items: flex-end;
+}
+
+.status .people {
+  margin : auto 10px;
+  color : dimgray;
+}
+
+#recruit{
+  background-color: pink;
+  color : darkred;
+  padding : 5px;
+  border-radius: 0.3em;
+  font-size: 15px;
+  font-weight: bold;
+  margin-bottom : 5px;
+}
+
+#progress{
+  background-color: powderblue;
+  color : darkblue;
+  padding : 5px;
+  border-radius: 0.3em;
+  font-size: 15px;
+  font-weight: bold;
+  margin-bottom : 5px;
+}
+
+#complete {
+  background-color: darkseagreen;
+  color : darkslategray;
+  padding : 5px;
+  border-radius: 0.3em;
+  font-size: 15px;
+  font-weight: bold;
+  margin-bottom : 5px;
+}
+
+/*
+스터디 타입별 상세 정보
+ */
+.studyDetailBox .studyDetail .studyDetail-center{
+  line-height: 18px;
+}
+
+#typeIcon{
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  color : dimgray;
+  background-color: #ffffff;
+  border: none;
+}
+
+.study-content{
+  display : none;
+}
+
+/*
+스터디 권장 진도율 & 스터디 달성률
+ */
+.recommend {
+  font-weight: bold;
+  margin-top : 5px;
+  color : #d54848;
+}
+
+.studyRate{
+  font-weight: bold;
+  margin-top : 5px;
+  color : #2fa27a;
+}
+
+/*
+스터디 신청자 목록
+ */
+.studyDetailBox .studyDetail .studyDetail-right{
+  margin-left: auto;
+  text-align: center;
+}
+
+#waitingList{
+  border-left: 1px dashed dimgray;
+  height : 100%;
+  min-width: 200px;
+}
+
+#waitingNickname{
+  word-wrap:break-word;
+}
+
+#waitingProfile{
+  width : 30px;
+  height : 30px;
+  border-radius: 0.1em;
+}
+
+table{
+  margin: 15px auto 15px auto;
+  text-align: left;
+}
+
+td{
+  max-width: 130px;
+}
+
+#updatebtn{
+  width: 40px;
+  font-size: 10px;
+  padding : 2px;
+}
+
+/*
+스터디 조회수
+ */
+.studyView {
+  position : absolute;
+  right : 0;
+  bottom : 0;
+}
+/*-------------------------------------------------------------
+게시판 이동 & 달성률 등록
+-------------------------------------------------------------*/
+.navbar > ul > li > .menu {
+  color : #519259;
+  font-family: "adobaonlyR", serif;
+  display : flex;
+  align-items: flex-start;
+}
+
+/*-------------------------------------------------------------
+팀원 목록 & 위임 신청
+-------------------------------------------------------------*/
+.acceptedTeamMate {
+  padding : 20px;
+}
+
+#acceptedProfile {
+  width : 45px;
+  height : 45px;
+  border-radius: 0.3em;
+}
+
+#delegatebtn{
+  width: 60px;
+  color: #519259;
+  border-color: #519279;
+  font-size : 14px;
+  padding : 0px;
+  margin-left : 10px;
+  display: none;
+}
+
+#delegatebtn:hover{
+  background-color: #519259;
+  color : #ffffff;
+}
+
+#completebtn{
+  width: 60px;
+  color : dimgray;
+  border-color: dimgray;
+  font-size : 14px;
+  padding : 0px;
+  margin-left : 10px;
+  display: none;
+}
+
+/*-------------------------------------------------------------
+PROGRESS - RATE
+ -------------------------------------------------------------*/
+.progress {
+  display: inline-block;
+  border-radius: 20px;
+  background: #e7e7e7;
+  width : 80%;
+}
+
+.zzandi {
+  width : 80%;
+  height: 100%;
+  border-radius: 20px;
+  transition: width;
+  transition-duration: 1s;
+  transition-timing-function: cubic-bezier(.36,.55,.63,.48);
+}
+
+.shadow {
+  /* 25 50 */
+  box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.bar {
+  border-radius: 20px;
+  width: 50%;
+  height: 100%;
+  transition: width;
+  transition-duration: 1s;
+  transition-timing-function: cubic-bezier(.36,.55,.63,.48);
+}
+
+.crosses {
+  background-color: #DFDBE5;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='25' height='25' viewBox='0 0 40 40'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.4'%3E%3Cpath d='M0 38.59l2.83-2.83 1.41 1.41L1.41 40H0v-1.41zM0 1.4l2.83 2.83 1.41-1.41L1.41 0H0v1.41zM38.59 40l-2.83-2.83 1.41-1.41L40 38.59V40h-1.41zM40 1.41l-2.83 2.83-1.41-1.41L38.59 0H40v1.41zM20 18.6l2.83-2.83 1.41 1.41L21.41 20l2.83 2.83-1.41 1.41L20 21.41l-2.83 2.83-1.41-1.41L18.59 20l-2.83-2.83 1.41-1.41L20 18.59z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+.jupiter {
+  background-color: #f395a5;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='52' height='52' viewBox='0 0 52 52'%3E%3Cpath fill='%23e6cca5' fill-opacity='0.4' d='M0 17.83V0h17.83a3 3 0 0 1-5.66 2H5.9A5 5 0 0 1 2 5.9v6.27a3 3 0 0 1-2 5.66zm0 18.34a3 3 0 0 1 2 5.66v6.27A5 5 0 0 1 5.9 52h6.27a3 3 0 0 1 5.66 0H0V36.17zM36.17 52a3 3 0 0 1 5.66 0h6.27a5 5 0 0 1 3.9-3.9v-6.27a3 3 0 0 1 0-5.66V52H36.17zM0 31.93v-9.78a5 5 0 0 1 3.8.72l4.43-4.43a3 3 0 1 1 1.42 1.41L5.2 24.28a5 5 0 0 1 0 5.52l4.44 4.43a3 3 0 1 1-1.42 1.42L3.8 31.2a5 5 0 0 1-3.8.72zm52-14.1a3 3 0 0 1 0-5.66V5.9A5 5 0 0 1 48.1 2h-6.27a3 3 0 0 1-5.66-2H52v17.83zm0 14.1a4.97 4.97 0 0 1-1.72-.72l-4.43 4.44a3 3 0 1 1-1.41-1.42l4.43-4.43a5 5 0 0 1 0-5.52l-4.43-4.43a3 3 0 1 1 1.41-1.41l4.43 4.43c.53-.35 1.12-.6 1.72-.72v9.78zM22.15 0h9.78a5 5 0 0 1-.72 3.8l4.44 4.43a3 3 0 1 1-1.42 1.42L29.8 5.2a5 5 0 0 1-5.52 0l-4.43 4.44a3 3 0 1 1-1.41-1.42l4.43-4.43a5 5 0 0 1-.72-3.8zm0 52c.13-.6.37-1.19.72-1.72l-4.43-4.43a3 3 0 1 1 1.41-1.41l4.43 4.43a5 5 0 0 1 5.52 0l4.43-4.43a3 3 0 1 1 1.42 1.41l-4.44 4.43c.36.53.6 1.12.72 1.72h-9.78zm9.75-24a5 5 0 0 1-3.9 3.9v6.27a3 3 0 1 1-2 0V31.9a5 5 0 0 1-3.9-3.9h-6.27a3 3 0 1 1 0-2h6.27a5 5 0 0 1 3.9-3.9v-6.27a3 3 0 1 1 2 0v6.27a5 5 0 0 1 3.9 3.9h6.27a3 3 0 1 1 0 2H31.9z'%3E%3C/path%3E%3C/svg%3E");
+}
+
+.jupiter2 {
+  background-color: #37bd8e;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='52' height='52' viewBox='0 0 52 52'%3E%3Cpath fill='%23e6cca5' fill-opacity='0.4' d='M0 17.83V0h17.83a3 3 0 0 1-5.66 2H5.9A5 5 0 0 1 2 5.9v6.27a3 3 0 0 1-2 5.66zm0 18.34a3 3 0 0 1 2 5.66v6.27A5 5 0 0 1 5.9 52h6.27a3 3 0 0 1 5.66 0H0V36.17zM36.17 52a3 3 0 0 1 5.66 0h6.27a5 5 0 0 1 3.9-3.9v-6.27a3 3 0 0 1 0-5.66V52H36.17zM0 31.93v-9.78a5 5 0 0 1 3.8.72l4.43-4.43a3 3 0 1 1 1.42 1.41L5.2 24.28a5 5 0 0 1 0 5.52l4.44 4.43a3 3 0 1 1-1.42 1.42L3.8 31.2a5 5 0 0 1-3.8.72zm52-14.1a3 3 0 0 1 0-5.66V5.9A5 5 0 0 1 48.1 2h-6.27a3 3 0 0 1-5.66-2H52v17.83zm0 14.1a4.97 4.97 0 0 1-1.72-.72l-4.43 4.44a3 3 0 1 1-1.41-1.42l4.43-4.43a5 5 0 0 1 0-5.52l-4.43-4.43a3 3 0 1 1 1.41-1.41l4.43 4.43c.53-.35 1.12-.6 1.72-.72v9.78zM22.15 0h9.78a5 5 0 0 1-.72 3.8l4.44 4.43a3 3 0 1 1-1.42 1.42L29.8 5.2a5 5 0 0 1-5.52 0l-4.43 4.44a3 3 0 1 1-1.41-1.42l4.43-4.43a5 5 0 0 1-.72-3.8zm0 52c.13-.6.37-1.19.72-1.72l-4.43-4.43a3 3 0 1 1 1.41-1.41l4.43 4.43a5 5 0 0 1 5.52 0l4.43-4.43a3 3 0 1 1 1.42 1.41l-4.44 4.43c.36.53.6 1.12.72 1.72h-9.78zm9.75-24a5 5 0 0 1-3.9 3.9v6.27a3 3 0 1 1-2 0V31.9a5 5 0 0 1-3.9-3.9h-6.27a3 3 0 1 1 0-2h6.27a5 5 0 0 1 3.9-3.9v-6.27a3 3 0 1 1 2 0v6.27a5 5 0 0 1 3.9 3.9h6.27a3 3 0 1 1 0 2H31.9z'%3E%3C/path%3E%3C/svg%3E");
+}
+
+.leaf {
+  /*background-color: #b5ccbf;*/
+  background-color: #7bb080;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 40' width='60' height='30'%3E%3Cpath fill='%2340584a' fill-opacity='0.47' d='M0 40a19.96 19.96 0 0 1 5.9-14.11 20.17 20.17 0 0 1 19.44-5.2A20 20 0 0 1 20.2 40H0zM65.32.75A20.02 20.02 0 0 1 40.8 25.26 20.02 20.02 0 0 1 65.32.76zM.07 0h20.1l-.08.07A20.02 20.02 0 0 1 .75 5.25 20.08 20.08 0 0 1 .07 0zm1.94 40h2.53l4.26-4.24v-9.78A17.96 17.96 0 0 0 2 40zm5.38 0h9.8a17.98 17.98 0 0 0 6.67-16.42L7.4 40zm3.43-15.42v9.17l11.62-11.59c-3.97-.5-8.08.3-11.62 2.42zm32.86-.78A18 18 0 0 0 63.85 3.63L43.68 23.8zm7.2-19.17v9.15L62.43 2.22c-3.96-.5-8.05.3-11.57 2.4zm-3.49 2.72c-4.1 4.1-5.81 9.69-5.13 15.03l6.61-6.6V6.02c-.51.41-1 .85-1.48 1.33zM17.18 0H7.42L3.64 3.78A18 18 0 0 0 17.18 0zM2.08 0c-.01.8.04 1.58.14 2.37L4.59 0H2.07z'%3E%3C/path%3E%3C/svg%3E");
+}

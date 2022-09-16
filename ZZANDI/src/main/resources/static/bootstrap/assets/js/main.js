@@ -387,3 +387,18 @@ $("#studyCoverUrl").change(function(e) {
   });
   reader.readAsDataURL(e.target.files[0]);
 });
+
+$("input[name=studyCoverUrl]").off().on("change", function(){
+
+  if (this.files && this.files[0]) {
+
+    var maxSize = 1 * 1024 * 1024;
+    var fileSize = this.files[0].size;
+
+    if(fileSize > maxSize){
+      alert("첨부파일 사이즈는 1MB 이내로 등록 가능합니다.");
+      $(this).val('');
+      return false;
+    }
+  }
+});

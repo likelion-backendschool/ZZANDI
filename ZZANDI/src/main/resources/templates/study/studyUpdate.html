@@ -34,7 +34,7 @@
     <div id="studyForm">
         <h4>Study</h4>
         <p>스터디 시작 전에는 언제든 수정할 수 있습니다. </p>
-        <form action="/study/create" th:object="${studyDto}" method="post" name="myForm">
+        <form th:object="${studyDto}" method="post" name="myForm">
             <div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">
                 <div th:each="err : ${#fields.allErrors()}" th:text="${err}"/>
             </div>

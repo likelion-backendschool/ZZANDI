@@ -182,6 +182,7 @@ public class StudyController {
         Study studies = studyService.findByStudyId(studyId).orElseThrow(null);
         System.out.println("principal.getName() = " + principal.getName());
         if (!studies.getUser().getUserId().equals(principal.getName().split(",")[1].substring(8, principal.getName().split(",")[1].length()))) {
+            model.addAttribute("user",user);
             return "study/studyError";
         }
         if (studyDto.getStudyType().equals("BOOK")) {

@@ -1,11 +1,42 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-</head>
-<body>
-    <h1>로그인 정보가 달라 작업을 수행할 수 없습니다.</h1>
-    <a href="/"> Main </a>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
+<!-- head -->
+<div th:replace="layout/head.html :: head"></div>
+<body>
+<section th:replace="layout/header.html :: header"></section>
+
+<main id="main">
+    <!-- ======= Breadcrumbs ======= -->
+    <div class="breadcrumbs">
+        <div class="page-header d-flex align-items-center" style="background-image: url('');">
+            <div class="container position-relative">
+                <div class="row d-flex justify-content-center">
+                    <div class="col-lg-6 text-center">
+                        <h2>Error</h2>
+                        <p>수정할 수 있는 권한이 없습니다.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- End Breadcrumbs -->
+    <!-- ======= Blog Section ======= -->
+    <div id="studyForm">
+        <p>스터디 팀장 또는 운영진에게 문의해주세요.</p>
+        <a href="/"> 메인화면으로 돌아가기 </a>
+    </div>
+
+
+</main><!-- End #main -->
+<!-- footer -->
+<div th:replace="layout/footer.html :: footer"></div>
+
+<!-- tail -->
+<div th:replace="layout/tail.html :: tail"></div>
 </body>
 </html>
+
+
+
+

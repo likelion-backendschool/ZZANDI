@@ -122,7 +122,7 @@
             종료된 스터디 입니다.
         </div>
     </div>
-    <div class="container" th:if="${studies.getStudyStatus().name() == 'PROGRESS'}">
+    <div class="container">
         <input type="hidden" id="studyperiod" th:value="${studyPeriod}"/>
         <input type="hidden" id="studydays" th:value="${studyDays}"/>
 
@@ -139,13 +139,16 @@
         </div>
         <div class = "my-3 w-50" th:each="teamMate : ${studies.teamMateList}" th:if = "${teamMate.teamMateStatus.name() == 'ACCEPTED'}">
             <div>
-                    <span>
-                        <svg th:if="${#strings.isEmpty(teamMate.user?.userprofileUrl)}" th:data-jdenticon-value="${teamMate.user.getUserNickname}"
-                             width="30" height="30" class="rounded border bg-light"></svg>
-                        <img th:if="${!#strings.isEmpty(teamMate.user?.userprofileUrl)}" th:src="${teamMate.user.userprofileUrl}"
-                             width="30" height="30" class="rounded border"/>
-                        <span th:text="${teamMate.user.getUserNickname}"></span>
-                    </span>
+                <span>
+                    <svg th:if="${#strings.isEmpty(teamMate.user?.userprofileUrl)}" th:data-jdenticon-value="${teamMate.user.getUserNickname}"
+                         width="30" height="30" class="rounded border bg-light"></svg>
+                    <img th:if="${!#strings.isEmpty(teamMate.user?.userprofileUrl)}" th:src="${teamMate.user.userprofileUrl}"
+                         width="30" height="30" class="rounded border"/>
+                    <span th:text="${teamMate.user.getUserNickname}"></span>
+                </span>
+                <button type="button" class="btn btn-success"
+                        id="study_btn" onclick='toggleStudyInput()' th:if="${teamMate.user.getId() == user.getId()}"> 진도율 기록</button>
+                <input type="text" class="form-control" id="study_input" th:if="${teamMate.user.getId() == user.getId()}" placeholder="총 몇중" style="display:none">
             </div>
             <div class="progress">
                 <div class="bar shadow overlap"></div>

@@ -42,6 +42,17 @@ zzandi.forEach((zzandi, index) => {
 });
 
 // 개인 유저 부분
+function toggleStudyInput() {
+    const study_input = document.getElementById("study_input");
+
+    if (study_input.style.display !== "none") {
+        study_input.style.display = "none";
+    }
+    else {
+        study_input.style.display = "inline";
+    }
+}
+
 const bars = document.querySelectorAll('.bar');
 const progress = document.querySelectorAll('.progress');
 

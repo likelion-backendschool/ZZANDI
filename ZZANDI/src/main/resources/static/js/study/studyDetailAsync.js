@@ -52,6 +52,10 @@ function displayStudy(data, teamMateList) {
     html += `
       <button onclick = "create()" id = "participationbtn" class="btn btn-outline-primary mt-3">참가 신청</button>
     `;
+  }else if (isParticipation && !isTeamMate && data.studyStatus == 'RECRUIT') {
+    html += `
+      <button disabled onclick = "create()" id = "participationbtn" class="btn btn-outline-primary mt-3">신청 완료</button>
+    `;
   }
 
   // 팀원이지만 팀장이 아니며, 아직 진행 중이 아닌 경우,
@@ -88,7 +92,7 @@ function displayStudy(data, teamMateList) {
   html += `
     <div class = "status">
       <div class = "people">
-          <i id="people-icon" class="bi bi-people-fill"></i>
+          <i class="bi bi-people-fill me-1"></i>
           <span>인원 : ${data.acceptedStudyMember} / ${data.studyPeople}명</span>
       </div>
    `;
@@ -190,6 +194,13 @@ function displayStudy(data, teamMateList) {
     </div>
     `;
   }
+
+  html += `
+  <div class = "mt-3 float-end" style = "color : dimgray;">
+    <i class="bi bi-eye"></i>
+    ${data.views}
+  </div>
+  `;
   studyDetail_bottom.innerHTML = html;
   // studyDetail-bottom[end]
 
@@ -199,12 +210,22 @@ function displayStudy(data, teamMateList) {
   for (let i = 0; i < teamMateList.length; i++) {
     if (teamMateList[i].teamMateStatus == 'ACCEPTED') {
       html += `
-        <div>
-          <a id="accepted" href="/user/mypage?userNickname=${teamMateList[i].userNickname}">
-            <img id = "acceptedProfile" src="${teamMateList[i].userprofileUrl}">
-            ${teamMateList[i].userNickname}
-          </a>
-    `;
+      <div>
+        <a id="accepted" href="/user/mypage?userNickname=${teamMateList[i].userNickname}">
+        <img id = "acceptedProfile" src="${teamMateList[i].userprofileUrl}">
+      `;
+      if (teamMateList[i].userNickname == userNickname) {
+        html +=`
+        <span class = "fw-bold">${teamMateList[i].userNickname}</span>
+        </a>
+        `;
+      }else {
+        html +=`
+        <span>${teamMateList[i].userNickname}</span>
+        </a>
+        `;
+      }
+
       if (teamMateList[i].userNickname == data.leader) {
         html += `<i class ="fa-solid fa-crown" style = "color : orange"></i>`;
       } else {

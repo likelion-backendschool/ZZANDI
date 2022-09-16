@@ -22,6 +22,7 @@ public class StudyDetailDto {
   private String studyTag;
   private String studyType;
   private int studyRate;
+  private int views;
   private String studyCoverUrl;
   private String studyStatus;
 

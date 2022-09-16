@@ -98,14 +98,8 @@ public class StudyController {
     }
 
     @GetMapping("/study/list")
-    public String studyList(Model model,@RequestParam(defaultValue = "ALL") String st,@RequestParam(defaultValue = "ALL") String ss, @RequestParam(defaultValue = "") String kw) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal();
-
+    public String studyList(@AuthenticationPrincipal User user, Model model,@RequestParam(defaultValue = "ALL") String st,@RequestParam(defaultValue = "ALL") String ss, @RequestParam(defaultValue = "") String kw) {
         List<Study> studyList = studyService.getList(st, ss, kw);
-
-
-
         model.addAttribute("studyList", studyList);
         model.addAttribute("user", user);
         return "study/studyList";
@@ -153,7 +147,7 @@ public class StudyController {
 
     @GetMapping("/study/detail/{studyId}/test")
     public String testStudyDetail(@AuthenticationPrincipal User user, @PathVariable Long studyId, Model model) {
-        Study study = studyService.findByStudyId(studyId).orElseThrow(() -> new StudyException(ErrorType.NOT_FOUND));
+        studyService.updateViews(studyId);
         model.addAttribute("studyId", studyId);
         model.addAttribute("user", user);
 

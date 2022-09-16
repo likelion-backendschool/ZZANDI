@@ -40,9 +40,9 @@ public class TeamMateService {
 
     // 팀장과 일치하는 경우, Accepted인 상태로 팀원에 팀장 추가
     if (study.getUser().getId().equals(currentUser.getId()) && teamMate == null) {
-      teamMateRepository.save(new TeamMate(user, study, 0, TeamMateStatus.ACCEPTED));
+      teamMateRepository.save(new TeamMate(user, study, TeamMateStatus.ACCEPTED));
     } else if (teamMate == null) {
-      teamMateRepository.save(new TeamMate(user, study, 0, TeamMateStatus.WAITING));
+      teamMateRepository.save(new TeamMate(user, study, TeamMateStatus.WAITING));
       sendWaitingEmail(currentUser, study);
     } else {
       throw new TeamMateException(ErrorType.DUPLICATED_TEAMMATE);

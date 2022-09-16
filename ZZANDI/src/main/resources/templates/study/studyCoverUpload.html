@@ -1,59 +1,42 @@
-<!DOCTYPE HTML>
-<html>
-<head>
-    <title> SpringBoot & AWS S3</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <script
-            src="https://code.jquery.com/jquery-3.3.1.js"
-            integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
-            crossorigin="anonymous"></script>
-</head>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<!-- head -->
+<div th:replace="layout/head.html :: head"></div>
 <body>
-<h1>
-    스터디 대표이미지 설정
-</h1>
-<div class="col-md-12">
-    <div class="col-md-2">
-        <div class="form-group">
-            <label for="studyCoverUrl">파일 업로드</label>
-            <input type="file" id="studyCoverUrl" name="studyCoverUrl" accept=".gif, .jpg, .png, .jpeg, .PNG">
-            <input type="hidden" id="study-id" th:value="${studyId}">
+<section th:replace="layout/header.html :: header"></section>
+
+<main id="main">
+    <!-- ======= Breadcrumbs ======= -->
+    <div class="breadcrumbs">
+        <div class="page-header d-flex align-items-center" style="background-image: url('');">
+            <div class="container position-relative">
+                <div class="row d-flex justify-content-center">
+                    <div class="col-lg-6 text-center">
+                        <h2>Study Cover Upload</h2>
+                        <p>원하시는 스터디 대표이미지를 만들어보세요!</p>
+                    </div>
+                </div>
+            </div>
         </div>
-        <button type="button" class="btn btn-primary" id="btn-save">저장</button>
+    </div><!-- End Breadcrumbs -->
+    <!-- ======= Blog Section ======= -->
+    <div id="studyForm">
+        <h4>Study Cover Image</h4>
+        <p>파일을 선택하시면 자동으로 등록됩니다.</p>
+                <div class="col-md-6 form-group">
+                    <input type="file" id="studyCoverUrl" name="studyCoverUrl" accept=".gif, .jpg, .png, .jpeg, .PNG">
+                    <input type="hidden" id="study-id" th:value="${studyId}">
+                </div>
     </div>
-</div>
-<script >
-    $("#studyCoverUrl").change(function(e) {
-
-        let studyId = document.getElementById("study-id").value;
-        const fileInput = document.getElementById("studyCoverUrl");
-        const reader = new FileReader();
-        let img = document.createElement("img");
-        img.id='studyCoverImg';
-        img.src=e.target.result;
-        const formData = new FormData()
-        var fileName = $('#studyCoverUrl').val();
-        formData.append("coverImage", fileInput.files[0],fileName);
-        console.log(studyId);
-        console.log(formData);
-        $.ajax("/study/coverUpload/" + studyId,{
-            method: 'POST',
-            data: formData,
-            processData : false,	// data 파라미터 강제 string 변환 방지
-            contentType : false,	// application/x-www-form-urlencoded; 방지
-            success() {
-                console.log('Upload success');
-                location.replace("/");
-            },
-            error() {
-                console.log('Upload error');
-            },
-
-        });
-        reader.readAsDataURL(e.target.files[0]);
-
-    });
 
 
-</script>
+</main><!-- End #main -->
+<!-- footer -->
+<div th:replace="layout/footer.html :: footer"></div>
+
+<!-- tail -->
+<div th:replace="layout/tail.html :: tail"></div>
 </body>
+</html>

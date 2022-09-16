@@ -61,7 +61,7 @@
                     <button type= "submit" onclick = "if(!confirm('스터디에서 탈퇴하시려면, 다른 팀원에게 권한을 위임해주세요.\n팀원이 수락한 후 탈퇴가 완료됩니다.')) return false; else delegate()" class= "btn btn-outline-secondary"
                             th:if = "${isTeamMate} and !${isDelete} and (${studies.studyStatus.name() == 'RECRUIT'} or ${studies.studyStatus.name() == 'RECRUIT_COMPLETE'}) and ${user.id == studies.user.id}">탈퇴하기</button>
                     <a th:href="@{/study/delete/{studyId}(studyId = ${studies.getId})}" class= "btn btn-outline-secondary"
-                            th:if = "${isTeamMate} and ${isDelete} and (${studies.studyStatus.name() == 'RECRUIT'} or ${studies.studyStatus.name() == 'RECRUIT_COMPLETE'}) and ${user.id == studies.user.id}">삭제</a>
+                            th:if = "${isTeamMate} and ${isDelete} and (${studies.studyStatus.name() == 'RECRUIT'} or ${studies.studyStatus.name() == 'RECRUIT_COMPLETE'}) and ${user.id == studies.user.id}">삭제</a></a>
                     <a class="btn btn-danger mx-2" th:href="@{/study/list}">스터디 리스트</a>
                     <a class="btn btn-primary" th:href="@{/{studyId}/board/list (studyId=${studies.getId})}">게시판 이동</a>
                 </div>

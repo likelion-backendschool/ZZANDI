@@ -48,6 +48,7 @@ public class BoardService {
                 .createdDate(createdDate)
                 .writer(board.getUser().getUserNickname())
                 .content(board.getContent())
+                .category(board.getCategory())
                 .views(board.getViews())
                 .heart(board.getHeart())
                 .count(board.getComments().size())

@@ -1,5 +1,6 @@
 package com.ll.zzandi.dto.board;
 
+import com.ll.zzandi.enumtype.BoardCategory;
 import lombok.*;
 
 @Getter @Setter
@@ -15,6 +16,7 @@ public class BoardDetailDto {
     private String createdDate;
     private String writer;
     private String content;
+    private BoardCategory category;
     private int views;
     private int heart;
     private int count; // 댓글의 개수

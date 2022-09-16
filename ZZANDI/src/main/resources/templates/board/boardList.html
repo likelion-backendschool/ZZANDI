@@ -9,15 +9,10 @@
     <script defer type="text/javascript" th:src="@{/js/board/boardList.js}"></script>
     <title>스터디 게시판</title>
     <style>
-        @font-face {
-            font-family: 'GmarketSansMedium';
-            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
-            font-weight: normal;
-            font-style: normal;
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
 
         body {
-            font-family: "Apple SD Gothic Neo", "Malgun Gothic", "맑은 고딕", arial, sans-serif; "GmarketSansMedium";
+            font-family: "Apple SD Gothic Neo", "Malgun Gothic", "맑은 고딕", arial, sans-serif;
             background-color: #ffffff;
         }
 
@@ -34,6 +29,21 @@
             color: #222222;
         }
 
+        .study-title {
+            font-family: 'Jua', "Apple SD Gothic Neo", "Malgun Gothic", "맑은 고딕", arial, sans-serif;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .study-title:hover {
+            text-decoration: underline;
+            text-underline-position: under;
+        }
+
+        li {
+            list-style: none;
+        }
+
         .page-btn {
             background-color: transparent;
             border: none;
@@ -46,6 +56,22 @@
             border-radius: 3px;
             pointer-events: none;
         }
+
+        .menu {
+            font-size: 13px;
+        }
+
+        .menu li {
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .best {
+            color: #42a5f5;
+            text-decoration: none;
+            transition: 1s;
+        }
+        .best:hover { text-shadow: 0 0 .1em, 0 0 .3em; }
     </style>
 </head>
 <body>
@@ -56,7 +82,24 @@
 <input type="hidden" class="page" th:value="${page}"> <!-- 현재 페이지 번호 -->
 <input type="hidden" class="study-id" th:value="${studyId}"> <!-- 현재 스터디 번호 -->
 
-<div class="container w-75 mx-auto my-4 bg-#f5f5f5 rounded">
+<div class="container w-75 mx-auto my-4 bg-#f5f5f5">
+    <div class="mb-2 d-flex flex-column border rounded p-2">
+        <div>
+            <a class="study-title" th:text="${studyTitle}" th:href="@{/study/detail/{studyId} (studyId = ${studyId})}"></a>
+        </div>
+        <div class="menu d-flex justify-content-start mt-2">
+            <ul class="categories d-flex mb-0 px-0">
+                <li><a th:href="@{/{studyId}/board/list (studyId = ${studyId})}"><i class="fa-solid fa-house" style="color: #222222;"></i></a></li>
+                <li><a href="#" class="best">인기</a></li>
+                <li><a href="#">공지</a></li>
+                <li><a href="#">질문</a></li>
+                <li><a href="#">정보</a></li>
+                <li><a href="#">자유</a></li>
+                <li><a href="#">자랑</a></li>
+            </ul>
+        </div>
+    </div>
+
     <table class="table text-center">
         <thead>
         <tr>

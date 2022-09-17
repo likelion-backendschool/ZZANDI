@@ -1,0 +1,95 @@
+@import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
+
+:root {
+    --main-bg-color: #ffffff;
+    --page-num-bg-color: #c5e1a5;
+
+    --white-color: #fff;
+    --study-title-color: #2e7d32;
+    --comment-count-color: #0d47a1;
+
+    --main-font: "Apple SD Gothic Neo";
+    --sub-font: "맑은 고딕", arial, sans-serif;
+    --study-title-font: "Jua";
+
+    --tiny-font-size: 11px;
+    --small-font-size: 13px;
+    --medium-font-size: 16px;
+}
+
+* {
+    font-family: var(--main-font), var(--sub-font);
+    font-size: var(--small-font-size);
+}
+
+body {
+    background-color: var(--main-bg-color);
+}
+
+td {
+    vertical-align: middle;
+}
+
+ul, li {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+button {
+    background-color: transparent;
+    border: none;
+    outline: none;
+}
+
+img {
+    margin-right: 10px;
+    width: 30px;
+    height: 30px;
+    border-radius: 5px;
+    border: 1px solid lightgrey;
+}
+
+.study-title {
+    font-family: var(--study-title-font), var(--main-font), var(--sub-font);
+    font-size: var(--medium-font-size);
+    color: var(--study-title-color);
+}
+
+.study-title:hover {
+    text-decoration: underline;
+    text-underline-position: under;
+}
+
+.menu li {
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+.board-table-category {
+    font-weight: bold;
+}
+
+.board-table-title {
+    text-align: left;
+}
+
+.board-table-title__comment {
+    margin-left: 5px;
+    font-size: var(--tiny-font-size);
+    font-weight: bold;
+    color: var(--comment-count-color);
+}
+
+.board-table-writer {
+    width: 200px;
+}
+
+.active {
+    background-color: var(--page-num-bg-color);
+    color: var(--white-color);
+    border-radius: 3px;
+}

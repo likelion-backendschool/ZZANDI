@@ -19,6 +19,7 @@ import com.ll.zzandi.enumtype.TableType;
 import com.ll.zzandi.repository.*;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.time.Period;
 
 import com.ll.zzandi.util.aws.ImageUploadService;
@@ -52,6 +53,8 @@ public class StudyService {
         Study study = new Study(user, studyDto.getStudyTitle(), book, null, StudyType.BOOK,
             studyDto.getStudyStart(), studyDto.getStudyEnd(), studyDto.getStudyPeople(),
             studyDto.getStudyTag(), StudyStatus.RECRUIT);
+
+        study = study.checkStatus();
         study.setStudyCoverUrl("https://cdn-icons-png.flaticon.com/512/4683/4683425.png");
         return studyRepository.save(study);
     }
@@ -60,6 +63,7 @@ public class StudyService {
         Study study = new Study(user, studyDto.getStudyTitle(), null, lecture, StudyType.LECTURE,
             studyDto.getStudyStart(), studyDto.getStudyEnd(), studyDto.getStudyPeople(),
             studyDto.getStudyTag(), StudyStatus.RECRUIT);
+        study = study.checkStatus();
         study.setStudyCoverUrl("https://cdn-icons-png.flaticon.com/512/2112/2112961.png");
         return studyRepository.save(study);
     }
@@ -97,6 +101,7 @@ public class StudyService {
         s1.setStudyEnd(studyDto.getStudyEnd());
         s1.setStudyPeople(studyDto.getStudyPeople());
         s1.setStudyTag(studyDto.getStudyTag());
+        s1 = s1.checkStatus();
         studyRepository.save(s1);
 
         if (lecture != null) {
@@ -124,6 +129,7 @@ public class StudyService {
         s1.setStudyEnd(studyDto.getStudyEnd());
         s1.setStudyPeople(studyDto.getStudyPeople());
         s1.setStudyTag(studyDto.getStudyTag());
+        s1 = s1.checkStatus();
         studyRepository.save(s1);
 
         if (book != null) {
@@ -251,21 +257,7 @@ public class StudyService {
     public void updateStudyStatus() {
         List<Study> studyList = studyRepository.findAll();
         for (Study study : studyList) {
-            int startYear = Integer.parseInt(study.getStudyStart().substring(0, 4));
-            int startMonth = Integer.parseInt(study.getStudyStart().substring(5, 7));
-            int startDay = Integer.parseInt(study.getStudyStart().substring(8, 10));
-
-            int endYear = Integer.parseInt(study.getStudyEnd().substring(0, 4));
-            int endMonth = Integer.parseInt(study.getStudyEnd().substring(5, 7));
-            int endDay = Integer.parseInt(study.getStudyEnd().substring(8, 10));
-
-            if (LocalDate.now().isEqual(LocalDate.of(startYear, startMonth, startDay))) {
-                study.setStudyStatus(StudyStatus.PROGRESS);
-            }
-
-            if (LocalDate.now().isAfter(LocalDate.of(endYear, endMonth, endDay))) {
-                study.setStudyStatus(StudyStatus.COMPLETE);
-            }
+            study = study.checkStatus();
             studyRepository.save(study);
         }
     }

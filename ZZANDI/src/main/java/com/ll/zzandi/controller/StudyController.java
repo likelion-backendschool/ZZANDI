@@ -59,19 +59,12 @@ public class StudyController {
     private final UserService userService;
 
     @GetMapping("/study/create")
-    public String createStudy(StudyDto studyDto, Model model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal(); // 현재 로그인 한 유저 정보
-        model.addAttribute("user", user);
+    public String createStudy(@AuthenticationPrincipal User user, StudyDto studyDto, Model model) {
         return "study/studyForm";
     }
 
     @PostMapping("/study/create")
-    public String createStudy(@Valid StudyDto studyDto, BindingResult bindingResult, BookDto bookDto, LectureDto lectureDto, Model model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal(); // 현재 로그인 한 유저 정보
-        model.addAttribute("user", user);
-
+    public String createStudy(@AuthenticationPrincipal User user, @Valid StudyDto studyDto, BindingResult bindingResult, BookDto bookDto, LectureDto lectureDto, Model model) {
         if (bindingResult.hasErrors()) {
             return "study/studyForm";
         }
@@ -94,14 +87,13 @@ public class StudyController {
             study = studyService.createStudyWithLecture(studyDto, lecture, user);
         }
         teamMateService.createTeamMate(user, study.getId());
-        return "redirect:/";
+        return "redirect:/study/detail/%d".formatted(study.getId());
     }
 
     @GetMapping("/study/list")
     public String studyList(@AuthenticationPrincipal User user, Model model,@RequestParam(defaultValue = "ALL") String st,@RequestParam(defaultValue = "ALL") String ss, @RequestParam(defaultValue = "") String kw) {
         List<Study> studyList = studyService.getList(st, ss, kw);
         model.addAttribute("studyList", studyList);
-        model.addAttribute("user", user);
         return "study/studyList";
     }
 
@@ -149,7 +141,6 @@ public class StudyController {
     public String testStudyDetail(@AuthenticationPrincipal User user, @PathVariable Long studyId, Model model) {
         studyService.updateViews(studyId);
         model.addAttribute("studyId", studyId);
-        model.addAttribute("user", user);
 
         int studyDays = studyService.getStudyDays(studyId);
         model.addAttribute("studyDays", studyDays);
@@ -173,15 +164,12 @@ public class StudyController {
     }
 
     @GetMapping("/study/update/{studyId}")
-    public String updateStudyForm(@PathVariable Long studyId, Model model, StudyDto studyDto) {
+    public String updateStudyForm(@AuthenticationPrincipal User user, @PathVariable Long studyId, Model model, StudyDto studyDto) {
 
         Study studies = studyService.findByStudyId(studyId).orElseThrow(null);
         Book books = studies.getBook();
         Lecture lectures = studies.getLecture();
         StudyDto newStudyDto = studyService.saveNewStudyDto(studyId, studyDto);
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal(); // 현재 로그인 한 유저 정보
-        model.addAttribute("user", user);
         model.addAttribute("studies", studies);
         model.addAttribute("lectures", lectures);
         model.addAttribute("books", books);
@@ -191,17 +179,13 @@ public class StudyController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/study/update/{studyId}")
-    public String updateStudy(@Valid StudyDto studyDto, BindingResult bindingResult, @PathVariable Long studyId, BookDto bookDto, LectureDto lectureDto, Principal principal, Model model) {
+    public String updateStudy(@AuthenticationPrincipal User user, @Valid StudyDto studyDto, BindingResult bindingResult, @PathVariable Long studyId, BookDto bookDto, LectureDto lectureDto, Model model) {
 
         if (bindingResult.hasErrors()) {
             return "study/studyUpdate";
         }
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal(); // 현재 로그인 한 유저 정보
         Study studies = studyService.findByStudyId(studyId).orElseThrow(null);
-        System.out.println("principal.getName() = " + principal.getName());
-        if (!studies.getUser().getUserId().equals(principal.getName().split(",")[1].substring(8, principal.getName().split(",")[1].length()))) {
-            model.addAttribute("user",user);
+        if (!studies.getUser().getId().equals(user.getId())) {
             return "study/studyError";
         }
         if (studyDto.getStudyType().equals("BOOK")) {
@@ -210,7 +194,7 @@ public class StudyController {
             studyService.updateStudyWithLecture(studyId, studyDto, lectureDto, user);
         }
 
-        return "redirect:/";
+        return "redirect:/study/detail/%d".formatted(studyId);
     }
 
     @GetMapping("/study/search/book")

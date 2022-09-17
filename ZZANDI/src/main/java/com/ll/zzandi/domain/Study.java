@@ -4,6 +4,7 @@ import static javax.persistence.FetchType.*;
 
 import com.ll.zzandi.enumtype.StudyStatus;
 import com.ll.zzandi.enumtype.StudyType;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
@@ -87,6 +88,25 @@ public class Study {
     }
     public void getStudyCoverUrl(String studyCoverUrl) {
         this.studyCoverUrl=studyCoverUrl;
+    }
+
+    public Study checkStatus() {
+        int startYear = Integer.parseInt(studyStart.substring(0, 4));
+        int startMonth = Integer.parseInt(studyStart.substring(5, 7));
+        int startDay = Integer.parseInt(studyStart.substring(8, 10));
+
+        int endYear = Integer.parseInt(studyEnd.substring(0, 4));
+        int endMonth = Integer.parseInt(studyEnd.substring(5, 7));
+        int endDay = Integer.parseInt(studyEnd.substring(8, 10));
+
+        if (LocalDate.now().isEqual(LocalDate.of(startYear, startMonth, startDay))) {
+            this.studyStatus = StudyStatus.PROGRESS;
+        }
+
+        if (LocalDate.now().isAfter(LocalDate.of(endYear, endMonth, endDay))) {
+            this.studyStatus = StudyStatus.COMPLETE;
+        }
+        return this;
     }
 
 }

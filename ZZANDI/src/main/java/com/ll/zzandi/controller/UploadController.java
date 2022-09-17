@@ -35,10 +35,7 @@ public class UploadController {
     }
 
     @GetMapping("/study/coverUpload/{studyId}")
-    public String StudyCover(@PathVariable long studyId, Model model){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal(); // 현재 로그인 한 유저 정보
-        model.addAttribute("user", user);
+    public String StudyCover(@AuthenticationPrincipal User user, @PathVariable long studyId, Model model){
         model.addAttribute("studyId", studyId);
         return "/study/studyCoverUpload";
     }

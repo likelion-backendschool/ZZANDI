@@ -1,0 +1,43 @@
+@import url("https://fonts.googleapis.com/css2?family=Jua&display=swap");
+@import url("root-style.css");
+
+.study-title {
+    font-family: var(--study-title-font), var(--main-font), var(--sub-font);
+    font-size: var(--medium-font-size);
+    color: var(--study-title-color);
+}
+
+.study-title:hover {
+    text-decoration: underline;
+    text-underline-position: under;
+}
+
+.menu li {
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+.board-table-category {
+    font-weight: bold;
+}
+
+.board-table-title {
+    text-align: left;
+}
+
+.board-table-title__comment {
+    margin-left: 5px;
+    font-size: var(--tiny-font-size);
+    font-weight: bold;
+    color: var(--comment-count-color);
+}
+
+.board-table-writer {
+    width: 200px;
+}
+
+.active {
+    background-color: var(--page-num-bg-color);
+    color: var(--white-color);
+    border-radius: 3px;
+}

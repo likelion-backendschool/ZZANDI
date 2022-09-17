@@ -1,0 +1,72 @@
+@import url("https://fonts.googleapis.com/css2?family=Jua&display=swap");
+@import url("root-style.css");
+
+.comment-box {
+    position: relative;
+    border-bottom: 1px solid var(--light-gray-color);
+}
+
+.comment-box__icon {
+    position: absolute;
+    top: 10px;
+    left: -15px;
+    color: var(--comment-reply-color);
+    font-size: var(--tiny-font-size);
+}
+
+.comment-box-header__writer {
+    font-weight: bold;
+}
+
+.comment-box-header__date {
+    margin-left: 5px;
+    color: var(--gray-color);
+}
+
+.comment-box-button, .comment-box-thumbs {
+    font-size: 11px;
+}
+
+.comment-box-content__parent-writer {
+    color: var(--medium-gray-color);
+}
+
+.comment-box-content__content {
+    word-break:break-all;
+    white-space: pre-line;
+}
+
+.comment-box__url {
+    color: var(--comment-url-color);
+}
+
+.comment-box__url:hover {
+    text-decoration: underline;
+}
+
+.reply-box * {
+    font-size: 12px;
+}
+
+.reply-box__title {
+    margin-bottom: 5px;
+}
+
+.reply-content, .update-content {
+    height: 70px;
+}
+
+.reply-btn, .update-btn {
+    width: 100px;
+    margin-left: 5px;
+}
+
+.hide {
+    display: none;
+}
+
+.active {
+    background-color: var(--page-num-bg-color);
+    color: var(--white-color);
+    border-radius: 3px;
+}

@@ -1,42 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Jua&display=swap");
 @import url("root-style.css");
 
-* {
-    font-family: var(--main-font), var(--sub-font);
-    font-size: var(--small-font-size);
-}
-
-body {
-    background-color: var(--main-bg-color);
-}
-
-td {
-    vertical-align: middle;
-}
-
-ul, li {
-    list-style: none;
-}
-
-a {
-    text-decoration: none;
-    color: inherit;
-}
-
-button {
-    background-color: transparent;
-    border: none;
-    outline: none;
-}
-
-img {
-    margin-right: 5px;
-    width: 30px;
-    height: 30px;
-    border-radius: 5px;
-    border: 1px solid var(--light-gray-color);
-}
-
 .study-title {
     font-family: var(--study-title-font), var(--main-font), var(--sub-font);
     font-size: var(--medium-font-size);

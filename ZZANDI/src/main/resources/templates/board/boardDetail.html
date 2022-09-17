@@ -2,9 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="ko">
 <head>
     <meta charset="UTF-8">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
-      rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
-      crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <script src="https://kit.fontawesome.com/585d621f74.js" crossorigin="anonymous"></script>
 
     <!-- 토스트 UI 에디터, css 코어 -->
@@ -19,98 +17,12 @@
     <!-- 토스트 UI Syntax Highlight 자바스크립트 -->
     <script src="https://uicdn.toast.com/editor-plugin-code-syntax-highlight/latest/toastui-editor-plugin-code-syntax-highlight-all.min.js"></script>
 
+    <link rel="stylesheet" th:href="@{/css/board/board-detail.css}">
+    <link rel="stylesheet" th:href="@{/css/board/comment-list.css}">
     <script defer type="text/javascript" th:src="@{/js/board/boardDetail.js}"></script>
     <script defer type="text/javascript" th:src="@{/js/comment/comment.js}"></script>
 
     <title>ZZANDI</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
-        body {
-            font-family: "Apple SD Gothic Neo","맑은 고딕", arial, sans-serif;
-            background-color: #ffffff;
-        }
-
-        .title {
-            font-size: 21px;
-            font-weight: bold;
-            line-height: 18px;
-            color: #444444;
-        }
-
-        .date {
-            font-size: 13px;
-        }
-
-        li {
-            list-style: none;
-        }
-
-        a {
-            text-decoration: none;
-            color: #222222;
-        }
-
-        .comment-box a {
-            text-decoration: none;
-            color: #333333;
-        }
-
-        .comment-box a:hover {
-            text-decoration: underline;
-        }
-
-        .study-title {
-            font-family: 'Jua', "Apple SD Gothic Neo", "Malgun Gothic", "맑은 고딕", arial, sans-serif;
-            text-decoration: none;
-            font-size: 16px;
-            color: #045CDF;
-        }
-
-        .study-title:hover {
-            text-decoration: underline;
-            text-underline-position: under;
-        }
-
-        .category {
-            margin-left: 10px;
-            text-decoration: none;
-            font-size: 13px;
-            color: #555555;
-        }
-
-        .category:hover {
-            text-decoration: underline;
-            text-underline-position: under;
-            color: #555555;
-        }
-
-        .hide {
-            display: none;
-        }
-
-        .page-btn {
-            background-color: transparent;
-            font-size: 11px;
-            border: none;
-            outline: none;
-        }
-
-        .active {
-            background-color: #c5e1a5;
-            color: white;
-            border-radius: 3px;
-            pointer-events: none;
-        }
-
-        .youtube {
-            width: 100%;
-            height: 550px;
-        }
-
-        .toastui-editor-contents {
-            font-size: 16px;
-        }
-    </style>
 </head>
 <body>
 <div class="w-100 d-flex justify-content-center align-items-center text-black" style="height: 100px; background-color: #c5e1a5;">
@@ -122,22 +34,22 @@
     <input type="hidden" class="board-id" th:value="${boardDetail.boardId}"> <!-- 현재 게시글 번호 -->
     <input type="hidden" class="board-content" th:value="${boardDetail.content}">
 
-    <div class="mb-2 d-flex align-items-center">
+    <div class="d-flex align-items-center mb-2">
         <a class="study-title" th:text="${studyTitle}" th:href="@{/{studyId}/board/list (studyId = ${studyId}, page = 0)}"></a>
         <a class="category" th:text="${boardDetail.category}" th:href="@{#}"></a>
     </div>
 
-    <div class="d-flex justify-content-between mt-2 border-bottom border-top" style="padding: 12px;">
-        <h3 class="title align-self-center mb-0" th:text="${boardDetail.title}">제목1</h3>
-        <p class="align-self-center mb-0 date" th:text="${boardDetail.createdDate}">날짜</p>
+    <div class="title-box d-flex justify-content-between border-top border-bottom">
+        <h3 class="title-box__title align-self-center mb-0" th:text="${boardDetail.title}">제목1</h3>
+        <p class="align-self-center mb-0" th:text="${boardDetail.createdDate}">날짜</p>
     </div>
 
-    <div class="d-flex border-bottom justify-content-between" style="padding: 8px;">
+    <div class="writer-box d-flex justify-content-between border-bottom">
         <div class="d-flex align-items-center my-2" sec:authorize="isAuthenticated()">
-            <img th:if="${!#strings.isEmpty(boardDetail.profile)}" th:src="${boardDetail.profile}" alt="profile" width="30" height="30"  class="rounded border bg-light"/>
-            <p class="align-self-center writer" th:text="${boardDetail.writer}" style="margin-left: 5px; margin-bottom: 0; font-size: 14px;">작성자</p>
+            <img th:if="${!#strings.isEmpty(boardDetail.profile)}" th:src="${boardDetail.profile}" alt="profile"/>
+            <p class="writer-box__writer align-self-center mb-0" th:text="${boardDetail.writer}">작성자</p>
         </div>
-        <div class="d-flex justify-content-between align-items-baseline align-self-center" style="font-size: 13px;">
+        <div class="d-flex justify-content-between align-items-baseline align-self-center">
             <p class="mx-1 my-0"><span th:text="|조회수 ${boardDetail.views}|"></span></p>
             <p class="mx-1 my-0"><span th:text="|좋아요 ${boardDetail.heart}|"></span></p>
             <p class="comment-count ml-1 my-0"></p>
@@ -145,16 +57,16 @@
     </div>
 
     <!-- Toast Viewer -->
-    <div id="viewer" class="my-2" style="padding: 11px;"></div>
+    <div id="viewer" class="my-2"></div>
 
-    <div class="d-flex justify-content-between" style="margin-top: 30px;">
+    <div class="d-flex justify-content-between mt-3">
         <button class="btn btn-secondary btn-sm invisible" th:if="${boardDetail.prev == null}">이전글</button>
         <button class="btn btn-secondary btn-sm" th:if="${boardDetail.prev != null}" th:onclick="|location.href='@{/{studyId}/board/detail/{boardId}/{page} (studyId=${studyId}, boardId=${boardDetail.prev}, page=${boardDetail.page})}'|">이전글</button>
         <button class="btn btn-secondary btn-sm w-50" type="button" th:onclick="|location.href='@{/{studyId}/board/list?page={page} (studyId=${studyId}, page=${boardDetail.page})}'|">목록으로</button>
         <button class="btn btn-secondary btn-sm" th:if="${boardDetail.next != null}" th:onclick="|location.href='@{/{studyId}/board/detail/{boardId}/{page} (studyId=${studyId}, boardId=${boardDetail.next}, page=${boardDetail.page})}'|">다음글</button>
         <button class="btn btn-secondary btn-sm invisible" th:if="${boardDetail.next == null}">다음글</button>
     </div>
-    <div class="mt-2 pt-2 d-flex justify-content-end border-top">
+    <div class="d-flex justify-content-end mt-2 pt-2 border-top">
         <form name="form" th:action="@{/{studyId}/board/delete/{boardId} (studyId=${studyId}, boardId=${boardDetail.boardId})}" th:onsubmit="return false" method="post">
             <button class="btn btn-light btn-sm" th:if="${userUUID == boardDetail.userUUID}" type="button" th:onclick="|location.href='@{/{studyId}/board/update/{boardId}/{page} (studyId=${studyId}, boardId=${boardDetail.boardId}, page=${boardDetail.page})}'|">수정</button>
             <button class="btn btn-light btn-sm" th:if="${userUUID == boardDetail.userUUID}" type="submit" th:onclick="deleteBoard()">삭제</button>

@@ -1,0 +1,21 @@
+:root {
+    --main-bg-color: #ffffff;
+    --page-num-bg-color: #c5e1a5;
+
+    --white-color: #fff;
+    --light-gray-color: #cfd8dc;
+    --gray-color: #888888;
+    --study-title-color: #2e7d32;
+    --comment-count-color: #0d47a1;
+    --comment-url-color: #333333;
+
+
+    --main-font: "Apple SD Gothic Neo";
+    --sub-font: "맑은 고딕", arial, sans-serif;
+    --study-title-font: "Jua";
+
+    --tiny-font-size: 11px;
+    --small-font-size: 13px;
+    --medium-font-size: 16px;
+    --large-font-size: 21px;
+}

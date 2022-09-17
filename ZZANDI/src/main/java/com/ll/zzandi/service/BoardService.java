@@ -23,9 +23,9 @@ public class BoardService {
 
     private final BoardRepository boardRepository;
 
-    public Page<BoardListDto> findBoardListPaging(int page, Long studyId) {
+    public Page<BoardListDto> findBoardListPaging(int page, Long studyId, String category) {
         PageRequest pageRequest = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "id"));
-        Page<Board> boardList = boardRepository.findBoardList(pageRequest, studyId);
+        Page<Board> boardList = boardRepository.findBoardList(pageRequest, studyId, category);
 
         return boardList.map(board -> new BoardListDto(board.getId(), board.getUser().getUserId(), board.getCategory(), board.getTitle(), board.getUser().getUserNickname(),
                         board.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd")), board.getViews(), board.getHeart(), page, board.getComments().size(), board.getUser().getUserprofileUrl()));

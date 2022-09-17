@@ -16,6 +16,7 @@
 
 <input type="hidden" class="page" th:value="${page}"> <!-- 현재 페이지 번호 -->
 <input type="hidden" class="study-id" th:value="${studyId}"> <!-- 현재 스터디 번호 -->
+<input type="hidden" class="category" th:value="${category}">
 
 <div class="container w-75 mx-auto my-4 bg-#f5f5f5">
     <div class="mb-2 d-flex flex-column border rounded p-2">
@@ -24,13 +25,12 @@
         </div>
         <div class="menu d-flex justify-content-start mt-2">
             <ul class="categories d-flex mb-0 px-0">
-                <li><a th:href="@{/{studyId}/board/list (studyId = ${studyId})}"><i class="fa-solid fa-house" style="color: #222222;"></i></a></li>
-                <li><a href="javascript:void(0)" class="popularity">인기</a></li>
+                <li><a href="javascript:void(0)">전체</a></li>
                 <li><a href="javascript:void(0)">공지</a></li>
-                <li><a href="#">질문</a></li>
-                <li><a href="#">정보</a></li>
-                <li><a href="#">자유</a></li>
-                <li><a href="#">자랑</a></li>
+                <li><a href="javascript:void(0)">질문</a></li>
+                <li><a href="javascript:void(0)">정보</a></li>
+                <li><a href="javascript:void(0)">자유</a></li>
+                <li><a href="javascript:void(0)">자랑</a></li>
             </ul>
         </div>
     </div>

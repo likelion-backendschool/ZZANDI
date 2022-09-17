@@ -4,9 +4,10 @@ const list = document.querySelector(".list");
 const pagination = document.querySelector('.pagination');
 const currPage = document.querySelector(".page").value;
 const studyId = document.querySelector(".study-id").value;
+const category = document.querySelector(".category").value;
 
 const colors = new Map();
-colors.set('인기', '#42a5f5');
+colors.set('전체', '#42a5f5');
 colors.set('공지', '#d50000');
 colors.set('자유', '#ff6f00');
 colors.set('정보', '#ffb2dd');
@@ -17,10 +18,10 @@ for(let category of document.querySelectorAll(".categories li > a")) {
     category.style.color = colors.get(category.innerHTML);
 }
 
-window.onload = () => findByPage(currPage, studyId);
+window.onload = () => findByPage(currPage, '', studyId);
 
-function findByPage(page, studyId) {
-    fetch(`/${studyId}/board/list-data?page=${page}`)
+function findByPage(page, category, studyId) {
+    fetch(`/${studyId}/board/list-data?page=${page}&category=${category}`)
         .then(response => response.json())
         .then(data => {
             if(data.content.length === 0) {
@@ -40,7 +41,7 @@ categories.addEventListener("click", (e) => {
         return false;
     }
 
-    let category = e.target.innerHTML;
+    let category = e.target.innerHTML === '전체' ? '' : e.target.innerHTML;
     findByPage(0, category, studyId);
 });
 
@@ -54,7 +55,7 @@ function createBoardList(item) {
     const color = colors.get(item.category);
 
     return `<tr>
-                <td class="board-table-category" style="color: ${color};">${item.category}</td>
+                <td class="board-table-category" style="color: ${color};"><a href="javascript:void(0)" onclick="findByPage(0, '${item.category}', ${studyId})">${item.category}</a></td>
                 <td class="board-table-title">
                     <a href="/${studyId}/board/detail/${item.boardId}/${item.pageNum}">${title}</a>
                     <span class="board-table-title__comment">${item.count}</span>

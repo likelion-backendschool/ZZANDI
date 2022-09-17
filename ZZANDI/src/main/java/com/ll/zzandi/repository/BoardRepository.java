@@ -1,6 +1,7 @@
 package com.ll.zzandi.repository;
 
 import com.ll.zzandi.domain.Board;
+import com.ll.zzandi.enumtype.BoardCategory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,8 +17,8 @@ import java.util.Optional;
 @Repository
 public interface BoardRepository extends JpaRepository<Board, Long> {
 
-    @Query("select b from Board b where b.study.id = :studyId")
-    Page<Board> findBoardList(Pageable pageable, @Param("studyId") Long studyId);
+    @Query("select b from Board b where b.study.id = :studyId and b.category like %:category%")
+    Page<Board> findBoardList(Pageable pageable, @Param("studyId") Long studyId, @Param("category") String category);
 
     @Query("select b from Board b where b.study.id = :studyId")
     List<Board> findBoardListByStudyId(@Param("studyId") Long studyId);

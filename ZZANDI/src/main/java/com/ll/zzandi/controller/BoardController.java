@@ -6,6 +6,7 @@ import com.ll.zzandi.domain.User;
 import com.ll.zzandi.dto.board.BoardCreateDto;
 import com.ll.zzandi.dto.board.BoardListDto;
 import com.ll.zzandi.dto.board.BoardUpdateFormDto;
+import com.ll.zzandi.enumtype.BoardCategory;
 import com.ll.zzandi.service.BoardService;
 import com.ll.zzandi.service.CommentService;
 import com.ll.zzandi.service.StudyService;
@@ -29,19 +30,20 @@ public class BoardController {
     private final StudyService studyService;
 
     @GetMapping("/list")
-    public String findBoardListPaging(@PathVariable Long studyId, @RequestParam(defaultValue = "0") int page, Model model) {
+    public String findBoardListPaging(@PathVariable Long studyId, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "") String category, Model model) {
         String studyTitle = studyService.findByStudyId(studyId).get().getStudyTitle();
 
         model.addAttribute("page", page);
         model.addAttribute("studyId", studyId);
         model.addAttribute("studyTitle", studyTitle);
+        model.addAttribute("category", category);
         return "board/boardList";
     }
 
     @GetMapping("/list-data")
     @ResponseBody
-    public Page<BoardListDto> findBoardListPagingToJson(@PathVariable Long studyId, @RequestParam(defaultValue = "0") int page) {
-        return boardService.findBoardListPaging(page, studyId);
+    public Page<BoardListDto> findBoardListPagingToJson(@PathVariable Long studyId, @RequestParam(defaultValue = "0") int page, @RequestParam(required = false) String category) {
+        return boardService.findBoardListPaging(page, studyId, category);
     }
 
     @GetMapping("/detail/{boardId}/{page}")

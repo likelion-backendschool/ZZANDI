@@ -27,21 +27,9 @@
     <link rel="stylesheet" href="https://uicdn.toast.com/editor-plugin-table-merged-cell/latest/toastui-editor-plugin-table-merged-cell.min.css"/>
     <script defer src="https://uicdn.toast.com/editor-plugin-table-merged-cell/latest/toastui-editor-plugin-table-merged-cell.min.js"></script>
 
+    <link rel="stylesheet" th:href="@{/css/board/board-write-form.css}">
     <script defer th:src="@{/js/board/boardWriteForm.js}"></script>
     <title>글 작성</title>
-    <style>
-        @font-face {
-            font-family: 'GmarketSansMedium';
-            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
-            font-weight: normal;
-            font-style: normal;
-        }
-
-        body {
-            font-family: "Apple SD Gothic Neo", "Malgun Gothic", "맑은 고딕", arial, sans-serif; "GmarketSansMedium";
-            background-color: #ffffff;
-        }
-    </style>
 </head>
 <body>
 <input type="hidden" class="study-id" th:value="${studyId}">
@@ -50,12 +38,18 @@
     <h2 class="mx-3 my-0" style="font-weight: bold;">ZZANDI</h2>
 </div>
 
-<div class="container w-75 mx-auto my-4">
-    <h3>글 작성 페이지</h3>
+<div class="container w-100 mx-auto my-4">
     <form name="form" th:action="@{/{studyId}/board/create (studyId=${studyId})}" th:object="${boardCreateDto}"
           method="post" enctype="multipart/form-data" onsubmit="return validSubmit();">
 
-        <div class="d-flex justify-content-around">
+        <div class="button-box">
+            <div class="form-group d-flex justify-content-end w-25 mb-2">
+                <button class="btn btn-secondary btn-sm mx-1" type="button" th:onclick="validSubmit()">등록</button>
+                <button class="btn btn-secondary btn-sm" type="button" th:onclick="|location.href='@{/{studyId}/board/list (studyId=${studyId})}'|">돌아가기</button>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-around writer-header">
             <div class="form-group align-self-center">
                 <select th:field="*{category}" class="category form-select form-select-sm">
                     <option value="">카테고리</option>
@@ -65,7 +59,7 @@
                     </option>
                 </select>
             </div>
-            <div class="form-group flex-grow-1" style="margin-left: 10px;">
+            <div class="form-group flex-grow-1 title-box">
                 <input type="text" th:field="*{title}" class="title form-control form-control-sm" placeholder="제목을 입력해주세요."/>
             </div>
         </div>
@@ -77,11 +71,6 @@
 
         <div class="mb-3">
             <input class="form-control" type="file" name="file">
-        </div>
-
-        <div class="form-group d-flex justify-content-between w-100">
-            <button class="btn btn-secondary btn-sm" type="button" th:onclick="|location.href='@{/{studyId}/board/list (studyId=${studyId})}'|">돌아가기</button>
-            <button class="btn btn-secondary btn-sm" type="button" th:onclick="validSubmit()">등록</button>
         </div>
     </form>
 </div>

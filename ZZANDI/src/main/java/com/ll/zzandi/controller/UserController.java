@@ -13,6 +13,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -161,5 +162,13 @@ public class UserController {
         model.addAttribute("user", pageUser);
         model.addAttribute("teamMateList", teamMateList);
         return "/user/mystudy";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/modify/id")
+    @ResponseBody
+    public Boolean checkUserId(@RequestParam("userid") String userid)  {
+        System.out.println("연걸 성공"+userid);
+        return userRepository.existsByUserId(userid);
     }
 }

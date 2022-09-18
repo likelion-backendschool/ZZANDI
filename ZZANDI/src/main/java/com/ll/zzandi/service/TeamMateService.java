@@ -51,7 +51,7 @@ public class TeamMateService {
 
   public void updateTeamMate(User user, Long studyId, Long teamMateId) {
     Study study = studyRepository.findById(studyId).orElseThrow(()->new StudyException(ErrorType.NOT_FOUND));
-    TeamMate teamMate = teamMateRepository.findById(teamMateId).orElseThrow(()-> new UserApplicationException(ErrorType.NOT_FOUND));
+    TeamMate teamMate = teamMateRepository.findById(teamMateId).orElseThrow(()-> new TeamMateException(ErrorType.NOT_FOUND));
 
     // 팀장만 수락이 가능
     if(study.getUser() == user) {
@@ -66,7 +66,7 @@ public class TeamMateService {
 
   public boolean deleteTeamMate(User user, Long studyId, Long teamMateId) {
     Study study = studyRepository.findById(studyId).orElseThrow(()->new StudyException(ErrorType.NOT_FOUND));
-    TeamMate teamMate = teamMateRepository.findById(teamMateId).orElseThrow(()-> new UserApplicationException(ErrorType.NOT_FOUND));
+    TeamMate teamMate = teamMateRepository.findById(teamMateId).orElseThrow(()-> new TeamMateException(ErrorType.NOT_FOUND));
 
     boolean isLeader = false;
 

@@ -12,6 +12,8 @@ public enum ErrorType {
 
     DUPLICATED_TEAMMATE("409", "이미 신청한 스터디입니다."),
     FULL_STUDY("409", "팀원이 모두 모집되어 신청할 수 없습니다."),
+
+    NOT_LEADER("403", "수정할 권한이 없습니다.")
     ;
 
 

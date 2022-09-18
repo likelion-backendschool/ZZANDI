@@ -42,7 +42,7 @@ public class UploadController {
         Study study = studyService.findByStudyId(studyId).orElseThrow(()->new StudyException(
             ErrorType.NOT_FOUND));
         if (!study.getUser().getId().equals(user.getId())|| study.getStudyStatus() == StudyStatus.COMPLETE) {
-            return "study/studyError";
+            throw new StudyException(ErrorType.NOT_LEADER);
         }
         model.addAttribute("studyId", studyId);
         return "/study/studyCoverUpload";
@@ -55,7 +55,7 @@ public class UploadController {
         Study study = studyService.findByStudyId(studyId).orElseThrow(()->new StudyException(
             ErrorType.NOT_FOUND));
         if (!study.getUser().getId().equals(user.getId())|| study.getStudyStatus() == StudyStatus.COMPLETE) {
-            return "study/studyError";
+            throw new StudyException(ErrorType.NOT_LEADER);
         }
         studyService.updateCoverImg(multipartFile, studyId);
         return "1";

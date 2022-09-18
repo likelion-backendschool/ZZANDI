@@ -188,7 +188,7 @@ public class StudyService {
     }
 
     public void updateCoverImg(MultipartFile multipartFile, long studyUUID) throws IOException {
-        Study study=studyRepository.findById(studyUUID).orElseThrow(RuntimeException::new);
+        Study study=studyRepository.findById(studyUUID).orElseThrow(()->new StudyException(ErrorType.NOT_FOUND));
 
         String originalName=multipartFile.getOriginalFilename();
         System.out.println("!!!!!!!!!!!!!!!오리지널"+originalName);
@@ -230,7 +230,7 @@ public class StudyService {
         Lecture lecture = study.getLecture();
         StudyDetailDto studyDetailDto = null;
         if (book != null) {
-            book = bookService.findByid(book.getId()).orElseThrow(null);
+            book = bookService.findByid(book.getId()).orElseThrow(() -> new StudyException(ErrorType.NOT_FOUND));
             studyDetailDto = new StudyDetailDto(study.getStudyTitle(), study.getUser().getUserNickname(),
                 study.getAcceptedStudyMember(), study.getStudyPeople(), study.getStudyStart(), study.getStudyEnd(),
                 study.getStudyTag(), String.valueOf(study.getStudyType()), study.getStudyRate(), study.getViews(),
@@ -238,7 +238,7 @@ public class StudyService {
                 book.getBookName(), book.getBookPage(), book.getBookAuthor(), book.getBookPublisher(), book.getBookIsbn(),
                 null, null, null);
         } else if (lecture != null) {
-            lecture = lectureService.findById(lecture.getId()).orElseThrow(null);
+            lecture = lectureService.findById(lecture.getId()).orElseThrow(() -> new StudyException(ErrorType.NOT_FOUND));
             studyDetailDto = new StudyDetailDto(study.getStudyTitle(), study.getUser().getUserNickname(),
                 study.getAcceptedStudyMember(), study.getStudyPeople(), study.getStudyStart(), study.getStudyEnd(),
                 study.getStudyTag(), String.valueOf(study.getStudyType()), study.getStudyRate(), study.getViews(),
@@ -263,7 +263,7 @@ public class StudyService {
     }
 
     public int getStudyPeriod(Long studyId) {
-        Study studies = findByStudyId(studyId).orElseThrow(null);
+        Study studies = findByStudyId(studyId).orElseThrow(() -> new StudyException(ErrorType.NOT_FOUND));
 
         LocalDate studyStart = LocalDate.parse(studies.getStudyStart());
         LocalDate studyEnd= LocalDate.parse(studies.getStudyEnd());
@@ -272,7 +272,7 @@ public class StudyService {
     }
 
     public int getStudyRecommend(Long studyId) {
-        Study studies = findByStudyId(studyId).orElseThrow(null);
+        Study studies = findByStudyId(studyId).orElseThrow(() -> new StudyException(ErrorType.NOT_FOUND));
 
         int studyDays = getStudyPeriod(studyId);
 
@@ -283,7 +283,7 @@ public class StudyService {
     }
 
     public int getStudyDays(Long studyId) {
-        Study studies = findByStudyId(studyId).orElseThrow(null);
+        Study studies = findByStudyId(studyId).orElseThrow(() -> new StudyException(ErrorType.NOT_FOUND));
 
         LocalDate studyStart = LocalDate.parse(studies.getStudyStart());
         LocalDate today = LocalDate.now();

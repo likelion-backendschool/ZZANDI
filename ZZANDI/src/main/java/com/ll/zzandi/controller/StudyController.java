@@ -153,7 +153,7 @@ public class StudyController {
     public String deleteStudy(@AuthenticationPrincipal User user, @PathVariable Long studyId) {
         Study studies = studyService.findByStudyId(studyId).orElseThrow(()->new StudyException(ErrorType.NOT_FOUND));
         if (!studies.getUser().getId().equals(user.getId()) || studies.getStudyStatus() == StudyStatus.PROGRESS || studies.getStudyStatus() == StudyStatus.COMPLETE) {
-            return "study/studyError";
+            throw new StudyException(ErrorType.NOT_LEADER);
         }
         studyService.deleteStudy(studies);
         return "redirect:/";
@@ -163,7 +163,7 @@ public class StudyController {
     public String updateStudyForm(@AuthenticationPrincipal User user, @PathVariable Long studyId, Model model, StudyDto studyDto) {
         Study studies = studyService.findByStudyId(studyId).orElseThrow(()->new StudyException(ErrorType.NOT_FOUND));
         if (!studies.getUser().getId().equals(user.getId())|| studies.getStudyStatus() == StudyStatus.PROGRESS || studies.getStudyStatus() == StudyStatus.COMPLETE) {
-            return "study/studyError";
+            throw new StudyException(ErrorType.NOT_LEADER);
         }
 
         Book books = studies.getBook();
@@ -182,7 +182,7 @@ public class StudyController {
 
         Study studies = studyService.findByStudyId(studyId).orElseThrow(()->new StudyException(ErrorType.NOT_FOUND));
         if (!studies.getUser().getId().equals(user.getId()) || studies.getStudyStatus() == StudyStatus.PROGRESS || studies.getStudyStatus() == StudyStatus.COMPLETE) {
-            return "study/studyError";
+            throw new StudyException(ErrorType.NOT_LEADER);
         }
 
         if (bindingResult.hasErrors()) {

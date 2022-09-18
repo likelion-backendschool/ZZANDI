@@ -27,21 +27,9 @@
     <link rel="stylesheet" href="https://uicdn.toast.com/editor-plugin-table-merged-cell/latest/toastui-editor-plugin-table-merged-cell.min.css"/>
     <script defer src="https://uicdn.toast.com/editor-plugin-table-merged-cell/latest/toastui-editor-plugin-table-merged-cell.min.js"></script>
 
+    <link rel="stylesheet" th:href="@{/css/board/board-update-form.css}">
     <script defer th:src="@{/js/board/boardUpdateForm.js}"></script>
     <title>ZZANDI</title>
-    <style>
-        @font-face {
-            font-family: 'GmarketSansMedium';
-            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
-            font-weight: normal;
-            font-style: normal;
-        }
-
-        body {
-            background-color: #ffffff;
-            font-family: "GmarketSansMedium", serif;
-        }
-    </style>
 </head>
 <body>
 <div class="w-100 d-flex justify-content-center align-items-center text-black"
@@ -49,12 +37,18 @@
     <h2 class="mx-3 my-0" style="font-weight: bold;">ZZANDI</h2>
 </div>
 
-<div class="container w-50 mx-auto my-4">
-    <h3>글 작성 페이지</h3>
+<div class="container w-100 mx-auto my-4">
     <form name="form" th:action="@{/{studyId}/board/update/{boardId}/{page} (studyId=${studyId}, boardId=${updateDto.id}, page=${updateDto.pageNum})}"
           method="post" onsubmit="return validSubmit();">
 
-        <div class="d-flex justify-content-around">
+        <div class="button-box">
+            <div class="form-group d-flex justify-content-end w-25 mb-2">
+                <button class="btn btn-sm btn-secondary mx-1" type="button" th:onclick="validSubmit()">등록</button>
+                <button class="btn btn-sm btn-secondary" type="button" th:onclick="|location.href='@{/{studyId}/board/detail/{boardId}/{page} (studyId=${studyId}, boardId=${updateDto.id}, page=${updateDto.pageNum})}'|">돌아가기</button>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-around update-header">
             <div class="form-group align-self-center">
                 <select id="category" name="category" class="category form-select form-select-sm">
                     <option th:text="${updateDto.category}">분류</option>
@@ -64,7 +58,7 @@
                     </option>
                 </select>
             </div>
-            <div class="form-group flex-grow-1" style="margin-left: 10px;">
+            <div class="form-group flex-grow-1 ml-2 title-box">
                 <input type="text" class="title form-control form-control-sm" id="title" name="title" th:value="${updateDto.title}" >
             </div>
         </div>
@@ -73,11 +67,6 @@
         <div id="editor" class="my-2"></div>
         <!-- Toast Editor Content-->
         <input type="hidden" class="editorContent" name="content" th:value="${updateDto.content}">
-
-        <div class="form-group d-flex justify-content-between w-100">
-            <button class="btn btn-sm btn-secondary" type="button" th:onclick="|location.href='@{/{studyId}/board/detail/{boardId}/{page} (studyId=${studyId}, boardId=${updateDto.id}, page=${updateDto.pageNum})}'|" style="margin-right: 5px;">돌아가기</button>
-            <button class="btn btn-sm btn-secondary" type="button" th:onclick="validSubmit()">등록</button>
-        </div>
     </form>
 </div>
 </body>

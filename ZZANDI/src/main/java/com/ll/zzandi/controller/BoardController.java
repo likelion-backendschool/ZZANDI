@@ -30,8 +30,11 @@ public class BoardController {
 
     @GetMapping("/list")
     public String findBoardListPaging(@PathVariable Long studyId, @RequestParam(defaultValue = "0") int page, Model model) {
+        String studyTitle = studyService.findByStudyId(studyId).get().getStudyTitle();
+
         model.addAttribute("page", page);
         model.addAttribute("studyId", studyId);
+        model.addAttribute("studyTitle", studyTitle);
         return "board/boardList";
     }
 
@@ -44,10 +47,12 @@ public class BoardController {
     @GetMapping("/detail/{boardId}/{page}")
     public String findBoardDetail(@AuthenticationPrincipal User user, @PathVariable Long studyId, @PathVariable Long boardId, @PathVariable int page, Model model) {
         boardService.updateBoardView(boardId);
+        String studyTitle = studyService.findByStudyId(studyId).get().getStudyTitle();
 
         model.addAttribute("boardDetail", boardService.findBoardDetail(boardId, page));
         model.addAttribute("userUUID", user.getId());
         model.addAttribute("studyId", studyId);
+        model.addAttribute("studyTitle", studyTitle);
         return "board/boardDetail";
     }
 

@@ -4,7 +4,6 @@ const list = document.querySelector(".list");
 const pagination = document.querySelector('.pagination');
 const currPage = document.querySelector(".page").value;
 const studyId = document.querySelector(".study-id").value;
-const category = document.querySelector(".category").value;
 
 const colors = new Map();
 colors.set('전체', '#42a5f5');
@@ -29,7 +28,7 @@ function findByPage(page, category, studyId) {
                 return false;
             } else {
                 history.pushState({page : page}, "", `/${studyId}/board/list?page=${page}`)
-                displayItems(data, studyId);
+                displayItems(data, category, studyId);
             }
         }
     );
@@ -45,9 +44,9 @@ categories.addEventListener("click", (e) => {
     findByPage(0, category, studyId);
 });
 
-function displayItems(items) {
+function displayItems(items, category) {
     list.innerHTML = items.content.map(item => createBoardList(item)).join('');
-    pagination.innerHTML = createPageList(items);
+    pagination.innerHTML = createPageList(items, category);
 }
 
 function createBoardList(item) {
@@ -55,7 +54,7 @@ function createBoardList(item) {
     const color = colors.get(item.category);
 
     return `<tr>
-                <td class="board-table-category" style="color: ${color};"><a href="javascript:void(0)" onclick="findByPage(0, '${item.category}', ${studyId})">${item.category}</a></td>
+                <td class="board-table-category" style="color: ${color};"><a onclick="findByPage(0, '${item.category}', ${studyId})">${item.category}</a></td>
                 <td class="board-table-title">
                     <a href="/${studyId}/board/detail/${item.boardId}/${item.pageNum}">${title}</a>
                     <span class="board-table-title__comment">${item.count}</span>
@@ -72,7 +71,7 @@ function createBoardList(item) {
             </tr>`;
 }
 
-function createPageList(items) {
+function createPageList(items, category) {
     let nowPage = items.pageable.pageNumber;
     let pageSize = items.pageable.pageSize;
     let totalPage = items.totalPages;
@@ -88,30 +87,30 @@ function createPageList(items) {
     const prevDisabled = hasPrev ? "disabled='disabled'" : '';
     pageHTML +=
         `<li class="page-item">
-            <button onClick="findByPage(0, ${studyId});" ${prevDisabled}>
+            <button onClick="findByPage(0, '${category}', ${studyId});" ${prevDisabled}>
                 <i class="fa-solid fa-angles-left"></i>
             </button>
         </li>
         <li class="page-item">
-            <button onClick="findByPage(${nowPage - 1}, ${studyId});" ${prevDisabled}>
+            <button onClick="findByPage(${nowPage - 1}, '${category}', ${studyId});" ${prevDisabled}>
                 <i class="fa-solid fa-angle-left"></i>
             </button>
         </li>`;
 
     for (let i = startPage; i < endPage; i++) {
         const active = (i === nowPage) ? 'active' : '';
-        pageHTML += `<li class="page-item"><button class="${active}" onclick="findByPage(${i}, ${studyId})">${i + 1}</button></li>`;
+        pageHTML += `<li class="page-item"><button class="${active}" onclick="findByPage(${i}, '${category}', ${studyId})">${i + 1}</button></li>`;
     }
 
     const nextDisabled = hasNext ? "disabled='disabled'" : '';
     pageHTML +=
         `<li class="page-item">
-            <button onClick="findByPage(${nowPage + 1}, ${studyId});" ${nextDisabled}>
+            <button onClick="findByPage(${nowPage + 1}, '${category}', ${studyId});" ${nextDisabled}>
                 <i class="fa-solid fa-angle-right"></i>
             </button>
         </li>
         <li class="page-item">
-            <button onClick="findByPage(${totalPage - 1}, ${studyId});" ${nextDisabled}>
+            <button onClick="findByPage(${totalPage - 1}, '${category}', ${studyId});" ${nextDisabled}>
                 <i class="fa-solid fa-angles-right"></i>
             </button>
         </li>`;
@@ -121,7 +120,7 @@ function createPageList(items) {
 
 window.addEventListener('popstate', (e) => {
     const data = history.state;
-    fetch(`/${studyId}/board/list-data?page=${data.page}`)
+    fetch(`/${studyId}/board/list-data?page=${data.page}&category=`)
         .then(response => response.json())
         .then(data => {
             if(data.content.length === 0) {

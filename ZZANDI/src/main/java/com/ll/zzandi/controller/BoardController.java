@@ -30,13 +30,12 @@ public class BoardController {
     private final StudyService studyService;
 
     @GetMapping("/list")
-    public String findBoardListPaging(@PathVariable Long studyId, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "") String category, Model model) {
+    public String findBoardListPaging(@PathVariable Long studyId, @RequestParam(defaultValue = "0") int page, Model model) {
         String studyTitle = studyService.findByStudyId(studyId).get().getStudyTitle();
 
         model.addAttribute("page", page);
         model.addAttribute("studyId", studyId);
         model.addAttribute("studyTitle", studyTitle);
-        model.addAttribute("category", category);
         return "board/boardList";
     }
 

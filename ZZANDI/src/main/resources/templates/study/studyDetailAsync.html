@@ -1,0 +1,70 @@
+<!--메인 페이지-->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<!-- head -->
+<div th:replace="layout/head.html :: head"></div>
+<script src="https://kit.fontawesome.com/86ddd041a9.js" crossorigin="anonymous"></script>
+<script defer type="text/javascript" th:src="@{/js/study/studyDetailAsync.js}"></script>
+<link rel="stylesheet" th:href="@{/css/study/studyDetail.css}">
+<body>
+
+<!-- header -->
+<section th:replace="layout/header.html :: header"></section>
+<input type="hidden" class = "studyId" th:value="${studyId}">
+<input type="hidden" class="userNickname" th:value="${#authentication.principal.userNickname}"> <!-- 현재 로그인 한 유저 식별자 -->
+<input type="hidden" class="studyDays" th:value="${studyDays}">
+<input type="hidden" class="studyPeriod" th:value="${studyPeriod}">
+<input type="hidden" class="studyRecommend" th:value="${studyRecommend}">
+
+<!--스터디 상세 정보란-->
+<div class="studyDetail-main">
+  <div class="studyDetailBox d-flex align-content-center">
+    <div class = "studyDetail-left">
+<!--        스터디 태그 & 스터디 대표 이미지 & 참가신청 및 탈퇴 버튼-->
+    </div>
+    <div class = "studyDetail">
+      <div class = "studyDetail-top">
+<!--        스터디 이름 & 수정 버튼 & 스터디 상태 & 모집인원          -->
+      </div>
+      <hr class = "mt-0">
+      <div class = "d-flex w-100">
+        <div class = "studyDetail-center">
+<!--            스터디 상세 정보 & 권장 진도율-->
+        </div>
+        <div class = "studyDetail-right">
+<!--            참여 신청자 목록(수락 및 거절)-->
+        </div>
+      </div>
+      <div class = "studyDetail-bottom">
+<!--        스터디 권장 진도율 & 총 달성률-->
+      </div>
+      <div class = "studyView">
+<!--        조회수-->
+      </div>
+    </div>
+  </div>
+  <nav class="navbar">
+    <ul>
+      <li><a class = "menu" th:href="@{|/${studyId}/board/list|}">
+        <i class="bi bi-chat-left-text" style="font-size: 1.3rem; margin-right : 5px;"></i>게시판 이동</a></li>
+      <li><a class = "menu" href="#">
+        <i class="bi bi-pencil-square" style="font-size: 1.3rem; margin-right : 5px;"></i>달성률 등록</a></li>
+    </ul>
+  </nav>
+  <div class = "acceptedTeamMate">
+<!--    팀원 목록-->
+  </div>
+</div>
+
+<!-- footer -->
+<div th:replace="layout/footer.html :: footer"></div>
+
+<!-- tail -->
+<div th:replace="layout/tail.html :: tail"></div>
+
+
+</body>
+
+</html>

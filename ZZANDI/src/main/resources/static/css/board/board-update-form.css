@@ -1,0 +1,23 @@
+@import url("root-style.css");
+
+.button-box{
+    display: flex;
+    justify-content: end;
+}
+
+.button-box button {
+    font-size: 16px;
+}
+
+.update-header * {
+    font-size: var(--medium-font-size);
+}
+
+.title-box {
+    margin-left: 10px;
+}
+
+#editor img {
+    width: 300px;
+    height: 200px;
+}

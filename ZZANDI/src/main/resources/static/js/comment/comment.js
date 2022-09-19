@@ -3,14 +3,14 @@
 const content = document.querySelector("#content");
 const boardId = document.querySelector('.board-id').value;
 const userUUID = document.querySelector(".user-uuid").value;
-const writer = document.querySelector(".writer").innerText;
+const writer = document.querySelector(".writer-box__writer").innerText;
 const commentCount = document.querySelectorAll(".comment-count");
 const commentList = document.querySelector(".comment-list");
 const pagination = document.querySelector('.pagination');
 let lastPage = 0;
 let currPage = 0;
 
-document.title = document.querySelector(".title").innerHTML;
+document.title = document.querySelector(".title-box__title").innerHTML;
 window.onload = () => findCommentList(boardId, 0);
 
 function findCommentList(boardId, page) {
@@ -23,7 +23,7 @@ function findCommentList(boardId, page) {
             currPage = comments.pageable.pageNumber;
 
             for (let countBox of commentCount) {
-                countBox.innerHTML = `<span style="font-size: 14px; font-weight: bold;">댓글 ${count}개</span>`;
+                countBox.innerHTML = `<span>댓글 ${count}개</span>`;
             }
 
             if (comment.length !== 0) {
@@ -34,29 +34,31 @@ function findCommentList(boardId, page) {
             for (let i = 0; i < count; i++) {
                 let icon = '';
                 if (comment[i].step > 0) {
-                    icon = `<i class="fa-solid fa-reply fa-rotate-180 position-absolute" style="top: 10px; left: -15px; color: #ccc; font-size: 11px;"></i>`;
+                    icon = `<span class="comment-box__icon">
+                                <i class="fa-solid fa-reply fa-rotate-180"></i>
+                            </span>`;
                 }
 
                 const content = urlFilter(comment[i].content);
                 const buttonList = commentButtonList(comment[i], i + 1);
                 const ml = comment[i].step * 3; // 들여쓰기 깊이 계산
                 commentList.innerHTML +=
-                    `<li class="comment-box mb-2 border-bottom" data-num="${i + 1}" style="margin-left:${ml}%; position: relative;">
+                    `<li class="comment-box mb-2" data-num="${i + 1}" style="margin-left:${ml}%;">
                         ${icon}
-                        <div class="d-flex justify-content-between mb-2 mt-2">
+                        <div class="d-flex justify-content-between my-2">
                             <div class="d-flex">
-                                <img src="${comment[i].profile}" alt="profile" class="rounded border bg-light" width="30" height="30" style="margin-right: 5px;">
-                                <div class="align-self-center" style="font-size: 14px;">
-                                    <span style="font-weight: 700;">${comment[i].writer}</span style="font-weight: 700;">
-                                    <span style="margin-left: 10px; color: #888888; font-size: 11px;">${comment[i].createdDate}</span>
+                                <img src="${comment[i].profile}" alt="profile">
+                                <div class="comment-box-header align-self-center">
+                                    <span class="comment-box-header__writer">${comment[i].writer}</span>
+                                    <span class="comment-box-header__date">${comment[i].createdDate}</span>
                                 </div>
                             </div>
-                            <div class="d-flex" style="font-size: 12px;">${buttonList}</div>
+                            <div class="d-flex">${buttonList}</div>
                         </div>
                         
-                        <div style="font-size: 11px; margin-bottom: 5px;">
-                            <span style="display: ${comment[i].parentId === 0 ? 'none' : 'inline'}; color: #AAAAAA;">${comment[i].parentWriter}</span>
-                            <span style="word-break:break-all; white-space: pre-line; color: ${comment[i].writer === writer ? '#045CDF' : '#333333'};">${content}</span>
+                        <div class="mb-2 comment-box-content">
+                            <span class="comment-box-content__parent-writer" style="display: ${comment[i].parentId === 0 ? 'none' : 'inline'};">${comment[i].parentWriter}</span>
+                            <span class="comment-box-content__content" style="color: ${comment[i].writer === writer ? '#045CDF' : '#333333'};">${content}</span>
                         </div>
                     </li>
                     <!-- 대댓글 & 댓글 수정 입력창 -->
@@ -67,7 +69,7 @@ function findCommentList(boardId, page) {
 
 function urlFilter(content) {
     const urlRegex = /(https?:\/\/[^\s]+)/g;
-    return content.replace(urlRegex,(url) => `<a href="${url}" target=_blank>${url}</a>`);
+    return content.replace(urlRegex,(url) => `<a href="${url}" class="comment-box__url" target=_blank>${url}</a>`);
 }
 
 function commentPageList(comments) {
@@ -86,30 +88,30 @@ function commentPageList(comments) {
     const prevDisabled = hasPrev ? "disabled='disabled'" : '';
     pageHTML +=
         `<li class="page-item">
-            <button class="page-btn" onClick="findCommentList(${boardId}, 0);" ${prevDisabled} aria-label="Previous">
+            <button onClick="findCommentList(${boardId}, 0);" ${prevDisabled}>
                 <i class="fa-solid fa-angles-left"></i>
             </button>
         </li>
         <li class="page-item">
-            <button class="page-btn" onClick="findCommentList(${boardId}, ${nowPage - 1});" ${prevDisabled} aria-label="Previous">
+            <button onClick="findCommentList(${boardId}, ${nowPage - 1});" ${prevDisabled}>
                 <i class="fa-solid fa-angle-left"></i>
             </button>
         </li>`;
 
     for (let i = startPage; i < endPage; i++) {
         const active = (i === nowPage) ? 'active' : '';
-        pageHTML += `<li class="page-item"><button class="page-btn page-num ${active}" onclick="findCommentList(${boardId}, ${i})">${i + 1}</button></li>`;
+        pageHTML += `<li class="page-item"><button class="page-num ${active}" onclick="findCommentList(${boardId}, ${i})">${i + 1}</button></li>`;
     }
 
     const nextDisabled = hasNext ? "disabled='disabled'" : '';
     pageHTML +=
         `<li class="page-item">
-            <button class="page-btn" onClick="findCommentList(${boardId}, ${nowPage + 1});" ${nextDisabled} aria-label="Next">
+            <button onClick="findCommentList(${boardId}, ${nowPage + 1});" ${nextDisabled}>
                 <i class="fa-solid fa-angle-right"></i>
             </button>
         </li>
         <li class="page-item">
-            <button class="page-btn" onClick="findCommentList(${boardId}, ${totalPage - 1});" ${nextDisabled}  aria-label="Next">
+            <button onClick="findCommentList(${boardId}, ${totalPage - 1});" ${nextDisabled}>
                 <i class="fa-solid fa-angles-right"></i>
             </button>
         </li>`;
@@ -122,22 +124,22 @@ function commentButtonList(comment, num) {
     if (parseInt(userUUID) === comment.userUUID && comment.status === 'EXIST') {
         html =
             `<div class="justify-content-between align-self-center mx-2">
-                   <i class="fa-regular fa-thumbs-up mx-2"></i>
-                   <i class="fa-regular fa-thumbs-down"></i>
+                   <i class="fa-regular fa-thumbs-up mx-2 comment-box-thumbs"></i>
+                   <i class="fa-regular fa-thumbs-down comment-box-thumbs"></i>
                </div>
-               <div class="d-flex justify-content-start">
-                   <button type="button" onclick="updateForm(${num}, '${comment.content}', ${comment.commentId}, ${comment.count})" style="border: none; outline: none; background-color: transparent; color: #666666;">수정</button>
-                   <button type="button" onclick="deleteComment(${comment.commentId}, ${comment.count})" style="border: none; outline: none; background-color: transparent; color: #666666;">삭제</button>
-                   <button type="button" onclick="createForm(${num}, ${comment.commentId})" style="border: none; outline: none; background-color: transparent; color: #666666;">댓글</button>
+               <div class="comment-box-button d-flex justify-content-start">
+                   <button type="button" onclick="updateForm(${num}, '${comment.content}', ${comment.commentId}, ${comment.count})">수정</button>
+                   <button type="button" onclick="deleteComment(${comment.commentId}, ${comment.count})">삭제</button>
+                   <button type="button" onclick="createForm(${num}, ${comment.commentId})">댓글</button>
                </div>`;
 
     } else {
         html =
             `<div class="justify-content-between align-self-center mx-2">
-                <i class="fa-regular fa-thumbs-up mx-2"></i>
-                <i class="fa-regular fa-thumbs-down"></i>
+                <i class="fa-regular fa-thumbs-up mx-2 comment-box-thumbs"></i>
+                <i class="fa-regular fa-thumbs-down comment-box-thumbs"></i>
             </div>
-            <button type="button" onclick="createForm(${num}, ${comment.commentId})" style="border: none; outline: none; background-color: transparent; color: #666666;">댓글</button>`;
+            <button class="comment-box-button" type="button" onclick="createForm(${num}, ${comment.commentId})">댓글</button>`;
     }
     return html;
 }
@@ -146,15 +148,16 @@ function createForm(num, commentId) {
     const form = document.querySelector(`.comment-list .comment-form:nth-of-type(${num})`);
     form.classList.toggle("hide");
 
-    form.innerHTML = `<div>
-                        <i class="fa-solid fa-reply fa-rotate-180" style="color: #ccc; font-size: 11px;"></i>
-                            <span style="font-size: 12px;">댓글 쓰기</span>
-                          </div>
-                          <div class="box d-flex justify-content-between">
-                            <textarea class="form-control reply-content" placeholder="따듯한 댓글 부탁드립니다." style="height: 70px; font-size: 12px;"></textarea>
-                            <button class="btn btn-secondary btn-sm" onclick="createReply(${commentId})" style="font-size: 12px; width: 100px; margin-left: 5px;">등록</button>
-                          </div>
-                        </div>`;
+    form.innerHTML = `<div class="reply-box">
+                        <div class="reply-box__title">
+                            <i class="fa-solid fa-reply fa-rotate-180"></i>
+                            <span>댓글 쓰기</span>
+                        </div>
+                        <div class="box d-flex justify-content-between">
+                            <textarea class="form-control reply-content" placeholder="따듯한 댓글 부탁드립니다."></textarea>
+                            <button class="btn btn-secondary btn-sm reply-btn" onclick="createReply(${commentId})">등록</button>
+                        </div>
+                      </div>`;
 
     document.querySelector(".reply-content").focus();
 }
@@ -164,15 +167,16 @@ function updateForm(num, content, commentId, count) {
     form.classList.toggle("hide");
     content = content.replace(/(<br>)/g, '\r\n');
 
-    form.innerHTML = ` 
-                        <div>
-                            <i class="fa-solid fa-reply fa-rotate-180" style="color: #ccc; font-size: 11px;"></i>
-                            <span style="font-size: 12px;">댓글 수정</span>
+    form.innerHTML = ` <div class="reply-box">
+                        <div class="reply-box__title">
+                            <i class="fa-solid fa-reply fa-rotate-180"></i>
+                            <span>댓글 수정</span>
                         </div>
                         <div class="d-flex justify-content-between">
-                            <textarea class="form-control update-content" placeholder="따듯한 댓글 부탁드립니다." style="height: 70px; font-size: 12px;">${content}</textarea>                            
-                            <button class="btn btn-secondary btn-sm" onclick="update(${commentId}, ${count})" style="font-size: 12px; width: 100px; margin-left: 5px;">등록</button>
-                        </div>`;
+                            <textarea class="form-control update-content" placeholder="따듯한 댓글 부탁드립니다.">${content}</textarea>                            
+                            <button class="btn btn-secondary btn-sm update-btn" onclick="update(${commentId}, ${count})">등록</button>
+                        </div>
+                       </div>`;
 
     document.querySelector(".update-content").focus();
 }

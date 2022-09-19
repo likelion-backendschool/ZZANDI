@@ -28,6 +28,10 @@ $(document).ready(function(){
 $("#submit").on('click', function () {
     var searchName = document.getElementById("bookSearch").value;
     var bookName = document.getElementById("bookName").value;
+    var lectureName = document.getElementById("lectureName").value;
+    var lecturer  = document.getElementById("lecturer").value;
+    var lectureNumber = document.getElementById("lectureNumber").value;
+
     if($("input[name='studyType']:checked").val() == 'BOOK') {
         if (searchName == '') {
             alert("책 제목을 입력해주십시오.");
@@ -37,6 +41,27 @@ $("#submit").on('click', function () {
         if (bookName == '') {
             alert("책을 선택해주세요.");
             $('#bookSearch').focus();
+            return false;
+        }
+    }
+
+    if($("input[name='studyType']:checked").val() == 'LECTURE') {
+
+        if (lectureName == '') {
+            alert("강의 제목을 입력해주십시오.");
+            $('#lectureName').focus();
+            return false;
+        }
+
+        if (lecturer == '') {
+            alert("강사 이름을 입력해주십시오.");
+            $('#lecturer').focus();
+            return false;
+        }
+
+        if (lectureNumber == '') {
+            alert("강의 개수를 입력해주십시오.");
+            $('#lectureNumber').focus();
             return false;
         }
     }

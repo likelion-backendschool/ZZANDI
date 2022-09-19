@@ -1,12 +1,8 @@
 package com.ll.zzandi.exception;
 
-public class TeamMateException extends RuntimeException{
+public class TeamMateException extends CustomException{
 
-  public TeamMateException() {
-
-  }
-
-  public TeamMateException(String message) {
-    super(message);
+  public TeamMateException(ErrorType errorType) {
+    super(errorType);
   }
 }

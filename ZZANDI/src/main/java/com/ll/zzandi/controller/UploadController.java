@@ -2,6 +2,9 @@ package com.ll.zzandi.controller;
 
 import com.ll.zzandi.domain.Study;
 import com.ll.zzandi.domain.User;
+import com.ll.zzandi.enumtype.StudyStatus;
+import com.ll.zzandi.exception.ErrorType;
+import com.ll.zzandi.exception.StudyException;
 import com.ll.zzandi.service.StudyService;
 import com.ll.zzandi.util.aws.ImageUploadService;
 import lombok.RequiredArgsConstructor;
@@ -35,10 +38,12 @@ public class UploadController {
     }
 
     @GetMapping("/study/coverUpload/{studyId}")
-    public String StudyCover(@PathVariable long studyId, Model model){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal(); // 현재 로그인 한 유저 정보
-        model.addAttribute("user", user);
+    public String StudyCover(@AuthenticationPrincipal User user, @PathVariable long studyId, Model model){
+        Study study = studyService.findByStudyId(studyId).orElseThrow(()->new StudyException(
+            ErrorType.NOT_FOUND));
+        if (!study.getUser().getId().equals(user.getId())|| study.getStudyStatus() == StudyStatus.COMPLETE) {
+            throw new StudyException(ErrorType.NOT_LEADER);
+        }
         model.addAttribute("studyId", studyId);
         return "/study/studyCoverUpload";
     }
@@ -46,7 +51,12 @@ public class UploadController {
     @PostMapping("/study/coverUpload/{studyId}")
     @ResponseBody
     @Transactional
-    public String getStudyCover(@RequestParam("coverImage")MultipartFile multipartFile  , @PathVariable long studyId , @AuthenticationPrincipal Study study) throws IOException {
+    public String getStudyCover(@AuthenticationPrincipal User user, @RequestParam("coverImage")MultipartFile multipartFile  , @PathVariable long studyId) throws IOException {
+        Study study = studyService.findByStudyId(studyId).orElseThrow(()->new StudyException(
+            ErrorType.NOT_FOUND));
+        if (!study.getUser().getId().equals(user.getId())|| study.getStudyStatus() == StudyStatus.COMPLETE) {
+            throw new StudyException(ErrorType.NOT_LEADER);
+        }
         studyService.updateCoverImg(multipartFile, studyId);
         return "1";
     }

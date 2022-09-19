@@ -22,9 +22,8 @@ public class Board extends BaseEntity {
     private Long id;
 
     @Column(name = "CATEGORY")
-    @Enumerated(EnumType.STRING)
     @NotNull
-    private BoardCategory category;
+    private String category;
 
     @Column(name = "TITLE")
     @NotNull
@@ -51,7 +50,7 @@ public class Board extends BaseEntity {
     @OneToMany(mappedBy = "board")
     private List<Comment> comments = new ArrayList<>();
 
-    public Board(User user, BoardCategory category, String title, String content, int views, int heart, Study study) {
+    public Board(User user, String category, String title, String content, int views, int heart, Study study) {
         this.user = user;
         this.category = category;
         this.title = title;

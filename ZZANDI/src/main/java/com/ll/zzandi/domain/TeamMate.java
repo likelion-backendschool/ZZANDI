@@ -38,8 +38,8 @@ public class TeamMate extends BaseEntity{
   @JoinColumn(name = "STUDY_ID")
   private Study study;
 
-  @Column(name = "TEAMMAATE_RATE")
-  private Integer teamRate;
+  @Column(name = "TEAMMAATE_RATE", columnDefinition = "integer default 0")
+  private int teamRate;
 
   @Enumerated(EnumType.STRING)
   @Column(name = "TEAMMATE_STATUS")
@@ -49,11 +49,9 @@ public class TeamMate extends BaseEntity{
   @Column(name = "TEAMMATE_DELEGATE")
   private TeamMateDelegate teamMateDelegate;
 
-  public TeamMate(User user, Study study, Integer teamRate,
-      TeamMateStatus teamMateStatus) {
+  public TeamMate(User user, Study study, TeamMateStatus teamMateStatus) {
     this.user = user;
     this.study = study;
-    this.teamRate = teamRate;
     this.teamMateStatus = teamMateStatus;
     this.teamMateDelegate = TeamMateDelegate.NONE;
   }

@@ -23,13 +23,31 @@ public class BoardService {
 
     private final BoardRepository boardRepository;
 
-    public Page<BoardListDto> findBoardListPaging(int page, Long studyId) {
+    public Page<BoardListDto> findBoardListPaging(int page, Long studyId, String category) {
         PageRequest pageRequest = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "id"));
-        Page<Board> boardList = boardRepository.findBoardList(pageRequest, studyId);
+        Page<Board> boardList = boardRepository.findBoardList(pageRequest, studyId, category);
 
         return boardList.map(board -> new BoardListDto(board.getId(), board.getUser().getUserId(), board.getCategory(), board.getTitle(), board.getUser().getUserNickname(),
                         board.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd")), board.getViews(), board.getHeart(), page, board.getComments().size(), board.getUser().getUserprofileUrl()));
     }
+
+    public Page<BoardListDto> findBoardListPaging2(int page, Long studyId, String filter, String keyword) {
+        PageRequest pageRequest = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "id"));
+
+        keyword = keyword.replaceAll(" ", "");
+        Page<Board> boardList = switch (filter) {
+            case "title" -> boardRepository.findBoardListFilterByTitle(pageRequest, studyId, keyword);
+            case "content" -> boardRepository.findBoardListFilterByContent(pageRequest, studyId, keyword);
+            case "comment" -> boardRepository.findBoardListFilterByComment(pageRequest, studyId, keyword);
+            case "writer" -> boardRepository.findBoardListFilterByWriter(pageRequest, studyId, keyword);
+            default -> boardRepository.findBoardListFilterByTitleAndContent(pageRequest, studyId, keyword);
+        };
+
+        return boardList.map(board -> new BoardListDto(board.getId(), board.getUser().getUserId(), board.getCategory(), board.getTitle(), board.getUser().getUserNickname(),
+                board.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd")), board.getViews(), board.getHeart(), page, board.getComments().size(), board.getUser().getUserprofileUrl()));
+    }
+
+
 
     public BoardDetailDto findBoardDetail(Long boardId, int page) {
         Board board = boardRepository.findById(boardId).orElseThrow();
@@ -48,6 +66,7 @@ public class BoardService {
                 .createdDate(createdDate)
                 .writer(board.getUser().getUserNickname())
                 .content(board.getContent())
+                .category(board.getCategory())
                 .views(board.getViews())
                 .heart(board.getHeart())
                 .count(board.getComments().size())
@@ -95,5 +114,4 @@ public class BoardService {
     public void deleteBoardByStudyId(Long studyId) {
         boardRepository.deleteBoardByStudyId(studyId);
     }
-
 }

@@ -18,14 +18,14 @@
         <li sec:authorize="isAuthenticated()" class = "dropdown">
           <a href="#">
             <div>
-              <img th:if="${!#strings.isEmpty(user?.userprofileUrl)}" th:src="${user.userprofileUrl}"
+              <img th:if="${!#strings.isEmpty(#authentication.principal?.userprofileUrl)}" th:src="${#authentication.principal.userprofileUrl}"
                    width="30" height="30" class="rounded border bg-light"/>
             </div>
             <i class="bi bi-chevron-down dropdown-indicator"></i>
           </a>
           <ul>
             <li sec:authorize="isAuthenticated()">
-              <a th:href="@{|/user/mypage?userNickname=${user.userNickname}|}">My Page</a>
+              <a th:href="@{|/user/mypage?userNickname=${#authentication.principal.userNickname}|}">My Page</a>
             </li>
             <li sec:authorize="isAuthenticated()">
               <a th:href="@{/user/profile}">프로필 수정</a>

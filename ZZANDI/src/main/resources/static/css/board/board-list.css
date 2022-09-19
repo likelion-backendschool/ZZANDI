@@ -1,0 +1,56 @@
+@import url("https://fonts.googleapis.com/css2?family=Jua&display=swap");
+@import url("root-style.css");
+
+.home-btn {
+    font-size: 16px;
+    color: #333333;
+}
+
+.study-title {
+    font-family: var(--study-title-font), var(--main-font), var(--sub-font);
+    font-size: var(--semi-medium-font-size);
+    color: var(--study-title-color);
+}
+
+.study-title:hover {
+    color: var(--study-title-color);
+    text-decoration: underline;
+    text-underline-position: under;
+}
+
+.menu li {
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+.menu li > a {
+    font-size: var(--small-font-size);
+}
+
+.board-table-category {
+    font-weight: bold;
+}
+
+.board-table-title {
+    text-align: left;
+}
+
+.board-table-title__comment {
+    margin-left: 5px;
+    font-size: var(--tiny-font-size);
+    font-weight: bold;
+    color: var(--comment-count-color);
+}
+.board-table-th-category{width: 50px;}
+.board-table-th-title {width: 500px;}
+.board-table-th-writer {width: 200px;}
+
+.active {
+    background-color: var(--page-num-bg-color);
+    color: var(--white-color);
+    border-radius: 3px;
+}
+
+.selected {
+    border-bottom: 2px solid #2e7d32;
+}

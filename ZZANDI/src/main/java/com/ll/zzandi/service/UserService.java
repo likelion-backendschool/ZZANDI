@@ -1,6 +1,8 @@
 package com.ll.zzandi.service;
 
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.google.common.base.Strings;
+import com.ll.zzandi.config.security.CustomUserDetailsService;
 import com.ll.zzandi.config.security.UserContext;
 import com.ll.zzandi.domain.File;
 import com.ll.zzandi.domain.Interest;
@@ -8,6 +10,8 @@ import com.ll.zzandi.domain.TeamMate;
 import com.ll.zzandi.domain.User;
 import com.ll.zzandi.dto.UserDto;
 import com.ll.zzandi.enumtype.TableType;
+import com.ll.zzandi.exception.ErrorType;
+import com.ll.zzandi.exception.UserApplicationException;
 import com.ll.zzandi.repository.FileRepository;
 import com.ll.zzandi.repository.InterestRepository;
 import com.ll.zzandi.repository.UserRepository;
@@ -17,8 +21,12 @@ import com.ll.zzandi.util.mail.EmailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,6 +54,8 @@ public class UserService {
     private final ImageUploadService imageUploadService;
 
     private final FileRepository fileRepository;
+
+    private final CustomUserDetailsService userDetailsService;
 
     @Transactional
     public User join(final UserDto.RegisterRequest registerRequest) {
@@ -136,6 +146,21 @@ public class UserService {
     }
     private static String getUuid() {
         return UUID.randomUUID().toString().replaceAll("-", "");
+    }
+
+    public String updateUserId(String updateId,String originId) {
+        if(Strings.isNullOrEmpty(updateId)) throw new UserApplicationException(ErrorType.INTERNAL_SERVER_ERROR);
+        User updateUser=userRepository.findByUserId(originId).orElseThrow(RuntimeException::new);
+        updateUser.setUserId(updateId);
+        userRepository.save(updateUser);
+       login(updateUser);
+       return updateUser.getUserId();
+    }
+    protected Authentication createNewAuthentication(Authentication currentAuth, String username) {
+        UserDetails newPrincipal = userDetailsService.loadUserByUsername(username);
+        UsernamePasswordAuthenticationToken newAuth = new UsernamePasswordAuthenticationToken(newPrincipal, currentAuth.getCredentials(), newPrincipal.getAuthorities());
+        newAuth.setDetails(currentAuth.getDetails());
+        return newAuth;
     }
 }
 

@@ -281,6 +281,15 @@ PROGRESS - RATE
   transition-timing-function: cubic-bezier(.36,.55,.63,.48);
 }
 
+.achieve {
+  width : 10%;
+  height: 100%;
+  border-radius: 20px;
+  transition: width;
+  transition-duration: 1s;
+  transition-timing-function: cubic-bezier(.36,.55,.63,.48);
+}
+
 .shadow {
   /* 25 50 */
   box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.5);

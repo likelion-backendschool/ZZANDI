@@ -204,7 +204,7 @@ function displayStudy(data, teamMateList) {
     <p class = "studyRate"><i class="bi bi-bar-chart-fill" style="font-size: 1.3rem; margin-right : 5px;"></i>우리의 달성률</p>
     <div class = "d-flex mt-3 mb-3 align-items-center">
       <div class="progress">
-        <div class="zzandi shadow jupiter2"></div>
+        <div class="achieve shadow jupiter2"></div>
       </div>
       <p class = "mb-0 ms-3">${data.studyRate}%</p>
     </div>

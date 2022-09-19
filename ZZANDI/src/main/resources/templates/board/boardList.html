@@ -21,16 +21,17 @@
 <div class="container w-75 mx-auto my-4 bg-#f5f5f5">
     <div class="mb-2 d-flex flex-column border rounded p-2">
         <div>
-            <a class="study-title" th:text="${studyTitle}" th:href="@{/study/detail/{studyId} (studyId = ${studyId})}"></a>
+            <a th:href="@{/study/detail/{studyId} (studyId = ${studyId})}"><i class="fa-solid fa-house home-btn"></i></a>
+            <a class="study-title" th:text="${studyTitle}" th:href="@{/{studyId}/board/list (studyId = ${studyId}, page = 0)}"></a>
         </div>
         <div class="menu d-flex justify-content-start mt-2">
             <ul class="categories d-flex mb-0 px-0">
-                <li><a href="javascript:void(0)">전체</a></li>
-                <li><a href="javascript:void(0)">공지</a></li>
-                <li><a href="javascript:void(0)">질문</a></li>
-                <li><a href="javascript:void(0)">정보</a></li>
-                <li><a href="javascript:void(0)">자유</a></li>
-                <li><a href="javascript:void(0)">자랑</a></li>
+                <li><a href="javascript:void(0)" class="li-category selected">전체</a></li>
+                <li><a href="javascript:void(0)" class="li-category">공지</a></li>
+                <li><a href="javascript:void(0)" class="li-category">질문</a></li>
+                <li><a href="javascript:void(0)" class="li-category">정보</a></li>
+                <li><a href="javascript:void(0)" class="li-category">자유</a></li>
+                <li><a href="javascript:void(0)" class="li-category">자랑</a></li>
             </ul>
         </div>
     </div>
@@ -51,8 +52,7 @@
         </tbody>
     </table>
 
-    <div class="d-flex justify-content-between">
-        <a th:href="@{/study/detail/{studyId} (studyId=${studyId})}" class="btn btn-secondary">스터디 메인화면</a>
+    <div class="d-flex justify-content-end">
         <button type="button" th:onclick="|location.href='@{/{studyId}/board/create (studyId=${studyId})}'|" class="btn btn-secondary btn-sm">글 쓰기</button>
     </div>
 

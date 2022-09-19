@@ -1,13 +1,19 @@
 @import url("https://fonts.googleapis.com/css2?family=Jua&display=swap");
 @import url("root-style.css");
 
+.home-btn {
+    font-size: 16px;
+    color: #333333;
+}
+
 .study-title {
     font-family: var(--study-title-font), var(--main-font), var(--sub-font);
-    font-size: var(--medium-font-size);
+    font-size: var(--semi-medium-font-size);
     color: var(--study-title-color);
 }
 
 .study-title:hover {
+    color: var(--study-title-color);
     text-decoration: underline;
     text-underline-position: under;
 }
@@ -15,6 +21,10 @@
 .menu li {
     margin-right: 10px;
     font-weight: bold;
+}
+
+.menu li > a {
+    font-size: var(--medium-font-size);
 }
 
 .board-table-category {
@@ -39,4 +49,8 @@
     background-color: var(--page-num-bg-color);
     color: var(--white-color);
     border-radius: 3px;
+}
+
+.selected {
+    border-bottom: 2px solid #2e7d32;
 }

@@ -35,12 +35,20 @@ function findByPage(page, category, studyId) {
 }
 
 const categories = document.querySelector(".categories");
+const categoryArr = document.querySelectorAll(".li-category");
 categories.addEventListener("click", (e) => {
     if (e.target.tagName !== 'A') {
         return false;
     }
 
+    for(let ca of categoryArr) {
+        if (ca.classList.contains("selected")) {
+            ca.classList.remove("selected");
+        }
+    }
+
     let category = e.target.innerHTML === '전체' ? '' : e.target.innerHTML;
+    e.target.classList.add("selected");
     findByPage(0, category, studyId);
 });
 

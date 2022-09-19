@@ -24,7 +24,7 @@
 }
 
 .menu li > a {
-    font-size: var(--medium-font-size);
+    font-size: var(--small-font-size);
 }
 
 .board-table-category {

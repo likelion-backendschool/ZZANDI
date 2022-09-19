@@ -17,10 +17,14 @@ for(let category of document.querySelectorAll(".categories li > a")) {
     category.style.color = colors.get(category.innerHTML);
 }
 
-window.onload = () => findByPage(currPage, '', studyId);
+window.onload = () => findByPage(currPage, '', '', '', studyId);
 
-function findByPage(page, category, studyId) {
-    fetch(`/${studyId}/board/list-data?page=${page}&category=${category}`)
+function findByPage(page, category, filter, keyword, studyId) {
+    let url = (keyword === '') ?
+        `/${studyId}/board/list-data?page=${page}&category=${category}` :
+        `/${studyId}/board/list-data2?page=${page}&filter=${filter}&keyword=${keyword}`;
+
+    fetch(url)
         .then(response => response.json())
         .then(data => {
             if(data.content.length === 0) {
@@ -28,11 +32,36 @@ function findByPage(page, category, studyId) {
                 return false;
             } else {
                 history.pushState({page : page}, "", `/${studyId}/board/list?page=${page}`)
-                displayItems(data, category, studyId);
+                displayItems(data, category, filter, keyword, studyId);
             }
         }
     );
 }
+
+function search() {
+    const filter = document.querySelector("#filter").value;
+    const keyword = document.querySelector("#keyword").value;
+
+    if(keyword === '') {
+        alert("검색어를 입력해주세요.");
+        document.querySelector("#keyword").focus();
+        return false;
+    }
+
+    findByPage(currPage, '', filter, keyword, studyId);
+}
+
+const searchBtn = document.querySelector(".search-btn");
+searchBtn.addEventListener('click', () => {
+    search();
+});
+
+const keywordInput = document.querySelector("#keyword");
+keywordInput.addEventListener('keypress', (e) => {
+    if (e.code === 'Enter') {
+        search();
+    }
+})
 
 const categories = document.querySelector(".categories");
 const categoryArr = document.querySelectorAll(".li-category");
@@ -49,12 +78,12 @@ categories.addEventListener("click", (e) => {
 
     let category = e.target.innerHTML === '전체' ? '' : e.target.innerHTML;
     e.target.classList.add("selected");
-    findByPage(0, category, studyId);
+    findByPage(0, category, '', '', studyId);
 });
 
-function displayItems(items, category) {
+function displayItems(items, category, filter, keyword) {
     list.innerHTML = items.content.map(item => createBoardList(item)).join('');
-    pagination.innerHTML = createPageList(items, category);
+    pagination.innerHTML = createPageList(items, category, filter, keyword);
 }
 
 function createBoardList(item) {
@@ -79,7 +108,7 @@ function createBoardList(item) {
             </tr>`;
 }
 
-function createPageList(items, category) {
+function createPageList(items, category, filter, keyword) {
     let nowPage = items.pageable.pageNumber;
     let pageSize = items.pageable.pageSize;
     let totalPage = items.totalPages;
@@ -91,34 +120,33 @@ function createPageList(items, category) {
     let hasNext = items.last;
 
     let pageHTML = '';
-
     const prevDisabled = hasPrev ? "disabled='disabled'" : '';
     pageHTML +=
         `<li class="page-item">
-            <button onClick="findByPage(0, '${category}', ${studyId});" ${prevDisabled}>
+            <button onClick="findByPage(0, '${category}', '${filter}', '${keyword}', ${studyId});" ${prevDisabled}>
                 <i class="fa-solid fa-angles-left"></i>
             </button>
         </li>
         <li class="page-item">
-            <button onClick="findByPage(${nowPage - 1}, '${category}', ${studyId});" ${prevDisabled}>
+            <button onClick="findByPage(${nowPage - 1}, '${category}', '${filter}', '${keyword}', ${studyId});" ${prevDisabled}>
                 <i class="fa-solid fa-angle-left"></i>
             </button>
         </li>`;
 
     for (let i = startPage; i < endPage; i++) {
         const active = (i === nowPage) ? 'active' : '';
-        pageHTML += `<li class="page-item"><button class="${active}" onclick="findByPage(${i}, '${category}', ${studyId})">${i + 1}</button></li>`;
+        pageHTML += `<li class="page-item"><button class="${active}" onclick="findByPage(${i}, '${category}', '${filter}', '${keyword}', ${studyId})">${i + 1}</button></li>`;
     }
 
     const nextDisabled = hasNext ? "disabled='disabled'" : '';
     pageHTML +=
         `<li class="page-item">
-            <button onClick="findByPage(${nowPage + 1}, '${category}', ${studyId});" ${nextDisabled}>
+            <button onClick="findByPage(${nowPage + 1}, '${category}', '${filter}', '${keyword}', ${studyId});" ${nextDisabled}>
                 <i class="fa-solid fa-angle-right"></i>
             </button>
         </li>
         <li class="page-item">
-            <button onClick="findByPage(${totalPage - 1}, '${category}', ${studyId});" ${nextDisabled}>
+            <button onClick="findByPage(${totalPage - 1}, '${category}', '${filter}', '${keyword}', ${studyId});" ${nextDisabled}>
                 <i class="fa-solid fa-angles-right"></i>
             </button>
         </li>`;

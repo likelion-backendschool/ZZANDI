@@ -6,7 +6,6 @@ import com.ll.zzandi.domain.User;
 import com.ll.zzandi.dto.board.BoardCreateDto;
 import com.ll.zzandi.dto.board.BoardListDto;
 import com.ll.zzandi.dto.board.BoardUpdateFormDto;
-import com.ll.zzandi.enumtype.BoardCategory;
 import com.ll.zzandi.service.BoardService;
 import com.ll.zzandi.service.CommentService;
 import com.ll.zzandi.service.StudyService;
@@ -43,6 +42,12 @@ public class BoardController {
     @ResponseBody
     public Page<BoardListDto> findBoardListPagingToJson(@PathVariable Long studyId, @RequestParam(defaultValue = "0") int page, @RequestParam(required = false) String category) {
         return boardService.findBoardListPaging(page, studyId, category);
+    }
+
+    @GetMapping("/list-data2")
+    @ResponseBody
+    public Page<BoardListDto> findBoardListPagingToJson(@PathVariable Long studyId, @RequestParam(defaultValue = "0") int page, @RequestParam String filter, @RequestParam String keyword) {
+        return boardService.findBoardListPaging2(page, studyId, filter, keyword);
     }
 
     @GetMapping("/detail/{boardId}/{page}")

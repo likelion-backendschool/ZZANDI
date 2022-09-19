@@ -31,10 +31,9 @@
     font-weight: bold;
     color: var(--comment-count-color);
 }
-
-.board-table-writer {
-    width: 200px;
-}
+.board-table-th-category{width: 50px;}
+.board-table-th-title {width: 500px;}
+.board-table-th-writer {width: 200px;}
 
 .active {
     background-color: var(--page-num-bg-color);

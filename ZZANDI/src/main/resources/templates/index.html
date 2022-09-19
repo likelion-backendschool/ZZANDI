@@ -28,13 +28,6 @@
     <!-- header -->
     <section th:replace="layout/header.html :: header"></section>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <div class="alert alert-warning" role="alert" th:if="${user != null && !user.userEmailVerified}">
-        ZZANDI 가입을 완료하려면 <a href="#" th:href="@{/check-email(email=${user.userEmail})}" class="alert-link">계정 인증 이메일을 확인</a>하세요.
-    </div>
-
-
-
-
 
     <!-- ======= Testimonials Section ======= -->
     <section id="testimonials" class="testimonials">

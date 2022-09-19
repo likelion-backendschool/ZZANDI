@@ -19,6 +19,7 @@ import com.ll.zzandi.enumtype.TableType;
 import com.ll.zzandi.repository.*;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.time.Period;
 
 import com.ll.zzandi.util.aws.ImageUploadService;
@@ -52,6 +53,8 @@ public class StudyService {
         Study study = new Study(user, studyDto.getStudyTitle(), book, null, StudyType.BOOK,
             studyDto.getStudyStart(), studyDto.getStudyEnd(), studyDto.getStudyPeople(),
             studyDto.getStudyTag(), StudyStatus.RECRUIT);
+
+        study = study.checkStatus();
         study.setStudyCoverUrl("https://cdn-icons-png.flaticon.com/512/4683/4683425.png");
         return studyRepository.save(study);
     }
@@ -60,6 +63,7 @@ public class StudyService {
         Study study = new Study(user, studyDto.getStudyTitle(), null, lecture, StudyType.LECTURE,
             studyDto.getStudyStart(), studyDto.getStudyEnd(), studyDto.getStudyPeople(),
             studyDto.getStudyTag(), StudyStatus.RECRUIT);
+        study = study.checkStatus();
         study.setStudyCoverUrl("https://cdn-icons-png.flaticon.com/512/2112/2112961.png");
         return studyRepository.save(study);
     }
@@ -97,6 +101,7 @@ public class StudyService {
         s1.setStudyEnd(studyDto.getStudyEnd());
         s1.setStudyPeople(studyDto.getStudyPeople());
         s1.setStudyTag(studyDto.getStudyTag());
+        s1 = s1.checkStatus();
         studyRepository.save(s1);
 
         if (lecture != null) {
@@ -124,6 +129,7 @@ public class StudyService {
         s1.setStudyEnd(studyDto.getStudyEnd());
         s1.setStudyPeople(studyDto.getStudyPeople());
         s1.setStudyTag(studyDto.getStudyTag());
+        s1 = s1.checkStatus();
         studyRepository.save(s1);
 
         if (book != null) {
@@ -182,7 +188,7 @@ public class StudyService {
     }
 
     public void updateCoverImg(MultipartFile multipartFile, long studyUUID) throws IOException {
-        Study study=studyRepository.findById(studyUUID).orElseThrow(RuntimeException::new);
+        Study study=studyRepository.findById(studyUUID).orElseThrow(()->new StudyException(ErrorType.NOT_FOUND));
 
         String originalName=multipartFile.getOriginalFilename();
         System.out.println("!!!!!!!!!!!!!!!오리지널"+originalName);
@@ -224,7 +230,7 @@ public class StudyService {
         Lecture lecture = study.getLecture();
         StudyDetailDto studyDetailDto = null;
         if (book != null) {
-            book = bookService.findByid(book.getId()).orElseThrow(null);
+            book = bookService.findByid(book.getId()).orElseThrow(() -> new StudyException(ErrorType.NOT_FOUND));
             studyDetailDto = new StudyDetailDto(study.getStudyTitle(), study.getUser().getUserNickname(),
                 study.getAcceptedStudyMember(), study.getStudyPeople(), study.getStudyStart(), study.getStudyEnd(),
                 study.getStudyTag(), String.valueOf(study.getStudyType()), study.getStudyRate(), study.getViews(),
@@ -232,7 +238,7 @@ public class StudyService {
                 book.getBookName(), book.getBookPage(), book.getBookAuthor(), book.getBookPublisher(), book.getBookIsbn(),
                 null, null, null);
         } else if (lecture != null) {
-            lecture = lectureService.findById(lecture.getId()).orElseThrow(null);
+            lecture = lectureService.findById(lecture.getId()).orElseThrow(() -> new StudyException(ErrorType.NOT_FOUND));
             studyDetailDto = new StudyDetailDto(study.getStudyTitle(), study.getUser().getUserNickname(),
                 study.getAcceptedStudyMember(), study.getStudyPeople(), study.getStudyStart(), study.getStudyEnd(),
                 study.getStudyTag(), String.valueOf(study.getStudyType()), study.getStudyRate(), study.getViews(),
@@ -251,27 +257,13 @@ public class StudyService {
     public void updateStudyStatus() {
         List<Study> studyList = studyRepository.findAll();
         for (Study study : studyList) {
-            int startYear = Integer.parseInt(study.getStudyStart().substring(0, 4));
-            int startMonth = Integer.parseInt(study.getStudyStart().substring(5, 7));
-            int startDay = Integer.parseInt(study.getStudyStart().substring(8, 10));
-
-            int endYear = Integer.parseInt(study.getStudyEnd().substring(0, 4));
-            int endMonth = Integer.parseInt(study.getStudyEnd().substring(5, 7));
-            int endDay = Integer.parseInt(study.getStudyEnd().substring(8, 10));
-
-            if (LocalDate.now().isEqual(LocalDate.of(startYear, startMonth, startDay))) {
-                study.setStudyStatus(StudyStatus.PROGRESS);
-            }
-
-            if (LocalDate.now().isAfter(LocalDate.of(endYear, endMonth, endDay))) {
-                study.setStudyStatus(StudyStatus.COMPLETE);
-            }
+            study = study.checkStatus();
             studyRepository.save(study);
         }
     }
 
     public int getStudyPeriod(Long studyId) {
-        Study studies = findByStudyId(studyId).orElseThrow(null);
+        Study studies = findByStudyId(studyId).orElseThrow(() -> new StudyException(ErrorType.NOT_FOUND));
 
         LocalDate studyStart = LocalDate.parse(studies.getStudyStart());
         LocalDate studyEnd= LocalDate.parse(studies.getStudyEnd());
@@ -280,7 +272,7 @@ public class StudyService {
     }
 
     public int getStudyRecommend(Long studyId) {
-        Study studies = findByStudyId(studyId).orElseThrow(null);
+        Study studies = findByStudyId(studyId).orElseThrow(() -> new StudyException(ErrorType.NOT_FOUND));
 
         int studyDays = getStudyPeriod(studyId);
 
@@ -291,7 +283,7 @@ public class StudyService {
     }
 
     public int getStudyDays(Long studyId) {
-        Study studies = findByStudyId(studyId).orElseThrow(null);
+        Study studies = findByStudyId(studyId).orElseThrow(() -> new StudyException(ErrorType.NOT_FOUND));
 
         LocalDate studyStart = LocalDate.parse(studies.getStudyStart());
         LocalDate today = LocalDate.now();

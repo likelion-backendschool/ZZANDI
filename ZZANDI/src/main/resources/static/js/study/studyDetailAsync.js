@@ -212,6 +212,12 @@ function displayStudy(data, teamMateList) {
   }
 
   studyDetail_bottom.innerHTML = html;
+  const zzandi = document.querySelector(".zzandi");
+  function showRate() {
+    const width = calcRate(studyPeriod, studyDays);
+    zzandi.style.width = `${width}%`
+  }
+  showRate();
   // studyDetail-bottom[end]
 
   html = '';
@@ -275,6 +281,7 @@ function displayStudy(data, teamMateList) {
     }
 
     acceptedTeamMate.innerHTML = html;
+
     // acceptedTeamMate[end]
   }
 }
@@ -444,3 +451,9 @@ function showStudyContent() {
     $('.study-content').hide();
   }
 }
+
+// 진도율 관련 함수
+function calcRate(studyPeriod, studyDays) {
+  return (studyDays / studyPeriod) * 100;
+}
+

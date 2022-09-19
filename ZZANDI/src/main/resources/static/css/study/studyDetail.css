@@ -273,7 +273,7 @@ PROGRESS - RATE
 }
 
 .zzandi {
-  width : 80%;
+  width : 0%;
   height: 100%;
   border-radius: 20px;
   transition: width;
@@ -282,7 +282,7 @@ PROGRESS - RATE
 }
 
 .achieve {
-  width : 10%;
+  width : 0%;
   height: 100%;
   border-radius: 20px;
   transition: width;

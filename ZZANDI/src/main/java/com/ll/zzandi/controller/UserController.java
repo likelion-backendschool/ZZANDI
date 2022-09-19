@@ -1,5 +1,6 @@
 package com.ll.zzandi.controller;
 
+import com.google.common.base.Strings;
 import com.ll.zzandi.domain.TeamMate;
 import com.ll.zzandi.domain.User;
 import com.ll.zzandi.dto.UserDto;
@@ -165,10 +166,17 @@ public class UserController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/modify/id")
+    @GetMapping("/check/id")
     @ResponseBody
     public Boolean checkUserId(@RequestParam("userid") String userid)  {
         System.out.println("연걸 성공"+userid);
         return userRepository.existsByUserId(userid);
+    }
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/modify/id")
+    @ResponseBody
+    public String updateUserId(@RequestParam("userid") String userid, @AuthenticationPrincipal User user)  {
+        if(Strings.isNullOrEmpty(userid)) throw new RuntimeException();
+        return userService.updateUserId(userid,user.getUserId());
     }
 }

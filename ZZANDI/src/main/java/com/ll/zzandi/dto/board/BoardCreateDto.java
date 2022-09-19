@@ -15,7 +15,7 @@ public class BoardCreateDto {
     private String title;
 
     @NotNull(message = "카테고리 설정은 필수입니다!")
-    private BoardCategory category;
+    private String category;
 
     @Lob
     private String content;

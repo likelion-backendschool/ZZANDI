@@ -16,3 +16,8 @@
 .title-box {
     margin-left: 10px;
 }
+
+#editor img {
+    width: 300px;
+    height: 200px;
+}

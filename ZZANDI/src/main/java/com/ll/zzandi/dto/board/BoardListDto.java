@@ -13,7 +13,7 @@ public class BoardListDto {
 
     private Long boardId;
     private String userId;
-    private BoardCategory category;
+    private String category;
     private String title;
     private String writer;
     private String createdDate;

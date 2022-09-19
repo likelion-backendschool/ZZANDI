@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public class BoardUpdateFormDto {
 
     private Long id;
-    private BoardCategory category;
+    private String category;
     private String title;
     private String writer;
     private String content;

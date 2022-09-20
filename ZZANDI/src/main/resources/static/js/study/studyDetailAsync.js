@@ -29,6 +29,8 @@ let isTeamMate = false;
 let isDelete = false;
 let cnt = 0;
 
+const patternList = Array.of('crosses', 'piano', 'dominos', 'pie', 'bees', 'food', 'floor', 'wiggle', 'bubbles', 'ticTac', 'zigZag', 'stripes', 'clouds', 'aztec')
+
 async function findStudyDetail(studyId) {
   console.log("findStudyDetail 실행");
   return fetch(`/study/detail/${studyId}/study-data`)
@@ -184,6 +186,7 @@ function displayStudy(data, teamMateList) {
   // studyDetail-right[end]
 
   // studyDetail-bottom[start]
+  const widthShow = Math.round(calcRate(studyPeriod, studyDays));
   html = '';
   html += ``;
   if (data.studyStatus == 'PROGRESS') {
@@ -196,9 +199,9 @@ function displayStudy(data, teamMateList) {
     html += `
     <div class = "d-flex mt-3 mb-3 align-items-center">
       <div class="progress">
-        <div class="zzandi shadow jupiter"></div>
+        <div class="zzandi ${widthShow} shadow jupiter"></div>
       </div>
-      <p class = "mb-0 ms-3">${studyRecommend}</p>
+      <p class = "mb-0 ms-3">${widthShow}%</p>
     </div>
     
     <p class = "studyRate"><i class="bi bi-bar-chart-fill" style="font-size: 1.3rem; margin-right : 5px;"></i>우리의 달성률</p>
@@ -269,19 +272,18 @@ function displayStudy(data, teamMateList) {
       html += `
         </div>
       `;
-
+      // 개인 진도율 바 보이는 부분
       html += `
         <div class = "d-flex mt-3 mb-5 align-items-center">
           <div class="progress">
-            <div class="bar shadow leaf"></div>
+            <div class="bar shadow ${patternList[i]}"></div>
           </div>
           <p class = "mb-0 ms-3">${teamMateList[i].teamRate}%</p>
         </div>
       `;
+      //
+      acceptedTeamMate.innerHTML = html;
     }
-
-    acceptedTeamMate.innerHTML = html;
-
     // acceptedTeamMate[end]
   }
 }

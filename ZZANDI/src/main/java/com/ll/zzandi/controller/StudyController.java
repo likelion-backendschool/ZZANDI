@@ -90,18 +90,19 @@ public class StudyController {
     }
 
     @GetMapping("/study/list")
-    public String findStudyList(@RequestParam(defaultValue = "ALL") String st, @RequestParam(defaultValue = "ALL") String ss, @RequestParam(defaultValue = "") String kw, @RequestParam(defaultValue = "0") int page, Model model) {
+    public String findStudyList(@RequestParam(defaultValue = "ALL") String st, @RequestParam(defaultValue = "ALL") String ss, @RequestParam(defaultValue = "ALL") String tag, @RequestParam(defaultValue = "") String kw, @RequestParam(defaultValue = "0") int page, Model model) {
         model.addAttribute("st", st);
         model.addAttribute("ss", ss);
         model.addAttribute("kw", kw);
+        model.addAttribute("tag", tag);
         model.addAttribute("page", page);
         return "study/studyList";
     }
 
     @GetMapping("/study/list-data")
     @ResponseBody
-    public Page<StudyListDto> findStudyListPaging(@RequestParam(defaultValue = "ALL") String st, @RequestParam(defaultValue = "ALL") String ss, @RequestParam(defaultValue = "") String kw, @RequestParam(defaultValue = "0") int page) {
-        return studyService.findStudyListPaging(st, ss, kw, page);
+    public Page<StudyListDto> findStudyListPaging(@RequestParam(defaultValue = "ALL") String st, @RequestParam(defaultValue = "ALL") String ss, @RequestParam(defaultValue = "ALL") String tag, @RequestParam(defaultValue = "") String kw, @RequestParam(defaultValue = "0") int page) {
+        return studyService.findStudyListPaging(st, ss, tag, kw, page);
     }
 
     @GetMapping("/study/detail/{studyId}")

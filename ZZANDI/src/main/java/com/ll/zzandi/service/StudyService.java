@@ -191,27 +191,23 @@ public class StudyService {
         }
     }
 
-    public Page<StudyListDto> findStudyListPaging(String st, String ss, String kw, int page) {
+    public Page<StudyListDto> findStudyListPaging(String st, String ss, String tag, String kw, int page) {
         PageRequest paging = PageRequest.of(page, 12, Sort.by(Sort.Direction.DESC, "id"));
-        Page<Study> studyList;
-        if (st.equals("ALL")) {
-            if (ss.equals("ALL")) {
-                studyList = studyRepository.findDistinctByStudyTitleContainsOrUser_userIdContains(kw, kw,
-                    paging);
-            } else {
-                studyList = studyRepository.findDistinctByStudyTitleContainsAndStudyStatusOrUser_userIdContainsAndStudyStatus(
-                    kw, StudyStatus.valueOf(ss), kw, StudyStatus.valueOf(ss), paging);
-            }
-        } else {
-            if (ss.equals("ALL")) {
-                studyList = studyRepository.findDistinctByStudyTitleContainsAndStudyTypeOrUser_userIdContainsAndStudyType(
-                    kw, StudyType.valueOf(st), kw, StudyType.valueOf(st), paging);
-            } else {
-                studyList = studyRepository.findDistinctByStudyTypeAndStudyStatusAndStudyTitleContainsOrStudyTypeAndStudyStatusAndUser_userIdContains(
-                    StudyType.valueOf(st), StudyStatus.valueOf(ss), kw, StudyType.valueOf(st),
-                    StudyStatus.valueOf(ss), kw, paging);
-            }
+
+        if (st.equals("ALL")) st = null;
+        if (ss.equals("ALL")) ss = null;
+        if (tag.equals("ALL")) tag = null;
+
+        StudyType stObj = null;
+        StudyStatus ssObj = null;
+        if (st != null) {
+            stObj = StudyType.valueOf(st);
         }
+        if (ss != null) {
+            ssObj = StudyStatus.valueOf(ss);
+        }
+
+        Page<Study> studyList = studyRepository.searchByKwAndOption(kw, stObj, ssObj, tag, paging);
         return studyList.map(
             study -> new StudyListDto(study.getId(), study.getStudyTitle(), study.getAcceptedStudyMember(), study.getStudyPeople(),
                 study.getStudyStart(), study.getStudyEnd(), study.getStudyTag(),

@@ -358,7 +358,7 @@ $(document).ready(function() {
 });
 
 //업로드
-$("#studyCoverUrl").change(function(e) {
+$("input[name=uploadButton]").on('click', function(e) {
 
   let studyId = document.getElementById("study-id").value;
   const fileInput = document.getElementById("studyCoverUrl");

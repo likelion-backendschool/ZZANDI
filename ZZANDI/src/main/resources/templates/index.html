@@ -5,6 +5,7 @@
 
 <!-- head -->
 <div th:replace="layout/head.html :: head"></div>
+<script defer type="text/javascript" th:src="@{/js/index.js}"></script>
 
 <body>
 <div style="margin-left: 200px">
@@ -16,9 +17,8 @@
             <label class="form-check-label" for="flexSwitchCheckChecked">To do List</label>
         </div>
         <div class="form-check" id="toDoListContent">
-            <div id="toDoList" th:each="toDoList : ${toDoList}">
-                <input class="form-check-input" type="checkbox" id="flexCheckDefault" name="checkTodo">
-                <p th:text="${toDoList.content}"></p>
+            <div class="toDoList">
+
             </div>
             <a th:href="@{/todo/list}" style="font-size: 8px; margin-left: 0px">
                 <img src="https://cdn-icons-png.flaticon.com/512/900/900834.png" style="width: 15px; height: 15px">

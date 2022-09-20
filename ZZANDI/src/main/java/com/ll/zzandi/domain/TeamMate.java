@@ -49,6 +49,10 @@ public class TeamMate extends BaseEntity{
   @Column(name = "TEAMMATE_DELEGATE")
   private TeamMateDelegate teamMateDelegate;
 
+  @Column(name ="TEAMMATE_DAILY_CHECK")
+  private String teamMateDailyCheck;
+
+
   public TeamMate(User user, Study study, TeamMateStatus teamMateStatus) {
     this.user = user;
     this.study = study;

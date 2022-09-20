@@ -52,10 +52,12 @@
             <div class="form-group align-self-center">
                 <select id="category" name="category" class="category form-select form-select-sm">
                     <option th:text="${updateDto.category}">분류</option>
-                    <option th:each="category : ${T(com.ll.zzandi.enumtype.BoardCategory).values()}"
-                            th:value="${category}"
-                            th:text="${category}">option
-                    </option>
+                    <option value="">카테고리</option>
+                    <option value="공지">공지</option>
+                    <option value="정보">정보</option>
+                    <option value="질문">질문</option>
+                    <option value="자유">자유</option>
+                    <option value="자랑">자랑</option>
                 </select>
             </div>
             <div class="form-group flex-grow-1 ml-2 title-box">

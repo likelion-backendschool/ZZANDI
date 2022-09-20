@@ -7,6 +7,7 @@ const studyDetail_right = document.querySelector(".studyDetail-right");
 const studyDetail_bottom = document.querySelector(".studyDetail-bottom");
 const acceptedTeamMate = document.querySelector(".acceptedTeamMate");
 const studyView = document.querySelector(".studyView");
+const updateRate = document.querySelector(".updateRate")
 
 const studyId = document.querySelector(".studyId").value;
 const userNickname = document.querySelector(".userNickname").value;
@@ -29,7 +30,7 @@ let isTeamMate = false;
 let isDelete = false;
 let cnt = 0;
 
-const patternList = Array.of('crosses', 'piano', 'dominos', 'pie', 'bees', 'food', 'floor', 'wiggle', 'bubbles', 'ticTac', 'zigZag', 'stripes', 'clouds', 'aztec')
+const patternList = Array.of('clouds', 'bees', 'dominos', 'pie', 'piano', 'crosses', 'floor', 'wiggle', 'bubbles', 'ticTac', 'zigZag', 'stripes', 'food', 'aztec')
 
 async function findStudyDetail(studyId) {
   console.log("findStudyDetail 실행");
@@ -57,7 +58,7 @@ function displayStudy(data, teamMateList) {
     <div>
       <p id = "studyTag"># ${data.studyTag}</p>
       <a href="/study/coverUpload/${studyId}">
-        <img class="studyCover flex-shrink-0" src="${data.studyCoverUrl}">
+        <img class="studyCover flex-shrink-0" style="border-radius: 1.3em" src="${data.studyCoverUrl}">
       </a>
   `;
 
@@ -235,6 +236,7 @@ function displayStudy(data, teamMateList) {
   showRate();
   // studyDetail-bottom[end]
 
+  // studyView[start]
   html = '';
 
   html += `
@@ -244,6 +246,19 @@ function displayStudy(data, teamMateList) {
   </div>
   `;
   studyView.innerHTML = html;
+  //studyView[end]
+
+  //updateRate[start]
+  html= ``;
+
+  html += `
+  <form id="study_input" style="display:none">
+    <input type="text" class="form-control"  placeholder="진도율 들어감">
+  </form>
+  `
+  updateRate.innerHTML = html;
+  //updateRate[end]
+
   // acceptedTeamMate[start]
   html = ``;
 
@@ -477,5 +492,16 @@ function showStudyContent() {
 // 진도율 관련 함수
 function calcRate(studyPeriod, studyDays) {
   return (studyDays / studyPeriod) * 100;
+}
+
+function toggleStudyInput() {
+  const study_input = document.getElementById("study_input");
+
+  if (study_input.style.display !== "none") {
+    study_input.style.display = "none";
+  }
+  else {
+    study_input.style.display = "inline";
+  }
 }
 

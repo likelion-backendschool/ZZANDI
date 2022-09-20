@@ -37,6 +37,18 @@ async function findStudyDetail(studyId) {
   .then(response => response.json())
 }
 
+function calcEach(data, EachRate) {
+  let Total = 0;
+  if (data.studyType == 'BOOK') {
+    Total = data.bookPage;
+  }
+  else {
+    Total = data.lectureNumber;
+  }
+
+  return (EachRate / Total) * 100;
+}
+
 function displayStudy(data, teamMateList) {
   console.log("displayStudy 실행");
   // StudyDetail-left [start]
@@ -273,16 +285,24 @@ function displayStudy(data, teamMateList) {
         </div>
       `;
       // 개인 진도율 바 보이는 부분
+      const eachWidth = calcEach(data, teamMateList[i].teamRate);
+
       html += `
         <div class = "d-flex mt-3 mb-5 align-items-center">
           <div class="progress">
             <div class="bar shadow ${patternList[i]}"></div>
           </div>
-          <p class = "mb-0 ms-3">${teamMateList[i].teamRate}%</p>
+          <p class = "mb-0 ms-3">${eachWidth}%</p>
         </div>
       `;
       //
       acceptedTeamMate.innerHTML = html;
+
+      const pattern = "." + patternList[i];
+
+      const each = document.querySelector(pattern);
+
+      each.style.width = `${eachWidth}%`;
     }
     // acceptedTeamMate[end]
   }

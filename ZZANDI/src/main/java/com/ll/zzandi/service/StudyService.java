@@ -262,6 +262,7 @@ public class StudyService {
         }
     }
 
+
     public int getStudyPeriod(Long studyId) {
         Study studies = findByStudyId(studyId).orElseThrow(() -> new StudyException(ErrorType.NOT_FOUND));
 

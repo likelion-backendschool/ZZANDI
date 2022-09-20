@@ -5,7 +5,7 @@ const studyId = document.querySelector('.study-id').value;
 const Editor = toastui.Editor;
 const editor = new Editor({
     el: document.querySelector('#editor'),
-    height: '700px',
+    height: '500px',
     initialEditType: 'markdown',
     previewStyle: 'vertical',
     previewHighlight: false,

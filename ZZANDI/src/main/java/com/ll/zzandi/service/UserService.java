@@ -43,6 +43,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class UserService {
     private final String DEFAULT_IMAGE_URL="https://zzandi.s3.ap-northeast-2.amazonaws.com/defaultImage.gif";
+    private final Integer DEFAULT_USER_ZZANDI=15;
 
     private final UserRepository userRepository;
 
@@ -64,6 +65,7 @@ public class UserService {
             newUser.generateEmailCheckToken();
             sendSignUpConfirmEmail(newUser);
             newUser.updateImageUrl(DEFAULT_IMAGE_URL);
+            newUser.updateUserZzandi(DEFAULT_USER_ZZANDI);
 
             for(String i : registerRequest.getInterests()){
                 Interest interest=new Interest();

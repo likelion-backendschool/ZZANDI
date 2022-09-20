@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Jua&display=swap");
 @import url("root-style.css");
+@import url("footer.css");
 
 .home-btn {
     font-size: 16px;
@@ -53,4 +54,5 @@
 
 .selected {
     border-bottom: 2px solid #2e7d32;
+    text-decoration: none;
 }

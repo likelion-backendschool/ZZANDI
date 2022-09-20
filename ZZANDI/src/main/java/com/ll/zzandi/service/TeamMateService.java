@@ -13,12 +13,14 @@ import com.ll.zzandi.exception.TeamMateException;
 import com.ll.zzandi.exception.UserApplicationException;
 import com.ll.zzandi.repository.StudyRepository;
 import com.ll.zzandi.repository.TeamMateRepository;
+import com.ll.zzandi.repository.UserRepository;
 import com.ll.zzandi.util.mail.EmailMessage;
 import com.ll.zzandi.util.mail.EmailService;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -29,6 +31,8 @@ public class TeamMateService {
   private final StudyRepository studyRepository;
   private final EmailService emailService;
   private final StudyService studyService;
+  private final UserService userService;
+  private final UserRepository userRepository;
 
   public void createTeamMate(User user, Long studyId) {
     Study study = studyRepository.findById(studyId).orElseThrow(()-> new StudyException(ErrorType.NOT_FOUND));
@@ -227,5 +231,19 @@ public class TeamMateService {
       isDelete = true;
     }
     return Arrays.asList(isParticipation, isTeamMate, isDelete);
+  }
+
+  @Scheduled(cron = "0 0 0 * * *")
+  public void updateDailyCheck() {
+    List<TeamMate> teamMates = teamMateRepository.findAll();
+    for (TeamMate teamMate : teamMates) {
+      if(teamMate.getTeamMateDailyCheck().equals("X")){
+        teamMate.getUser().setUserZzandi( teamMate.getUser().getUserZzandi()-1);
+      } else {
+        teamMate.getUser().setUserZzandi( teamMate.getUser().getUserZzandi()+1);
+      }
+      teamMate.setTeamMateDailyCheck("X");
+      teamMateRepository.save(teamMate);
+    }
   }
 }

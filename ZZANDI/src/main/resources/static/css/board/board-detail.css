@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Jua&display=swap");
 @import url("root-style.css");
+@import url("footer.css");
 
 .study-title {
     font-family: var(--study-title-font), var(--main-font), var(--sub-font);

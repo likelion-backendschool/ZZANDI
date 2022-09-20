@@ -25,10 +25,19 @@
 * {
     font-family: var(--main-font), var(--sub-font);
     font-size: var(--small-font-size);
+    box-sizing: border-box;
 }
 
 body {
     background-color: var(--main-bg-color);
+}
+
+.header.sticked {
+    height: 90px;
+}
+
+.footer {
+    height: 300px;
 }
 
 td {

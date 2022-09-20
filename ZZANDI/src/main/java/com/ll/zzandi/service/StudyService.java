@@ -5,6 +5,7 @@ import com.ll.zzandi.dto.BookDto;
 import com.ll.zzandi.dto.LectureDto;
 import com.ll.zzandi.dto.StudyDto;
 import com.ll.zzandi.dto.study.StudyDetailDto;
+import com.ll.zzandi.dto.study.StudyListDto;
 import com.ll.zzandi.enumtype.StudyStatus;
 import com.ll.zzandi.enumtype.StudyType;
 import com.ll.zzandi.enumtype.TeamMateStatus;
@@ -24,6 +25,9 @@ import java.time.Period;
 
 import com.ll.zzandi.util.aws.ImageUploadService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -185,6 +189,30 @@ public class StudyService {
                 return studyRepository.findAllByStudyTypeAndStudyStatusAndStudyTitleContainsOrStudyTypeAndStudyStatusAndUser_userIdContains(StudyType.valueOf(st), StudyStatus.valueOf(ss),kw, StudyType.valueOf(st), StudyStatus.valueOf(ss), kw);
             }
         }
+    }
+
+    public Page<StudyListDto> findStudyListPaging(String st, String ss, String tag, String kw, int page) {
+        PageRequest paging = PageRequest.of(page, 12, Sort.by(Sort.Direction.DESC, "id"));
+
+        if (st.equals("ALL")) st = null;
+        if (ss.equals("ALL")) ss = null;
+        if (tag.equals("ALL")) tag = null;
+
+        StudyType stObj = null;
+        StudyStatus ssObj = null;
+        if (st != null) {
+            stObj = StudyType.valueOf(st);
+        }
+        if (ss != null) {
+            ssObj = StudyStatus.valueOf(ss);
+        }
+
+        Page<Study> studyList = studyRepository.searchByKwAndOption(kw, stObj, ssObj, tag, paging);
+        return studyList.map(
+            study -> new StudyListDto(study.getId(), study.getStudyTitle(), study.getAcceptedStudyMember(), study.getStudyPeople(),
+                study.getStudyStart(), study.getStudyEnd(), study.getStudyTag(),
+                String.valueOf(study.getStudyType()), study.getViews(), study.getStudyCoverUrl(),
+                String.valueOf(study.getStudyStatus())));
     }
 
     public void updateCoverImg(MultipartFile multipartFile, long studyUUID) throws IOException {

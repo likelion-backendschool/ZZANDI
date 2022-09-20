@@ -57,7 +57,7 @@ public class Study {
     @Column(name = "VIEWS", columnDefinition = "integer default 0")
     private int views;
 
-    @Column(name = "ACCEPTED_STUDY_MEMBER", columnDefinition = "integer default 1")
+    @Column(name = "ACCEPTED_STUDY_MEMBER")
     private int acceptedStudyMember;
 
     @Column(name = "STUDY_COVER_URL")
@@ -85,6 +85,7 @@ public class Study {
         this.studyPeople = studyPeople;
         this.studyTag = studyTag;
         this.studyStatus = studyStatus;
+        this.acceptedStudyMember = 1;
     }
     public void getStudyCoverUrl(String studyCoverUrl) {
         this.studyCoverUrl=studyCoverUrl;

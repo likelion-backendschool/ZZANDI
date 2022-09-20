@@ -8,6 +8,7 @@ import com.ll.zzandi.dto.StudyDto;
 
 import com.ll.zzandi.dto.api.SearchDto;
 import com.ll.zzandi.dto.study.StudyDetailDto;
+import com.ll.zzandi.dto.study.StudyListDto;
 import com.ll.zzandi.enumtype.StudyStatus;
 import com.ll.zzandi.exception.ErrorType;
 import com.ll.zzandi.exception.StudyException;
@@ -24,6 +25,7 @@ import java.nio.charset.StandardCharsets;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -88,10 +90,19 @@ public class StudyController {
     }
 
     @GetMapping("/study/list")
-    public String studyList(@AuthenticationPrincipal User user, Model model,@RequestParam(defaultValue = "ALL") String st,@RequestParam(defaultValue = "ALL") String ss, @RequestParam(defaultValue = "") String kw) {
-        List<Study> studyList = studyService.getList(st, ss, kw);
-        model.addAttribute("studyList", studyList);
+    public String findStudyList(@RequestParam(defaultValue = "ALL") String st, @RequestParam(defaultValue = "ALL") String ss, @RequestParam(defaultValue = "ALL") String tag, @RequestParam(defaultValue = "") String kw, @RequestParam(defaultValue = "0") int page, Model model) {
+        model.addAttribute("st", st);
+        model.addAttribute("ss", ss);
+        model.addAttribute("kw", kw);
+        model.addAttribute("tag", tag);
+        model.addAttribute("page", page);
         return "study/studyList";
+    }
+
+    @GetMapping("/study/list-data")
+    @ResponseBody
+    public Page<StudyListDto> findStudyListPaging(@RequestParam(defaultValue = "ALL") String st, @RequestParam(defaultValue = "ALL") String ss, @RequestParam(defaultValue = "ALL") String tag, @RequestParam(defaultValue = "") String kw, @RequestParam(defaultValue = "0") int page) {
+        return studyService.findStudyListPaging(st, ss, tag, kw, page);
     }
 
     @GetMapping("/study/detail/{studyId}")

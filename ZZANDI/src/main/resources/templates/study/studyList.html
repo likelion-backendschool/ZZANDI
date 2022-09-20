@@ -13,6 +13,7 @@
 <input type="hidden" class="st" th:value="${st}">
 <input type="hidden" class="ss" th:value="${ss}">
 <input type="hidden" class="kw" th:value="${kw}">
+<input type="hidden" class="tag" th:value="${tag}">
 <input type="hidden" class="page" th:value="${page}">
 
 <div class = "studyList-main">
@@ -22,18 +23,29 @@
     </div>
 
     <div class="selectSearch">
-        <form>
-            <select th:name="st">
-                <option th:value="BOOK" value="BOOK" th:selected="${#strings.equals(param.st, 'BOOK')}">BOOK</option>
-                <option th:value="LECTURE" th:selected="${#strings.equals(param.st, 'LECTURE')}">LECTURE</option>
-                <option th:value="ALL" th:selected="${param.st} == null or ${#strings.equals(param.st, 'ALL')}">ALL</option>
-            </select>
-            <select name="ss">
-                <option th:value="RECRUIT" th:selected="${#strings.equals(param.ss, 'RECRUIT')}">모집 중</option>
-                <option th:value="PROGRESS" th:selected="${#strings.equals(param.ss, 'PROGRESS')}">모집 완료</option>
-                <option th:value="ALL" th:selected="${param.ss} == null or ${#strings.equals(param.ss, 'ALL')}">ALL</option>
-            </select>
-        </form>
+        <select class="form-select form-select-sm" id="selectStudyType" name="st" onchange="changeSearch()">
+            <option th:value="BOOK" value="BOOK" th:selected="${#strings.equals(param.st, 'BOOK')}">책</option>
+            <option th:value="LECTURE" th:selected="${#strings.equals(param.st, 'LECTURE')}">강의</option>
+            <option th:value="ALL" th:selected="${param.st} == null or ${#strings.equals(param.st, 'ALL')}">전체</option>
+        </select>
+        <select class="form-select form-select-sm" id = "selectStudyStatus" name="ss" onchange="changeSearch()">
+            <option th:value="RECRUIT" th:selected="${#strings.equals(param.ss, 'RECRUIT')}">모집 중</option>
+            <option th:value="RECRUIT_COMPLETE" th:selected="${#strings.equals(param.ss, 'RECRUIT_COMPLETE')}">모집 완료</option>
+            <option th:value="PROGRESS" th:selected="${#strings.equals(param.ss, 'PROGRESS')}">진행 중</option>
+            <option th:value="COMPLETE" th:selected="${#strings.equals(param.ss, 'COMPLETE')}">완료</option>
+            <option th:value="ALL" th:selected="${param.ss} == null or ${#strings.equals(param.ss, 'ALL')}">전체</option>
+        </select>
+        <select class="form-select form-select-sm" id = "selectStudyTag" name="tag" onchange="changeSearch()">
+            <option th:selected="${#strings.equals(param.tag, '역사')}">역사</option>
+            <option th:selected="${#strings.equals(param.tag, '과학')}">과학</option>
+            <option th:selected="${#strings.equals(param.tag, '경제경영')}">경제경영</option>
+            <option th:selected="${#strings.equals(param.tag, '외국어')}">외국어</option>
+            <option th:selected="${#strings.equals(param.tag, '컴퓨터')}">컴퓨터</option>
+            <option th:selected="${#strings.equals(param.tag, '수험서/자격증')}">수험서/자격증</option>
+            <option th:selected="${#strings.equals(param.tag, '자기계발')}">자기계발</option>
+            <option th:selected="${#strings.equals(param.tag, '참고서')}">참고서</option>
+            <option th:selected="${param.tag} == null or ${#strings.equals(param.tag, 'ALL')}">전체</option>
+        </select>
     </div>
 
     <div class = "studyList mb-3">

@@ -24,6 +24,24 @@ body{
   color: #0c4128;
 }
 
+/*
+SELECT
+ */
+.selectSearch{
+  margin-left: 20px;
+  display : flex;
+}
+
+.selectSearch select:nth-child(1){
+  width : 85px;
+}
+.selectSearch select:nth-child(2){
+  width : 115px;
+}
+.selectSearch select:nth-child(3){
+  width : 135px;
+}
+
 .studyList table {
   width : 100%;
   border-spacing: 20px;
@@ -102,6 +120,7 @@ a{
 #studyTitle{
   font-size : 15px;
   font-weight: bold;
+  width : 150px;
   height : 65px;
   margin-bottom: 3px;
   white-space: normal;

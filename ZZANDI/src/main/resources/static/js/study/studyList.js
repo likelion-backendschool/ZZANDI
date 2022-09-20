@@ -6,6 +6,7 @@ const pagination = document.querySelector('.pagination');
 const st = document.querySelector(".st").value;
 const ss = document.querySelector(".ss").value;
 const kw = document.querySelector(".kw").value;
+const tag = document.querySelector(".tag").value;
 const page = document.querySelector(".page").value;
 
 window.onload = () => {
@@ -14,14 +15,14 @@ window.onload = () => {
 
 function findStudyList(st, ss, kw, page) {
   console.log("findStudyList 실행");
-  fetch(`/study/list-data?st=${st}&ss=${ss}&kw=${kw}&page=${page}`)
+  fetch(`/study/list-data?st=${st}&ss=${ss}&tag=${tag}&kw=${kw}&page=${page}`)
   .then(response => response.json())
   .then(data => {
         if(data.content.length === 0) {
-          list.innerHTML = '<td colspan="6">등록된 스터디가 없습니다.</td>';
+          list.innerHTML = '<p class = "text-center m-5">등록된 스터디가 없습니다.</p>';
           return false;
         } else {
-          history.pushState({page : page}, "", `/study/list/test?st=${st}&ss=${ss}&kw=${kw}&page=${page}`)
+          history.pushState({page : page}, "", `/study/list?st=${st}&ss=${ss}&tag=${tag}&kw=${kw}&page=${page}`)
           displayStudyList(data);
           displayPagination(data);
         }
@@ -147,9 +148,27 @@ function displayPagination(studyList) {
   pagination.innerHTML = html;
 }
 
+function changeSearch() {
+  console.log("changeSearch 실행");
+  var selectStudyType = document.getElementById("selectStudyType");
+  var optionST = selectStudyType.options[selectStudyType.selectedIndex].value;
+  console.log(optionST);
+
+  var selectStudyStatus = document.getElementById("selectStudyStatus");
+  var optionSS = selectStudyStatus.options[selectStudyStatus.selectedIndex].value;
+  console.log(optionSS);
+
+  var selectStudyTag = document.getElementById("selectStudyTag");
+  var optionStudyTag = selectStudyTag.options[selectStudyTag.selectedIndex].text;
+  if (optionStudyTag == '전체') optionStudyTag = 'ALL';
+  console.log(optionStudyTag);
+
+  window.location.href = `/study/list?st=${optionST}&ss=${optionSS}&tag=${optionStudyTag}&kw=${kw}&page=${page}`;
+}
+
 window.addEventListener('popstate', (e) => {
       const data = history.state;
-      fetch(`/study/list-data?st=${st}&ss=${ss}&kw=${kw}&page=${page}`)
+      fetch(`/study/list-data?st=${st}&ss=${ss}&tag=${tag}&kw=${kw}&page=${page}`)
       .then(response => response.json())
       .then(data => {
         if(data.content.length === 0) {

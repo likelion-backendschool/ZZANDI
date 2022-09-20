@@ -16,8 +16,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.util.Arrays;
+import java.util.List;
 
 @Controller
 @RequestMapping("/{studyId}/board")
@@ -69,7 +72,11 @@ public class BoardController {
     }
 
     @PostMapping("/create")
-    public String createBoard(@AuthenticationPrincipal User user, @PathVariable Long studyId, @Valid BoardCreateDto boardCreateDto, BindingResult result) {
+    public String createBoard(@AuthenticationPrincipal User user, @PathVariable Long studyId, @RequestParam("file") List<MultipartFile> files, @Valid BoardCreateDto boardCreateDto, BindingResult result) {
+        System.out.println("size : " + files.size());
+        for (MultipartFile file : files) {
+            System.out.println("fileName : " + file.getOriginalFilename());
+        }
         if (result.hasErrors()) {
             return "/board/boardWriteForm";
         }

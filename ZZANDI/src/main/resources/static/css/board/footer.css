@@ -1,0 +1,14 @@
+html, body {
+    height: 100%;
+}
+
+.container {
+    position: relative;
+    min-height: 100%;
+}
+
+footer {
+    position: relative;
+    transform: translateY(-100%);
+    width: 100%;
+}

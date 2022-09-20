@@ -17,62 +17,63 @@
     <!-- 토스트 UI Syntax Highlight 자바스크립트 -->
     <script src="https://uicdn.toast.com/editor-plugin-code-syntax-highlight/latest/toastui-editor-plugin-code-syntax-highlight-all.min.js"></script>
 
+    <div th:replace="layout/head.html :: head"></div>
     <link rel="stylesheet" th:href="@{/css/board/board-detail.css}">
     <link rel="stylesheet" th:href="@{/css/board/comment-list.css}">
     <script defer type="text/javascript" th:src="@{/js/board/boardDetail.js}"></script>
     <script defer type="text/javascript" th:src="@{/js/comment/comment.js}"></script>
-
-    <title>ZZANDI</title>
 </head>
 <body>
-<div class="w-100 d-flex justify-content-center align-items-center text-black" style="height: 100px; background-color: #c5e1a5;">
-    <h2 class="mx-3 my-0" style="font-weight: bold;">ZZANDI</h2>
-</div>
 
-<div class="container w-75 mx-auto my-4">
+<section th:replace="layout/header.html :: header"></section>
+
+<div class="container w-75 mx-auto" style="margin-top: 120px;">
     <input type="hidden" class="user-uuid" th:value="${userUUID}"> <!-- 현재 로그인 한 유저 식별자 -->
     <input type="hidden" class="board-id" th:value="${boardDetail.boardId}"> <!-- 현재 게시글 번호 -->
     <input type="hidden" class="board-content" th:value="${boardDetail.content}">
 
-    <div class="d-flex align-items-center mb-2">
-        <a class="study-title" th:text="${studyTitle}" th:href="@{/{studyId}/board/list (studyId = ${studyId}, page = 0)}"></a>
-        <a class="category" th:text="${boardDetail.category}" th:href="@{#}"></a>
-    </div>
-
-    <div class="title-box d-flex justify-content-between border-top border-bottom">
-        <h3 class="title-box__title align-self-center mb-0" th:text="${boardDetail.title}">제목1</h3>
-        <p class="align-self-center mb-0" th:text="${boardDetail.createdDate}">날짜</p>
-    </div>
-
-    <div class="writer-box d-flex justify-content-between border-bottom">
-        <div class="d-flex align-items-center my-2" sec:authorize="isAuthenticated()">
-            <img th:if="${!#strings.isEmpty(boardDetail.profile)}" th:src="${boardDetail.profile}" alt="profile"/>
-            <p class="writer-box__writer align-self-center mb-0" th:text="${boardDetail.writer}">작성자</p>
+    <div>
+        <div class="d-flex align-items-center mb-2">
+            <a class="study-title" th:text="${studyTitle}" th:href="@{/{studyId}/board/list (studyId = ${studyId}, page = 0)}"></a>
+            <a class="category" th:text="${boardDetail.category}" th:href="@{#}"></a>
         </div>
-        <div class="d-flex justify-content-between align-items-baseline align-self-center">
-            <p class="mx-1 my-0"><span th:text="|조회수 ${boardDetail.views}|"></span></p>
-            <p class="mx-1 my-0"><span th:text="|좋아요 ${boardDetail.heart}|"></span></p>
-            <p class="comment-count ml-1 my-0"></p>
+
+        <div class="title-box d-flex justify-content-between border-top border-bottom">
+            <h3 class="title-box__title align-self-center mb-0" th:text="${boardDetail.title}">제목1</h3>
+            <p class="align-self-center mb-0" th:text="${boardDetail.createdDate}">날짜</p>
+        </div>
+
+        <div class="writer-box d-flex justify-content-between border-bottom">
+            <div class="d-flex align-items-center my-2" sec:authorize="isAuthenticated()">
+                <img th:if="${!#strings.isEmpty(boardDetail.profile)}" th:src="${boardDetail.profile}" alt="profile"/>
+                <p class="writer-box__writer align-self-center mb-0" th:text="${boardDetail.writer}">작성자</p>
+            </div>
+            <div class="d-flex justify-content-between align-items-baseline align-self-center">
+                <p class="mx-1 my-0"><span th:text="|조회수 ${boardDetail.views}|"></span></p>
+                <p class="mx-1 my-0"><span th:text="|좋아요 ${boardDetail.heart}|"></span></p>
+                <p class="comment-count ml-1 my-0"></p>
+            </div>
+        </div>
+
+        <!-- Toast Viewer -->
+        <div id="viewer" class="my-2"></div>
+
+        <div class="d-flex justify-content-between mt-3">
+            <button class="btn btn-secondary btn-sm invisible" th:if="${boardDetail.prev == null}">이전글</button>
+            <button class="btn btn-secondary btn-sm" th:if="${boardDetail.prev != null}" th:onclick="|location.href='@{/{studyId}/board/detail/{boardId}/{page} (studyId=${studyId}, boardId=${boardDetail.prev}, page=${boardDetail.page})}'|">이전글</button>
+            <button class="btn btn-secondary btn-sm w-50" type="button" th:onclick="|location.href='@{/{studyId}/board/list?page={page} (studyId=${studyId}, page=${boardDetail.page})}'|">목록으로</button>
+            <button class="btn btn-secondary btn-sm" th:if="${boardDetail.next != null}" th:onclick="|location.href='@{/{studyId}/board/detail/{boardId}/{page} (studyId=${studyId}, boardId=${boardDetail.next}, page=${boardDetail.page})}'|">다음글</button>
+            <button class="btn btn-secondary btn-sm invisible" th:if="${boardDetail.next == null}">다음글</button>
+        </div>
+        <div class="d-flex justify-content-end mt-2 pt-2 border-top">
+            <form name="form" th:action="@{/{studyId}/board/delete/{boardId} (studyId=${studyId}, boardId=${boardDetail.boardId})}" th:onsubmit="return false" method="post">
+                <button class="btn btn-light btn-sm" th:if="${userUUID == boardDetail.userUUID}" type="button" th:onclick="|location.href='@{/{studyId}/board/update/{boardId}/{page} (studyId=${studyId}, boardId=${boardDetail.boardId}, page=${boardDetail.page})}'|">수정</button>
+                <button class="btn btn-light btn-sm" th:if="${userUUID == boardDetail.userUUID}" type="submit" th:onclick="deleteBoard()">삭제</button>
+            </form>
         </div>
     </div>
 
-    <!-- Toast Viewer -->
-    <div id="viewer" class="my-2"></div>
-
-    <div class="d-flex justify-content-between mt-3">
-        <button class="btn btn-secondary btn-sm invisible" th:if="${boardDetail.prev == null}">이전글</button>
-        <button class="btn btn-secondary btn-sm" th:if="${boardDetail.prev != null}" th:onclick="|location.href='@{/{studyId}/board/detail/{boardId}/{page} (studyId=${studyId}, boardId=${boardDetail.prev}, page=${boardDetail.page})}'|">이전글</button>
-        <button class="btn btn-secondary btn-sm w-50" type="button" th:onclick="|location.href='@{/{studyId}/board/list?page={page} (studyId=${studyId}, page=${boardDetail.page})}'|">목록으로</button>
-        <button class="btn btn-secondary btn-sm" th:if="${boardDetail.next != null}" th:onclick="|location.href='@{/{studyId}/board/detail/{boardId}/{page} (studyId=${studyId}, boardId=${boardDetail.next}, page=${boardDetail.page})}'|">다음글</button>
-        <button class="btn btn-secondary btn-sm invisible" th:if="${boardDetail.next == null}">다음글</button>
-    </div>
-    <div class="d-flex justify-content-end mt-2 pt-2 border-top">
-        <form name="form" th:action="@{/{studyId}/board/delete/{boardId} (studyId=${studyId}, boardId=${boardDetail.boardId})}" th:onsubmit="return false" method="post">
-            <button class="btn btn-light btn-sm" th:if="${userUUID == boardDetail.userUUID}" type="button" th:onclick="|location.href='@{/{studyId}/board/update/{boardId}/{page} (studyId=${studyId}, boardId=${boardDetail.boardId}, page=${boardDetail.page})}'|">수정</button>
-            <button class="btn btn-light btn-sm" th:if="${userUUID == boardDetail.userUUID}" type="submit" th:onclick="deleteBoard()">삭제</button>
-        </form>
-    </div>
-
+    <div style="padding-bottom: 300px; margin-bottom: 20px;">
     <div class="comment w-100 mt-4">
         <div class="comment-count mb-2 border rounded-1 p-3"></div>
         <ul class="comment-list p-0"></ul>
@@ -89,6 +90,9 @@
             </div>
         </div>
     </div>
+        </div>
 </div>
+<div th:replace="layout/footer.html :: footer"></div>
+<div th:replace="layout/tail.html :: tail"></div>
 </body>
 </html>

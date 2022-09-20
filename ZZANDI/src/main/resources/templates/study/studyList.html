@@ -1,33 +1,27 @@
 
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 
 <!-- head -->
 <div th:replace="layout/head.html :: head"></div>
-
+<script defer type="text/javascript" th:src="@{/js/study/studyList.js}"></script>
+<link rel="stylesheet" th:href="@{/css/study/studyList.css}">
 <body>
 
 <!-- header -->
 <section th:replace="layout/header.html :: header"></section>
+<input type="hidden" class="st" th:value="${st}">
+<input type="hidden" class="ss" th:value="${ss}">
+<input type="hidden" class="kw" th:value="${kw}">
+<input type="hidden" class="page" th:value="${page}">
 
-<main id="main">
+<div class = "studyList-main">
+    <div class = "studyList-description">
+        <h3>스터디 리스트</h3>
+        <p>진행 중인 스터디를 찾아 마음껏 참여해보세요!</p>
+    </div>
 
-    <!-- ======= Breadcrumbs ======= -->
-    <div class="breadcrumbs">
-        <div class="page-header d-flex align-items-center" style="background-image: url('');">
-            <div class="container position-relative">
-                <div class="row d-flex justify-content-center">
-                    <div class="col-lg-6 text-center">
-                        <h2>Study List</h2>
-                        <p>진행 중인 스터디를 찾아 마음껏 참여해보세요!</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div><!-- End Breadcrumbs -->
-
-    <!-- ======= Blog Section ======= -->
-    <div class="container">
+    <div class="selectSearch">
         <form>
             <select th:name="st">
                 <option th:value="BOOK" value="BOOK" th:selected="${#strings.equals(param.st, 'BOOK')}">BOOK</option>
@@ -39,38 +33,18 @@
                 <option th:value="PROGRESS" th:selected="${#strings.equals(param.ss, 'PROGRESS')}">모집 완료</option>
                 <option th:value="ALL" th:selected="${param.ss} == null or ${#strings.equals(param.ss, 'ALL')}">ALL</option>
             </select>
-            <input type="text" name="kw" th:value="${param.kw}" placeholder="검색어">
-            <button type="submit">검색</button>
         </form>
     </div>
-    <section>
-        <div id="studyList" class="container">
-            <div id="post" th:each="study : ${studyList}">
-                <div>
-                    <article>
-                        <div class="post-img" id="studyBox">
-                            <img id="studyCover" th:src="${study.studyCoverUrl}">
-                            <div>
-                                <p id="studyType" class="post-category" th:text="${study.studyType}"></p>
 
-                                <p class="title">
-                                    <a  th:href="@{/study/detail/{studyId}(studyId = ${study.getId})}"
-                                        th:text="${study.studyTitle}"></a>
-                                </p>
-                                <p id="studyStart" th:text="${study.studyStart}"></p>
-                                <p id="studyEnd_List" th:text="'~' + ${study.studyEnd}"></p>
-                            </div>
+    <div class = "studyList mb-3">
+        <!--    스터디 리스트 12개-->
+    </div>
+    <div class = "pagination d-flex justify-content-center mb-5">
 
-                        </div>
-                    </article>
-                </div><!-- End post list item -->
+    </div>
+</div>
 
-            </div><!-- End blog posts list -->
 
-        </div>
-    </section><!-- End Blog Section -->
-
-</main><!-- End #main -->
 <!-- footer -->
 <div th:replace="layout/footer.html :: footer"></div>
 

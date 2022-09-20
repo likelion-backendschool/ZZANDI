@@ -1,0 +1,150 @@
+@font-face {
+  font-family: 'adobaonlyR';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2205@1.0/adobaonlyR.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body{
+  font-family: "adobaonlyR", serif;
+}
+
+.studyList-main {
+  margin: 0 auto;
+  max-width : 830px;
+  min-height: 700px;
+}
+
+.studyList-description{
+  margin: 100px auto 25px auto;
+}
+
+.studyList-description h3 {
+  font-weight: bold;
+  color: #0c4128;
+}
+
+.studyList table {
+  width : 100%;
+  border-spacing: 20px;
+  border-collapse: separate;
+  table-layout : fixed;
+  min-width: 830px;
+}
+
+a{
+  color : black;
+}
+
+.studyBox {
+  width : 248px;
+  height : 150px;
+  word-wrap: break-word;
+  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.5);
+  border-radius : 1em;
+  padding : 15px;
+  position : relative;
+}
+
+.studyBox-top p{
+  margin : 0;
+}
+
+#studyTag{
+  color : #0a53be;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+#people{
+  font-size : 13px;
+  color : dimgray;
+}
+
+#recruit{
+  background-color: pink;
+  color : darkred;
+  padding : 2px;
+  border-radius: 0.3em;
+  font-weight: bold;
+  font-size: 10px;
+  text-align: center;
+}
+
+#progress{
+  background-color: powderblue;
+  color : darkblue;
+  padding : 2px;
+  border-radius: 0.3em;
+  font-weight: bold;
+  font-size: 10px;
+}
+
+#complete {
+  background-color: darkseagreen;
+  color : darkslategray;
+  padding : 2px;
+  border-radius: 0.3em;
+  font-weight: bold;
+  font-size: 10px;
+}
+
+#line {
+  margin : 0;
+}
+
+.studyCover {
+  width: 60px;
+  margin-right: 15px;
+  border-radius : 0.3em;
+}
+
+#studyTitle{
+  font-size : 15px;
+  font-weight: bold;
+  height : 65px;
+  margin-bottom: 3px;
+  white-space: normal;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient : vertical;
+  overflow: hidden;
+}
+
+.studyBox-bottom{
+  display : flex;
+  position : absolute;
+  bottom : 0;
+  width : 220px;
+  align-items : baseline;
+  /*align-content: flex-end;*/
+}
+
+#date{
+  font-size : 11px;
+  color : dimgray;
+  display : flex;
+  align-items : center;
+}
+
+#view{
+  font-size : 13px;
+  color : dimgray;
+  float : right;
+  margin-left : auto;
+}
+
+/*
+페이징
+ */
+.pagination button{
+  background-color: white;
+  border: none;
+  outline: none;
+}
+
+#pageActive {
+  background-color: #c5e1a5;
+  color : white;
+  border-radius: 3px;
+}

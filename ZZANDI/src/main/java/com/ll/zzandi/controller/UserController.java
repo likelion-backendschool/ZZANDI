@@ -1,5 +1,6 @@
 package com.ll.zzandi.controller;
 
+import com.google.common.base.Strings;
 import com.ll.zzandi.domain.TeamMate;
 import com.ll.zzandi.domain.User;
 import com.ll.zzandi.dto.UserDto;
@@ -13,6 +14,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -161,5 +163,20 @@ public class UserController {
         model.addAttribute("user", pageUser);
         model.addAttribute("teamMateList", teamMateList);
         return "/user/mystudy";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/check/id")
+    @ResponseBody
+    public Boolean checkUserId(@RequestParam("userid") String userid)  {
+        System.out.println("연걸 성공"+userid);
+        return userRepository.existsByUserId(userid);
+    }
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/modify/id")
+    @ResponseBody
+    public String updateUserId(@RequestParam("userid") String userid, @AuthenticationPrincipal User user)  {
+        if(Strings.isNullOrEmpty(userid)) throw new RuntimeException();
+        return userService.updateUserId(userid,user.getUserId());
     }
 }

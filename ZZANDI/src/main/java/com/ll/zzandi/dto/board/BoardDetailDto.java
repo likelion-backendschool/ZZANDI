@@ -16,7 +16,7 @@ public class BoardDetailDto {
     private String createdDate;
     private String writer;
     private String content;
-    private BoardCategory category;
+    private String category;
     private int views;
     private int heart;
     private int count; // 댓글의 개수

@@ -6,7 +6,7 @@ const currPage = document.querySelector(".page").value;
 const studyId = document.querySelector(".study-id").value;
 
 const colors = new Map();
-colors.set('인기', '#42a5f5');
+colors.set('전체', '#42a5f5');
 colors.set('공지', '#d50000');
 colors.set('자유', '#ff6f00');
 colors.set('정보', '#ffb2dd');
@@ -17,10 +17,14 @@ for(let category of document.querySelectorAll(".categories li > a")) {
     category.style.color = colors.get(category.innerHTML);
 }
 
-window.onload = () => findByPage(currPage, studyId);
+window.onload = () => findByPage(currPage, '', '', '', studyId);
 
-function findByPage(page, studyId) {
-    fetch(`/${studyId}/board/list-data?page=${page}`)
+function findByPage(page, category, filter, keyword, studyId) {
+    let url = (keyword === '') ?
+        `/${studyId}/board/list-data?page=${page}&category=${category}` :
+        `/${studyId}/board/list-data2?page=${page}&filter=${filter}&keyword=${keyword}`;
+
+    fetch(url)
         .then(response => response.json())
         .then(data => {
             if(data.content.length === 0) {
@@ -28,25 +32,58 @@ function findByPage(page, studyId) {
                 return false;
             } else {
                 history.pushState({page : page}, "", `/${studyId}/board/list?page=${page}`)
-                displayItems(data, studyId);
+                displayItems(data, category, filter, keyword, studyId);
             }
         }
     );
 }
 
+function search() {
+    const filter = document.querySelector("#filter").value;
+    const keyword = document.querySelector("#keyword").value;
+
+    if(keyword === '') {
+        alert("검색어를 입력해주세요.");
+        document.querySelector("#keyword").focus();
+        return false;
+    }
+
+    findByPage(currPage, '', filter, keyword, studyId);
+}
+
+const searchBtn = document.querySelector(".search-btn");
+searchBtn.addEventListener('click', () => {
+    search();
+});
+
+const keywordInput = document.querySelector("#keyword");
+keywordInput.addEventListener('keypress', (e) => {
+    if (e.code === 'Enter') {
+        search();
+    }
+})
+
 const categories = document.querySelector(".categories");
+const categoryArr = document.querySelectorAll(".li-category");
 categories.addEventListener("click", (e) => {
     if (e.target.tagName !== 'A') {
         return false;
     }
 
-    let category = e.target.innerHTML;
-    findByPage(0, category, studyId);
+    for(let ca of categoryArr) {
+        if (ca.classList.contains("selected")) {
+            ca.classList.remove("selected");
+        }
+    }
+
+    let category = e.target.innerHTML === '전체' ? '' : e.target.innerHTML;
+    e.target.classList.add("selected");
+    findByPage(0, category, '', '', studyId);
 });
 
-function displayItems(items) {
+function displayItems(items, category, filter, keyword) {
     list.innerHTML = items.content.map(item => createBoardList(item)).join('');
-    pagination.innerHTML = createPageList(items);
+    pagination.innerHTML = createPageList(items, category, filter, keyword);
 }
 
 function createBoardList(item) {
@@ -54,7 +91,7 @@ function createBoardList(item) {
     const color = colors.get(item.category);
 
     return `<tr>
-                <td class="board-table-category" style="color: ${color};">${item.category}</td>
+                <td class="board-table-category" style="color: ${color};"><a onclick="findByPage(0, '${item.category}', ${studyId})">${item.category}</a></td>
                 <td class="board-table-title">
                     <a href="/${studyId}/board/detail/${item.boardId}/${item.pageNum}">${title}</a>
                     <span class="board-table-title__comment">${item.count}</span>
@@ -71,7 +108,7 @@ function createBoardList(item) {
             </tr>`;
 }
 
-function createPageList(items) {
+function createPageList(items, category, filter, keyword) {
     let nowPage = items.pageable.pageNumber;
     let pageSize = items.pageable.pageSize;
     let totalPage = items.totalPages;
@@ -83,34 +120,33 @@ function createPageList(items) {
     let hasNext = items.last;
 
     let pageHTML = '';
-
     const prevDisabled = hasPrev ? "disabled='disabled'" : '';
     pageHTML +=
         `<li class="page-item">
-            <button onClick="findByPage(0, ${studyId});" ${prevDisabled}>
+            <button onClick="findByPage(0, '${category}', '${filter}', '${keyword}', ${studyId});" ${prevDisabled}>
                 <i class="fa-solid fa-angles-left"></i>
             </button>
         </li>
         <li class="page-item">
-            <button onClick="findByPage(${nowPage - 1}, ${studyId});" ${prevDisabled}>
+            <button onClick="findByPage(${nowPage - 1}, '${category}', '${filter}', '${keyword}', ${studyId});" ${prevDisabled}>
                 <i class="fa-solid fa-angle-left"></i>
             </button>
         </li>`;
 
     for (let i = startPage; i < endPage; i++) {
         const active = (i === nowPage) ? 'active' : '';
-        pageHTML += `<li class="page-item"><button class="${active}" onclick="findByPage(${i}, ${studyId})">${i + 1}</button></li>`;
+        pageHTML += `<li class="page-item"><button class="${active}" onclick="findByPage(${i}, '${category}', '${filter}', '${keyword}', ${studyId})">${i + 1}</button></li>`;
     }
 
     const nextDisabled = hasNext ? "disabled='disabled'" : '';
     pageHTML +=
         `<li class="page-item">
-            <button onClick="findByPage(${nowPage + 1}, ${studyId});" ${nextDisabled}>
+            <button onClick="findByPage(${nowPage + 1}, '${category}', '${filter}', '${keyword}', ${studyId});" ${nextDisabled}>
                 <i class="fa-solid fa-angle-right"></i>
             </button>
         </li>
         <li class="page-item">
-            <button onClick="findByPage(${totalPage - 1}, ${studyId});" ${nextDisabled}>
+            <button onClick="findByPage(${totalPage - 1}, '${category}', '${filter}', '${keyword}', ${studyId});" ${nextDisabled}>
                 <i class="fa-solid fa-angles-right"></i>
             </button>
         </li>`;
@@ -120,7 +156,7 @@ function createPageList(items) {
 
 window.addEventListener('popstate', (e) => {
     const data = history.state;
-    fetch(`/${studyId}/board/list-data?page=${data.page}`)
+    fetch(`/${studyId}/board/list-data?page=${data.page}&category=`)
         .then(response => response.json())
         .then(data => {
             if(data.content.length === 0) {

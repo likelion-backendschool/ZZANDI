@@ -5,6 +5,7 @@ import com.ll.zzandi.dto.BookDto;
 import com.ll.zzandi.dto.LectureDto;
 import com.ll.zzandi.dto.StudyDto;
 import com.ll.zzandi.dto.study.StudyDetailDto;
+import com.ll.zzandi.dto.study.StudyListDto;
 import com.ll.zzandi.enumtype.StudyStatus;
 import com.ll.zzandi.enumtype.StudyType;
 import com.ll.zzandi.enumtype.TeamMateStatus;
@@ -24,6 +25,9 @@ import java.time.Period;
 
 import com.ll.zzandi.util.aws.ImageUploadService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -185,6 +189,34 @@ public class StudyService {
                 return studyRepository.findAllByStudyTypeAndStudyStatusAndStudyTitleContainsOrStudyTypeAndStudyStatusAndUser_userIdContains(StudyType.valueOf(st), StudyStatus.valueOf(ss),kw, StudyType.valueOf(st), StudyStatus.valueOf(ss), kw);
             }
         }
+    }
+
+    public Page<StudyListDto> findStudyListPaging(String st, String ss, String kw, int page) {
+        PageRequest paging = PageRequest.of(page, 12, Sort.by(Sort.Direction.DESC, "id"));
+        Page<Study> studyList;
+        if (st.equals("ALL")) {
+            if (ss.equals("ALL")) {
+                studyList = studyRepository.findDistinctByStudyTitleContainsOrUser_userIdContains(kw, kw,
+                    paging);
+            } else {
+                studyList = studyRepository.findDistinctByStudyTitleContainsAndStudyStatusOrUser_userIdContainsAndStudyStatus(
+                    kw, StudyStatus.valueOf(ss), kw, StudyStatus.valueOf(ss), paging);
+            }
+        } else {
+            if (ss.equals("ALL")) {
+                studyList = studyRepository.findDistinctByStudyTitleContainsAndStudyTypeOrUser_userIdContainsAndStudyType(
+                    kw, StudyType.valueOf(st), kw, StudyType.valueOf(st), paging);
+            } else {
+                studyList = studyRepository.findDistinctByStudyTypeAndStudyStatusAndStudyTitleContainsOrStudyTypeAndStudyStatusAndUser_userIdContains(
+                    StudyType.valueOf(st), StudyStatus.valueOf(ss), kw, StudyType.valueOf(st),
+                    StudyStatus.valueOf(ss), kw, paging);
+            }
+        }
+        return studyList.map(
+            study -> new StudyListDto(study.getId(), study.getStudyTitle(), study.getAcceptedStudyMember(), study.getStudyPeople(),
+                study.getStudyStart(), study.getStudyEnd(), study.getStudyTag(),
+                String.valueOf(study.getStudyType()), study.getViews(), study.getStudyCoverUrl(),
+                String.valueOf(study.getStudyStatus())));
     }
 
     public void updateCoverImg(MultipartFile multipartFile, long studyUUID) throws IOException {

@@ -1,9 +1,13 @@
 'use strict';
 
+const myStudyList = document.querySelector(".myStudyList");
+
+const userNickname = document.querySelector(".userNickname").value;
+
+/*---------------------------------------------------------------------------
+투두리스트 사이드바 JS 코드
+ ---------------------------------------------------------------------------*/
 const toDoList = document.querySelector(".toDoList");
-// window.onload =() => {
-//     findAll('TOTAL');
-// }
 
 function findAll(type) {
     let url = (type === 'TOTAL') ? "/todo/list-data" : "/todo/list-data?type="+type;
@@ -58,3 +62,4 @@ function disToggle() {
         $('#toDoListContent').hide();
     }
 }
+

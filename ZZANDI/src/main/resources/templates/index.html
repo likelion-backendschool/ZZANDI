@@ -6,9 +6,16 @@
 <!-- head -->
 <div th:replace="layout/head.html :: head"></div>
 <script defer type="text/javascript" th:src="@{/js/index.js}"></script>
+<link rel="stylesheet" th:href="@{/css/mainPage.css}">
 
+<!-- header -->
+<section th:replace="layout/header.html :: header"></section>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <body>
-<div style="margin-left: 200px">
+
+<input sec:authorize="isAuthenticated()" type="hidden" class = "userNickname" th:value="${#authentication.principal.userNickname}">
+
+<div class = "main">
     <!--quick menu-->
     <aside id="quick">
         <div class="form-check form-switch">
@@ -25,9 +32,6 @@
             </a>
         </div>
     </aside>
-    <!-- header -->
-    <section th:replace="layout/header.html :: header"></section>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <!-- ======= Testimonials Section ======= -->
     <section id="testimonials" class="testimonials">
@@ -63,14 +67,21 @@
                             <img src="https://shopping-phinf.pstatic.net/main_3246926/32469262578.20220527022446.jpg?type=w300" class="testimonial-img" alt="">
                         </div>
                     </div><!-- End testimonial item -->
-
                 </div>
                 <div class="swiper-pagination"></div>
-
             </div>
-
         </div>
     </section><!-- End Testimonials Section -->
+
+    <div sec:authorize="isAuthenticated()" class = "myStudyListBox">
+        <div class="d-flex align-items-baseline">
+            <p class="subHeading">내 스터디</p>
+            <a class="link" th:href="@{study/list}">더보기<i class="bi bi-chevron-compact-right"></i></a>
+        </div>
+        <div class = "myStudyList">
+            <!--        내 스터디 목록-->
+        </div>
+    </div>
 
     <section>
         <div id="studyList" class="container">

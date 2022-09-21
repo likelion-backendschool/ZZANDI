@@ -7,6 +7,7 @@ const studyDetail_right = document.querySelector(".studyDetail-right");
 const studyDetail_bottom = document.querySelector(".studyDetail-bottom");
 const acceptedTeamMate = document.querySelector(".acceptedTeamMate");
 const studyView = document.querySelector(".studyView");
+const updateRate = document.querySelector(".updateRate")
 
 const studyId = document.querySelector(".studyId").value;
 const userNickname = document.querySelector(".userNickname").value;
@@ -19,6 +20,7 @@ let studyDetail;
 
 window.onload = async () => {
   teamMateList = await findTeamMateList(studyId, userNickname);
+  console.log(teamMateList);
   checkTeamMate(teamMateList);
   studyDetail = await findStudyDetail(studyId);
   displayStudy(studyDetail, teamMateList);
@@ -29,10 +31,24 @@ let isTeamMate = false;
 let isDelete = false;
 let cnt = 0;
 
+const patternList = Array.of('clouds', 'bees', 'dominos', 'pie', 'piano', 'crosses', 'floor', 'wiggle', 'bubbles', 'ticTac', 'zigZag', 'stripes', 'food', 'aztec')
+
 async function findStudyDetail(studyId) {
   console.log("findStudyDetail 실행");
   return fetch(`/study/detail/${studyId}/study-data`)
   .then(response => response.json())
+}
+
+function calcEach(data, EachRate) {
+  let Total = 0;
+  if (data.studyType == 'BOOK') {
+    Total = data.bookPage;
+  }
+  else {
+    Total = data.lectureNumber;
+  }
+
+  return (EachRate / Total) * 100;
 }
 
 function displayStudy(data, teamMateList) {
@@ -43,7 +59,7 @@ function displayStudy(data, teamMateList) {
     <div>
       <p id = "studyTag"># ${data.studyTag}</p>
       <a href="/study/coverUpload/${studyId}">
-        <img class="studyCover flex-shrink-0" src="${data.studyCoverUrl}">
+        <img class="studyCover flex-shrink-0" style="border-radius: 1.3em" src="${data.studyCoverUrl}">
       </a>
   `;
 
@@ -184,6 +200,7 @@ function displayStudy(data, teamMateList) {
   // studyDetail-right[end]
 
   // studyDetail-bottom[start]
+  const widthShow = Math.round(calcRate(studyPeriod, studyDays));
   html = '';
   html += ``;
   if (data.studyStatus == 'PROGRESS') {
@@ -196,15 +213,15 @@ function displayStudy(data, teamMateList) {
     html += `
     <div class = "d-flex mt-3 mb-3 align-items-center">
       <div class="progress">
-        <div class="zzandi shadow jupiter"></div>
+        <div class="zzandi ${widthShow} shadow jupiter"></div>
       </div>
-      <p class = "mb-0 ms-3">${studyRecommend}</p>
+      <p class = "mb-0 ms-3">${widthShow}%</p>
     </div>
     
     <p class = "studyRate"><i class="bi bi-bar-chart-fill" style="font-size: 1.3rem; margin-right : 5px;"></i>우리의 달성률</p>
     <div class = "d-flex mt-3 mb-3 align-items-center">
       <div class="progress">
-        <div class="zzandi shadow jupiter2"></div>
+        <div class="achieve shadow jupiter2"></div>
       </div>
       <p class = "mb-0 ms-3">${data.studyRate}%</p>
     </div>
@@ -212,8 +229,15 @@ function displayStudy(data, teamMateList) {
   }
 
   studyDetail_bottom.innerHTML = html;
+  const zzandi = document.querySelector(".zzandi");
+  function showRate() {
+    const width = calcRate(studyPeriod, studyDays);
+    zzandi.style.width = `${width}%`
+  }
+  showRate();
   // studyDetail-bottom[end]
 
+  // studyView[start]
   html = '';
 
   html += `
@@ -223,6 +247,25 @@ function displayStudy(data, teamMateList) {
   </div>
   `;
   studyView.innerHTML = html;
+  //studyView[end]
+
+  //updateRate[start]
+  html= ``;
+
+  html += `
+  <form id="study_input" style="display:none">
+    <input type="text" class="form-control updateRateForm"  placeholder="진도율 들어감">
+  </form>
+  `
+  updateRate.innerHTML = html;
+
+  const updateRateForm = document.querySelector(".updateRateForm");
+
+  updateRateForm.placeholder = getTeamRate();
+  console.log(updateRateForm);
+
+  //updateRate[end]
+
   // acceptedTeamMate[start]
   html = ``;
 
@@ -263,18 +306,26 @@ function displayStudy(data, teamMateList) {
       html += `
         </div>
       `;
+      // 개인 진도율 바 보이는 부분
+      const eachWidth = calcEach(data, teamMateList[i].teamRate);
 
       html += `
         <div class = "d-flex mt-3 mb-5 align-items-center">
           <div class="progress">
-            <div class="bar shadow leaf"></div>
+            <div class="bar shadow ${patternList[i]}"></div>
           </div>
-          <p class = "mb-0 ms-3">${teamMateList[i].teamRate}%</p>
+          <p class = "mb-0 ms-3">${eachWidth}%</p>
         </div>
       `;
-    }
+      //
+      acceptedTeamMate.innerHTML = html;
 
-    acceptedTeamMate.innerHTML = html;
+      const pattern = "." + patternList[i];
+
+      const each = document.querySelector(pattern);
+
+      each.style.width = `${eachWidth}%`;
+    }
     // acceptedTeamMate[end]
   }
 }
@@ -444,3 +495,34 @@ function showStudyContent() {
     $('.study-content').hide();
   }
 }
+
+// 진도율 관련 함수
+function calcRate(studyPeriod, studyDays) {
+  return (studyDays / studyPeriod) * 100;
+}
+
+function toggleStudyInput() {
+  const study_input = document.getElementById("study_input");
+
+  if (study_input.style.display !== "none") {
+    study_input.style.display = "none";
+    let userRate = getTeamRate();
+    console.log(userRate);
+    console.log(updateRateForm);
+    console.log(updateRateForm.placeholder);
+    updateRateForm.placeholder = userRate;
+  }
+  else {
+    study_input.style.display = "inline";
+  }
+}
+
+function getTeamRate(){
+  for (let i = 0; i < teamMateList.length; i++) {
+    if(teamMateList[i].userNickname == userNickname) {
+      console.log(teamMateList[i].teamRate)
+      return teamMateList[i].teamRate;
+    }
+  }
+}
+

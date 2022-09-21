@@ -49,8 +49,11 @@
     <ul>
       <li><a class = "menu" th:href="@{|/${studyId}/board/list|}">
         <i class="bi bi-chat-left-text" style="font-size: 1.3rem; margin-right : 5px;"></i>게시판 이동</a></li>
-      <li><a class = "menu" href="#">
+      <li><a class = "menu" onclick="toggleStudyInput()">
         <i class="bi bi-pencil-square" style="font-size: 1.3rem; margin-right : 5px;"></i>달성률 등록</a></li>
+      <li class="updateRate">
+<!--        개인 진도율 저장-->
+      </li>
     </ul>
   </nav>
   <div class = "acceptedTeamMate">

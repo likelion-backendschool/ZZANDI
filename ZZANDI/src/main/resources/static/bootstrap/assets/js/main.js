@@ -340,13 +340,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
 $('#toDoListContent').hide();
 
-function dis() {
-  if ($('#toDoListContent').css('display') == 'none') {
-    $('#toDoListContent').show();
-  } else {
-    $('#toDoListContent').hide();
-  }
-}
+// function dis() {
+//   if ($('#toDoListContent').css('display') == 'none') {
+//     $('#toDoListContent').show();
+//   } else {
+//     $('#toDoListContent').hide();
+//   }
+// }
 $(document).ready(function() {
   $("input[name=checkTodo]").on('click', function() {
     if ( $(this).prop('checked') ) {

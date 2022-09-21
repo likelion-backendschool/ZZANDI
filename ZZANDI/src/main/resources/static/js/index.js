@@ -1,9 +1,9 @@
 'use strict';
 
 const toDoList = document.querySelector(".toDoList");
-window.onload =() => {
-    findAll('TOTAL');
-}
+// window.onload =() => {
+//     findAll('TOTAL');
+// }
 
 function findAll(type) {
     let url = (type === 'TOTAL') ? "/todo/list-data" : "/todo/list-data?type="+type;
@@ -48,4 +48,13 @@ function findById(id) {
         .then(data => {
             displayModifyForm(data);
         });
+}
+
+function disToggle() {
+    if ($('#toDoListContent').css('display') == 'none') {
+        findAll('TOTAL');
+        $('#toDoListContent').show();
+    } else {
+        $('#toDoListContent').hide();
+    }
 }

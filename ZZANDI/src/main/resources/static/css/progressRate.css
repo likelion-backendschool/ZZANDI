@@ -13,7 +13,7 @@
 
 .zzandi {
   border-radius: 20px;
-  width: 80%;
+  width: 0%;
   height: 100%;
   transition: width;
   transition-duration: 1s;
@@ -32,6 +32,10 @@
 .shadow {
   /* 25 50 */
   box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+#study_input {
+  width: 150px;
 }
 
 .crosses {

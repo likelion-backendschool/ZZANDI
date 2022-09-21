@@ -25,6 +25,34 @@ function delegate() {
 }
 
 // 진도율 관련 js 부분 (시작)
+// ZZANDI 부분
+// Controller 의 model 로 부터 값을 받아옴
+const zzandi = document.querySelectorAll('.zzandi');
+const studyperiod = document.getElementById('studyperiod').value;
+const studydays = document.getElementById('studydays').value;
+
+function calcRate(studyperiod, studydays) {
+    return (studydays / studyperiod) * 100;
+}
+
+zzandi.forEach((zzandi, index) => {
+    const Width = calcRate(studyperiod, studydays);
+    console.log(Width);
+    zzandi.style.width = `${Width}%`;
+});
+
+// 개인 유저 부분
+function toggleStudyInput() {
+    const study_input = document.getElementById("study_input");
+
+    if (study_input.style.display !== "none") {
+        study_input.style.display = "none";
+    }
+    else {
+        study_input.style.display = "inline";
+    }
+}
+
 const bars = document.querySelectorAll('.bar');
 const progress = document.querySelectorAll('.progress');
 

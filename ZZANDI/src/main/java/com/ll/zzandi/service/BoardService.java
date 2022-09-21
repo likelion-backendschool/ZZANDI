@@ -1,20 +1,28 @@
 package com.ll.zzandi.service;
 
 import com.ll.zzandi.domain.Board;
+import com.ll.zzandi.domain.File;
 import com.ll.zzandi.dto.board.BoardDetailDto;
 import com.ll.zzandi.dto.board.BoardListDto;
 import com.ll.zzandi.dto.board.BoardUpdateFormDto;
+import com.ll.zzandi.enumtype.TableType;
 import com.ll.zzandi.repository.BoardRepository;
+import com.ll.zzandi.repository.FileRepository;
+import com.ll.zzandi.util.aws.ImageUploadService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +30,8 @@ import java.util.Optional;
 public class BoardService {
 
     private final BoardRepository boardRepository;
+    private final FileRepository fileRepository;
+    private final ImageUploadService imageUploadService;
 
     public Page<BoardListDto> findBoardListPaging(int page, Long studyId, String category) {
         PageRequest pageRequest = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "id"));
@@ -46,8 +56,6 @@ public class BoardService {
         return boardList.map(board -> new BoardListDto(board.getId(), board.getUser().getUserId(), board.getCategory(), board.getTitle(), board.getUser().getUserNickname(),
                 board.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd")), board.getViews(), board.getHeart(), page, board.getComments().size(), board.getUser().getUserprofileUrl()));
     }
-
-
 
     public BoardDetailDto findBoardDetail(Long boardId, int page) {
         Board board = boardRepository.findById(boardId).orElseThrow();
@@ -81,8 +89,32 @@ public class BoardService {
     }
 
     @Transactional
-    public Long createBoard(Board board) {
+    public Long createBoard(Board board, List<MultipartFile> files) throws IOException {
         Board saveBoard = boardRepository.save(board);
+        for (MultipartFile file : files) {
+            if(!file.isEmpty()) {
+                String originalName = file.getOriginalFilename();
+
+                int index = originalName.lastIndexOf(".");
+                String fileName = originalName.substring(0, index);
+                String ext = originalName.substring(index);
+
+                String saveFileName = UUID.randomUUID().toString().replaceAll("-", "") + ext;
+                String uploadUrl = imageUploadService.upload(saveFileName, file);
+
+                File newFile = File.builder()
+                        .fileName(saveFileName)
+                        .originalName(fileName)
+                        .fileExt(ext)
+                        .fileSize(file.getSize())
+                        .fileUrl(uploadUrl)
+                        .tableId(saveBoard.getId())
+                        .tableType(TableType.BOARD)
+                        .build();
+
+                fileRepository.save(newFile);
+            }
+        }
         return saveBoard.getId();
     }
 

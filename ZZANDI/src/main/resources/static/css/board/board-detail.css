@@ -54,3 +54,9 @@
 .toastui-editor-contents > p {
     font-size: 16px;
 }
+
+.file-img {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+}

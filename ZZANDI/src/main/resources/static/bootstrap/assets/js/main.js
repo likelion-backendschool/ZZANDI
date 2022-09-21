@@ -402,3 +402,8 @@ $("input[name=studyCoverUrl]").off().on("change", function(){
     }
   }
 });
+
+const url = location.search;
+const params = new URLSearchParams(url);
+const param = params.get('kw');
+document.querySelector(".keyword").value = param;

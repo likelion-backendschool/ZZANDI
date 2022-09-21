@@ -188,6 +188,34 @@ h6 {
   margin-top: 80px;
 }
 
+.searchBox {
+  display : flex;
+  outline : none;
+}
+
+.searchBox input {
+  width : 400px;
+  border : none;
+  border-radius: 5px 0 0 5px;
+  background-color: #efefef;
+  padding-left: 10px;
+}
+
+.searchBox input:focus {
+  outline : none;
+}
+
+.searchBox button {
+  background: darkseagreen;
+  font-size: 17px;
+  border: none;
+  border-radius: 0 5px 5px 0;
+  cursor: pointer;
+}
+
+.searchBox button:hover {
+  background: #a0cba0;
+}
 /*--------------------------------------------------------------
 # Desktop Navigation
 --------------------------------------------------------------*/

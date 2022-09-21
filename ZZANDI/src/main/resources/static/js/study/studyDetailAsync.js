@@ -20,6 +20,7 @@ let studyDetail;
 
 window.onload = async () => {
   teamMateList = await findTeamMateList(studyId, userNickname);
+  console.log(teamMateList);
   checkTeamMate(teamMateList);
   studyDetail = await findStudyDetail(studyId);
   displayStudy(studyDetail, teamMateList);
@@ -253,10 +254,16 @@ function displayStudy(data, teamMateList) {
 
   html += `
   <form id="study_input" style="display:none">
-    <input type="text" class="form-control"  placeholder="진도율 들어감">
+    <input type="text" class="form-control updateRateForm"  placeholder="진도율 들어감">
   </form>
   `
   updateRate.innerHTML = html;
+
+  const updateRateForm = document.querySelector(".updateRateForm");
+
+  updateRateForm.placeholder = getTeamRate();
+  console.log(updateRateForm);
+
   //updateRate[end]
 
   // acceptedTeamMate[start]
@@ -499,9 +506,23 @@ function toggleStudyInput() {
 
   if (study_input.style.display !== "none") {
     study_input.style.display = "none";
+    let userRate = getTeamRate();
+    console.log(userRate);
+    console.log(updateRateForm);
+    console.log(updateRateForm.placeholder);
+    updateRateForm.placeholder = userRate;
   }
   else {
     study_input.style.display = "inline";
+  }
+}
+
+function getTeamRate(){
+  for (let i = 0; i < teamMateList.length; i++) {
+    if(teamMateList[i].userNickname == userNickname) {
+      console.log(teamMateList[i].teamRate)
+      return teamMateList[i].teamRate;
+    }
   }
 }
 

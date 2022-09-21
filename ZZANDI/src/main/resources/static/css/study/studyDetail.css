@@ -79,15 +79,15 @@ body{
 }
 
 #studyTitle {
-  font-size : 25px;
+  font-size : 18px;
   font-weight: bold;
-  max-width : 400px;
+  max-width : 370px;
   word-wrap: break-word;
 }
 
 #studyUpdate{
   color : dimgray;
-  font-size: 15px;
+  font-size: 13px;
   margin : 3px 10px;
 }
 
@@ -100,14 +100,15 @@ body{
 .status .people {
   margin : auto 10px;
   color : dimgray;
+  font-size : 15px;
 }
 
 #recruit{
   background-color: pink;
   color : darkred;
-  padding : 5px;
+  padding : 3px;
   border-radius: 0.3em;
-  font-size: 15px;
+  font-size: 13px;
   font-weight: bold;
   margin-bottom : 5px;
 }
@@ -115,9 +116,9 @@ body{
 #progress{
   background-color: powderblue;
   color : darkblue;
-  padding : 5px;
+  padding : 3px;
   border-radius: 0.3em;
-  font-size: 15px;
+  font-size: 13px;
   font-weight: bold;
   margin-bottom : 5px;
 }
@@ -125,9 +126,9 @@ body{
 #complete {
   background-color: darkseagreen;
   color : darkslategray;
-  padding : 5px;
+  padding : 3px;
   border-radius: 0.3em;
-  font-size: 15px;
+  font-size: 13px;
   font-weight: bold;
   margin-bottom : 5px;
 }

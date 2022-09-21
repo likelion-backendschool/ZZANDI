@@ -7,6 +7,10 @@
       <!-- <img src="assets/img/logo.png" alt=""> -->
       <h1>ZZANDI</h1>
     </a>
+    <form class = "searchBox" th:action="@{/study/list}">
+      <input type="text" autocomplete="off" th:name="kw" placeholder="스터디명, 닉네임 검색" class = "keyword" value>
+      <button type="submit"><i class="bi bi-search"></i></button>
+    </form>
     <nav id="navbar" class="navbar">
       <ul>
         <li sec:authorize="hasAuthority('ROLE_ADMIN')">

@@ -11,7 +11,7 @@ import javax.validation.constraints.Size;
 @Setter
 public class StudyDto {
     @NotEmpty(message = "스터디명은 필수항목입니다.")
-    @Size(max = 200)
+    @Size(max = 50)
     private String studyTitle;
 
     @NotEmpty(message = "스터디 시작일은 필수항목입니다.")

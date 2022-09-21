@@ -232,7 +232,9 @@ function displayStudy(data, teamMateList) {
   const zzandi = document.querySelector(".zzandi");
   function showRate() {
     const width = calcRate(studyPeriod, studyDays);
-    zzandi.style.width = `${width}%`
+    if (zzandi) {
+      zzandi.style.width = `${width}%`;
+    }
   }
   showRate();
   // studyDetail-bottom[end]
@@ -407,6 +409,7 @@ function quit() {
 }
 
 function updateTeamMate(data) {
+  console.log("updateTeamMate 실행")
   if (!confirm('참가 신청을 수락하시겠습니까?')){
     return false;
   }else {
@@ -426,6 +429,7 @@ function updateTeamMate(data) {
 }
 
 function deleteTeamMate(data){
+  console.log("deleteTeamMate 실행")
   if (!confirm('참가 신청을 거절하시겠습니까?')) {
     return false;
   } else {

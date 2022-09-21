@@ -33,7 +33,7 @@
 </head>
 <body>
 <section th:replace="layout/header.html :: header"></section>
-<div class="container w-100 mx-auto" style="margin-top: 120px; padding-bottom: 300px; margin-bottom: 20px;">
+<div class="container w-75 mx-auto" style="margin-top: 120px; padding-bottom: 300px; margin-bottom: 20px;">
     <div>
     <form name="form" th:action="@{/{studyId}/board/update/{boardId}/{page} (studyId=${studyId}, boardId=${updateDto.id}, page=${updateDto.pageNum})}"
           method="post" onsubmit="return validSubmit();">

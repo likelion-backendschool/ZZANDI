@@ -60,6 +60,7 @@ public class CommentService {
         Board board = boardRepository.findById(boardId).orElseThrow(() -> new IllegalArgumentException("작성할 게시글이 없습니다."));
 
         Long commentRef = commentRepository.findByNvlRef(boardId);
+        System.out.println("commentRef = " + commentRef);
 
         if (comment.getId() == null) {
             return commentRepository.save(Comment.builder()
@@ -76,6 +77,7 @@ public class CommentService {
         } else {
             Comment parentComment = commentRepository.findById(comment.getId()).orElseThrow(() -> new IllegalArgumentException("가져올 댓글이 없습니다."));
             Long refOrderResult = refOrderAndUpdate(parentComment);
+            System.out.println("refOrderResult = " + refOrderResult);
 
             commentRepository.updateCount(parentComment.getId(), parentComment.getCount());
             return commentRepository.save(Comment.builder()

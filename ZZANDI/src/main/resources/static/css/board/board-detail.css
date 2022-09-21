@@ -5,6 +5,7 @@
 .study-title {
     font-family: var(--study-title-font), var(--main-font), var(--sub-font);
     font-size: var(--medium-font-size);
+    font-weight: bold;
     color: var(--study-title-color);
 }
 

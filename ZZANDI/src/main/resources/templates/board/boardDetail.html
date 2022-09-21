@@ -74,7 +74,9 @@
             <span style="font-weight: bold;" class="my-1">첨부파일</span>
             <div class="file-box d-flex">
                 <div th:each="file : ${files}">
-                    <img th:src="@{${file.url}}" alt="upload file" class="file-img"/>
+                    <a th:href="@{/{studyId}/board/attach/{fileId} (studyId = ${studyId}, fileId = ${file.fileId})}">
+                        <img th:src="@{${file.url}}" alt="upload file" class="file-img"/>
+                    </a>
                 </div>
             </div>
         </div>

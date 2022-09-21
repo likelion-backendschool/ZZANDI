@@ -24,6 +24,7 @@ import java.time.LocalDateTime;
 import java.time.Period;
 
 import com.ll.zzandi.util.aws.ImageUploadService;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -325,5 +326,16 @@ public class StudyService {
             .orElseThrow(() -> new StudyException(ErrorType.NOT_FOUND));
         study.setViews(study.getViews() + 1);
         studyRepository.save(study);
+    }
+
+    public List<StudyListDto> findMyStudyList(User user) {
+        PageRequest paging = PageRequest.of(0, 9, Sort.by(Sort.Direction.DESC, "id"));
+        List<Study> studyList = studyRepository.findMyStudyList(user.getId(), paging);
+
+        return studyList.stream().map(study -> new StudyListDto(study.getId(), study.getStudyTitle(),
+            study.getAcceptedStudyMember(), study.getStudyPeople(),
+            study.getStudyStart(), study.getStudyEnd(), study.getStudyTag(),
+            String.valueOf(study.getStudyType()), study.getViews(), study.getStudyCoverUrl(),
+            String.valueOf(study.getStudyStatus()))).collect(Collectors.toList());
     }
 }

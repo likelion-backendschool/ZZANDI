@@ -34,4 +34,7 @@ public interface StudyRepository extends JpaRepository<Study, Integer> {
     countQuery = "select count(s) from Study s where (s.studyTitle like %:kw% or s.user.userNickname like %:kw%) "
         + "and (:st is null or s.studyType = :st) and ((:ss is null or s.studyStatus = :ss)) and (:tag is null or s.studyTag = :tag)")
     Page<Study> searchByKwAndOption(@Param("kw") String kw, @Param("st") StudyType st, @Param("ss") StudyStatus ss, @Param("tag") String tag, Pageable paging);
+
+    @Query("select s from Study s join s.teamMateList teamMate where teamMate.user.id = :id")
+    List<Study> findMyStudyList(@Param("id") Long id, Pageable pageable);
 }

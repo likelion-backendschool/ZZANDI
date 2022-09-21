@@ -3,6 +3,7 @@ package com.ll.zzandi.controller;
 import com.ll.zzandi.domain.Study;
 import com.ll.zzandi.domain.ToDoList;
 import com.ll.zzandi.domain.User;
+import com.ll.zzandi.dto.study.StudyListDto;
 import com.ll.zzandi.enumtype.ToDoType;
 import com.ll.zzandi.exception.ErrorType;
 import com.ll.zzandi.exception.UserApplicationException;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.persistence.EntityExistsException;
 import java.util.List;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @Slf4j
@@ -37,6 +39,12 @@ public class MainController {
         List<Study> studyList = studyService.getList(st, ss, kw);
         model.addAttribute("studyList", studyList);
         return "index";
+    }
+
+    @GetMapping("/myStudyList")
+    @ResponseBody
+    public List<StudyListDto> findMyStudyList(@AuthenticationPrincipal User user) {
+        return studyService.findMyStudyList(user);
     }
 
     //TODO 예외처리 확인하기 위한 단순한 테스트 api 추후 삭제 예정

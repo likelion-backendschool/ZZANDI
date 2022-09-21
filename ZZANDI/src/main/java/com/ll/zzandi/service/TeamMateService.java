@@ -58,7 +58,7 @@ public class TeamMateService {
     TeamMate teamMate = teamMateRepository.findById(teamMateId).orElseThrow(()-> new TeamMateException(ErrorType.NOT_FOUND));
 
     // 팀장만 수락이 가능
-    if(study.getUser() == user) {
+    if(study.getUser().getId().equals(user.getId())) {
       teamMate.setTeamMateStatus(TeamMateStatus.ACCEPTED);
       teamMateRepository.save(teamMate);
       sendAcceptedEmail(study, teamMate);
@@ -74,10 +74,10 @@ public class TeamMateService {
 
     boolean isLeader = false;
 
-    if(study.getUser() == user) {
+    if(study.getUser().getId().equals(user.getId())) {
       teamMateRepository.delete(teamMate);
       isLeader = true;
-    } else if (user == teamMate.getUser()) {
+    } else if (user.getId().equals(teamMate.getUser().getId())) {
       teamMateRepository.delete(teamMate);
     }
     return isLeader;
@@ -88,7 +88,7 @@ public class TeamMateService {
     TeamMate teamMate = teamMateRepository.findByUserAndAndStudy(user, study).orElseThrow(()-> new TeamMateException(ErrorType.NOT_FOUND));
 
     if((study.getStudyStatus() == StudyStatus.RECRUIT
-        || study.getStudyStatus() == StudyStatus.RECRUIT_COMPLETE) && study.getUser() != user) {
+        || study.getStudyStatus() == StudyStatus.RECRUIT_COMPLETE) && !study.getUser().getId().equals(user.getId())) {
       teamMateRepository.delete(teamMate);
       study.setAcceptedStudyMember(study.getAcceptedStudyMember()-1);
       studyService.updateRecruitStudyStatus(study);
@@ -104,7 +104,7 @@ public class TeamMateService {
     TeamMate delegateTeamMate = teamMateRepository.findById(teamMateId).orElseThrow(()-> new TeamMateException(ErrorType.NOT_FOUND));
     User delegateUser = delegateTeamMate.getUser();
 
-    if (study.getUser() == user && study.getUser() != delegateUser) {
+    if (study.getUser().getId().equals(user.getId()) && !study.getUser().getId().equals(delegateUser.getId())) {
       teamMate.setTeamMateDelegate(TeamMateDelegate.DELEGATE);
       delegateTeamMate.setTeamMateDelegate(TeamMateDelegate.WAITING);
       sendDelegateEmail(study, user, delegateUser);

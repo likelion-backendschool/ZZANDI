@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BOOKSEARCH</title>
+    <div th:replace="layout/head.html :: head"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script defer type="text/javascript" th:src="@{/js/study/studyBookSearch.js}"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"
+            integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+</head>
+
+<header xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+        th:fragment="header" id="header" class="header d-flex align-items-center">
+    <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
+        <a href="/" class="logo d-flex align-items-center">
+            <h1>BOOKSEARCH</h1>
+        </a>
+    </div>
+</header><!-- End Header -->
+<!-- End Header -->
+<body>
+    <input type="button" id="complete" value="선택완료">
+    <div class="col-md-6 form-group">
+        <label for="bookSearch"> </label>
+        <input type="text" id="bookSearch" name="bookSearch" placeholder="책 정보를 입력하세요">
+        <button type="button" id="search">검색</button>
+
+        <div class="col-md-6 form-group">
+            <div class="bookList" id="bookList"></div>
+            <div class="thumbnail"></div>
+            <input class="card-title" name="bookName" id="bookName" readonly placeholder="선택한 책의 제목입니다.">
+            <input class="card-author" name="bookAuthor" id="bookAuthor" readonly placeholder="선택한 책의 작가입니다.">
+            <input class="card-publisher" name="bookPublisher" id="bookPublisher" readonly placeholder="선택한 책의 출판사입니다.">
+            <input class="card-ISBN" name="bookIsbn" id="bookIsbn" readonly placeholder="선택한 책의 고유번호입니다.">
+        </div>
+        <div class="List"></div>
+
+    </div>
+
+</body>
+<style>
+
+</style>
+</html>

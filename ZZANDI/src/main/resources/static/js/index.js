@@ -10,6 +10,15 @@ function changeField() {
     window.location.href = `?tag=` + optionStudyTag + `#searchField`;
 }
 
+function more() {
+    console.log("더보기 실행");
+    let selectStudyTag = document.getElementById("selectStudyTag");
+    let optionStudyTag = selectStudyTag.options[selectStudyTag.selectedIndex].text;
+    if (optionStudyTag == '전체' || optionStudyTag == '추천' ) optionStudyTag = 'ALL';
+
+    window.location.href = `/study/list?tag=` + optionStudyTag;
+}
+
 /*---------------------------------------------------------------------------
 투두리스트 사이드바 JS 코드
  ---------------------------------------------------------------------------*/

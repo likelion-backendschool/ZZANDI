@@ -1,0 +1,18 @@
+#studyForm{
+  border: 1px solid;
+  border-radius: 10px;
+  padding: 20px;
+  margin: auto;
+  justify-content: center;
+  width: 500px;
+  box-shadow: 5px 5px 5px 5px gray;
+}
+
+#main{
+  margin: 100px;
+}
+
+.col-md-6.form-group{
+  margin: 10px;
+  width: 250px;
+}

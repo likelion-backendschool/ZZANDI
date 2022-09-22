@@ -62,17 +62,15 @@
                 <label for="file">
                     <div class="btn-upload">파일 첨부하기</div>
                 </label>
-                <input type="file" multiple="multiple" id="file" name="file" >
+                <input type="file" multiple="multiple" id="file" name="file" style="display: none; object-fit: cover">
             </div>
             <div class="my-2">
-                <span>1개 첨부 됨 (10.0KB / 50.00MB)</span>
+                <span class="file-count"></span>
             </div>
-            <div class="file-box d-flex">
-                <img src="https://zzandi.s3.ap-northeast-2.amazonaws.com/BrqzKWJDBcmQYFG14To4e7RwkjV09A.jpg">
-                <img src="https://zzandi.s3.ap-northeast-2.amazonaws.com/jszimUthR0k0bIZsNLxvlkWMsD59HI.gif">
-                <img src="https://zzandi.s3.ap-northeast-2.amazonaws.com/g2kvVfYpNRVd0ANwkwTldicP3zcw74.png">
-                <img src="https://zzandi.s3.ap-northeast-2.amazonaws.com/MmFZg02uUrn8TZkQcIQ1doQEDeU4On.jpeg">
+            <div class="file-box d-flex flex-wrap" id="image_container">
+
             </div>
+
         </div>
 
         <div class="button-box">

@@ -85,7 +85,7 @@ function displayItems(items, category, filter, keyword) {
 }
 
 function createBoardList(item) {
-    const title = (item.title.length > 50) ? `${item.title.substr(0, 50)}...` : `${item.title}`;
+    const title = (item.title.length > 30) ? `${item.title.substr(0, 30)}...` : `${item.title}`;
     const color = colors.get(item.category);
     const fileSize = item.files.length;
 

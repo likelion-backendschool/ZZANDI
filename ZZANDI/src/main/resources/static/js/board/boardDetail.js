@@ -36,9 +36,22 @@ const viewer = new Editor.factory({
     },
 });
 
+
 function deleteBoard() {
     if (confirm("정말로 삭제하시겠습니까?") === false) {
         return false;
     }
     document.forms['form'].submit();
+}
+
+function deleteFile(studyId, fileId) {
+    if(confirm("정말로 삭제하시겠습니까?") === false) {
+        return false;
+    }
+
+    fetch(`/${studyId}/board/delete/file/${fileId}`, {
+        method: 'POST'
+    }).then(() => {
+        console.log("첨부 파일 화면 체인지!!");
+    });
 }

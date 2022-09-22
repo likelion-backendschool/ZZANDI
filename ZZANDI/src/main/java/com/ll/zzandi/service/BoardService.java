@@ -94,6 +94,15 @@ public class BoardService {
                 .profile(board.getUser().getUserprofileUrl()).build();
     }
 
+    @Transactional
+    public void deleteFile(Long boardId) {
+        List<File> files = fileRepository.findFileByBoardId(boardId);
+        for (File file : files) {
+            fileRepository.deleteById(file.getId());
+            fileRepository.updateFileStatus(file.getId());
+        }
+    }
+
     public Board findByBoardId(Long boardId) {
         return boardRepository.findById(boardId).get();
     }

@@ -65,6 +65,13 @@ public class BoardController {
         return boardService.findBoardListPaging2(page, studyId, filter, keyword);
     }
 
+    @PostMapping("/delete/file/{fileId}")
+    @ResponseBody
+    public void deleteAttachment(@PathVariable Long fileId) {
+        System.out.println("fileId = " + fileId);
+        System.out.println("여기서 파일 삭제 처리!!");
+    }
+
     @GetMapping("/detail/{boardId}/{page}")
     public String findBoardDetail(@AuthenticationPrincipal User user, @PathVariable Long studyId, @PathVariable Long boardId, @PathVariable int page, Model model) {
         boardService.updateBoardView(boardId);
@@ -89,14 +96,15 @@ public class BoardController {
         return "board/boardDetail";
     }
 
-    @GetMapping("/attach/{fileId}")
+    @GetMapping("/download/{fileId}")
     public ResponseEntity<Resource> downloadAttach(@PathVariable Long fileId) throws MalformedURLException, FileNotFoundException {
         // 다운로드 할 파일 가져오기
         File file = fileRepository.findById(fileId).orElseThrow(FileNotFoundException::new);
         // 서버에 업로드된 파일 url (s3)
         UrlResource resource = new UrlResource(file.getFileUrl());
         // 실제 파일의 이름을 인코딩해서 가져온다. -> 한글인 경우 깨질수도 있기 때문이다.
-        String encodedFileName = UriUtils.encode(file.getOriginalName() + "." +file.getFileExt(), StandardCharsets.UTF_8);
+
+        String encodedFileName = UriUtils.encode(file.getOriginalName() + file.getFileExt(), StandardCharsets.UTF_8);
         // 인코딩해서 가져온 String을 ResponseHeader에 넣어줘야 한다. 그래야 링크를 눌렀을 때 다운이 된다. -> 정해진 규칙이라고 함
         String contentDisposition = "attachment; filename=\"" + encodedFileName + "\"";
 
@@ -139,6 +147,7 @@ public class BoardController {
     @PostMapping("/delete/{boardId}")
     public String deleteBoard(@PathVariable Long studyId, @PathVariable Long boardId) {
         commentService.deleteCommentByBoardId(boardId);
+        boardService.deleteFile(boardId);
         boardService.deleteBoard(boardId);
         return "redirect:/%d/board/list".formatted(studyId);
     }

@@ -56,6 +56,26 @@ const editor = new Editor({
     },
 });
 
+document.querySelector("#file").addEventListener('change', (e) => {
+    let totalSize = 0;
+    document.querySelector('#image_container').innerHTML = '';
+    for (let image of e.target.files) {
+        let reader = new FileReader();
+
+        totalSize += image.size;
+
+        reader.onload = function (e) {
+            let img = document.createElement('img');
+            img.setAttribute('src', e.target.result);
+            document.querySelector('#image_container').appendChild(img);
+        };
+        reader.readAsDataURL(image);
+    }
+    // const i = Math.floor(Math.log(totalSize) / Math.log(1024));
+    // console.log(parseFloat((totalSize / Math.pow(2048, i)).toFixed(3)) + 'MB');
+    document.querySelector(".file-count").innerHTML = `${e.target.files.length}개 첨부 됨 (${totalSize}Byte / 50MB)`;
+});
+
 function validSubmit() {
     const category = document.querySelector(".category");
     const title = document.querySelector(".title");

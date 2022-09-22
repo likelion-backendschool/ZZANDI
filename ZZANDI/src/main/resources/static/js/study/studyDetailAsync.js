@@ -255,16 +255,24 @@ function displayStudy(data, teamMateList) {
   html= ``;
 
   html += `
-  <form id="study_input" style="display:none">
-    <input type="text" class="form-control updateRateForm"  placeholder="진도율 들어감">
+  <form id="study_input" style="display:none" onsubmit="submitModifyRate(this, studyId, userNickname, studyDetail); return false;">
+    <input name="rate" type="text" class="form-control updateRateForm">
+    <button type="submit" id="status" value="modify" class="btn">수정</button>
   </form>
   `
+
   updateRate.innerHTML = html;
 
   const updateRateForm = document.querySelector(".updateRateForm");
 
-  updateRateForm.placeholder = getTeamRate();
-  console.log(updateRateForm);
+  let TeamRate = getTeamRate();
+
+  if (data.studyType == 'BOOK') {
+    updateRateForm.placeholder = "나의 진도 : " + TeamRate + " 페이지";
+  }
+  else {
+    updateRateForm.placeholder = "나의 진도 : " + TeamRate + " 강";
+  }
 
   //updateRate[end]
 
@@ -510,14 +518,9 @@ function toggleStudyInput() {
 
   if (study_input.style.display !== "none") {
     study_input.style.display = "none";
-    let userRate = getTeamRate();
-    console.log(userRate);
-    console.log(updateRateForm);
-    console.log(updateRateForm.placeholder);
-    updateRateForm.placeholder = userRate;
   }
   else {
-    study_input.style.display = "inline";
+    study_input.style.display="inline-flex";
   }
 }
 
@@ -530,3 +533,48 @@ function getTeamRate(){
   }
 }
 
+// 개인 진도율 수정
+// // (1) 숫자만 입력 받도록
+// function checkNumber(e) {
+//   console.log(e.value);
+//   alert(e.value);
+//   if(e.value >= 0 && e.value <= 10000) {
+//     return true;
+//   }
+//   return false;
+// }
+// (2) 수정 버튼 클릭 시 작
+function submitModifyRate(form, studyId, userNickname, data) {
+  console.log(form.rate.value);
+  console.log(studyId);
+  console.log(userNickname);
+  console.log(data.studyType);
+  console.log(data.bookPage);
+  console.log(data.lectureNumber);
+
+  let rateInput = form.rate.value.trim();
+
+  if (data.studyType == "BOOK") {
+    if (rateInput < 0 || rateInput > data.bookPage) {
+      alert("페이지 범위 내에서 입력해주세요!")
+      return;
+    }
+  }
+  else {
+    if (rateInput < 0 || rateInput > data.lectureNumber) {
+      alert("강 수 범위 내에서 입력해주세요!")
+      return;
+    }
+  }
+
+  let url = `/${studyId}/teamMate/update/${rateInput}`;
+
+  console.log(url);
+
+  fetch(url)
+  .then (
+      displayStudy(studyDetail, teamMateList)
+  );
+}
+
+// list studyDetaildto

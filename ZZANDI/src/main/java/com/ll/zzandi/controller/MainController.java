@@ -31,19 +31,29 @@ public class MainController {
     private final ToDoListService toDoListService;
 
     @GetMapping("/")
-    public String main(@AuthenticationPrincipal User user, Model model, @RequestParam(defaultValue = "ALL") String tag){
+    public String main(@AuthenticationPrincipal User user, Model model, @RequestParam(defaultValue = "추천") String tag){
         if(user != null) {
             List<ToDoList> toDoLists = toDoListService.findAllByUserAndType(user, ToDoType.DOING);
             model.addAttribute("toDoList", toDoLists);
             List<StudyListDto> myStudyList = studyService.findMyStudyList(user);
             model.addAttribute("myStudyList", myStudyList);
+            if (!tag.equals("추천")) {
+                List<StudyListDto> fieldStudyList = studyService.findFieldStudyList(tag);
+                model.addAttribute("fieldStudyList", fieldStudyList);
+            } else {
+                List<StudyListDto> fieldStudyList = studyService.findInterestStudyList(user);
+                model.addAttribute("fieldStudyList", fieldStudyList);
+            }
+        }else {
+            if (tag.equals("추천")) {
+                tag = "ALL";
+            }
+            List<StudyListDto> fieldStudyList = studyService.findFieldStudyList(tag);
+            model.addAttribute("fieldStudyList", fieldStudyList);
         }
-
         List<StudyListDto> newStudyList = studyService.findNewStudyList();
         model.addAttribute("newStudyList", newStudyList);
 
-        List<StudyListDto> fieldStudyList = studyService.findFieldStudyList(tag);
-        model.addAttribute("fieldStudyList", fieldStudyList);
         return "index";
     }
 

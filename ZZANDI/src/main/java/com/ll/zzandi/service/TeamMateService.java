@@ -68,6 +68,14 @@ public class TeamMateService {
     studyService.updateRecruitStudyStatus(study);
   }
 
+  public void updateTeamMateRate(User user, Long studyId, int rateInput) {
+    Study study = studyRepository.findById(studyId).orElseThrow(()->new StudyException(ErrorType.NOT_FOUND));
+    TeamMate teamMate = teamMateRepository.findByUserAndAndStudy(user, study).orElseThrow(()-> new TeamMateException(ErrorType.NOT_FOUND));
+    
+    teamMate.setTeamRate(rateInput);
+    teamMateRepository.save(teamMate);
+  }
+
   public boolean deleteTeamMate(User user, Long studyId, Long teamMateId) {
     Study study = studyRepository.findById(studyId).orElseThrow(()->new StudyException(ErrorType.NOT_FOUND));
     TeamMate teamMate = teamMateRepository.findById(teamMateId).orElseThrow(()-> new TeamMateException(ErrorType.NOT_FOUND));

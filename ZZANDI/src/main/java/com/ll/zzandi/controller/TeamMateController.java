@@ -45,8 +45,8 @@ public class TeamMateController {
   */
   @GetMapping("/update/{rateInput}")
   @ResponseBody
-  public String updateTeamMateRate(@AuthenticationPrincipal User user, @PathVariable Long studyId, @PathVariable Long rateInput, Model model) {
-    return "";
+  public void updateTeamMateRate(@AuthenticationPrincipal User user, @PathVariable Long studyId, @PathVariable int rateInput, Model model) {
+    teamMateService.updateTeamMateRate(user, studyId, rateInput);
   }
 
   /*

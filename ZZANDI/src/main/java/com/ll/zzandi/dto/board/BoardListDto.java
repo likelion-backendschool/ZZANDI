@@ -1,10 +1,13 @@
 package com.ll.zzandi.dto.board;
 
+import com.ll.zzandi.domain.File;
 import com.ll.zzandi.enumtype.BoardCategory;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter @Setter
 @AllArgsConstructor
@@ -22,5 +25,6 @@ public class BoardListDto {
     private int pageNum; // 현재 페이지 번호
     private int count; // 댓글의 개수
     private String profile; // 게시글 작성자의 프로필 사진
+    private List<File> files;
 
 }

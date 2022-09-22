@@ -38,7 +38,7 @@
 }
 
 .board-table-title__comment {
-    margin-left: 5px;
+    margin: 0 5px;
     font-size: var(--tiny-font-size);
     font-weight: bold;
     color: var(--comment-count-color);

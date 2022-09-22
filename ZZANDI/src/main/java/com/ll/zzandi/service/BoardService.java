@@ -37,8 +37,13 @@ public class BoardService {
         PageRequest pageRequest = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "id"));
         Page<Board> boardList = boardRepository.findBoardList(pageRequest, studyId, category);
 
-        return boardList.map(board -> new BoardListDto(board.getId(), board.getUser().getUserId(), board.getCategory(), board.getTitle(), board.getUser().getUserNickname(),
-                        board.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd")), board.getViews(), board.getHeart(), page, board.getComments().size(), board.getUser().getUserprofileUrl()));
+        return boardList.map(board -> {
+            List<File> fileList = fileRepository.findFileByBoardId(board.getId());
+            return new BoardListDto(board.getId(), board.getUser().getUserId(), board.getCategory(),
+                    board.getTitle(), board.getUser().getUserNickname(),
+                    board.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd")), board.getViews(),
+                    board.getHeart(), page, board.getComments().size(), board.getUser().getUserprofileUrl(), fileList);
+        });
     }
 
     public Page<BoardListDto> findBoardListPaging2(int page, Long studyId, String filter, String keyword) {
@@ -53,8 +58,13 @@ public class BoardService {
             default -> boardRepository.findBoardListFilterByTitleAndContent(pageRequest, studyId, keyword);
         };
 
-        return boardList.map(board -> new BoardListDto(board.getId(), board.getUser().getUserId(), board.getCategory(), board.getTitle(), board.getUser().getUserNickname(),
-                board.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd")), board.getViews(), board.getHeart(), page, board.getComments().size(), board.getUser().getUserprofileUrl()));
+        return boardList.map(board -> {
+            List<File> fileList = fileRepository.findFileByBoardId(board.getId());
+            return new BoardListDto(board.getId(), board.getUser().getUserId(), board.getCategory(),
+                    board.getTitle(), board.getUser().getUserNickname(),
+                    board.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd")), board.getViews(),
+                    board.getHeart(), page, board.getComments().size(), board.getUser().getUserprofileUrl(), fileList);
+        });
     }
 
     public BoardDetailDto findBoardDetail(Long boardId, int page) {

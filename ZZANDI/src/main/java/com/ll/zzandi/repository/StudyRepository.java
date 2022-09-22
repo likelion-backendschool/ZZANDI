@@ -5,6 +5,7 @@ import com.ll.zzandi.enumtype.StudyStatus;
 import com.ll.zzandi.enumtype.StudyType;
 import java.util.List;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -40,4 +41,7 @@ public interface StudyRepository extends JpaRepository<Study, Integer> {
 
     @Query("select s from Study s")
     List<Study> findNewStudyList(Pageable pageable);
+
+    @Query("select s from Study s where (:tag is null or s.studyTag = :tag)")
+    List<Study> findFieldStudyList(@Param("tag") String tag, PageRequest paging);
 }

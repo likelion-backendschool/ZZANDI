@@ -41,7 +41,16 @@ public class MainController {
 
         List<StudyListDto> newStudyList = studyService.findNewStudyList();
         model.addAttribute("newStudyList", newStudyList);
+
+        List<StudyListDto> fieldStudyList = studyService.findFieldStudyList("ALL");
+        model.addAttribute("fieldStudyList", fieldStudyList);
         return "index";
+    }
+
+    @GetMapping("/fieldStudyList")
+    @ResponseBody
+    public List<StudyListDto> findFieldStudy(@RequestParam(defaultValue = "ALL") String tag) {
+        return studyService.findFieldStudyList(tag);
     }
 
     //TODO 예외처리 확인하기 위한 단순한 테스트 api 추후 삭제 예정

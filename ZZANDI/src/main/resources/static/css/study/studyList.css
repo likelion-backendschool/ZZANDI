@@ -58,6 +58,18 @@ a:hover {
   color : black;
 }
 
+#selectStudyType{
+  box-shadow : none;
+}
+
+#selectStudyStatus{
+  box-shadow : none;
+}
+
+#selectStudyTag{
+  box-shadow : none;
+}
+
 .studyBox {
   width : 248px;
   height : 150px;

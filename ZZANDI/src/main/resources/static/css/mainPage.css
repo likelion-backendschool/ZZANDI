@@ -29,6 +29,12 @@ body{
   color: forestgreen;
 }
 
+#selectStudyTag {
+  width : 100px;
+  margin-right : 10px;
+  box-shadow : none;
+}
+
 /*sidebar*/
 #quick {position: fixed; top: 40%; left: 1.5%; z-index: 10; margin: 0px 0px 0 0;}
 #quick a {display: block; margin: 0px 0 0;}

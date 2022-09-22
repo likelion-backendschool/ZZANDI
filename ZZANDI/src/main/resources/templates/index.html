@@ -150,7 +150,7 @@
     </div>
     <div>
       <div th:if="${newStudyList.size() == 0}" style="margin-left : 70px; margin-top : 10px;">
-        참여한 스터디가 없습니다.
+      등록된 스터디가 없습니다.
       </div>
       <div id = "newStudyList" class="carousel carousel-dark slide" th:if="${newStudyList.size() > 0}">
         <div class="carousel-inner w-75 ms-auto me-auto">
@@ -188,6 +188,85 @@
           <span class="visually-hidden">Previous</span>
         </button>
         <button class="carousel-control-next" type="button" data-bs-target="#newStudyList"
+                data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class = "mt-5 mb-5">
+    <div class="d-flex align-items-baseline">
+      <p class="subHeading">분야별 스터디</p>
+      <select class="form-select form-select-sm" id = "selectStudyTag" name="tag">
+        <option th:selected="${#strings.equals(param.tag, '역사')}">역사</option>
+        <option th:selected="${#strings.equals(param.tag, '과학')}">과학</option>
+        <option th:selected="${#strings.equals(param.tag, '경제경영')}">경제경영</option>
+        <option th:selected="${#strings.equals(param.tag, '외국어')}">외국어</option>
+        <option th:selected="${#strings.equals(param.tag, '컴퓨터')}">컴퓨터</option>
+        <option th:selected="${#strings.equals(param.tag, '수험서/자격증')}">수험서/자격증</option>
+        <option th:selected="${#strings.equals(param.tag, '자기계발')}">자기계발</option>
+        <option th:selected="${#strings.equals(param.tag, '참고서')}">참고서</option>
+        <option th:selected="${param.tag} == null or ${#strings.equals(param.tag, 'ALL')}">전체</option>
+      </select>
+      <a class="link" th:href="@{/study/list}">더보기<i class="bi bi-chevron-compact-right"></i></a>
+    </div>
+    <div>
+      <div th:if="${newStudyList.size() == 0}" style="margin-left : 70px; margin-top : 10px;">
+        등록된 스터디가 없습니다.
+      </div>
+      <div id = "fieldStudyList" class="carousel carousel-dark slide" th:if="${fieldStudyList.size() > 0}">
+        <div class="carousel-inner w-75 ms-auto me-auto">
+          <div class="carousel-item active studyList">
+            <table>
+              <tr>
+                <td th:each="study : ${#numbers.sequence(0, 2)}">
+                  <div th:replace="layout/fieldStudyListBox.html"></div>
+                </td>
+              </tr>
+              <tr>
+                <td th:each="study : ${#numbers.sequence(3, 5)}">
+                  <div th:replace="layout/fieldStudyListBox.html"></div>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div class="carousel-item studyList" th:if="${fieldStudyList.size() > 6}">
+            <table>
+              <tr>
+                <td th:each="study : ${#numbers.sequence(6, 8)}">
+                  <div th:replace="layout/fieldStudyListBox.html"></div>
+                </td>
+              </tr>
+              <tr>
+                <td th:each="study : ${#numbers.sequence(9, 11)}">
+                  <div th:replace="layout/fieldStudyListBox.html"></div>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div class="carousel-item studyList" th:if="${fieldStudyList.size() > 12}">
+            <table>
+              <tr>
+                <td th:each="study : ${#numbers.sequence(12, 14)}">
+                  <div th:replace="layout/fieldStudyListBox.html"></div>
+                </td>
+              </tr>
+              <tr>
+                <td th:each="study : ${#numbers.sequence(15, 17)}">
+                  <div th:replace="layout/fieldStudyListBox.html"></div>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#fieldStudyList"
+                data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#fieldStudyList"
                 data-bs-slide="next">
           <span class="carousel-control-next-icon" aria-hidden="true"></span>
           <span class="visually-hidden">Next</span>

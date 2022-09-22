@@ -6,130 +6,275 @@
 <!-- head -->
 <div th:replace="layout/head.html :: head"></div>
 <script defer type="text/javascript" th:src="@{/js/index.js}"></script>
+<link rel="stylesheet" th:href="@{/css/mainPage.css}">
+<link rel="stylesheet" th:href="@{/css/study/studyList.css}">
 
+<!-- header -->
+<section th:replace="layout/header.html :: header"></section>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <body>
-<div style="margin-left: 200px">
-    <!--quick menu-->
-    <aside id="quick">
-        <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" onchange="disToggle()">
-            <img src="https://cdn-icons-png.flaticon.com/512/3176/3176366.png" style="width: 20px; height: 20px">
-            <label class="form-check-label" for="flexSwitchCheckChecked">To do List</label>
-        </div>
-        <div class="form-check" id="toDoListContent">
-            <div class="toDoList">
 
+<input sec:authorize="isAuthenticated()" type="hidden" class="userNickname"
+       th:value="${#authentication.principal.userNickname}">
+
+<div class="main">
+  <!--quick menu-->
+  <aside id="quick">
+    <div class="form-check form-switch">
+      <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked"
+             onchange="disToggle()">
+      <img src="https://cdn-icons-png.flaticon.com/512/3176/3176366.png"
+           style="width: 20px; height: 20px">
+      <label class="form-check-label" for="flexSwitchCheckChecked">To do List</label>
+    </div>
+    <div class="form-check" id="toDoListContent">
+      <div class="toDoList">
+
+      </div>
+      <a th:href="@{/todo/list}" style="font-size: 8px; margin-left: 0px">
+        <img src="https://cdn-icons-png.flaticon.com/512/900/900834.png"
+             style="width: 15px; height: 15px">
+      </a>
+    </div>
+  </aside>
+
+  <!-- ======= Testimonials Section ======= -->
+  <section id="testimonials" class="testimonials">
+    <div class="container">
+      <div class="slides-3 swiper">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide">
+            <div class="testimonial-item">
+              <img
+                  src="https://shopping-phinf.pstatic.net/main_3300583/33005838635.20220626070123.jpg?type=w300"
+                  class="testimonial-img" alt="">
             </div>
-            <a th:href="@{/todo/list}" style="font-size: 8px; margin-left: 0px">
-                <img src="https://cdn-icons-png.flaticon.com/512/900/900834.png" style="width: 15px; height: 15px">
-            </a>
-        </div>
-    </aside>
-    <!-- header -->
-    <section th:replace="layout/header.html :: header"></section>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+          </div><!-- End testimonial item -->
 
-    <!-- ======= Testimonials Section ======= -->
-    <section id="testimonials" class="testimonials">
-        <div class="container">
-            <div class="slides-3 swiper">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide">
-                        <div class="testimonial-item">
-                            <img src="https://shopping-phinf.pstatic.net/main_3300583/33005838635.20220626070123.jpg?type=w300" class="testimonial-img" alt="">
-                        </div>
-                    </div><!-- End testimonial item -->
-
-                    <div class="swiper-slide">
-                        <div class="testimonial-item">
-                            <img src="https://shopping-phinf.pstatic.net/main_3246352/32463526779.20220527042908.jpg?type=w300" class="testimonial-img" alt="">
-                        </div>
-                    </div><!-- End testimonial item -->
-
-                    <div class="swiper-slide">
-                        <div class="testimonial-item">
-                            <img src="https://shopping-phinf.pstatic.net/main_3245543/32455430639.20220527070644.jpg?type=w300" class="testimonial-img" alt="">
-                        </div>
-                    </div><!-- End testimonial item -->
-
-                    <div class="swiper-slide">
-                        <div class="testimonial-item">
-                            <img src="https://shopping-phinf.pstatic.net/main_3247767/32477674953.20220527044845.jpg?type=w300" class="testimonial-img" alt="">
-                        </div>
-                    </div><!-- End testimonial item -->
-
-                    <div class="swiper-slide">
-                        <div class="testimonial-item">
-                            <img src="https://shopping-phinf.pstatic.net/main_3246926/32469262578.20220527022446.jpg?type=w300" class="testimonial-img" alt="">
-                        </div>
-                    </div><!-- End testimonial item -->
-
-                </div>
-                <div class="swiper-pagination"></div>
-
+          <div class="swiper-slide">
+            <div class="testimonial-item">
+              <img
+                  src="https://shopping-phinf.pstatic.net/main_3246352/32463526779.20220527042908.jpg?type=w300"
+                  class="testimonial-img" alt="">
             </div>
+          </div><!-- End testimonial item -->
 
-        </div>
-    </section><!-- End Testimonials Section -->
-
-    <section>
-        <div id="studyList" class="container">
-            <p style="margin-right: 10px">New study</p>
-            <p>
-                <a th:href="@{study/list}" style="font-size: 8px" >more></a>
-            </p>
-            <div id="latest-post">
-                <div id="post1" th:if="${studyList.size() >= 3}" th:each="i: ${#numbers.sequence(studyList.size()-1, studyList.size()-3, -1)}">
-
-                    <div>
-                        <article>
-                            <div class="post-img" id="studyBox1">
-                                <img id="studyCover1" th:src="${studyList[i].studyCoverUrl}">
-                                <div>
-                                    <p id="studyType1" class="post-category" th:text="${studyList[i].studyType}"></p>
-
-                                    <p class="title">
-                                        <a  th:href="@{/study/detail/{studyId}(studyId = ${studyList[i].getId})}"
-                                            th:text="${studyList[i].studyTitle}"></a>
-                                    </p>
-                                    <p id="studyStart1" th:text="${studyList[i].studyStart}"></p>
-                                    <p id="studyEnd_List1" th:text="'~' + ${studyList[i].studyEnd}"></p>
-                                </div>
-
-                            </div>
-                        </article>
-                    </div>
-                </div>
+          <div class="swiper-slide">
+            <div class="testimonial-item">
+              <img
+                  src="https://shopping-phinf.pstatic.net/main_3245543/32455430639.20220527070644.jpg?type=w300"
+                  class="testimonial-img" alt="">
             </div>
-            <p style="margin-right: 10px">Popular Study</p>
-            <p>
-                <a th:href="@{study/list}" style="font-size: 8px" >more></a>
-            </p>
-            <div id="all-post">
-                <div id="post" th:each="i: ${#numbers.sequence(studyList.size()-1, 0, -1)}">
-                    <div>
-                        <article>
-                            <div class="post-img" id="studyBox">
-                                <img id="studyCover" th:src="${studyList[i].studyCoverUrl}">
-                                <div>
-                                    <p id="studyType" class="post-category" th:text="${studyList[i].studyType}"></p>
+          </div><!-- End testimonial item -->
 
-                                    <p class="title">
-                                        <a  th:href="@{/study/detail/{studyId}(studyId = ${studyList[i].getId})}"
-                                            th:text="${studyList[i].studyTitle}"></a>
-                                    </p>
-                                    <p id="studyStart" th:text="${studyList[i].studyStart}"></p>
-                                    <p id="studyEnd_List" th:text="'~' + ${studyList[i].studyEnd}"></p>
-                                </div>
-
-                            </div>
-                        </article>
-                    </div><!-- End post list item -->
-
-                </div><!-- End blog posts list -->
+          <div class="swiper-slide">
+            <div class="testimonial-item">
+              <img
+                  src="https://shopping-phinf.pstatic.net/main_3247767/32477674953.20220527044845.jpg?type=w300"
+                  class="testimonial-img" alt="">
             </div>
+          </div><!-- End testimonial item -->
+
+          <div class="swiper-slide">
+            <div class="testimonial-item">
+              <img
+                  src="https://shopping-phinf.pstatic.net/main_3246926/32469262578.20220527022446.jpg?type=w300"
+                  class="testimonial-img" alt="">
+            </div>
+          </div><!-- End testimonial item -->
         </div>
-    </section><!-- End Blog Section -->
+        <div class="swiper-pagination"></div>
+      </div>
+    </div>
+  </section><!-- End Testimonials Section -->
+
+  <div sec:authorize="isAuthenticated()" class="mt-5">
+    <div class="d-flex align-items-baseline">
+      <p class="subHeading">내 스터디</p>
+      <a class="link"
+         th:href="@{|/user/mypage?userNickname=${#authentication.principal.userNickname}|}">더보기<i
+          class="bi bi-chevron-compact-right"></i></a>
+    </div>
+    <div>
+      <div th:if="${myStudyList.size() == 0}" style="margin-left : 70px; margin-top : 10px;">
+        참여한 스터디가 없습니다.
+      </div>
+      <div id = "myStudyList" class="carousel carousel-dark slide" th:if="${myStudyList.size() > 0}">
+        <div class="carousel-inner w-75 ms-auto me-auto">
+          <div class="carousel-item active studyList">
+            <table>
+              <tr>
+                <td th:each="study : ${#numbers.sequence(0, 2)}">
+                  <div th:replace="layout/myStudyListBox.html"></div>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div class="carousel-item studyList" th:if="${myStudyList.size() > 3}">
+            <table>
+              <tr>
+                <td th:each="study : ${#numbers.sequence(3, 5)}">
+                  <div th:replace="layout/myStudyListBox.html"></div>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div class="carousel-item studyList" th:if="${myStudyList.size() > 6}">
+            <table>
+              <tr>
+                <td th:each="study : ${#numbers.sequence(6, 8)}">
+                  <div th:replace="layout/myStudyListBox.html"></div>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#myStudyList"
+                data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#myStudyList"
+                data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-5">
+    <div class="d-flex align-items-baseline">
+      <p class="subHeading">신규 스터디</p>
+    </div>
+    <div>
+      <div th:if="${newStudyList.size() == 0}" style="margin-left : 70px; margin-top : 10px;">
+      등록된 스터디가 없습니다.
+      </div>
+      <div id = "newStudyList" class="carousel carousel-dark slide" th:if="${newStudyList.size() > 0}">
+        <div class="carousel-inner w-75 ms-auto me-auto">
+          <div class="carousel-item active studyList">
+            <table>
+              <tr>
+                <td th:each="study : ${#numbers.sequence(0, 2)}">
+                  <div th:replace="layout/newStudyListBox.html"></div>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div class="carousel-item studyList" th:if="${newStudyList.size() > 3}">
+            <table>
+              <tr>
+                <td th:each="study : ${#numbers.sequence(3, 5)}">
+                  <div th:replace="layout/newStudyListBox.html"></div>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div class="carousel-item studyList" th:if="${newStudyList.size() > 6}">
+            <table>
+              <tr>
+                <td th:each="study : ${#numbers.sequence(6, 8)}">
+                  <div th:replace="layout/newStudyListBox.html"></div>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#newStudyList"
+                data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#newStudyList"
+                data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <a th:id = "searchField"></a>
+  <div class = "mt-5 mb-5">
+    <div class="d-flex align-items-baseline">
+      <p class="subHeading">분야별 스터디</p>
+      <select class="form-select form-select-sm" id = "selectStudyTag" name="tag" onchange="changeField()">
+        <option th:selected="${#strings.equals(param.tag, '역사')}">역사</option>
+        <option th:selected="${#strings.equals(param.tag, '과학')}">과학</option>
+        <option th:selected="${#strings.equals(param.tag, '경제경영')}">경제경영</option>
+        <option th:selected="${#strings.equals(param.tag, '외국어')}">외국어</option>
+        <option th:selected="${#strings.equals(param.tag, 'IT')}">IT</option>
+        <option th:selected="${#strings.equals(param.tag, '수험서/자격증')}">수험서/자격증</option>
+        <option th:selected="${#strings.equals(param.tag, '자기계발')}">자기계발</option>
+        <option th:selected="${#strings.equals(param.tag, '참고서')}">참고서</option>
+        <option th:selected="${param.tag} == null or ${#strings.equals(param.tag, 'ALL')}">전체</option>
+        <option sec:authorize="isAuthenticated()" th:selected="${param.tag} == null or ${#strings.equals(param.tag, '추천')}">추천</option>
+      </select>
+      <a class="link" href="#" onclick="more()">더보기<i class="bi bi-chevron-compact-right"></i></a>
+    </div>
+    <div>
+      <div th:if="${fieldStudyList.size() == 0}" style="margin-left : 70px; margin-top : 10px;">
+        등록된 스터디가 없습니다.
+      </div>
+      <div id = "fieldStudyList" class="carousel carousel-dark slide" th:if="${fieldStudyList.size() > 0}">
+        <div class="carousel-inner w-75 ms-auto me-auto">
+          <div class="carousel-item active studyList">
+            <table>
+              <tr>
+                <td th:each="study : ${#numbers.sequence(0, 2)}">
+                  <div th:replace="layout/fieldStudyListBox.html"></div>
+                </td>
+              </tr>
+              <tr>
+                <td th:each="study : ${#numbers.sequence(3, 5)}">
+                  <div th:replace="layout/fieldStudyListBox.html"></div>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div class="carousel-item studyList" th:if="${fieldStudyList.size() > 6}">
+            <table>
+              <tr>
+                <td th:each="study : ${#numbers.sequence(6, 8)}">
+                  <div th:replace="layout/fieldStudyListBox.html"></div>
+                </td>
+              </tr>
+              <tr>
+                <td th:each="study : ${#numbers.sequence(9, 11)}">
+                  <div th:replace="layout/fieldStudyListBox.html"></div>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div class="carousel-item studyList" th:if="${fieldStudyList.size() > 12}">
+            <table>
+              <tr>
+                <td th:each="study : ${#numbers.sequence(12, 14)}">
+                  <div th:replace="layout/fieldStudyListBox.html"></div>
+                </td>
+              </tr>
+              <tr>
+                <td th:each="study : ${#numbers.sequence(15, 17)}">
+                  <div th:replace="layout/fieldStudyListBox.html"></div>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#fieldStudyList"
+                data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#fieldStudyList"
+                data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
 <!-- footer -->
 <div th:replace="layout/footer.html :: footer"></div>

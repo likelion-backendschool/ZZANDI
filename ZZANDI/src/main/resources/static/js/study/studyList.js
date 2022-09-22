@@ -52,9 +52,9 @@ function displayStudyList(studyList) {
                   </div>
       `;
       if (studyList.content[i+j].studyStatus == 'RECRUIT'){
-        html += `<div class = "text-center ms-2"><p id = "recruit">모집 중</p></div>`;
+        html += `<div class = "text-center ms-2"><p class = "recruit">모집 중</p></div>`;
       }else if (studyList.content[i + j].studyStatus == 'RECRUIT_COMPLETE') {
-        html += `<div class = "text-center ms-2"><p id = "recruit">모집 완료</p></div>`;
+        html += `<div class = "text-center ms-2"><p class = "recruit">모집 완료</p></div>`;
       }else if (studyList.content[i + j].studyStatus == 'PROGRESS') {
         html += `<div class = "text-center ms-2"><p id = "progress">진행 중</p></div>`;
       }else{

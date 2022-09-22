@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="studyListBox" class="studyBox" th:if="${fieldStudyList.size() - 1 >= study}">
+  <a th:href="@{|/study/detail/${fieldStudyList[study].studyId}|}">
+    <div class="studyBox-top d-flex align-items-baseline mb-1">
+      <p id="studyTag" th:text="|# ${fieldStudyList[study].studyTag}|"></p>
+      <div class="d-flex ms-auto">
+        <div id="people">
+          <i class="bi bi-people-fill me-1"></i><span
+            th:text="${fieldStudyList[study].acceptedStudyMember} + ' / ' + ${fieldStudyList[study].studyPeople}"></span>
+        </div>
+        <div th:if="${fieldStudyList[study].studyStatus == 'RECRUIT'}"
+             class="text-center ms-2"><p class="recruit">모집 중</p></div>
+        <div th:if="${fieldStudyList[study].studyStatus == 'RECRUIT_COMPLETE'}"
+             class="text-center ms-2"><p class="recruit">모집 완료</p></div>
+        <div th:if="${fieldStudyList[study].studyStatus == 'PROGRESS'}"
+             class="text-center ms-2"><p id="progress">진행 중</p></div>
+        <div th:if="${fieldStudyList[study].studyStatus == 'COMPLETE'}"
+             class="text-center ms-2"><p id="complete">완료</p></div>
+      </div>
+    </div>
+    <hr id="line">
+    <div class="d-flex mt-2">
+      <div>
+        <img class="studyCover" th:src="${fieldStudyList[study].studyCoverUrl}">
+      </div>
+      <div class="w-100">
+        <p id="studyTitle" th:text="${fieldStudyList[study].studyTitle}"></p>
+      </div>
+    </div>
+    <div class="studyBox-bottom">
+      <div id="date">
+        <i class="bi bi-calendar-range me-2"></i><span
+          th:text="${fieldStudyList[study].studyStart}"></span>
+        <i class="bi bi-arrow-right-short" style="font-size: 1.2rem;"></i> <span
+          th:text="${fieldStudyList[study].studyEnd}"></span>
+      </div>
+      <div id="view"><i class="bi bi-eye me-1"></i><span
+          th:text="${fieldStudyList[study].views}"></span></div>
+    </div>
+  </a>
+</div>
+</html>

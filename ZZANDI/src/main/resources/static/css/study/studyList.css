@@ -54,6 +54,22 @@ a{
   color : black;
 }
 
+a:hover {
+  color : black;
+}
+
+#selectStudyType{
+  box-shadow : none;
+}
+
+#selectStudyStatus{
+  box-shadow : none;
+}
+
+#selectStudyTag{
+  box-shadow : none;
+}
+
 .studyBox {
   width : 248px;
   height : 150px;
@@ -79,7 +95,7 @@ a{
   color : dimgray;
 }
 
-#recruit{
+.recruit{
   background-color: pink;
   color : darkred;
   padding : 2px;

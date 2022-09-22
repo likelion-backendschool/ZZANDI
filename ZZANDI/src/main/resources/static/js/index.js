@@ -1,9 +1,28 @@
 'use strict';
 
+function changeField() {
+    console.log("changeField 실행");
+    let selectStudyTag = document.getElementById("selectStudyTag");
+    let optionStudyTag = selectStudyTag.options[selectStudyTag.selectedIndex].text;
+    if (optionStudyTag == '전체') optionStudyTag = 'ALL';
+    console.log(optionStudyTag);
+
+    window.location.href = `?tag=` + optionStudyTag + `#searchField`;
+}
+
+function more() {
+    console.log("더보기 실행");
+    let selectStudyTag = document.getElementById("selectStudyTag");
+    let optionStudyTag = selectStudyTag.options[selectStudyTag.selectedIndex].text;
+    if (optionStudyTag == '전체' || optionStudyTag == '추천' ) optionStudyTag = 'ALL';
+
+    window.location.href = `/study/list?tag=` + optionStudyTag;
+}
+
+/*---------------------------------------------------------------------------
+투두리스트 사이드바 JS 코드
+ ---------------------------------------------------------------------------*/
 const toDoList = document.querySelector(".toDoList");
-// window.onload =() => {
-//     findAll('TOTAL');
-// }
 
 function findAll(type) {
     let url = (type === 'TOTAL') ? "/todo/list-data" : "/todo/list-data?type="+type;
@@ -58,3 +77,4 @@ function disToggle() {
         $('#toDoListContent').hide();
     }
 }
+

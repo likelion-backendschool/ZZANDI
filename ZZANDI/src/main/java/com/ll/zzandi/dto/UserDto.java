@@ -47,9 +47,14 @@ public class UserDto {
 
         public static Map<String,String> getInterest(){
             Map<String, String> interesting = new LinkedHashMap<>();
+            interesting.put("역사", "역사");
+            interesting.put("과학", "과학");
+            interesting.put("경제경영", "경제경영");
+            interesting.put("외국어", "외국어");
             interesting.put("IT", "IT");
-            interesting.put("NOVEL", "소설책");
-            interesting.put("ENGLISH", "영어");
+            interesting.put("수험서/자격증", "수험서/자격증");
+            interesting.put("자기계발", "자기계발");
+            interesting.put("참고서", "참고서");
             return interesting;
         }
     }

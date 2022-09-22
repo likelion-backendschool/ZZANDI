@@ -3,7 +3,7 @@
 <div th:fragment="studyListBox" class="studyBox" th:if="${newStudyList.size() - 1 >= study}">
   <a th:href="@{|/study/detail/${newStudyList[study].studyId}|}">
     <div class="studyBox-top d-flex align-items-baseline mb-1">
-      <p id="studyTag" th:text="${newStudyList[study].studyTag}"></p>
+      <p id="studyTag" th:text="|# ${newStudyList[study].studyTag}|"></p>
       <div class="d-flex ms-auto">
         <div id="people">
           <i class="bi bi-people-fill me-1"></i><span

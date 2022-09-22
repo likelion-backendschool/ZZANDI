@@ -31,7 +31,7 @@ public class MainController {
     private final ToDoListService toDoListService;
 
     @GetMapping("/")
-    public String main(@AuthenticationPrincipal User user, Model model){
+    public String main(@AuthenticationPrincipal User user, Model model, @RequestParam(defaultValue = "ALL") String tag){
         if(user != null) {
             List<ToDoList> toDoLists = toDoListService.findAllByUserAndType(user, ToDoType.DOING);
             model.addAttribute("toDoList", toDoLists);
@@ -42,7 +42,7 @@ public class MainController {
         List<StudyListDto> newStudyList = studyService.findNewStudyList();
         model.addAttribute("newStudyList", newStudyList);
 
-        List<StudyListDto> fieldStudyList = studyService.findFieldStudyList("ALL");
+        List<StudyListDto> fieldStudyList = studyService.findFieldStudyList(tag);
         model.addAttribute("fieldStudyList", fieldStudyList);
         return "index";
     }

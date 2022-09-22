@@ -1,14 +1,14 @@
 'use strict';
 
-const userNickname = document.querySelector(".userNickname");
+function changeField() {
+    console.log("changeField 실행");
+    let selectStudyTag = document.getElementById("selectStudyTag");
+    let optionStudyTag = selectStudyTag.options[selectStudyTag.selectedIndex].text;
+    if (optionStudyTag == '전체') optionStudyTag = 'ALL';
+    console.log(optionStudyTag);
 
-//     const myStudyLists = document.querySelectorAll(".myStudyList");
-//     for (let i = 0; i < myStudyLists.length; i++) {
-//         myStudyLists.item(i).innerHTML = `
-
-//         `;
-//     }
-// });
+    window.location.href = `?tag=` + optionStudyTag + `#searchField`;
+}
 
 /*---------------------------------------------------------------------------
 투두리스트 사이드바 JS 코드

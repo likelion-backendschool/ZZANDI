@@ -196,10 +196,11 @@
     </div>
   </div>
 
+  <a th:id = "searchField"></a>
   <div class = "mt-5 mb-5">
     <div class="d-flex align-items-baseline">
       <p class="subHeading">분야별 스터디</p>
-      <select class="form-select form-select-sm" id = "selectStudyTag" name="tag">
+      <select class="form-select form-select-sm" id = "selectStudyTag" name="tag" onchange="changeField()">
         <option th:selected="${#strings.equals(param.tag, '역사')}">역사</option>
         <option th:selected="${#strings.equals(param.tag, '과학')}">과학</option>
         <option th:selected="${#strings.equals(param.tag, '경제경영')}">경제경영</option>
@@ -213,7 +214,7 @@
       <a class="link" th:href="@{/study/list}">더보기<i class="bi bi-chevron-compact-right"></i></a>
     </div>
     <div>
-      <div th:if="${newStudyList.size() == 0}" style="margin-left : 70px; margin-top : 10px;">
+      <div th:if="${fieldStudyList.size() == 0}" style="margin-left : 70px; margin-top : 10px;">
         등록된 스터디가 없습니다.
       </div>
       <div id = "fieldStudyList" class="carousel carousel-dark slide" th:if="${fieldStudyList.size() > 0}">

@@ -338,4 +338,15 @@ public class StudyService {
             String.valueOf(study.getStudyType()), study.getViews(), study.getStudyCoverUrl(),
             String.valueOf(study.getStudyStatus()))).collect(Collectors.toList());
     }
+
+    public List<StudyListDto> findNewStudyList() {
+        PageRequest paging = PageRequest.of(0, 18, Sort.by(Sort.Direction.DESC, "id"));
+        List<Study> studyList = studyRepository.findNewStudyList(paging);
+
+        return studyList.stream().map(study -> new StudyListDto(study.getId(), study.getStudyTitle(),
+            study.getAcceptedStudyMember(), study.getStudyPeople(),
+            study.getStudyStart(), study.getStudyEnd(), study.getStudyTag(),
+            String.valueOf(study.getStudyType()), study.getViews(), study.getStudyCoverUrl(),
+            String.valueOf(study.getStudyStatus()))).collect(Collectors.toList());
+    }
 }

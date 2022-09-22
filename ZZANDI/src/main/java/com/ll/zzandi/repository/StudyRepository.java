@@ -37,4 +37,7 @@ public interface StudyRepository extends JpaRepository<Study, Integer> {
 
     @Query("select s from Study s join s.teamMateList teamMate where teamMate.user.id = :id")
     List<Study> findMyStudyList(@Param("id") Long id, Pageable pageable);
+
+    @Query("select s from Study s")
+    List<Study> findNewStudyList(Pageable pageable);
 }

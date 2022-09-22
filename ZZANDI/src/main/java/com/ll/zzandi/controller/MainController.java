@@ -31,18 +31,16 @@ public class MainController {
     private final ToDoListService toDoListService;
 
     @GetMapping("/")
-    public String main(@AuthenticationPrincipal User user, Model model, @RequestParam(defaultValue = "ALL") String st, @RequestParam(defaultValue = "ALL") String ss, @RequestParam(defaultValue = "") String kw){
-        if(user!=null) {
+    public String main(@AuthenticationPrincipal User user, Model model){
+        if(user != null) {
             List<ToDoList> toDoLists = toDoListService.findAllByUserAndType(user, ToDoType.DOING);
             model.addAttribute("toDoList", toDoLists);
-        }
-        List<Study> studyList = studyService.getList(st, ss, kw);
-        model.addAttribute("studyList", studyList);
-
-        if (user != null) {
             List<StudyListDto> myStudyList = studyService.findMyStudyList(user);
             model.addAttribute("myStudyList", myStudyList);
         }
+
+        List<StudyListDto> newStudyList = studyService.findNewStudyList();
+        model.addAttribute("newStudyList", newStudyList);
         return "index";
     }
 

@@ -7,140 +7,319 @@
 <div th:replace="layout/head.html :: head"></div>
 <script defer type="text/javascript" th:src="@{/js/index.js}"></script>
 <link rel="stylesheet" th:href="@{/css/mainPage.css}">
+<link rel="stylesheet" th:href="@{/css/study/studyList.css}">
 
 <!-- header -->
 <section th:replace="layout/header.html :: header"></section>
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <body>
 
-<input sec:authorize="isAuthenticated()" type="hidden" class = "userNickname" th:value="${#authentication.principal.userNickname}">
+<input sec:authorize="isAuthenticated()" type="hidden" class="userNickname"
+       th:value="${#authentication.principal.userNickname}">
 
-<div class = "main">
-    <!--quick menu-->
-    <aside id="quick">
-        <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" onchange="disToggle()">
-            <img src="https://cdn-icons-png.flaticon.com/512/3176/3176366.png" style="width: 20px; height: 20px">
-            <label class="form-check-label" for="flexSwitchCheckChecked">To do List</label>
-        </div>
-        <div class="form-check" id="toDoListContent">
-            <div class="toDoList">
-
-            </div>
-            <a th:href="@{/todo/list}" style="font-size: 8px; margin-left: 0px">
-                <img src="https://cdn-icons-png.flaticon.com/512/900/900834.png" style="width: 15px; height: 15px">
-            </a>
-        </div>
-    </aside>
-
-    <!-- ======= Testimonials Section ======= -->
-    <section id="testimonials" class="testimonials">
-        <div class="container">
-            <div class="slides-3 swiper">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide">
-                        <div class="testimonial-item">
-                            <img src="https://shopping-phinf.pstatic.net/main_3300583/33005838635.20220626070123.jpg?type=w300" class="testimonial-img" alt="">
-                        </div>
-                    </div><!-- End testimonial item -->
-
-                    <div class="swiper-slide">
-                        <div class="testimonial-item">
-                            <img src="https://shopping-phinf.pstatic.net/main_3246352/32463526779.20220527042908.jpg?type=w300" class="testimonial-img" alt="">
-                        </div>
-                    </div><!-- End testimonial item -->
-
-                    <div class="swiper-slide">
-                        <div class="testimonial-item">
-                            <img src="https://shopping-phinf.pstatic.net/main_3245543/32455430639.20220527070644.jpg?type=w300" class="testimonial-img" alt="">
-                        </div>
-                    </div><!-- End testimonial item -->
-
-                    <div class="swiper-slide">
-                        <div class="testimonial-item">
-                            <img src="https://shopping-phinf.pstatic.net/main_3247767/32477674953.20220527044845.jpg?type=w300" class="testimonial-img" alt="">
-                        </div>
-                    </div><!-- End testimonial item -->
-
-                    <div class="swiper-slide">
-                        <div class="testimonial-item">
-                            <img src="https://shopping-phinf.pstatic.net/main_3246926/32469262578.20220527022446.jpg?type=w300" class="testimonial-img" alt="">
-                        </div>
-                    </div><!-- End testimonial item -->
-                </div>
-                <div class="swiper-pagination"></div>
-            </div>
-        </div>
-    </section><!-- End Testimonials Section -->
-
-    <div sec:authorize="isAuthenticated()" class = "myStudyListBox">
-        <div class="d-flex align-items-baseline">
-            <p class="subHeading">내 스터디</p>
-            <a class="link" th:href="@{study/list}">더보기<i class="bi bi-chevron-compact-right"></i></a>
-        </div>
-        <div class = "myStudyList">
-            <!--        내 스터디 목록-->
-        </div>
+<div class="main">
+  <!--quick menu-->
+  <aside id="quick">
+    <div class="form-check form-switch">
+      <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked"
+             onchange="disToggle()">
+      <img src="https://cdn-icons-png.flaticon.com/512/3176/3176366.png"
+           style="width: 20px; height: 20px">
+      <label class="form-check-label" for="flexSwitchCheckChecked">To do List</label>
     </div>
+    <div class="form-check" id="toDoListContent">
+      <div class="toDoList">
 
-    <section>
-        <div id="studyList" class="container">
-            <p style="margin-right: 10px">New study</p>
-            <p>
-                <a th:href="@{study/list}" style="font-size: 8px" >more></a>
-            </p>
-            <div id="latest-post">
-                <div id="post1" th:if="${studyList.size() >= 3}" th:each="i: ${#numbers.sequence(studyList.size()-1, studyList.size()-3, -1)}">
+      </div>
+      <a th:href="@{/todo/list}" style="font-size: 8px; margin-left: 0px">
+        <img src="https://cdn-icons-png.flaticon.com/512/900/900834.png"
+             style="width: 15px; height: 15px">
+      </a>
+    </div>
+  </aside>
 
-                    <div>
-                        <article>
-                            <div class="post-img" id="studyBox1">
-                                <img id="studyCover1" th:src="${studyList[i].studyCoverUrl}">
-                                <div>
-                                    <p id="studyType1" class="post-category" th:text="${studyList[i].studyType}"></p>
-
-                                    <p class="title">
-                                        <a  th:href="@{/study/detail/{studyId}(studyId = ${studyList[i].getId})}"
-                                            th:text="${studyList[i].studyTitle}"></a>
-                                    </p>
-                                    <p id="studyStart1" th:text="${studyList[i].studyStart}"></p>
-                                    <p id="studyEnd_List1" th:text="'~' + ${studyList[i].studyEnd}"></p>
-                                </div>
-
-                            </div>
-                        </article>
-                    </div>
-                </div>
+  <!-- ======= Testimonials Section ======= -->
+  <section id="testimonials" class="testimonials">
+    <div class="container">
+      <div class="slides-3 swiper">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide">
+            <div class="testimonial-item">
+              <img
+                  src="https://shopping-phinf.pstatic.net/main_3300583/33005838635.20220626070123.jpg?type=w300"
+                  class="testimonial-img" alt="">
             </div>
-            <p style="margin-right: 10px">Popular Study</p>
-            <p>
-                <a th:href="@{study/list}" style="font-size: 8px" >more></a>
-            </p>
-            <div id="all-post">
-                <div id="post" th:each="i: ${#numbers.sequence(studyList.size()-1, 0, -1)}">
-                    <div>
-                        <article>
-                            <div class="post-img" id="studyBox">
-                                <img id="studyCover" th:src="${studyList[i].studyCoverUrl}">
-                                <div>
-                                    <p id="studyType" class="post-category" th:text="${studyList[i].studyType}"></p>
+          </div><!-- End testimonial item -->
 
-                                    <p class="title">
-                                        <a  th:href="@{/study/detail/{studyId}(studyId = ${studyList[i].getId})}"
-                                            th:text="${studyList[i].studyTitle}"></a>
-                                    </p>
-                                    <p id="studyStart" th:text="${studyList[i].studyStart}"></p>
-                                    <p id="studyEnd_List" th:text="'~' + ${studyList[i].studyEnd}"></p>
-                                </div>
-
-                            </div>
-                        </article>
-                    </div><!-- End post list item -->
-
-                </div><!-- End blog posts list -->
+          <div class="swiper-slide">
+            <div class="testimonial-item">
+              <img
+                  src="https://shopping-phinf.pstatic.net/main_3246352/32463526779.20220527042908.jpg?type=w300"
+                  class="testimonial-img" alt="">
             </div>
+          </div><!-- End testimonial item -->
+
+          <div class="swiper-slide">
+            <div class="testimonial-item">
+              <img
+                  src="https://shopping-phinf.pstatic.net/main_3245543/32455430639.20220527070644.jpg?type=w300"
+                  class="testimonial-img" alt="">
+            </div>
+          </div><!-- End testimonial item -->
+
+          <div class="swiper-slide">
+            <div class="testimonial-item">
+              <img
+                  src="https://shopping-phinf.pstatic.net/main_3247767/32477674953.20220527044845.jpg?type=w300"
+                  class="testimonial-img" alt="">
+            </div>
+          </div><!-- End testimonial item -->
+
+          <div class="swiper-slide">
+            <div class="testimonial-item">
+              <img
+                  src="https://shopping-phinf.pstatic.net/main_3246926/32469262578.20220527022446.jpg?type=w300"
+                  class="testimonial-img" alt="">
+            </div>
+          </div><!-- End testimonial item -->
         </div>
-    </section><!-- End Blog Section -->
+        <div class="swiper-pagination"></div>
+      </div>
+    </div>
+  </section><!-- End Testimonials Section -->
+
+  <div sec:authorize="isAuthenticated()" class="mt-3">
+    <div class="d-flex align-items-baseline">
+      <p class="subHeading">내 스터디</p>
+      <a class="link"
+         th:href="@{|/user/mypage?userNickname=${#authentication.principal.userNickname}|}">더보기<i
+          class="bi bi-chevron-compact-right"></i></a>
+    </div>
+    <div class="myStudyListBox">
+      <div th:if="${myStudyList.size() == 0}" style="margin-left : 70px; margin-top : 10px;">
+        참여한 스터디가 없습니다.
+      </div>
+      <div id="carouselExampleDark" class="carousel carousel-dark slide"
+           th:if="${myStudyList.size() > 0}">
+        <div class="carousel-inner w-75 ms-auto me-auto">
+          <div class="carousel-item active studyList">
+            <table>
+              <tr>
+                <td th:each="myStudy : ${#numbers.sequence(0, 2)}">
+                  <div class="studyBox" th:if="${myStudyList.size() - 1 >= myStudy}">
+                    <a th:href="@{|/study/detail/${myStudyList[myStudy].studyId}|}">
+                      <div class="studyBox-top d-flex align-items-baseline mb-1">
+                        <p id="studyTag" th:text="${myStudyList[myStudy].studyTag}"></p>
+                        <div class="d-flex ms-auto">
+                          <div id="people">
+                            <i class="bi bi-people-fill me-1"></i><span
+                              th:text="${myStudyList[myStudy].acceptedStudyMember} + ' / ' + ${myStudyList[myStudy].studyPeople}"></span>
+                          </div>
+                          <div th:if="${myStudyList[myStudy].studyStatus == 'RECRUIT'}"
+                               class="text-center ms-2"><p class="recruit">모집 중</p></div>
+                          <div th:if="${myStudyList[myStudy].studyStatus == 'RECRUIT_COMPLETE'}"
+                               class="text-center ms-2"><p class="recruit">모집 완료</p></div>
+                          <div th:if="${myStudyList[myStudy].studyStatus == 'PROGRESS'}"
+                               class="text-center ms-2"><p id="progress">진행 중</p></div>
+                          <div th:if="${myStudyList[myStudy].studyStatus == 'COMPLETE'}"
+                               class="text-center ms-2"><p id="complete">완료</p></div>
+                        </div>
+                      </div>
+                      <hr id="line">
+                      <div class="d-flex mt-2">
+                        <div>
+                          <img class="studyCover" th:src="${myStudyList[myStudy].studyCoverUrl}">
+                        </div>
+                        <div class="w-100">
+                          <p id="studyTitle" th:text="${myStudyList[myStudy].studyTitle}"></p>
+                        </div>
+                      </div>
+                      <div class="studyBox-bottom">
+                        <div id="date">
+                          <i class="bi bi-calendar-range me-2"></i><span
+                            th:text="${myStudyList[myStudy].studyStart}"></span>
+                          <i class="bi bi-arrow-right-short" style="font-size: 1.2rem;"></i> <span
+                            th:text="${myStudyList[myStudy].studyEnd}"></span>
+                        </div>
+                        <div id="view"><i class="bi bi-eye me-1"></i><span
+                            th:text="${myStudyList[myStudy].views}"></span></div>
+                      </div>
+                    </a>
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div class="carousel-item studyList" th:if="${myStudyList.size() - 1 >= 3}">
+            <table>
+              <tr>
+                <td th:each="myStudy : ${#numbers.sequence(3, 5)}">
+                  <div class="studyBox" th:if="${myStudyList.size() - 1 >= myStudy}">
+                    <a th:href="@{|/study/detail/${myStudyList[myStudy].studyId}|}">
+                      <div class="studyBox-top d-flex align-items-baseline mb-1">
+                        <p id="studyTag" th:text="${myStudyList[myStudy].studyTag}"></p>
+                        <div class="d-flex ms-auto">
+                          <div id="people">
+                            <i class="bi bi-people-fill me-1"></i><span
+                              th:text="${myStudyList[myStudy].acceptedStudyMember} + ' / ' + ${myStudyList[myStudy].studyPeople}"></span>
+                          </div>
+                          <div th:if="${myStudyList[myStudy].studyStatus == 'RECRUIT'}"
+                               class="text-center ms-2"><p class="recruit">모집 중</p></div>
+                          <div th:if="${myStudyList[myStudy].studyStatus == 'RECRUIT_COMPLETE'}"
+                               class="text-center ms-2"><p class="recruit">모집 완료</p></div>
+                          <div th:if="${myStudyList[myStudy].studyStatus == 'PROGRESS'}"
+                               class="text-center ms-2"><p id="progress">진행 중</p></div>
+                          <div th:if="${myStudyList[myStudy].studyStatus == 'COMPLETE'}"
+                               class="text-center ms-2"><p id="complete">완료</p></div>
+                        </div>
+                      </div>
+                      <hr id="line">
+                      <div class="d-flex mt-2">
+                        <div>
+                          <img class="studyCover" th:src="${myStudyList[myStudy].studyCoverUrl}">
+                        </div>
+                        <div class="w-100">
+                          <p id="studyTitle" th:text="${myStudyList[myStudy].studyTitle}"></p>
+                        </div>
+                      </div>
+                      <div class="studyBox-bottom">
+                        <div id="date">
+                          <i class="bi bi-calendar-range me-2"></i><span
+                            th:text="${myStudyList[myStudy].studyStart}"></span>
+                          <i class="bi bi-arrow-right-short" style="font-size: 1.2rem;"></i> <span
+                            th:text="${myStudyList[myStudy].studyEnd}"></span>
+                        </div>
+                        <div id="view"><i class="bi bi-eye me-1"></i><span
+                            th:text="${myStudyList[myStudy].views}"></span></div>
+                      </div>
+                    </a>
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div class="carousel-item studyList" th:if="${myStudyList.size() - 1 >= 7}">
+            <table>
+              <tr>
+                <td th:each="myStudy : ${#numbers.sequence(6, 8)}">
+                  <div class="studyBox" th:if="${myStudyList.size() - 1 >= myStudy}">
+                    <a th:href="@{|/study/detail/${myStudyList[myStudy].studyId}|}">
+                      <div class="studyBox-top d-flex align-items-baseline mb-1">
+                        <p id="studyTag" th:text="${myStudyList[myStudy].studyTag}"></p>
+                        <div class="d-flex ms-auto">
+                          <div id="people">
+                            <i class="bi bi-people-fill me-1"></i><span
+                              th:text="${myStudyList[myStudy].acceptedStudyMember} + ' / ' + ${myStudyList[myStudy].studyPeople}"></span>
+                          </div>
+                          <div th:if="${myStudyList[myStudy].studyStatus == 'RECRUIT'}"
+                               class="text-center ms-2"><p class="recruit">모집 중</p></div>
+                          <div th:if="${myStudyList[myStudy].studyStatus == 'RECRUIT_COMPLETE'}"
+                               class="text-center ms-2"><p class="recruit">모집 완료</p></div>
+                          <div th:if="${myStudyList[myStudy].studyStatus == 'PROGRESS'}"
+                               class="text-center ms-2"><p id="progress">진행 중</p></div>
+                          <div th:if="${myStudyList[myStudy].studyStatus == 'COMPLETE'}"
+                               class="text-center ms-2"><p id="complete">완료</p></div>
+                        </div>
+                      </div>
+                      <hr id="line">
+                      <div class="d-flex mt-2">
+                        <div>
+                          <img class="studyCover" th:src="${myStudyList[myStudy].studyCoverUrl}">
+                        </div>
+                        <div class="w-100">
+                          <p id="studyTitle" th:text="${myStudyList[myStudy].studyTitle}"></p>
+                        </div>
+                      </div>
+                      <div class="studyBox-bottom">
+                        <div id="date">
+                          <i class="bi bi-calendar-range me-2"></i><span
+                            th:text="${myStudyList[myStudy].studyStart}"></span>
+                          <i class="bi bi-arrow-right-short" style="font-size: 1.2rem;"></i> <span
+                            th:text="${myStudyList[myStudy].studyEnd}"></span>
+                        </div>
+                        <div id="view"><i class="bi bi-eye me-1"></i><span
+                            th:text="${myStudyList[myStudy].views}"></span></div>
+                      </div>
+                    </a>
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark"
+                data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark"
+                data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!--  <section>-->
+  <!--    <div id="studyList" class="container">-->
+  <!--      <p style="margin-right: 10px">New study</p>-->
+  <!--      <p>-->
+  <!--        <a th:href="@{study/list}" style="font-size: 8px">more></a>-->
+  <!--      </p>-->
+  <!--      <div id="latest-post">-->
+  <!--        <div id="post1" th:if="${studyList.size() >= 3}"-->
+  <!--             th:each="i: ${#numbers.sequence(studyList.size()-1, studyList.size()-3, -1)}">-->
+
+  <!--          <div>-->
+  <!--            <article>-->
+  <!--              <div class="post-img" id="studyBox1">-->
+  <!--                <img id="studyCover1" th:src="${studyList[i].studyCoverUrl}">-->
+  <!--                <div>-->
+  <!--                  <p id="studyType1" class="post-category" th:text="${studyList[i].studyType}"></p>-->
+
+  <!--                  <p class="title">-->
+  <!--                    <a th:href="@{/study/detail/{studyId}(studyId = ${studyList[i].getId})}"-->
+  <!--                       th:text="${studyList[i].studyTitle}"></a>-->
+  <!--                  </p>-->
+  <!--                  <p id="studyStart1" th:text="${studyList[i].studyStart}"></p>-->
+  <!--                  <p id="studyEnd_List1" th:text="'~' + ${studyList[i].studyEnd}"></p>-->
+  <!--                </div>-->
+
+  <!--              </div>-->
+  <!--            </article>-->
+  <!--          </div>-->
+  <!--        </div>-->
+  <!--      </div>-->
+  <!--      <p style="margin-right: 10px">Popular Study</p>-->
+  <!--      <p>-->
+  <!--        <a th:href="@{study/list}" style="font-size: 8px">more></a>-->
+  <!--      </p>-->
+  <!--      <div id="all-post">-->
+  <!--        <div id="post" th:each="i: ${#numbers.sequence(studyList.size()-1, 0, -1)}">-->
+  <!--          <div>-->
+  <!--            <article>-->
+  <!--              <div class="post-img" id="studyBox">-->
+  <!--                <img id="studyCover" th:src="${studyList[i].studyCoverUrl}">-->
+  <!--                <div>-->
+  <!--                  <p id="studyType" class="post-category" th:text="${studyList[i].studyType}"></p>-->
+
+  <!--                  <p class="title">-->
+  <!--                    <a th:href="@{/study/detail/{studyId}(studyId = ${studyList[i].getId})}"-->
+  <!--                       th:text="${studyList[i].studyTitle}"></a>-->
+  <!--                  </p>-->
+  <!--                  <p id="studyStart" th:text="${studyList[i].studyStart}"></p>-->
+  <!--                  <p id="studyEnd_List" th:text="'~' + ${studyList[i].studyEnd}"></p>-->
+  <!--                </div>-->
+
+  <!--              </div>-->
+  <!--            </article>-->
+  <!--          </div>&lt;!&ndash; End post list item &ndash;&gt;-->
+
+  <!--        </div>&lt;!&ndash; End blog posts list &ndash;&gt;-->
+  <!--      </div>-->
+  <!--    </div>-->
+  <!--  </section>&lt;!&ndash; End Blog Section &ndash;&gt;-->
 </div>
 <!-- footer -->
 <div th:replace="layout/footer.html :: footer"></div>

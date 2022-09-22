@@ -15,21 +15,18 @@ body{
   min-height: 700px;
 }
 
-.myStudyListBox{
-  margin : 0 auto;
-  max-width: 1000px;
-  padding : 15px;
-}
-
 .subHeading{
   font-size : 21px;
   color : darkslategray;
   font-weight: bold;
-  margin-right: 10px;
+  margin-left: 70px;
+  margin-right : 10px;
+  margin-bottom : 0px;
 }
 
 .link {
   font-size: 13px;
+  color: forestgreen;
 }
 
 /*sidebar*/

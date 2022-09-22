@@ -38,6 +38,11 @@ public class MainController {
         }
         List<Study> studyList = studyService.getList(st, ss, kw);
         model.addAttribute("studyList", studyList);
+
+        if (user != null) {
+            List<StudyListDto> myStudyList = studyService.findMyStudyList(user);
+            model.addAttribute("myStudyList", myStudyList);
+        }
         return "index";
     }
 

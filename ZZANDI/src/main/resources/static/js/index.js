@@ -1,8 +1,14 @@
 'use strict';
 
-const myStudyList = document.querySelector(".myStudyList");
+const userNickname = document.querySelector(".userNickname");
 
-const userNickname = document.querySelector(".userNickname").value;
+//     const myStudyLists = document.querySelectorAll(".myStudyList");
+//     for (let i = 0; i < myStudyLists.length; i++) {
+//         myStudyLists.item(i).innerHTML = `
+
+//         `;
+//     }
+// });
 
 /*---------------------------------------------------------------------------
 투두리스트 사이드바 JS 코드

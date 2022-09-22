@@ -228,4 +228,8 @@ public class StudyController {
         }
         return null;
     }
+    @RequestMapping("study/studyBookSearch")
+    public String search() {
+        return "/study/studyBookSearch";
+    }
 }

@@ -44,12 +44,6 @@ public class MainController {
         return "index";
     }
 
-    @GetMapping("/myStudyList")
-    @ResponseBody
-    public List<StudyListDto> findMyStudyList(@AuthenticationPrincipal User user) {
-        return studyService.findMyStudyList(user);
-    }
-
     //TODO 예외처리 확인하기 위한 단순한 테스트 api 추후 삭제 예정
     @GetMapping("/test")
     public String test(){

@@ -340,7 +340,7 @@ public class StudyService {
     }
 
     public List<StudyListDto> findNewStudyList() {
-        PageRequest paging = PageRequest.of(0, 18, Sort.by(Sort.Direction.DESC, "id"));
+        PageRequest paging = PageRequest.of(0, 9, Sort.by(Sort.Direction.DESC, "id"));
         List<Study> studyList = studyRepository.findNewStudyList(paging);
 
         return studyList.stream().map(study -> new StudyListDto(study.getId(), study.getStudyTitle(),

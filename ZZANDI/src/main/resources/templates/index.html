@@ -88,171 +88,53 @@
     </div>
   </section><!-- End Testimonials Section -->
 
-  <div sec:authorize="isAuthenticated()" class="mt-3">
+  <div sec:authorize="isAuthenticated()" class="mt-5">
     <div class="d-flex align-items-baseline">
       <p class="subHeading">내 스터디</p>
       <a class="link"
          th:href="@{|/user/mypage?userNickname=${#authentication.principal.userNickname}|}">더보기<i
           class="bi bi-chevron-compact-right"></i></a>
     </div>
-    <div class="myStudyListBox">
+    <div>
       <div th:if="${myStudyList.size() == 0}" style="margin-left : 70px; margin-top : 10px;">
         참여한 스터디가 없습니다.
       </div>
-      <div id="carouselExampleDark" class="carousel carousel-dark slide"
-           th:if="${myStudyList.size() > 0}">
+      <div id = "myStudyList" class="carousel carousel-dark slide" th:if="${myStudyList.size() > 0}">
         <div class="carousel-inner w-75 ms-auto me-auto">
           <div class="carousel-item active studyList">
             <table>
               <tr>
-                <td th:each="myStudy : ${#numbers.sequence(0, 2)}">
-                  <div class="studyBox" th:if="${myStudyList.size() - 1 >= myStudy}">
-                    <a th:href="@{|/study/detail/${myStudyList[myStudy].studyId}|}">
-                      <div class="studyBox-top d-flex align-items-baseline mb-1">
-                        <p id="studyTag" th:text="${myStudyList[myStudy].studyTag}"></p>
-                        <div class="d-flex ms-auto">
-                          <div id="people">
-                            <i class="bi bi-people-fill me-1"></i><span
-                              th:text="${myStudyList[myStudy].acceptedStudyMember} + ' / ' + ${myStudyList[myStudy].studyPeople}"></span>
-                          </div>
-                          <div th:if="${myStudyList[myStudy].studyStatus == 'RECRUIT'}"
-                               class="text-center ms-2"><p class="recruit">모집 중</p></div>
-                          <div th:if="${myStudyList[myStudy].studyStatus == 'RECRUIT_COMPLETE'}"
-                               class="text-center ms-2"><p class="recruit">모집 완료</p></div>
-                          <div th:if="${myStudyList[myStudy].studyStatus == 'PROGRESS'}"
-                               class="text-center ms-2"><p id="progress">진행 중</p></div>
-                          <div th:if="${myStudyList[myStudy].studyStatus == 'COMPLETE'}"
-                               class="text-center ms-2"><p id="complete">완료</p></div>
-                        </div>
-                      </div>
-                      <hr id="line">
-                      <div class="d-flex mt-2">
-                        <div>
-                          <img class="studyCover" th:src="${myStudyList[myStudy].studyCoverUrl}">
-                        </div>
-                        <div class="w-100">
-                          <p id="studyTitle" th:text="${myStudyList[myStudy].studyTitle}"></p>
-                        </div>
-                      </div>
-                      <div class="studyBox-bottom">
-                        <div id="date">
-                          <i class="bi bi-calendar-range me-2"></i><span
-                            th:text="${myStudyList[myStudy].studyStart}"></span>
-                          <i class="bi bi-arrow-right-short" style="font-size: 1.2rem;"></i> <span
-                            th:text="${myStudyList[myStudy].studyEnd}"></span>
-                        </div>
-                        <div id="view"><i class="bi bi-eye me-1"></i><span
-                            th:text="${myStudyList[myStudy].views}"></span></div>
-                      </div>
-                    </a>
-                  </div>
+                <td th:each="study : ${#numbers.sequence(0, 2)}">
+                  <div th:replace="layout/myStudyListBox.html"></div>
                 </td>
               </tr>
             </table>
           </div>
-          <div class="carousel-item studyList" th:if="${myStudyList.size() - 1 >= 3}">
+          <div class="carousel-item studyList" th:if="${myStudyList.size() > 3}">
             <table>
               <tr>
-                <td th:each="myStudy : ${#numbers.sequence(3, 5)}">
-                  <div class="studyBox" th:if="${myStudyList.size() - 1 >= myStudy}">
-                    <a th:href="@{|/study/detail/${myStudyList[myStudy].studyId}|}">
-                      <div class="studyBox-top d-flex align-items-baseline mb-1">
-                        <p id="studyTag" th:text="${myStudyList[myStudy].studyTag}"></p>
-                        <div class="d-flex ms-auto">
-                          <div id="people">
-                            <i class="bi bi-people-fill me-1"></i><span
-                              th:text="${myStudyList[myStudy].acceptedStudyMember} + ' / ' + ${myStudyList[myStudy].studyPeople}"></span>
-                          </div>
-                          <div th:if="${myStudyList[myStudy].studyStatus == 'RECRUIT'}"
-                               class="text-center ms-2"><p class="recruit">모집 중</p></div>
-                          <div th:if="${myStudyList[myStudy].studyStatus == 'RECRUIT_COMPLETE'}"
-                               class="text-center ms-2"><p class="recruit">모집 완료</p></div>
-                          <div th:if="${myStudyList[myStudy].studyStatus == 'PROGRESS'}"
-                               class="text-center ms-2"><p id="progress">진행 중</p></div>
-                          <div th:if="${myStudyList[myStudy].studyStatus == 'COMPLETE'}"
-                               class="text-center ms-2"><p id="complete">완료</p></div>
-                        </div>
-                      </div>
-                      <hr id="line">
-                      <div class="d-flex mt-2">
-                        <div>
-                          <img class="studyCover" th:src="${myStudyList[myStudy].studyCoverUrl}">
-                        </div>
-                        <div class="w-100">
-                          <p id="studyTitle" th:text="${myStudyList[myStudy].studyTitle}"></p>
-                        </div>
-                      </div>
-                      <div class="studyBox-bottom">
-                        <div id="date">
-                          <i class="bi bi-calendar-range me-2"></i><span
-                            th:text="${myStudyList[myStudy].studyStart}"></span>
-                          <i class="bi bi-arrow-right-short" style="font-size: 1.2rem;"></i> <span
-                            th:text="${myStudyList[myStudy].studyEnd}"></span>
-                        </div>
-                        <div id="view"><i class="bi bi-eye me-1"></i><span
-                            th:text="${myStudyList[myStudy].views}"></span></div>
-                      </div>
-                    </a>
-                  </div>
+                <td th:each="study : ${#numbers.sequence(3, 5)}">
+                  <div th:replace="layout/myStudyListBox.html"></div>
                 </td>
               </tr>
             </table>
           </div>
-          <div class="carousel-item studyList" th:if="${myStudyList.size() - 1 >= 7}">
+          <div class="carousel-item studyList" th:if="${myStudyList.size() > 6}">
             <table>
               <tr>
-                <td th:each="myStudy : ${#numbers.sequence(6, 8)}">
-                  <div class="studyBox" th:if="${myStudyList.size() - 1 >= myStudy}">
-                    <a th:href="@{|/study/detail/${myStudyList[myStudy].studyId}|}">
-                      <div class="studyBox-top d-flex align-items-baseline mb-1">
-                        <p id="studyTag" th:text="${myStudyList[myStudy].studyTag}"></p>
-                        <div class="d-flex ms-auto">
-                          <div id="people">
-                            <i class="bi bi-people-fill me-1"></i><span
-                              th:text="${myStudyList[myStudy].acceptedStudyMember} + ' / ' + ${myStudyList[myStudy].studyPeople}"></span>
-                          </div>
-                          <div th:if="${myStudyList[myStudy].studyStatus == 'RECRUIT'}"
-                               class="text-center ms-2"><p class="recruit">모집 중</p></div>
-                          <div th:if="${myStudyList[myStudy].studyStatus == 'RECRUIT_COMPLETE'}"
-                               class="text-center ms-2"><p class="recruit">모집 완료</p></div>
-                          <div th:if="${myStudyList[myStudy].studyStatus == 'PROGRESS'}"
-                               class="text-center ms-2"><p id="progress">진행 중</p></div>
-                          <div th:if="${myStudyList[myStudy].studyStatus == 'COMPLETE'}"
-                               class="text-center ms-2"><p id="complete">완료</p></div>
-                        </div>
-                      </div>
-                      <hr id="line">
-                      <div class="d-flex mt-2">
-                        <div>
-                          <img class="studyCover" th:src="${myStudyList[myStudy].studyCoverUrl}">
-                        </div>
-                        <div class="w-100">
-                          <p id="studyTitle" th:text="${myStudyList[myStudy].studyTitle}"></p>
-                        </div>
-                      </div>
-                      <div class="studyBox-bottom">
-                        <div id="date">
-                          <i class="bi bi-calendar-range me-2"></i><span
-                            th:text="${myStudyList[myStudy].studyStart}"></span>
-                          <i class="bi bi-arrow-right-short" style="font-size: 1.2rem;"></i> <span
-                            th:text="${myStudyList[myStudy].studyEnd}"></span>
-                        </div>
-                        <div id="view"><i class="bi bi-eye me-1"></i><span
-                            th:text="${myStudyList[myStudy].views}"></span></div>
-                      </div>
-                    </a>
-                  </div>
+                <td th:each="study : ${#numbers.sequence(6, 8)}">
+                  <div th:replace="layout/myStudyListBox.html"></div>
                 </td>
               </tr>
             </table>
           </div>
         </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark"
+        <button class="carousel-control-prev" type="button" data-bs-target="#myStudyList"
                 data-bs-slide="prev">
           <span class="carousel-control-prev-icon" aria-hidden="true"></span>
           <span class="visually-hidden">Previous</span>
         </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark"
+        <button class="carousel-control-next" type="button" data-bs-target="#myStudyList"
                 data-bs-slide="next">
           <span class="carousel-control-next-icon" aria-hidden="true"></span>
           <span class="visually-hidden">Next</span>
@@ -261,65 +143,58 @@
     </div>
   </div>
 
-  <!--  <section>-->
-  <!--    <div id="studyList" class="container">-->
-  <!--      <p style="margin-right: 10px">New study</p>-->
-  <!--      <p>-->
-  <!--        <a th:href="@{study/list}" style="font-size: 8px">more></a>-->
-  <!--      </p>-->
-  <!--      <div id="latest-post">-->
-  <!--        <div id="post1" th:if="${studyList.size() >= 3}"-->
-  <!--             th:each="i: ${#numbers.sequence(studyList.size()-1, studyList.size()-3, -1)}">-->
-
-  <!--          <div>-->
-  <!--            <article>-->
-  <!--              <div class="post-img" id="studyBox1">-->
-  <!--                <img id="studyCover1" th:src="${studyList[i].studyCoverUrl}">-->
-  <!--                <div>-->
-  <!--                  <p id="studyType1" class="post-category" th:text="${studyList[i].studyType}"></p>-->
-
-  <!--                  <p class="title">-->
-  <!--                    <a th:href="@{/study/detail/{studyId}(studyId = ${studyList[i].getId})}"-->
-  <!--                       th:text="${studyList[i].studyTitle}"></a>-->
-  <!--                  </p>-->
-  <!--                  <p id="studyStart1" th:text="${studyList[i].studyStart}"></p>-->
-  <!--                  <p id="studyEnd_List1" th:text="'~' + ${studyList[i].studyEnd}"></p>-->
-  <!--                </div>-->
-
-  <!--              </div>-->
-  <!--            </article>-->
-  <!--          </div>-->
-  <!--        </div>-->
-  <!--      </div>-->
-  <!--      <p style="margin-right: 10px">Popular Study</p>-->
-  <!--      <p>-->
-  <!--        <a th:href="@{study/list}" style="font-size: 8px">more></a>-->
-  <!--      </p>-->
-  <!--      <div id="all-post">-->
-  <!--        <div id="post" th:each="i: ${#numbers.sequence(studyList.size()-1, 0, -1)}">-->
-  <!--          <div>-->
-  <!--            <article>-->
-  <!--              <div class="post-img" id="studyBox">-->
-  <!--                <img id="studyCover" th:src="${studyList[i].studyCoverUrl}">-->
-  <!--                <div>-->
-  <!--                  <p id="studyType" class="post-category" th:text="${studyList[i].studyType}"></p>-->
-
-  <!--                  <p class="title">-->
-  <!--                    <a th:href="@{/study/detail/{studyId}(studyId = ${studyList[i].getId})}"-->
-  <!--                       th:text="${studyList[i].studyTitle}"></a>-->
-  <!--                  </p>-->
-  <!--                  <p id="studyStart" th:text="${studyList[i].studyStart}"></p>-->
-  <!--                  <p id="studyEnd_List" th:text="'~' + ${studyList[i].studyEnd}"></p>-->
-  <!--                </div>-->
-
-  <!--              </div>-->
-  <!--            </article>-->
-  <!--          </div>&lt;!&ndash; End post list item &ndash;&gt;-->
-
-  <!--        </div>&lt;!&ndash; End blog posts list &ndash;&gt;-->
-  <!--      </div>-->
-  <!--    </div>-->
-  <!--  </section>&lt;!&ndash; End Blog Section &ndash;&gt;-->
+  <div class="mt-5">
+    <div class="d-flex align-items-baseline">
+      <p class="subHeading">신규 스터디</p>
+      <a class="link" th:href="@{/study/list}">더보기<i class="bi bi-chevron-compact-right"></i></a>
+    </div>
+    <div>
+      <div th:if="${newStudyList.size() == 0}" style="margin-left : 70px; margin-top : 10px;">
+        참여한 스터디가 없습니다.
+      </div>
+      <div id = "newStudyList" class="carousel carousel-dark slide" th:if="${newStudyList.size() > 0}">
+        <div class="carousel-inner w-75 ms-auto me-auto">
+          <div class="carousel-item active studyList">
+            <table>
+              <tr>
+                <td th:each="study : ${#numbers.sequence(0, 2)}">
+                  <div th:replace="layout/newStudyListBox.html"></div>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div class="carousel-item studyList" th:if="${newStudyList.size() > 3}">
+            <table>
+              <tr>
+                <td th:each="study : ${#numbers.sequence(3, 5)}">
+                  <div th:replace="layout/newStudyListBox.html"></div>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div class="carousel-item studyList" th:if="${newStudyList.size() > 6}">
+            <table>
+              <tr>
+                <td th:each="study : ${#numbers.sequence(6, 8)}">
+                  <div th:replace="layout/newStudyListBox.html"></div>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#newStudyList"
+                data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#newStudyList"
+                data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
 <!-- footer -->
 <div th:replace="layout/footer.html :: footer"></div>

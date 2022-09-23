@@ -70,8 +70,11 @@ public class TeamMateService {
 
   public void updateTeamMateRate(User user, Long studyId, int rateInput) {
     Study study = studyRepository.findById(studyId).orElseThrow(()->new StudyException(ErrorType.NOT_FOUND));
+    if (study.getStudyStatus() != StudyStatus.PROGRESS) {
+      throw new TeamMateException(ErrorType.NOT_LEADER);
+    }
     TeamMate teamMate = teamMateRepository.findByUserAndAndStudy(user, study).orElseThrow(()-> new TeamMateException(ErrorType.NOT_FOUND));
-    
+
     teamMate.setTeamRate(rateInput);
     teamMateRepository.save(teamMate);
   }

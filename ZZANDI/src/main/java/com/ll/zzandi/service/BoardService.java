@@ -39,10 +39,23 @@ public class BoardService {
 
         return boardList.map(board -> {
             List<File> fileList = fileRepository.findFileByBoardId(board.getId());
-            return new BoardListDto(board.getId(), board.getUser().getUserId(), board.getCategory(),
-                    board.getTitle(), board.getUser().getUserNickname(),
-                    board.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd")), board.getViews(),
-                    board.getHeart(), page, board.getComments().size(), board.getUser().getUserprofileUrl(), fileList);
+            int existCount = fileRepository.findExistFileCount(board.getId());
+
+            return BoardListDto.builder()
+                    .boardId(board.getId())
+                    .userId(board.getUser().getUserId())
+                    .category(board.getCategory())
+                    .title(board.getTitle())
+                    .writer(board.getUser().getUserNickname())
+                    .createdDate(board.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm")))
+                    .views(board.getViews())
+                    .heart(board.getHeart())
+                    .pageNum(page)
+                    .count(board.getComments().size())
+                    .profile(board.getUser().getUserprofileUrl())
+                    .files(fileList)
+                    .existCount(existCount)
+                    .build();
         });
     }
 
@@ -60,10 +73,23 @@ public class BoardService {
 
         return boardList.map(board -> {
             List<File> fileList = fileRepository.findFileByBoardId(board.getId());
-            return new BoardListDto(board.getId(), board.getUser().getUserId(), board.getCategory(),
-                    board.getTitle(), board.getUser().getUserNickname(),
-                    board.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd")), board.getViews(),
-                    board.getHeart(), page, board.getComments().size(), board.getUser().getUserprofileUrl(), fileList);
+            int existCount = fileRepository.findExistFileCount(board.getId());
+
+            return BoardListDto.builder()
+                    .boardId(board.getId())
+                    .userId(board.getUser().getUserId())
+                    .category(board.getCategory())
+                    .title(board.getTitle())
+                    .writer(board.getUser().getUserNickname())
+                    .createdDate(board.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm")))
+                    .views(board.getViews())
+                    .heart(board.getHeart())
+                    .pageNum(page)
+                    .count(board.getComments().size())
+                    .profile(board.getUser().getUserprofileUrl())
+                    .files(fileList)
+                    .existCount(existCount)
+                    .build();
         });
     }
 
@@ -101,6 +127,12 @@ public class BoardService {
             fileRepository.deleteById(file.getId());
             fileRepository.updateFileStatus(file.getId());
         }
+    }
+
+    @Transactional
+    public void deleteFileTest(Long fileId) {
+        fileRepository.deleteById(fileId);
+        fileRepository.updateFileStatus(fileId);
     }
 
     public Board findByBoardId(Long boardId) {
@@ -144,7 +176,15 @@ public class BoardService {
 
     public BoardUpdateFormDto updateBoardForm(Long id, int page) {
         Board board = boardRepository.findById(id).orElse(null);
-        return new BoardUpdateFormDto(board.getId(), board.getCategory(), board.getTitle(), board.getUser().getUserNickname(), board.getContent(), page, board.getUpdatedDate());
+        return BoardUpdateFormDto.builder()
+                .id(board.getId())
+                .category(board.getCategory())
+                .title(board.getTitle())
+                .writer(board.getUser().getUserNickname())
+                .content(board.getContent())
+                .pageNum(page)
+                .updatedDate(board.getUpdatedDate())
+                .build();
     }
 
     @Transactional

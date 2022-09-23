@@ -87,7 +87,6 @@ function displayItems(items, category, filter, keyword) {
 function createBoardList(item) {
     const title = (item.title.length > 30) ? `${item.title.substr(0, 30)}...` : `${item.title}`;
     const color = colors.get(item.category);
-    const fileSize = item.files.length;
 
     return `<tr>
                 <td class="board-table-category" style="color: ${color}; width: 70px;">
@@ -96,7 +95,7 @@ function createBoardList(item) {
                 <td class="board-table-title">
                     <a href="/${studyId}/board/detail/${item.boardId}/${item.pageNum}">${title}</a>
                     <span class="board-table-title__comment">${item.count}</span>
-                    <i class="fa-solid fa-file-image" style="color: var(--comment-count-color); display: ${fileSize === 0 ? 'none' : 'inline'}"></i>
+                    <i class="fa-solid fa-file-image" style="color: var(--comment-count-color); display: ${item.existCount === 0 ? 'none' : 'inline'}"></i>
                 </td>
                 <td>
                     <div class="d-flex mx-2">

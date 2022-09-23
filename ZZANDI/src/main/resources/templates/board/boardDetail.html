@@ -31,6 +31,7 @@
     <input type="hidden" class="user-uuid" th:value="${userUUID}"> <!-- 현재 로그인 한 유저 식별자 -->
     <input type="hidden" class="board-id" th:value="${boardDetail.boardId}"> <!-- 현재 게시글 번호 -->
     <input type="hidden" class="board-content" th:value="${boardDetail.content}">
+    <input type="hidden" class="study-id" th:value="${studyId}">
 
     <div>
         <div class="d-flex align-items-center mb-2">
@@ -72,18 +73,7 @@
         </div>
         <div class="d-flex flex-column border rounded p-2 mt-3" th:if="${!files.isEmpty()}">
             <span style="font-weight: bold;" class="my-1">첨부파일</span>
-            <span></span>
             <div class="file-box d-flex">
-                <div th:each="file : ${files}">
-                    <div style="position: relative;">
-                        <a th:href="@{/{studyId}/board/download/{fileId} (studyId = ${studyId}, fileId = ${file.fileId})}">
-                            <img th:src="@{${file.url}}" alt="upload file" class="file-img"/>
-                        </a>
-                        <a th:onclick="|deleteFile(${studyId}, ${file.fileId})|" class="file-del-btn" style="cursor: pointer">
-                            <i class="fa-sharp fa-solid fa-square-xmark" style="object-fit: cover; position: absolute; font-size: 16px; color: var(--bs-gray); right: 8px; top: 2px;"></i>
-                        </a>
-                    </div>
-                </div>
             </div>
         </div>
     </div>

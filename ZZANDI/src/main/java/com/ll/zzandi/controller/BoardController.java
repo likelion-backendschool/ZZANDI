@@ -65,11 +65,16 @@ public class BoardController {
         return boardService.findBoardListPaging2(page, studyId, filter, keyword);
     }
 
+    @GetMapping("/file-list/{boardId}")
+    @ResponseBody
+    public List<File> createFileList(@PathVariable Long boardId) {
+        return fileRepository.findFileByBoardId(boardId);
+    }
+
     @PostMapping("/delete/file/{fileId}")
     @ResponseBody
     public void deleteAttachment(@PathVariable Long fileId) {
-        System.out.println("fileId = " + fileId);
-        System.out.println("여기서 파일 삭제 처리!!");
+        boardService.deleteFileTest(fileId);
     }
 
     @GetMapping("/detail/{boardId}/{page}")

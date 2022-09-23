@@ -14,6 +14,9 @@ public interface FileRepository extends JpaRepository<File,Long> {
     @Query(value = "select * from file where table_id = :boardId and table_type ='BOARD'", nativeQuery = true)
     List<File> findFileByBoardId(@Param("boardId") Long boardId);
 
+    @Query("select count(f) from File f where f.tableId = :boardId and f.tableType = 'BOARD' and f.fileStatus = 'EXIST'")
+    int findExistFileCount(@Param("boardId") Long boardId);
+
     @Modifying
     @Query(value = "update file set file_stauts = 'DELETE' where id = :fileId", nativeQuery = true)
     void updateFileStatus(@Param("fileId") Long fileId);

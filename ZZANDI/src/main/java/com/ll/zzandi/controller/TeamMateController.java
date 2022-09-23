@@ -41,6 +41,15 @@ public class TeamMateController {
   }
 
   /*
+  개인 진도율 수정
+  */
+  @GetMapping("/update/{rateInput}")
+  @ResponseBody
+  public void updateTeamMateRate(@AuthenticationPrincipal User user, @PathVariable Long studyId, @PathVariable int rateInput, Model model) {
+    teamMateService.updateTeamMateRate(user, studyId, rateInput);
+  }
+
+  /*
   스터디 참가 거절 및 취소
    */
   @PostMapping("/delete/{teamMateId}")

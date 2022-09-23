@@ -5,6 +5,7 @@ import com.ll.zzandi.dto.BookDto;
 import com.ll.zzandi.dto.LectureDto;
 import com.ll.zzandi.dto.StudyDto;
 import com.ll.zzandi.dto.study.StudyDetailDto;
+import com.ll.zzandi.dto.study.StudyListDto;
 import com.ll.zzandi.enumtype.StudyStatus;
 import com.ll.zzandi.enumtype.StudyType;
 import com.ll.zzandi.enumtype.TeamMateStatus;
@@ -23,7 +24,12 @@ import java.time.LocalDateTime;
 import java.time.Period;
 
 import com.ll.zzandi.util.aws.ImageUploadService;
+import java.util.Collections;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,7 +53,7 @@ public class StudyService {
     private final CommentRepository commentRepository;
     private final ImageUploadService imageUploadService;
     private final FileRepository fileRepository;
-    private final TeamMateRepository teamMateRepository;
+    private final InterestRepository interestRepository;
 
     public Study createStudyWithBook(@Valid StudyDto studyDto, Book book, User user) {
         Study study = new Study(user, studyDto.getStudyTitle(), book, null, StudyType.BOOK,
@@ -187,6 +193,30 @@ public class StudyService {
         }
     }
 
+    public Page<StudyListDto> findStudyListPaging(String st, String ss, String tag, String kw, int page) {
+        PageRequest paging = PageRequest.of(page, 12, Sort.by(Sort.Direction.DESC, "id"));
+
+        if (st.equals("ALL")) st = null;
+        if (ss.equals("ALL")) ss = null;
+        if (tag.equals("ALL")) tag = null;
+
+        StudyType stObj = null;
+        StudyStatus ssObj = null;
+        if (st != null) {
+            stObj = StudyType.valueOf(st);
+        }
+        if (ss != null) {
+            ssObj = StudyStatus.valueOf(ss);
+        }
+
+        Page<Study> studyList = studyRepository.searchByKwAndOption(kw, stObj, ssObj, tag, paging);
+        return studyList.map(
+            study -> new StudyListDto(study.getId(), study.getStudyTitle(), study.getAcceptedStudyMember(), study.getStudyPeople(),
+                study.getStudyStart(), study.getStudyEnd(), study.getStudyTag(),
+                String.valueOf(study.getStudyType()), study.getViews(), study.getStudyCoverUrl(),
+                String.valueOf(study.getStudyStatus())));
+    }
+
     public void updateCoverImg(MultipartFile multipartFile, long studyUUID) throws IOException {
         Study study=studyRepository.findById(studyUUID).orElseThrow(()->new StudyException(ErrorType.NOT_FOUND));
 
@@ -262,6 +292,7 @@ public class StudyService {
         }
     }
 
+
     public int getStudyPeriod(Long studyId) {
         Study studies = findByStudyId(studyId).orElseThrow(() -> new StudyException(ErrorType.NOT_FOUND));
 
@@ -296,5 +327,58 @@ public class StudyService {
             .orElseThrow(() -> new StudyException(ErrorType.NOT_FOUND));
         study.setViews(study.getViews() + 1);
         studyRepository.save(study);
+    }
+
+    public List<StudyListDto> findMyStudyList(User user) {
+        PageRequest paging = PageRequest.of(0, 9, Sort.by(Sort.Direction.DESC, "id"));
+        List<Study> studyList = studyRepository.findMyStudyList(user.getId(), paging);
+
+        return studyList.stream().map(study -> new StudyListDto(study.getId(), study.getStudyTitle(),
+            study.getAcceptedStudyMember(), study.getStudyPeople(),
+            study.getStudyStart(), study.getStudyEnd(), study.getStudyTag(),
+            String.valueOf(study.getStudyType()), study.getViews(), study.getStudyCoverUrl(),
+            String.valueOf(study.getStudyStatus()))).collect(Collectors.toList());
+    }
+
+    public List<StudyListDto> findNewStudyList() {
+        PageRequest paging = PageRequest.of(0, 9, Sort.by(Sort.Direction.DESC, "id"));
+        List<Study> studyList = studyRepository.findNewStudyList(paging);
+
+        return studyList.stream().map(study -> new StudyListDto(study.getId(), study.getStudyTitle(),
+            study.getAcceptedStudyMember(), study.getStudyPeople(),
+            study.getStudyStart(), study.getStudyEnd(), study.getStudyTag(),
+            String.valueOf(study.getStudyType()), study.getViews(), study.getStudyCoverUrl(),
+            String.valueOf(study.getStudyStatus()))).collect(Collectors.toList());
+    }
+
+    public List<StudyListDto> findFieldStudyList(String tag) {
+        PageRequest paging = PageRequest.of(0, 18, Sort.by(Sort.Direction.DESC, "id"));
+
+        if (tag.equals("ALL")) tag = null;
+
+        List<Study> studyList = studyRepository.findFieldStudyList(tag, paging);
+
+        return studyList.stream().map(study -> new StudyListDto(study.getId(), study.getStudyTitle(),
+            study.getAcceptedStudyMember(), study.getStudyPeople(),
+            study.getStudyStart(), study.getStudyEnd(), study.getStudyTag(),
+            String.valueOf(study.getStudyType()), study.getViews(), study.getStudyCoverUrl(),
+            String.valueOf(study.getStudyStatus()))).collect(Collectors.toList());
+    }
+
+    public List<StudyListDto> findInterestStudyList(User user) {
+        PageRequest paging = PageRequest.of(0, 18, Sort.by(Sort.Direction.DESC, "id"));
+        List<Interest> interestList = interestRepository.findByUser(user);
+        Collections.shuffle(interestList);
+        String interest1 = interestList.size() > 0 ? interestList.get(0).getInterest() : null;
+        String interest2 = interestList.size() > 1 ? interestList.get(1).getInterest() : null;
+        String interest3 = interestList.size() > 2 ? interestList.get(2).getInterest() : null;
+
+        List<Study> studyList = studyRepository.findInterestStudyList(interest1 , interest2, interest3, paging);
+
+        return studyList.stream().map(study -> new StudyListDto(study.getId(), study.getStudyTitle(),
+            study.getAcceptedStudyMember(), study.getStudyPeople(),
+            study.getStudyStart(), study.getStudyEnd(), study.getStudyTag(),
+            String.valueOf(study.getStudyType()), study.getViews(), study.getStudyCoverUrl(),
+            String.valueOf(study.getStudyStatus()))).collect(Collectors.toList());
     }
 }

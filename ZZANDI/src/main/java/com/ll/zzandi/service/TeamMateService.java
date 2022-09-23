@@ -13,12 +13,14 @@ import com.ll.zzandi.exception.TeamMateException;
 import com.ll.zzandi.exception.UserApplicationException;
 import com.ll.zzandi.repository.StudyRepository;
 import com.ll.zzandi.repository.TeamMateRepository;
+import com.ll.zzandi.repository.UserRepository;
 import com.ll.zzandi.util.mail.EmailMessage;
 import com.ll.zzandi.util.mail.EmailService;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -29,6 +31,8 @@ public class TeamMateService {
   private final StudyRepository studyRepository;
   private final EmailService emailService;
   private final StudyService studyService;
+  private final UserService userService;
+  private final UserRepository userRepository;
 
   public void createTeamMate(User user, Long studyId) {
     Study study = studyRepository.findById(studyId).orElseThrow(()-> new StudyException(ErrorType.NOT_FOUND));
@@ -54,7 +58,7 @@ public class TeamMateService {
     TeamMate teamMate = teamMateRepository.findById(teamMateId).orElseThrow(()-> new TeamMateException(ErrorType.NOT_FOUND));
 
     // 팀장만 수락이 가능
-    if(study.getUser() == user) {
+    if(study.getUser().getId().equals(user.getId())) {
       teamMate.setTeamMateStatus(TeamMateStatus.ACCEPTED);
       teamMateRepository.save(teamMate);
       sendAcceptedEmail(study, teamMate);
@@ -64,16 +68,27 @@ public class TeamMateService {
     studyService.updateRecruitStudyStatus(study);
   }
 
+  public void updateTeamMateRate(User user, Long studyId, int rateInput) {
+    Study study = studyRepository.findById(studyId).orElseThrow(()->new StudyException(ErrorType.NOT_FOUND));
+    if (study.getStudyStatus() != StudyStatus.PROGRESS) {
+      throw new TeamMateException(ErrorType.NOT_LEADER);
+    }
+    TeamMate teamMate = teamMateRepository.findByUserAndAndStudy(user, study).orElseThrow(()-> new TeamMateException(ErrorType.NOT_FOUND));
+
+    teamMate.setTeamRate(rateInput);
+    teamMateRepository.save(teamMate);
+  }
+
   public boolean deleteTeamMate(User user, Long studyId, Long teamMateId) {
     Study study = studyRepository.findById(studyId).orElseThrow(()->new StudyException(ErrorType.NOT_FOUND));
     TeamMate teamMate = teamMateRepository.findById(teamMateId).orElseThrow(()-> new TeamMateException(ErrorType.NOT_FOUND));
 
     boolean isLeader = false;
 
-    if(study.getUser() == user) {
+    if(study.getUser().getId().equals(user.getId())) {
       teamMateRepository.delete(teamMate);
       isLeader = true;
-    } else if (user == teamMate.getUser()) {
+    } else if (user.getId().equals(teamMate.getUser().getId())) {
       teamMateRepository.delete(teamMate);
     }
     return isLeader;
@@ -84,7 +99,7 @@ public class TeamMateService {
     TeamMate teamMate = teamMateRepository.findByUserAndAndStudy(user, study).orElseThrow(()-> new TeamMateException(ErrorType.NOT_FOUND));
 
     if((study.getStudyStatus() == StudyStatus.RECRUIT
-        || study.getStudyStatus() == StudyStatus.RECRUIT_COMPLETE) && study.getUser() != user) {
+        || study.getStudyStatus() == StudyStatus.RECRUIT_COMPLETE) && !study.getUser().getId().equals(user.getId())) {
       teamMateRepository.delete(teamMate);
       study.setAcceptedStudyMember(study.getAcceptedStudyMember()-1);
       studyService.updateRecruitStudyStatus(study);
@@ -100,7 +115,7 @@ public class TeamMateService {
     TeamMate delegateTeamMate = teamMateRepository.findById(teamMateId).orElseThrow(()-> new TeamMateException(ErrorType.NOT_FOUND));
     User delegateUser = delegateTeamMate.getUser();
 
-    if (study.getUser() == user && study.getUser() != delegateUser) {
+    if (study.getUser().getId().equals(user.getId()) && !study.getUser().getId().equals(delegateUser.getId())) {
       teamMate.setTeamMateDelegate(TeamMateDelegate.DELEGATE);
       delegateTeamMate.setTeamMateDelegate(TeamMateDelegate.WAITING);
       sendDelegateEmail(study, user, delegateUser);
@@ -227,5 +242,19 @@ public class TeamMateService {
       isDelete = true;
     }
     return Arrays.asList(isParticipation, isTeamMate, isDelete);
+  }
+
+  @Scheduled(cron = "0 0 0 * * *")
+  public void updateDailyCheck() {
+    List<TeamMate> teamMates = teamMateRepository.findAll();
+    for (TeamMate teamMate : teamMates) {
+      if(teamMate.getTeamMateDailyCheck().equals("X")){
+        teamMate.getUser().setUserZzandi( teamMate.getUser().getUserZzandi()-1);
+      } else {
+        teamMate.getUser().setUserZzandi( teamMate.getUser().getUserZzandi()+1);
+      }
+      teamMate.setTeamMateDailyCheck("X");
+      teamMateRepository.save(teamMate);
+    }
   }
 }

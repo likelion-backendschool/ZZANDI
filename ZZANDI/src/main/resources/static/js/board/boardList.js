@@ -6,12 +6,12 @@ const currPage = document.querySelector(".page").value;
 const studyId = document.querySelector(".study-id").value;
 
 const colors = new Map();
-colors.set('전체', '#42a5f5');
-colors.set('공지', '#d50000');
-colors.set('자유', '#ff6f00');
-colors.set('정보', '#ffb2dd');
-colors.set('질문', '#2e7d32');
-colors.set('자랑', '#003c8f');
+colors.set('전체', 'blue');
+colors.set('공지', 'red');
+colors.set('자유', 'brown');
+colors.set('정보', 'yellow');
+colors.set('질문', 'green');
+colors.set('자랑', 'pink');
 
 for(let category of document.querySelectorAll(".categories li > a")) {
     category.style.color = colors.get(category.innerHTML);
@@ -52,21 +52,19 @@ function search() {
 }
 
 const searchBtn = document.querySelector(".search-btn");
-searchBtn.addEventListener('click', () => {
-    search();
-});
+searchBtn.addEventListener('click', () => search());
 
 const keywordInput = document.querySelector("#keyword");
 keywordInput.addEventListener('keypress', (e) => {
     if (e.code === 'Enter') {
         search();
     }
-})
+});
 
 const categories = document.querySelector(".categories");
 const categoryArr = document.querySelectorAll(".li-category");
 categories.addEventListener("click", (e) => {
-    if (e.target.tagName !== 'A') {
+    if (e.target.tagName !== 'BUTTON') {
         return false;
     }
 
@@ -87,14 +85,17 @@ function displayItems(items, category, filter, keyword) {
 }
 
 function createBoardList(item) {
-    const title = (item.title.length > 50) ? `${item.title.substr(0, 50)}...` : `${item.title}`;
+    const title = (item.title.length > 30) ? `${item.title.substr(0, 30)}...` : `${item.title}`;
     const color = colors.get(item.category);
 
     return `<tr>
-                <td class="board-table-category" style="color: ${color};"><a onclick="findByPage(0, '${item.category}', ${studyId})">${item.category}</a></td>
+                <td class="board-table-category" style="color: ${color}; width: 70px;">
+                        <button class="w-btn-sm w-btn-${color}" type="button">${item.category}</button>
+                </td>
                 <td class="board-table-title">
                     <a href="/${studyId}/board/detail/${item.boardId}/${item.pageNum}">${title}</a>
                     <span class="board-table-title__comment">${item.count}</span>
+                    <i class="fa-solid fa-file-image" style="color: var(--comment-count-color); display: ${item.existCount === 0 ? 'none' : 'inline'}"></i>
                 </td>
                 <td>
                     <div class="d-flex mx-2">

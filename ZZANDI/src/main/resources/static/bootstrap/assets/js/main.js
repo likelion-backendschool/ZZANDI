@@ -340,13 +340,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
 $('#toDoListContent').hide();
 
-function dis() {
-  if ($('#toDoListContent').css('display') == 'none') {
-    $('#toDoListContent').show();
-  } else {
-    $('#toDoListContent').hide();
-  }
-}
+// function dis() {
+//   if ($('#toDoListContent').css('display') == 'none') {
+//     $('#toDoListContent').show();
+//   } else {
+//     $('#toDoListContent').hide();
+//   }
+// }
 $(document).ready(function() {
   $("input[name=checkTodo]").on('click', function() {
     if ( $(this).prop('checked') ) {
@@ -358,7 +358,7 @@ $(document).ready(function() {
 });
 
 //업로드
-$("#studyCoverUrl").change(function(e) {
+$("input[name=uploadButton]").on('click', function(e) {
 
   let studyId = document.getElementById("study-id").value;
   const fileInput = document.getElementById("studyCoverUrl");
@@ -402,3 +402,8 @@ $("input[name=studyCoverUrl]").off().on("change", function(){
     }
   }
 });
+
+const url = location.search;
+const params = new URLSearchParams(url);
+const param = params.get('kw');
+document.querySelector(".keyword").value = param;

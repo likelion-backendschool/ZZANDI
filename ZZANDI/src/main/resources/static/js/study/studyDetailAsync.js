@@ -7,6 +7,7 @@ const studyDetail_right = document.querySelector(".studyDetail-right");
 const studyDetail_bottom = document.querySelector(".studyDetail-bottom");
 const acceptedTeamMate = document.querySelector(".acceptedTeamMate");
 const studyView = document.querySelector(".studyView");
+const updateRate = document.querySelector(".updateRate")
 
 const studyId = document.querySelector(".studyId").value;
 const userNickname = document.querySelector(".userNickname").value;
@@ -19,6 +20,7 @@ let studyDetail;
 
 window.onload = async () => {
   teamMateList = await findTeamMateList(studyId, userNickname);
+  console.log(teamMateList);
   checkTeamMate(teamMateList);
   studyDetail = await findStudyDetail(studyId);
   displayStudy(studyDetail, teamMateList);
@@ -28,6 +30,8 @@ let isParticipation = false;
 let isTeamMate = false;
 let isDelete = false;
 let cnt = 0;
+
+const patternList = Array.of('clouds', 'bees', 'dominos', 'pie', 'piano', 'crosses', 'floor', 'wiggle', 'bubbles', 'ticTac', 'zigZag', 'stripes', 'food', 'aztec')
 
 async function findStudyDetail(studyId) {
   console.log("findStudyDetail 실행");
@@ -43,7 +47,7 @@ function displayStudy(data, teamMateList) {
     <div>
       <p id = "studyTag"># ${data.studyTag}</p>
       <a href="/study/coverUpload/${studyId}">
-        <img class="studyCover flex-shrink-0" src="${data.studyCoverUrl}">
+        <img class="studyCover flex-shrink-0" style="border-radius: 1.3em" src="${data.studyCoverUrl}">
       </a>
   `;
 
@@ -184,11 +188,13 @@ function displayStudy(data, teamMateList) {
   // studyDetail-right[end]
 
   // studyDetail-bottom[start]
+  const widthShowZzandi = Math.round(calcRate(studyPeriod, studyDays));
+  const widthShowAchieve = Math.round(calcTotalTeamRate(data, teamMateList));
   html = '';
   html += ``;
   if (data.studyStatus == 'PROGRESS') {
     if (data.studyType == 'BOOK') {
-      html += `<p class = "recommend"><i class="bi bi-bar-chart-fill" style="font-size: 1.3rem; margin-right : 5px;"></i>오늘의 권장 진도율</p>`;
+      html += `<p class = "recommend"><i class="bi bi-bar-chart-fill" style="font-size: 1.3rem; margin-right : 5px;"></i>오늘의 권장 진도율 : ~ p.${studyRecommend}</p>`;
     } else {
       html += `<p class = "recommend"><i class="bi bi-bar-chart-fill" style="font-size: 1.3rem; margin-right : 5px;"></i>오늘의 권장 진도율 : ~ ${studyRecommend}강</p>`;
     }
@@ -198,22 +204,39 @@ function displayStudy(data, teamMateList) {
       <div class="progress">
         <div class="zzandi shadow jupiter"></div>
       </div>
-      <p class = "mb-0 ms-3">${studyRecommend}</p>
+      <p class = "mb-0 ms-3">${widthShowZzandi}%</p>
     </div>
     
     <p class = "studyRate"><i class="bi bi-bar-chart-fill" style="font-size: 1.3rem; margin-right : 5px;"></i>우리의 달성률</p>
     <div class = "d-flex mt-3 mb-3 align-items-center">
       <div class="progress">
-        <div class="zzandi shadow jupiter2"></div>
+        <div class="achieve shadow jupiter2"></div>
       </div>
-      <p class = "mb-0 ms-3">${data.studyRate}%</p>
+      <p class = "mb-0 ms-3">${widthShowAchieve}%</p>
     </div>
     `;
   }
 
   studyDetail_bottom.innerHTML = html;
+  // 권장 진도율
+  const zzandi = document.querySelector(".zzandi");
+  function showRate() {
+    const width = calcRate(studyPeriod, studyDays);
+    if (zzandi) {
+      zzandi.style.width = `${width}%`;
+    }
+  }
+  showRate();
+
+  // 팀 달성률
+  const achieve = document.querySelector(".achieve");
+  const achieveRate = calcTotalTeamRate(data, teamMateList);
+  if (achieve) {
+    achieve.style.width = `${achieveRate}%`;
+  }
   // studyDetail-bottom[end]
 
+  // studyView[start]
   html = '';
 
   html += `
@@ -223,6 +246,37 @@ function displayStudy(data, teamMateList) {
   </div>
   `;
   studyView.innerHTML = html;
+  //studyView[end]
+
+  const rateSubmit = document.querySelector("#rateSubmit");
+  if (data.studyStatus == 'PROGRESS') {
+    rateSubmit.style.display = `block`;
+  }
+  //updateRate[start]
+  html= ``;
+
+  html += `
+  <form id="study_input" style="display:none" onsubmit="submitModifyRate(this, studyId, userNickname, studyDetail); return false;">
+    <input name="rate" type="text" class="form-control updateRateForm">
+    <button type="submit" id="status" value="modify" class="btn">수정</button>
+  </form>
+  `
+
+  updateRate.innerHTML = html;
+
+  const updateRateForm = document.querySelector(".updateRateForm");
+
+  let TeamRate = getTeamRate();
+
+  if (data.studyType == 'BOOK') {
+    updateRateForm.placeholder = "나의 진도 : " + TeamRate + " 페이지";
+  }
+  else {
+    updateRateForm.placeholder = "나의 진도 : " + TeamRate + " 강";
+  }
+
+  //updateRate[end]
+
   // acceptedTeamMate[start]
   html = ``;
 
@@ -263,20 +317,33 @@ function displayStudy(data, teamMateList) {
       html += `
         </div>
       `;
+      // 개인 진도율 바 보이는 부분
+      const eachWidth = Math.round(calcEach(studyDetail, i));
 
       html += `
         <div class = "d-flex mt-3 mb-5 align-items-center">
           <div class="progress">
-            <div class="bar shadow leaf"></div>
+            <div class="bar shadow ${patternList[i]}"></div>
           </div>
-          <p class = "mb-0 ms-3">${teamMateList[i].teamRate}%</p>
+          <p class = "mb-0 ms-3">${eachWidth}%</p>
         </div>
       `;
-    }
+      //
+      acceptedTeamMate.innerHTML = html;
 
-    acceptedTeamMate.innerHTML = html;
+      const pattern = "." + patternList[i];
+
+      const each = document.querySelector(pattern);
+
+      console.log(each);
+
+      each.style.width = `${eachWidth}%`;
+    }
     // acceptedTeamMate[end]
   }
+  const first = document.querySelector(".clouds");
+  const firstWidth = calcEach(data, 0);
+  first.style.width=`${firstWidth}%`;
 }
 
 function findTeamMateList(studyId) {
@@ -356,6 +423,7 @@ function quit() {
 }
 
 function updateTeamMate(data) {
+  console.log("updateTeamMate 실행")
   if (!confirm('참가 신청을 수락하시겠습니까?')){
     return false;
   }else {
@@ -375,6 +443,7 @@ function updateTeamMate(data) {
 }
 
 function deleteTeamMate(data){
+  console.log("deleteTeamMate 실행")
   if (!confirm('참가 신청을 거절하시겠습니까?')) {
     return false;
   } else {
@@ -444,3 +513,111 @@ function showStudyContent() {
     $('.study-content').hide();
   }
 }
+
+// 진도율 관련 함수
+function calcRate(studyPeriod, studyDays) {
+  return (studyDays / studyPeriod) * 100;
+}
+
+function calcEach(data, i) {
+  let Total = 0;
+  if (data.studyType == 'BOOK') {
+    Total = data.bookPage;
+  }
+  else {
+    Total = data.lectureNumber;
+  }
+
+  console.log(teamMateList[i].teamRate);
+
+  return (teamMateList[i].teamRate / Total) * 100;
+}
+
+function calcTotalTeamRate(data, teamMateList) {
+  let teamTotal = 0;
+  let teamTotalPage = 0;
+  if (data.studyType == 'BOOK') {
+    teamTotalPage = teamMateList.length * data.bookPage;
+  }
+  else {
+    teamTotalPage = teamMateList.length * data.lectureNumber;
+  }
+  for (let i =0; i < teamMateList.length; i++) {
+    teamTotal += teamMateList[i].teamRate;
+  }
+
+  console.log(teamTotal);
+  console.log(teamTotalPage);
+
+  return (teamTotal / teamTotalPage) * 100;
+}
+
+function toggleStudyInput() {
+  const study_input = document.getElementById("study_input");
+
+  if (study_input.style.display !== "none") {
+    study_input.style.display = "none";
+  }
+  else {
+    study_input.style.display="inline-flex";
+  }
+}
+
+function getTeamRate(){
+  for (let i = 0; i < teamMateList.length; i++) {
+    if(teamMateList[i].userNickname == userNickname) {
+      console.log(teamMateList[i].teamRate)
+      return teamMateList[i].teamRate;
+    }
+  }
+}
+
+// 개인 진도율 수정
+// // (1) 숫자만 입력 받도록
+// function checkNumber(e) {
+//   console.log(e.value);
+//   alert(e.value);
+//   if(e.value >= 0 && e.value <= 10000) {
+//     return true;
+//   }
+//   return false;
+// }
+// (2) 수정 버튼 클릭 시 작
+function submitModifyRate(form, studyId, userNickname, data) {
+  console.log(form.rate.value);
+  console.log(studyId);
+  console.log(userNickname);
+  console.log(data.studyType);
+  console.log(data.bookPage);
+  console.log(data.lectureNumber);
+
+  let rateInput = form.rate.value.trim();
+
+  if (data.studyType == 'BOOK') {
+    if (rateInput < 0 || rateInput > data.bookPage) {
+      alert("페이지 범위 내에서 입력해주세요!")
+      return;
+    }
+  }
+  else {
+    if (rateInput < 0 || rateInput > data.lectureNumber) {
+      alert("강 수 범위 내에서 입력해주세요!")
+      return;
+    }
+  }
+
+  let url = `/${studyId}/teamMate/update/${rateInput}`;
+
+  console.log(url);
+
+  fetch(url).then(
+      async () => {
+        teamMateList = await findTeamMateList(studyId, userNickname);
+        console.log(teamMateList);
+        studyDetail = await findStudyDetail(studyId);
+        displayStudy(studyDetail, teamMateList);
+      }
+  );
+}
+
+// list studyDetaildto

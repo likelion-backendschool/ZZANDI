@@ -3,6 +3,7 @@ package com.ll.zzandi.controller;
 import com.ll.zzandi.domain.Study;
 import com.ll.zzandi.domain.ToDoList;
 import com.ll.zzandi.domain.User;
+import com.ll.zzandi.dto.study.StudyListDto;
 import com.ll.zzandi.enumtype.ToDoType;
 import com.ll.zzandi.exception.ErrorType;
 import com.ll.zzandi.exception.UserApplicationException;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.persistence.EntityExistsException;
 import java.util.List;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @Slf4j
@@ -29,14 +31,36 @@ public class MainController {
     private final ToDoListService toDoListService;
 
     @GetMapping("/")
-    public String main(@AuthenticationPrincipal User user, Model model, @RequestParam(defaultValue = "ALL") String st, @RequestParam(defaultValue = "ALL") String ss, @RequestParam(defaultValue = "") String kw){
-        if(user!=null) {
+    public String main(@AuthenticationPrincipal User user, Model model, @RequestParam(defaultValue = "추천") String tag){
+        if(user != null) {
             List<ToDoList> toDoLists = toDoListService.findAllByUserAndType(user, ToDoType.DOING);
             model.addAttribute("toDoList", toDoLists);
+            List<StudyListDto> myStudyList = studyService.findMyStudyList(user);
+            model.addAttribute("myStudyList", myStudyList);
+            if (!tag.equals("추천")) {
+                List<StudyListDto> fieldStudyList = studyService.findFieldStudyList(tag);
+                model.addAttribute("fieldStudyList", fieldStudyList);
+            } else {
+                List<StudyListDto> fieldStudyList = studyService.findInterestStudyList(user);
+                model.addAttribute("fieldStudyList", fieldStudyList);
+            }
+        }else {
+            if (tag.equals("추천")) {
+                tag = "ALL";
+            }
+            List<StudyListDto> fieldStudyList = studyService.findFieldStudyList(tag);
+            model.addAttribute("fieldStudyList", fieldStudyList);
         }
-        List<Study> studyList = studyService.getList(st, ss, kw);
-        model.addAttribute("studyList", studyList);
+        List<StudyListDto> newStudyList = studyService.findNewStudyList();
+        model.addAttribute("newStudyList", newStudyList);
+
         return "index";
+    }
+
+    @GetMapping("/fieldStudyList")
+    @ResponseBody
+    public List<StudyListDto> findFieldStudy(@RequestParam(defaultValue = "ALL") String tag) {
+        return studyService.findFieldStudyList(tag);
     }
 
     //TODO 예외처리 확인하기 위한 단순한 테스트 api 추후 삭제 예정

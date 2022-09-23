@@ -13,7 +13,7 @@
 
     --main-font: "Apple SD Gothic Neo";
     --sub-font: "맑은 고딕", arial, sans-serif;
-    --study-title-font: "Jua";
+    --study-title-font: "Montserrat";
 
     --tiny-font-size: 11px;
     --small-font-size: 13px;
@@ -25,10 +25,19 @@
 * {
     font-family: var(--main-font), var(--sub-font);
     font-size: var(--small-font-size);
+    box-sizing: border-box;
 }
 
 body {
     background-color: var(--main-bg-color);
+}
+
+.header.sticked {
+    height: 90px;
+}
+
+.footer {
+    height: 300px;
 }
 
 td {

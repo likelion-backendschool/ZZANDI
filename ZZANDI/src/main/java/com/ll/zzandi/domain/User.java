@@ -58,6 +58,9 @@ public class User extends BaseEntity{
     @Column(name="USER_PROFILEURL")
     private String userprofileUrl;
 
+    @Column(name="USER_ZZANDI")
+    private Integer userZzandi;
+
 
     public User(String userId, String userPassword, String userEmail, String userNickname) {
         this.userId = userId;
@@ -88,5 +91,9 @@ public class User extends BaseEntity{
 
     public void updateImageUrl(String image_url) {
         this.userprofileUrl=image_url;
+    }
+
+    public void updateUserZzandi(Integer userZzandi){
+        this.userZzandi = userZzandi;
     }
 }

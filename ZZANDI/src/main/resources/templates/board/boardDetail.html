@@ -29,6 +29,7 @@
 
 <div class="container w-75 mx-auto" style="margin-top: 120px;">
     <input type="hidden" class="user-uuid" th:value="${userUUID}"> <!-- 현재 로그인 한 유저 식별자 -->
+    <input type="hidden" class="board-user-uuid" th:value="${boardDetail.userUUID}"> <!-- 게시글 작성 유저 식별자 -->
     <input type="hidden" class="board-id" th:value="${boardDetail.boardId}"> <!-- 현재 게시글 번호 -->
     <input type="hidden" class="board-content" th:value="${boardDetail.content}">
     <input type="hidden" class="study-id" th:value="${studyId}">
@@ -73,7 +74,7 @@
         </div>
         <div class="d-flex flex-column border rounded p-2 mt-3" th:if="${!files.isEmpty()}">
             <span style="font-weight: bold;" class="my-1">첨부파일</span>
-            <div class="file-box d-flex">
+            <div class="file-box d-flex justify-content-start" style="height: auto;">
             </div>
         </div>
     </div>

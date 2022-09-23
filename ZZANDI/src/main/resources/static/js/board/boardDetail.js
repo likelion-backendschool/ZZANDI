@@ -46,6 +46,8 @@ function deleteBoard() {
 
 const studyId = document.querySelector(".study-id").value;
 const currBoardId = document.querySelector(".board-id").value;
+const userUUID = document.querySelector(".user-uuid").value;
+const boardUserUUID = document.querySelector(".board-user-uuid").value;
 const fileBox = document.querySelector(".file-box");
 fetch(`/${studyId}/board/file-list/${currBoardId}`)
     .then(data => data.json())
@@ -60,7 +62,7 @@ function createThumbnail(file) {
             <a href="/{studyId}/board/download/${f.id}">
                 <img src="${f.fileUrl}" alt="upload file" class="file-img"/>
             </a>
-            <a onclick="deleteFile(${studyId}, ${f.id})" class="file-del-btn" style="cursor: pointer">
+            <a onclick="deleteFile(${studyId}, ${f.id})" class="file-del-btn" style="cursor: pointer; display: ${userUUID === boardUserUUID ? 'inline' : 'none'}">
                 <i class="fa-sharp fa-solid fa-square-xmark" style="object-fit: cover; position: absolute; font-size: 16px; color: var(--bs-gray); right: 8px; top: 2px;"></i>
             </a>
         </div>`;

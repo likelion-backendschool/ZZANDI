@@ -188,7 +188,8 @@ function displayStudy(data, teamMateList) {
   // studyDetail-right[end]
 
   // studyDetail-bottom[start]
-  const widthShow = Math.round(calcRate(studyPeriod, studyDays));
+  const widthShowZzandi = Math.round(calcRate(studyPeriod, studyDays));
+  const widthShowAchieve = Math.round(calcTotalTeamRate(data, teamMateList));
   html = '';
   html += ``;
   if (data.studyStatus == 'PROGRESS') {
@@ -201,9 +202,9 @@ function displayStudy(data, teamMateList) {
     html += `
     <div class = "d-flex mt-3 mb-3 align-items-center">
       <div class="progress">
-        <div class="zzandi ${widthShow} shadow jupiter"></div>
+        <div class="zzandi shadow jupiter"></div>
       </div>
-      <p class = "mb-0 ms-3">${widthShow}%</p>
+      <p class = "mb-0 ms-3">${widthShowZzandi}%</p>
     </div>
     
     <p class = "studyRate"><i class="bi bi-bar-chart-fill" style="font-size: 1.3rem; margin-right : 5px;"></i>우리의 달성률</p>
@@ -211,12 +212,13 @@ function displayStudy(data, teamMateList) {
       <div class="progress">
         <div class="achieve shadow jupiter2"></div>
       </div>
-      <p class = "mb-0 ms-3">${data.studyRate}%</p>
+      <p class = "mb-0 ms-3">${widthShowAchieve}%</p>
     </div>
     `;
   }
 
   studyDetail_bottom.innerHTML = html;
+  // 권장 진도율
   const zzandi = document.querySelector(".zzandi");
   function showRate() {
     const width = calcRate(studyPeriod, studyDays);
@@ -225,6 +227,11 @@ function displayStudy(data, teamMateList) {
     }
   }
   showRate();
+
+  // 팀 달성률
+  const achieve = document.querySelector(".achieve");
+  const achieveRate = calcTotalTeamRate(data, teamMateList);
+  achieve.style.width = `${achieveRate}%`;
   // studyDetail-bottom[end]
 
   // studyView[start]
@@ -520,6 +527,25 @@ function calcEach(data, i) {
   return (teamMateList[i].teamRate / Total) * 100;
 }
 
+function calcTotalTeamRate(data, teamMateList) {
+  let teamTotal = 0;
+  let teamTotalPage = 0;
+  if (data.studyType == 'BOOK') {
+    teamTotalPage = teamMateList.length * data.bookPage;
+  }
+  else {
+    teamTotalPage = teamMateList.length * data.lectureNumber;
+  }
+  for (let i =0; i < teamMateList.length; i++) {
+    teamTotal += teamMateList[i].teamRate;
+  }
+
+  console.log(teamTotal);
+  console.log(teamTotalPage);
+
+  return (teamTotal / teamTotalPage) * 100;
+}
+
 function toggleStudyInput() {
   const study_input = document.getElementById("study_input");
 
@@ -561,7 +587,7 @@ function submitModifyRate(form, studyId, userNickname, data) {
 
   let rateInput = form.rate.value.trim();
 
-  if (data.studyType == "BOOK") {
+  if (data.studyType == 'BOOK') {
     if (rateInput < 0 || rateInput > data.bookPage) {
       alert("페이지 범위 내에서 입력해주세요!")
       return;

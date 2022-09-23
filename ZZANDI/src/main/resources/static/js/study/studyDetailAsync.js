@@ -39,18 +39,6 @@ async function findStudyDetail(studyId) {
   .then(response => response.json())
 }
 
-function calcEach(data, EachRate) {
-  let Total = 0;
-  if (data.studyType == 'BOOK') {
-    Total = data.bookPage;
-  }
-  else {
-    Total = data.lectureNumber;
-  }
-
-  return (EachRate / Total) * 100;
-}
-
 function displayStudy(data, teamMateList) {
   console.log("displayStudy 실행");
   // StudyDetail-left [start]
@@ -317,7 +305,7 @@ function displayStudy(data, teamMateList) {
         </div>
       `;
       // 개인 진도율 바 보이는 부분
-      const eachWidth = calcEach(data, teamMateList[i].teamRate);
+      const eachWidth = calcEach(studyDetail, i);
 
       html += `
         <div class = "d-flex mt-3 mb-5 align-items-center">
@@ -334,10 +322,15 @@ function displayStudy(data, teamMateList) {
 
       const each = document.querySelector(pattern);
 
+      console.log(each);
+
       each.style.width = `${eachWidth}%`;
     }
     // acceptedTeamMate[end]
   }
+  const first = document.querySelector(".clouds");
+  const firstWidth = calcEach(data, 0);
+  first.style.width=`${firstWidth}%`;
 }
 
 function findTeamMateList(studyId) {
@@ -513,6 +506,20 @@ function calcRate(studyPeriod, studyDays) {
   return (studyDays / studyPeriod) * 100;
 }
 
+function calcEach(data, i) {
+  let Total = 0;
+  if (data.studyType == 'BOOK') {
+    Total = data.bookPage;
+  }
+  else {
+    Total = data.lectureNumber;
+  }
+
+  console.log(teamMateList[i].teamRate);
+
+  return (teamMateList[i].teamRate / Total) * 100;
+}
+
 function toggleStudyInput() {
   const study_input = document.getElementById("study_input");
 
@@ -571,9 +578,13 @@ function submitModifyRate(form, studyId, userNickname, data) {
 
   console.log(url);
 
-  fetch(url)
-  .then (
-      displayStudy(studyDetail, teamMateList)
+  fetch(url).then(
+      async () => {
+        teamMateList = await findTeamMateList(studyId, userNickname);
+        console.log(teamMateList);
+        studyDetail = await findStudyDetail(studyId);
+        displayStudy(studyDetail, teamMateList);
+      }
   );
 }
 

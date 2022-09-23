@@ -106,38 +106,19 @@ public class StudyController {
     }
 
     @GetMapping("/study/detail/{studyId}")
-    public String detailStudy(@AuthenticationPrincipal User user, Model model, @PathVariable Long studyId) {
-        Study studies = studyService.findByStudyId(studyId).orElseThrow(null);
-        Book books = studies.getBook();
-        Lecture lectures = studies.getLecture();
+    public String StudyDetail(@AuthenticationPrincipal User user, @PathVariable Long studyId, Model model) {
+        studyService.updateViews(studyId);
+        model.addAttribute("studyId", studyId);
 
-        // 상세검색 기능 (시작)
-        if (books != null) {
-            books = bookService.findByid(books.getId()).orElseThrow(null);
-        } else if (lectures != null) {
-            lectures = lectureService.findById(lectures.getId()).orElseThrow(null);
-        }
-        // 상세검색 기능 (종료)
-
-        // 권장 진도율 계산 (시작)
         int studyDays = studyService.getStudyDays(studyId);
         model.addAttribute("studyDays", studyDays);
         int studyPeriod = studyService.getStudyPeriod(studyId);
         model.addAttribute("studyPeriod", studyPeriod);
         int studyRecommend = studyService.getStudyRecommend(studyId);
         model.addAttribute("studyRecommend", studyRecommend);
-        // 권장 진도율 계산 (종료)
-
-        List<Boolean> checkList = teamMateService.checkTeamMate(studies.getTeamMateList(), user);
-        model.addAttribute("studies", studies);
-        model.addAttribute("books", books);
-        model.addAttribute("lectures", lectures);
-        model.addAttribute("user", user);
-        model.addAttribute("isParticipation", checkList.get(0));
-        model.addAttribute("isTeamMate", checkList.get(1));
-        model.addAttribute("isDelete", checkList.get(2));
-        return"study/studyDetail";
+        return "study/studyDetailAsync";
     }
+
 
     @GetMapping("/study/detail/{studyId}/study-data")
     @ResponseBody

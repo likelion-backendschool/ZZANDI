@@ -312,7 +312,7 @@ function displayStudy(data, teamMateList) {
         </div>
       `;
       // 개인 진도율 바 보이는 부분
-      const eachWidth = calcEach(studyDetail, i);
+      const eachWidth = Math.round(calcEach(studyDetail, i));
 
       html += `
         <div class = "d-flex mt-3 mb-5 align-items-center">

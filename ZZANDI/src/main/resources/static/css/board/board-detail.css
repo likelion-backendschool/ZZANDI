@@ -5,6 +5,7 @@
 .study-title {
     font-family: var(--study-title-font), var(--main-font), var(--sub-font);
     font-size: var(--medium-font-size);
+    font-weight: bold;
     color: var(--study-title-color);
 }
 
@@ -53,4 +54,10 @@
 
 .toastui-editor-contents > p {
     font-size: 16px;
+}
+
+.file-img {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
 }

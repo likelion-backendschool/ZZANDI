@@ -85,7 +85,7 @@ function displayItems(items, category, filter, keyword) {
 }
 
 function createBoardList(item) {
-    const title = (item.title.length > 50) ? `${item.title.substr(0, 50)}...` : `${item.title}`;
+    const title = (item.title.length > 30) ? `${item.title.substr(0, 30)}...` : `${item.title}`;
     const color = colors.get(item.category);
 
     return `<tr>
@@ -95,6 +95,7 @@ function createBoardList(item) {
                 <td class="board-table-title">
                     <a href="/${studyId}/board/detail/${item.boardId}/${item.pageNum}">${title}</a>
                     <span class="board-table-title__comment">${item.count}</span>
+                    <i class="fa-solid fa-file-image" style="color: var(--comment-count-color); display: ${item.existCount === 0 ? 'none' : 'inline'}"></i>
                 </td>
                 <td>
                     <div class="d-flex mx-2">

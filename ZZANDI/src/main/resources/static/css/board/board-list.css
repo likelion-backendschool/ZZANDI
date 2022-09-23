@@ -38,13 +38,13 @@
 }
 
 .board-table-title__comment {
-    margin-left: 5px;
+    margin: 0 5px;
     font-size: var(--tiny-font-size);
     font-weight: bold;
     color: var(--comment-count-color);
 }
-.board-table-th-category{width: 50px;}
-.board-table-th-title {width: 500px;}
+.board-table-th-category{width: 80px;}
+.board-table-th-title {width: 400px;}
 .board-table-th-writer {width: 200px;}
 
 .active {

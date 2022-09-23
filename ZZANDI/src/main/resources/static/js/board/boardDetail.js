@@ -36,9 +36,50 @@ const viewer = new Editor.factory({
     },
 });
 
+
 function deleteBoard() {
     if (confirm("정말로 삭제하시겠습니까?") === false) {
         return false;
     }
     document.forms['form'].submit();
+}
+
+const studyId = document.querySelector(".study-id").value;
+const currBoardId = document.querySelector(".board-id").value;
+const currUserUUID = document.querySelector(".user-uuid").value;
+const boardUserUUID = document.querySelector(".board-user-uuid").value;
+const fileBox = document.querySelector(".file-box");
+fetch(`/${studyId}/board/file-list/${currBoardId}`)
+    .then(data => data.json())
+    .then(file => createThumbnail(file));
+
+function createThumbnail(file) {
+    fileBox.innerHTML = '';
+    for (let f of file) {
+        fileBox.innerHTML +=
+        `<div style="position: relative; display: ${f.fileStatus === 'DELETE' ? 'none' : 'inline'};">
+            <a href="/{studyId}/board/download/${f.id}">
+                <img src="${f.fileUrl}" alt="upload file" class="file-img"/>
+            </a>
+            <a onclick="deleteFile(${studyId}, ${f.id})" class="file-del-btn" style="cursor: pointer; display: ${currUserUUID === boardUserUUID ? 'inline' : 'none'}">
+                <i class="fa-sharp fa-solid fa-square-xmark" style="object-fit: cover; position: absolute; font-size: 16px; color: var(--bs-gray); right: 8px; top: 2px;"></i>
+            </a>
+        </div>`;
+    }
+}
+
+function deleteFile(studyId, fileId) {
+    if(confirm("정말로 삭제하시겠습니까?") === false) {
+        return false;
+    }
+
+    fetch(`/${studyId}/board/delete/file/${fileId}`, {
+        method: 'POST'
+    }).then(() => {
+        fetch(`/${studyId}/board/file-list/${currBoardId}`)
+            .then(data => data.json())
+            .then(file => {
+                createThumbnail(file);
+            });
+    });
 }

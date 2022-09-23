@@ -42,6 +42,9 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     @Query(value = "select * from board b join study s on b.study_id = s.study_id where b.study_id = 1 and b.board_id > :boardId order by b.board_id limit 1", nativeQuery = true)
     Optional<Board> findNextBoard(@Param("boardId") Long boardId);
 
+    @Query(value = "select board_id from board order by board_id desc limit 1", nativeQuery = true)
+    Long findMaxBoardId();
+
     @Modifying
     @Query("delete from Board b where b.study.id = :studyId")
     void deleteBoardByStudyId(@Param("studyId") Long studyId);

@@ -22,3 +22,17 @@
     width: 300px;
     height: 200px;
 }
+
+.btn-upload {
+    cursor: pointer;
+    border: 1px solid var(--light-gray-color);
+    border-radius: 5px;
+    padding: 5px;
+    background-color: #f7f7f7;
+}
+
+.file-box img {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+}

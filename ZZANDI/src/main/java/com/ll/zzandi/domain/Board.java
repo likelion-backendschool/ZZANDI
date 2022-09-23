@@ -50,6 +50,9 @@ public class Board extends BaseEntity {
     @OneToMany(mappedBy = "board")
     private List<Comment> comments = new ArrayList<>();
 
+    @Transient
+    private List<File> fileList = new ArrayList<>();
+
     public Board(User user, String category, String title, String content, int views, int heart, Study study) {
         this.user = user;
         this.category = category;

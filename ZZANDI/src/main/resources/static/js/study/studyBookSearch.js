@@ -25,32 +25,30 @@ $(document).ready(function () {
                 $(".List").empty();
                 for (var i = 0; i < msg.item.length; i++) {
                     var div = document.createElement('div');
-                    div.setAttribute("class" , "image");
+                    div.setAttribute("style" , "margin-right: 20px; margin-bottom: 20px");
                     var img = document.createElement("img");
                     img.src = msg.item[i].cover;
                     div.appendChild(img);
-                    document.querySelector(".List").appendChild(div);
+                    // document.querySelector(".List").appendChild(div);
 
                     bookTitleMap.set(i , msg.item[i].title);
                     bookAuthorMap.set(i , msg.item[i].author);
                     bookPublisherMap.set(i , msg.item[i].publisher);
                     bookIsbnMap.set(i , msg.item[i].isbn13);
 
-                    var div = document.createElement('div');
-                    div.setAttribute("class" , "btn-gradient green mini");
-                    div.setAttribute("onclick", "bookInfo("+i+")");
-                    var button = document.createElement("button");
-                    button.append("선택");
+                    var button = document.createElement("input");
+                    button.setAttribute("class", "btn btn-outline-success")
+                    button.setAttribute("type", "button")
+                    button.setAttribute("value", "선택")
+                    button.setAttribute("onclick", "bookInfo("+i+")");
+
                     div.appendChild(button);
-                    document.querySelector(".List").appendChild(div);
 
-                    var div = document.createElement('div');
-                    div.setAttribute("id" , "text");
                     var title = document.createElement("p");
-                    title.append(msg.item[i].title);
+                    title.append(msg.item[i].title.substring(0,10));
                     div.appendChild(title);
-                    document.querySelector(".List").appendChild(div);
 
+                    document.querySelector(".List").appendChild(div);
                 }
             });
     });

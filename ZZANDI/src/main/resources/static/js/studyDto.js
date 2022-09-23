@@ -71,7 +71,7 @@ $("#submit").on('click', function () {
 var openWin;
 function openSearch(){
     window.name="studyForm";
-    openWin=window.open("/study/studyBookSearch","searchForm","width=1200,height=500,resizable=no,scrollbars=yes")
+    openWin=window.open("/study/studyBookSearch","searchForm","width=750,height=600,resizable=no,scrollbars=no")
 }
 
 // 엔터키 방지

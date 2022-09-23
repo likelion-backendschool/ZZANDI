@@ -61,7 +61,7 @@
             </div>
             <div id="book">
                 <div class="col-md-6 form-group">
-                    <button id="search" type="button" value="검색" onclick="openSearch()">검색</button>
+                    <input class="btn btn-outline-success" id="search" type="button" value="책 검색" onclick="openSearch()">
                 </div>
                 <div class="col-md-6 form-group">
                     <label for="bookName"> </label>
@@ -73,11 +73,11 @@
                 </div>
                 <div class="col-md-6 form-group">
                     <label for="bookPublisher"> </label>
-                    <input type="text" id="bookPublisher" name="bookPublisher" placeholder="출판사">
+                    <input type="text" id="bookPublisher" name="bookPublisher" placeholder="출판사" readonly>
                 </div>
                 <div class="col-md-6 form-group">
                     <label for="bookIsbn"> </label>
-                    <input type="text" id="bookIsbn" name="bookIsbn" placeholder="책 고유번호">
+                    <input type="text" id="bookIsbn" name="bookIsbn" placeholder="책 고유번호" readonly>
                 </div>
             </div>
             <div id="lecture">
@@ -108,7 +108,7 @@
             </div>
 
             <div class="col-md-6 form-group">
-                <button id="submit" type="submit" class="btn btn-primary" >등록</button>
+                <button id="submit" type="submit" class="btn btn-outline-success" >등록</button>
             </div>
 
 

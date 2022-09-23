@@ -16,32 +16,78 @@
         th:fragment="header" id="header" class="header d-flex align-items-center">
     <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
         <a href="/" class="logo d-flex align-items-center">
-            <h1>BOOKSEARCH</h1>
+            <h1>ZZANDI</h1>
         </a>
     </div>
 </header><!-- End Header -->
 <!-- End Header -->
 <body>
-    <input type="button" id="complete" value="선택완료">
-    <div class="col-md-6 form-group">
-        <label for="bookSearch"> </label>
-        <input type="text" id="bookSearch" name="bookSearch" placeholder="책 정보를 입력하세요">
-        <button type="button" id="search">검색</button>
+<div class="breadcrumbs">
+    <div class="page-header d-flex align-items-center" style="background-image: url('');">
+        <div class="container position-relative">
+            <div class="row d-flex justify-content-center">
+                <div class="col-lg-6 text-center">
+                    <h2>BOOK SEARCH</h2>
+                    <p>스터디에 사용하실 책을 선택해주세요.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div><!-- End Breadcrumbs -->
+<div id="BOOK">
 
         <div class="col-md-6 form-group">
-            <div class="bookList" id="bookList"></div>
-            <div class="thumbnail"></div>
-            <input class="card-title" name="bookName" id="bookName" readonly placeholder="선택한 책의 제목입니다.">
-            <input class="card-author" name="bookAuthor" id="bookAuthor" readonly placeholder="선택한 책의 작가입니다.">
-            <input class="card-publisher" name="bookPublisher" id="bookPublisher" readonly placeholder="선택한 책의 출판사입니다.">
-            <input class="card-ISBN" name="bookIsbn" id="bookIsbn" readonly placeholder="선택한 책의 고유번호입니다.">
+            <div id="search_" style="margin-right: 20px">
+                <input class="form-control" type="text" id="bookSearch" name="bookSearch" placeholder="책 정보를 입력하세요">
+                <input class="btn btn-outline-success" type="button" id="search" value="검색">
+                <input class="btn btn-outline-success" type="button" id="complete" value="선택완료">
+            </div>
         </div>
-        <div class="List"></div>
+        <div class="col-md-6 form-group">
+            <input disabled class="form-control" name="bookName" id="bookName" readonly placeholder="선택한 책의 제목입니다.">
+            <input disabled class="form-control" name="bookAuthor" id="bookAuthor" readonly placeholder="선택한 책의 작가입니다.">
+            <input disabled class="form-control" name="bookPublisher" id="bookPublisher" readonly placeholder="선택한 책의 출판사입니다.">
+            <input disabled class="form-control" name="bookIsbn" id="bookIsbn" readonly placeholder="선택한 책의 고유번호입니다.">
+        </div>
+        <div class="List" style="display: flex; flex-wrap: wrap">
 
-    </div>
+            </div>
+        </div>
+</div>
 
 </body>
 <style>
+    @font-face {
+        font-family: 'adobaonlyR';
+        src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2205@1.0/adobaonlyR.woff2') format('woff2');
+        font-weight: normal;
+        font-style: normal;
+    }
 
+    body{
+        font-family: "adobaonlyR", serif;
+    }
+    #BOOK{
+        border: 1px solid;
+        border-radius: 10px;
+        padding: 20px;
+        margin: auto;
+        justify-content: center;
+        width: 700px;
+        box-shadow: 5px 5px 5px 5px gray;
+    }
+    .col-md-6.form-group{
+        margin: 10px;
+        width: 400px;
+    }
+    input{
+        margin: 10px;
+    }
+    #search_ {
+        display: flex;
+    }
+    .List{
+        margin-top: 40px;
+    }
 </style>
 </html>

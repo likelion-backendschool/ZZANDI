@@ -194,7 +194,7 @@ function displayStudy(data, teamMateList) {
   html += ``;
   if (data.studyStatus == 'PROGRESS') {
     if (data.studyType == 'BOOK') {
-      html += `<p class = "recommend"><i class="bi bi-bar-chart-fill" style="font-size: 1.3rem; margin-right : 5px;"></i>오늘의 권장 진도율 : ~ ${studyRecommend} 페이지</p>`;
+      html += `<p class = "recommend"><i class="bi bi-bar-chart-fill" style="font-size: 1.3rem; margin-right : 5px;"></i>오늘의 권장 진도율 : ~ p.${studyRecommend}</p>`;
     } else {
       html += `<p class = "recommend"><i class="bi bi-bar-chart-fill" style="font-size: 1.3rem; margin-right : 5px;"></i>오늘의 권장 진도율 : ~ ${studyRecommend}강</p>`;
     }

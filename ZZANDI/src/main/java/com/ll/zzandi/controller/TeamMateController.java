@@ -41,7 +41,7 @@ public class TeamMateController {
   }
 
   /*
-  개인 진도율 수정
+  개인 진도율 수정 및 daily-check 반영
   */
   @GetMapping("/update/{rateInput}")
   @ResponseBody

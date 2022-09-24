@@ -76,6 +76,7 @@ public class TeamMateService {
     TeamMate teamMate = teamMateRepository.findByUserAndAndStudy(user, study).orElseThrow(()-> new TeamMateException(ErrorType.NOT_FOUND));
 
     teamMate.setTeamRate(rateInput);
+    teamMate.setTeamMateDailyCheck("O");
     teamMateRepository.save(teamMate);
   }
 

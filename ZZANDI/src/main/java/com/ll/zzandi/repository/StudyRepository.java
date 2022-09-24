@@ -47,4 +47,7 @@ public interface StudyRepository extends JpaRepository<Study, Integer> {
 
     @Query("select s from Study s where (:interest1 is null or s.studyTag = :interest1) or (:interest2 is null or s.studyTag = :interest2) or (:interest3 is null or s.studyTag = :interest3)")
     List<Study> findInterestStudyList(@Param("interest1") String interest1, @Param("interest2") String interest2, @Param("interest3") String interest3, PageRequest paging);
+
+    @Query("select s from Study s where (:interest is null or s.studyTag = :interest)")
+    List<Study> findInterest1StudyList(@Param("interest") String interest, PageRequest paging);
 }

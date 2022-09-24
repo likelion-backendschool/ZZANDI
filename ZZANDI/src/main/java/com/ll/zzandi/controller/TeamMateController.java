@@ -41,7 +41,7 @@ public class TeamMateController {
   }
 
   /*
-  개인 진도율 수정
+  개인 진도율 수정 및 daily-check 반영
   */
   @GetMapping("/update/{rateInput}")
   @ResponseBody
@@ -104,5 +104,11 @@ public class TeamMateController {
   @ResponseBody
   public List<TeamMateDto> findTeamMateList(@PathVariable Long studyId) {
     return teamMateService.findByStudy(studyId);
+  }
+
+  @GetMapping("/rate-data")
+  @ResponseBody
+  public int findRateData(@AuthenticationPrincipal User user, @PathVariable Long studyId) {
+    return teamMateService.findRateByUserId(user, studyId);
   }
 }

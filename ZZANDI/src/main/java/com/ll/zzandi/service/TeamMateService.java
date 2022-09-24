@@ -76,6 +76,7 @@ public class TeamMateService {
     TeamMate teamMate = teamMateRepository.findByUserAndAndStudy(user, study).orElseThrow(()-> new TeamMateException(ErrorType.NOT_FOUND));
 
     teamMate.setTeamRate(rateInput);
+    teamMate.setTeamMateDailyCheck("O");
     teamMateRepository.save(teamMate);
   }
 
@@ -256,5 +257,17 @@ public class TeamMateService {
       teamMate.setTeamMateDailyCheck("X");
       teamMateRepository.save(teamMate);
     }
+  }
+
+  public int findRateByUserId(User user, Long studyId) {
+    Study study = studyRepository.findById(studyId).orElseThrow(()->new StudyException(ErrorType.NOT_FOUND));
+
+    if (study.getStudyStatus() != StudyStatus.PROGRESS) {
+      throw new TeamMateException(ErrorType.NOT_LEADER);
+    }
+
+    TeamMate teamMate = teamMateRepository.findByUserAndAndStudy(user, study).orElseThrow(()-> new TeamMateException(ErrorType.NOT_FOUND));
+
+    return teamMate.getTeamRate();
   }
 }

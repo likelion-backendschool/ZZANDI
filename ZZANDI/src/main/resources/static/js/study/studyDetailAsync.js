@@ -582,16 +582,13 @@ function getTeamRate(){
 //   }
 //   return false;
 // }
-// (2) 수정 버튼 클릭 시 작
-function submitModifyRate(form, studyId, userNickname, data) {
-  console.log(form.rate.value);
-  console.log(studyId);
-  console.log(userNickname);
-  console.log(data.studyType);
-  console.log(data.bookPage);
-  console.log(data.lectureNumber);
+// (2) 수정 버튼 클릭 시 작동
+
+async function submitModifyRate(form, studyId, userNickname, data) {
 
   let rateInput = form.rate.value.trim();
+
+  const personRate = await getUserRate(studyId);
 
   if (data.studyType == 'BOOK') {
     if (rateInput < 0 || rateInput > data.bookPage) {
@@ -604,6 +601,11 @@ function submitModifyRate(form, studyId, userNickname, data) {
       alert("강 수 범위 내에서 입력해주세요!")
       return;
     }
+  }
+
+  if (rateInput <= personRate) {
+    alert("기존 진도율보다 높아야 합니다!")
+    return;
   }
 
   let url = `/${studyId}/teamMate/update/${rateInput}`;
@@ -619,5 +621,12 @@ function submitModifyRate(form, studyId, userNickname, data) {
       }
   );
 }
+
+async function getUserRate(studyId) {
+  return fetch(`/${studyId}/teamMate/rate-data`)
+  .then(response => response.json());
+}
+
+
 
 // list studyDetaildto

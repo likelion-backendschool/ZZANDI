@@ -78,7 +78,6 @@ public class UserController {
         }
 
         userService.completeSignUp(user);
-        model.addAttribute("numberOfUser", userRepository.count());
         model.addAttribute("nickname", user.getUserNickname());
         return view;
     }

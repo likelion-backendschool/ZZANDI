@@ -37,9 +37,14 @@
 /*--------------------------------------------------------------
 # General
 --------------------------------------------------------------*/
+html {
+  height : 100%;
+}
+
 body {
   font-family: var(--font-default);
   color: var(--color-default);
+  height : 100%
 }
 
 a {
@@ -483,6 +488,7 @@ h6 {
   background-color: var(--color-back);
   padding: 50px 0;
   color: var(--color-font);
+  width : 100%;
 }
 
 .footer .footer-info .logo {

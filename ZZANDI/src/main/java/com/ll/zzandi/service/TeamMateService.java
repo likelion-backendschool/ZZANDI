@@ -257,4 +257,16 @@ public class TeamMateService {
       teamMateRepository.save(teamMate);
     }
   }
+
+  public int findRateByUserId(User user, Long studyId) {
+    Study study = studyRepository.findById(studyId).orElseThrow(()->new StudyException(ErrorType.NOT_FOUND));
+
+    if (study.getStudyStatus() != StudyStatus.PROGRESS) {
+      throw new TeamMateException(ErrorType.NOT_LEADER);
+    }
+
+    TeamMate teamMate = teamMateRepository.findByUserAndAndStudy(user, study).orElseThrow(()-> new TeamMateException(ErrorType.NOT_FOUND));
+
+    return teamMate.getTeamRate();
+  }
 }

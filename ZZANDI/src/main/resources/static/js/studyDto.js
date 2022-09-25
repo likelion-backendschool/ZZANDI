@@ -3,7 +3,7 @@
 //달력
 $("#studyStart").change(function () {
     const val = $(this).val();
-    $("#studyEnd").attr("min", val);
+    $("#studyEnd").attr("min", valg);
 });
 
 //라디오버튼

@@ -23,6 +23,7 @@ window.onload = async () => {
   console.log(teamMateList);
   checkTeamMate(teamMateList);
   studyDetail = await findStudyDetail(studyId);
+  console.log(studyDetail);
   displayStudy(studyDetail, teamMateList);
 }
 
@@ -188,15 +189,23 @@ function displayStudy(data, teamMateList) {
   // studyDetail-right[end]
 
   // studyDetail-bottom[start]
-  const widthShowZzandi = Math.round(calcRate(studyPeriod, studyDays));
+  let widthShowZzandi;
+  if (data.studyType == 'BOOK') {
+    widthShowZzandi = Math.round(calcRate(data.bookPage, data.studyRate));
+  }
+  else {
+    widthShowZzandi = Math.round(calcRate(data.lectureNumber, data.studyRate));
+  }
+
   const widthShowAchieve = Math.round(calcTotalTeamRate(data, teamMateList));
   html = '';
   html += ``;
   if (data.studyStatus == 'PROGRESS') {
     if (data.studyType == 'BOOK') {
-      html += `<p class = "recommend"><i class="bi bi-bar-chart-fill" style="font-size: 1.3rem; margin-right : 5px;"></i>오늘의 권장 진도율 : ~ p.${studyRecommend}</p>`;
+      html += `<p class = "recommend"><i class="bi bi-bar-chart-fill" style="font-size: 1.3rem; margin-right : 5px;"></i>오늘의 권장 진도율 : p.${data.studyRate - data.studyRecommend} ~ p.${data.studyRate
+      }</p>`;
     } else {
-      html += `<p class = "recommend"><i class="bi bi-bar-chart-fill" style="font-size: 1.3rem; margin-right : 5px;"></i>오늘의 권장 진도율 : ~ ${studyRecommend}강</p>`;
+      html += `<p class = "recommend"><i class="bi bi-bar-chart-fill" style="font-size: 1.3rem; margin-right : 5px;"></i>오늘의 권장 진도율 : ${data.studyRate - data.studyRecommend}강 ~ ${data.studyRate}강</p>`;
     }
 
     html += `
@@ -221,7 +230,13 @@ function displayStudy(data, teamMateList) {
   // 권장 진도율
   const zzandi = document.querySelector(".zzandi");
   function showRate() {
-    const width = calcRate(studyPeriod, studyDays);
+    let width;
+    if (data.studyType == 'BOOK') {
+      width = calcRate(data.bookPage, data.studyRate);
+    }
+    else {
+      width = calcRate(data.lectureNumber, data.studyRate);
+    }
     if (zzandi) {
       zzandi.style.width = `${width}%`;
     }
@@ -515,8 +530,8 @@ function showStudyContent() {
 }
 
 // 진도율 관련 함수
-function calcRate(studyPeriod, studyDays) {
-  return (studyDays / studyPeriod) * 100;
+function calcRate(totalNum, studyRate) {
+  return (studyRate / totalNum) * 100;
 }
 
 function calcEach(data, i) {

@@ -16,6 +16,12 @@ function findAll(type) {
     fetch(url)
         .then(response => response.json())
         .then(data => {
+            const buttons = document.querySelectorAll('.nav-item > button');
+            for (let button of buttons) {
+                button.classList.remove('active');
+            }
+
+            document.querySelector(`.${type}`).classList.add('active');
             displayItems(data,type);
         });
 }
@@ -123,20 +129,16 @@ function displayItems(data, type) {
  */
 function displayMenu() {
     let html = '';
-    let tab1 = "active";
-    let tab2 = "";
-    let tab3 = "";
-
     html += `<li class="nav-item" role="presentation">
-                <button onclick="findAll('TOTAL')" class="nav-link ${tab1}" id="ex1-tab-1" data-mdb-toggle="tab" role="tab"
+                <button onclick="findAll('TOTAL')" class="nav-link TOTAL" id="ex1-tab-1" data-mdb-toggle="tab" role="tab"
                                    aria-controls="ex1-tabs-1" aria-selected="true">ALL</button>
              </li>
             <li class="nav-item" role="presentation">
-                <button onclick="findAll('DOING')" class="nav-link ${tab2}" id="ex1-tab-2" data-mdb-toggle="tab" role="tab"
+                <button onclick="findAll('DOING')" class="nav-link DOING" id="ex1-tab-2" data-mdb-toggle="tab" role="tab"
                    aria-controls="ex1-tabs-2" aria-selected="fasle">DOING</button>
             </li>
             <li class="nav-item" role="presentation">
-                <button onclick="findAll('DONE')" class="nav-link ${tab3}" id="ex1-tab-3" data-mdb-toggle="tab" role="tab"
+                <button onclick="findAll('DONE')" class="nav-link DONE" id="ex1-tab-3" data-mdb-toggle="tab" role="tab"
                    aria-controls="ex1-tabs-3" aria-selected="false">DONE</button>
             </li>
     `
@@ -154,7 +156,7 @@ function displayAddForm() {
             <input type="text" name="todo" class="form-control"/>
             <label class="form-label" > TODO 추가!</label>
         </div>
-        <button type="submit" class="btn btn-info ms-2" style="background-color: darkseagreen;">추가</button>
+        <button type="submit" class="btn btn-info ms-2" style="background-color: darkseagreen; padding: 5px 10px;">추가</button>
     </form>`
 
     addForm.innerHTML = html;
@@ -173,11 +175,11 @@ function displayModifyForm(data) {
             <input type="text" name="todo" class="form-control"/>
             <label class="form-label" >${data.content}</label>
         </div>
-        <div class="d-flex justify-content-around">
-            <button type="submit" id="status" value="modify" class="btn btn-info mx-1" style="background-color: darkseagreen;">
+        <div class="d-flex justify-content-end">
+            <button type="submit" id="status" value="modify" class="btn btn-info mx-1" style="background-color: darkseagreen; padding: 5px 10px;">
                 <span>수정</span>
             </button>
-            <button onclick="displayAddForm()" id="status" value="undo" class="btn btn-info" style="background-color: darkseagreen;">취소</button>
+            <button onclick="displayAddForm()" id="status" value="undo" class="btn btn-info" style="background-color: darkseagreen; padding: 5px 10px;">취소</button>
         </div>
     </form>`
     addForm.innerHTML = html;

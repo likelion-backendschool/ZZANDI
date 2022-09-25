@@ -54,6 +54,9 @@ public class Study {
     @Column(name = "STUDY_RATE", columnDefinition = "integer default 0")
     private int studyRate;
 
+    @Column(name = "RECOMMEND", columnDefinition = "integer default 0")
+    private int recommend;
+
     @Column(name = "VIEWS", columnDefinition = "integer default 0")
     private int views;
 

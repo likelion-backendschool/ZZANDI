@@ -19,8 +19,7 @@ public interface StudyRepository extends JpaRepository<Study, Integer> {
     Optional<Study> findById(Long id);
 
     List<Study> findAllByStudyTitleContainsOrUser_userIdContains(String kw1, String kw2);
-    @Override
-    List<Study> findAll();
+
     List<Study> findAllByUser_userIdContainsAndStudyTypeOrStudyTitleContainsAndStudyType(String kw, StudyType valueOf,
         String kw1, StudyType valueOf1);
 

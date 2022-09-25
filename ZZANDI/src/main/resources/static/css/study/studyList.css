@@ -12,7 +12,8 @@ body{
 .studyList-main {
   margin: 0 auto;
   max-width : 830px;
-  min-height: 700px;
+  min-height: 100%;
+  position : relative;
 }
 
 .studyList-description{

@@ -152,9 +152,9 @@ function displayAddForm() {
         onsubmit="submitAddForm(this); return false;" method="get">
         <div class="form-outline flex-fill">
             <input type="text" name="todo" class="form-control"/>
-            <label class="form-label" > New task...</label>
+            <label class="form-label" > TODO 추가!</label>
         </div>
-        <button type="submit" class="btn btn-info ms-2">Add</button>
+        <button type="submit" class="btn btn-info ms-2" style="background-color: darkseagreen;">추가</button>
     </form>`
 
     addForm.innerHTML = html;
@@ -167,15 +167,18 @@ function displayModifyForm(data) {
 
 
     let html = `
-    <form class="d-flex justify-content-center align-items-center mb-4"
+    <form class="d-flex justify-content-between align-items-center mb-4"
         onsubmit="submitModifyForm(this, ${data.id}); return false;" method="get">
         <div class="form-outline flex-fill">
             <input type="text" name="todo" class="form-control"/>
             <label class="form-label" >${data.content}</label>
         </div>
-        <button type="submit" id="status" value="modify" class="btn btn-info ms-2">수정</button>
-        <button onclick="displayAddForm()" id="status" value="undo" class="btn btn-info ms-2">취소</button>
+        <div class="d-flex justify-content-around">
+            <button type="submit" id="status" value="modify" class="btn btn-info mx-1" style="background-color: darkseagreen;">
+                <span>수정</span>
+            </button>
+            <button onclick="displayAddForm()" id="status" value="undo" class="btn btn-info" style="background-color: darkseagreen;">취소</button>
+        </div>
     </form>`
-
     addForm.innerHTML = html;
 }

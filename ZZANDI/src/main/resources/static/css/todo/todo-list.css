@@ -1,0 +1,25 @@
+#todo-list {
+    box-shadow: rgb(0 0 0 / 30%) 0px 12px 60px 5px;
+    border: none;
+    position: fixed;
+    bottom: 110px;
+    right: 15px;
+    width: 430px;
+    height: 600px;
+    border-radius: 30px;
+    display: none;
+    padding: 10px;
+    background-color: darkseagreen;
+}
+
+#todo-btn {
+    cursor: pointer;
+    position: fixed;
+    font-size: 8px;
+    bottom: 65px;
+    right: 15px;
+    width: 44px;
+    height: 44px;
+    border: none;
+    border-radius: 50%;
+}

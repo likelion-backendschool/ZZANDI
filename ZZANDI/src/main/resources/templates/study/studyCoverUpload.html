@@ -4,40 +4,72 @@
 
 <!-- head -->
 <div th:replace="layout/head.html :: head"></div>
+<script defer type="text/javascript" th:src="@{/js/study/studyCoverUpload.js}"></script>
 <body>
 <section th:replace="layout/header.html :: header"></section>
-
-<main id="main">
-    <!-- ======= Breadcrumbs ======= -->
-    <div class="breadcrumbs">
-        <div class="page-header d-flex align-items-center" style="background-image: url('');">
-            <div class="container position-relative">
-                <div class="row d-flex justify-content-center">
-                    <div class="col-lg-6 text-center">
-                        <h2>Study Cover Upload</h2>
-                        <p>원하시는 스터디 대표이미지를 만들어보세요!</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div><!-- End Breadcrumbs -->
-    <!-- ======= Blog Section ======= -->
-    <div id="studyForm">
+<div class="main">
+    <div id="uploadCoverUrl">
         <h4>Study Cover Image</h4>
         <p>저장버튼을 눌러주세요.</p>
-                <div class="col-md-6 form-group">
-                    <input type="file" id="studyCoverUrl" name="studyCoverUrl" accept=".gif, .jpg, .png, .jpeg, .PNG">
-                    <input type="hidden" id="study-id" th:value="${studyId}">
-                </div>
-        <input type="button" name="uploadButton" value="저장">
+        <div class="col-md-6 form-group">
+            <img  style="width: 200px; height: 200px;margin-left: 200px " id="preview-image" >
+            <div>
+                <input style="margin-top: 50px" class="form-control" type="file" id="studyCoverUrl" name="studyCoverUrl" accept=".gif, .jpg, .png, .jpeg, .PNG">
+            </div>
+        </div>
+        <div class="col-md-6 form-group">
+            <input type="hidden" id="study-id" th:value="${studyId}">
+        </div>
+        <div class="col-md-6 form-group">
+            <input class="btn btn-outline-success" type="button" name="uploadButton" value="저장">
+        </div>
     </div>
+</div>
 
 
-</main><!-- End #main -->
 <!-- footer -->
 <div th:replace="layout/footer.html :: footer"></div>
 
 <!-- tail -->
 <div th:replace="layout/tail.html :: tail"></div>
 </body>
+<style>
+    .breadcrumbs{
+        margin-top: 120px;
+    }
+    #uploadCoverUrl {
+        border: 1px solid;
+        border-radius: 10px;
+        padding: 20px;
+        margin-top: 100px;
+        margin-bottom: 100px;
+        justify-content: center;
+        width: 700px;
+        height: 500px;
+        box-shadow: 5px 5px 5px 5px gray;
+    }
+    .main{
+        margin: auto;
+    }
+
+
+
+
+    @font-face {
+        font-family: 'adobaonlyR';
+        src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2205@1.0/adobaonlyR.woff2') format('woff2');
+        font-weight: normal;
+        font-style: normal;
+    }
+
+    body{
+        font-family: "adobaonlyR", serif;
+        display: flex;
+        flex-direction: column;
+    }
+    .col-md-6.form-group{
+        margin: 10px;
+        width: 600px;
+    }
+</style>
 </html>

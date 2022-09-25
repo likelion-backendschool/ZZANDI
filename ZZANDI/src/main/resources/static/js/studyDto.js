@@ -3,7 +3,11 @@
 //달력
 $("#studyStart").change(function () {
     const val = $(this).val();
-    $("#studyEnd").attr("min", valg);
+    const selectDay = new Date(val);
+    selectDay.setDate(new Date(val).getDate()+1);
+    const result = selectDay.toISOString().substring(0,10);
+    console.log(result);
+    $("#studyEnd").attr("min", result);
 });
 
 //라디오버튼

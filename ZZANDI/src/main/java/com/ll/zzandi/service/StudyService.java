@@ -262,7 +262,7 @@ public class StudyService {
             studyDetailDto = new StudyDetailDto(study.getStudyTitle(), study.getUser().getUserNickname(),
                 study.getAcceptedStudyMember(), study.getStudyPeople(), study.getStudyStart(), study.getStudyEnd(),
                 study.getStudyTag(), String.valueOf(study.getStudyType()), study.getStudyRate(), study.getViews(),
-                study.getStudyCoverUrl(), String.valueOf(study.getStudyStatus()),
+                study.getStudyCoverUrl(), String.valueOf(study.getStudyStatus()), study.getRecommend(),
                 book.getBookName(), book.getBookPage(), book.getBookAuthor(), book.getBookPublisher(), book.getBookIsbn(),
                 null, null, null);
         } else if (lecture != null) {
@@ -270,7 +270,7 @@ public class StudyService {
             studyDetailDto = new StudyDetailDto(study.getStudyTitle(), study.getUser().getUserNickname(),
                 study.getAcceptedStudyMember(), study.getStudyPeople(), study.getStudyStart(), study.getStudyEnd(),
                 study.getStudyTag(), String.valueOf(study.getStudyType()), study.getStudyRate(), study.getViews(),
-                study.getStudyCoverUrl(), String.valueOf(study.getStudyStatus()),
+                study.getStudyCoverUrl(), String.valueOf(study.getStudyStatus()), study.getRecommend(),
                 null, null, null, null, null,
                 lecture.getLectureName(), lecture.getLecturer(), lecture.getLectureNumber());
         }
@@ -312,6 +312,7 @@ public class StudyService {
         }
 
         study.setStudyRate(study.getStudyRate() + recommend);
+        study.setRecommend(recommend);
 
         studyRepository.save(study);
     }

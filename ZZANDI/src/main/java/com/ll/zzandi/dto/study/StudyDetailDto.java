@@ -25,6 +25,7 @@ public class StudyDetailDto {
   private int views;
   private String studyCoverUrl;
   private String studyStatus;
+  private int studyRecommend;
 
   private String bookName;
   private Integer bookPage;

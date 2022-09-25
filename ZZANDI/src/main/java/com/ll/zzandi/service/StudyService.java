@@ -8,19 +8,16 @@ import com.ll.zzandi.dto.study.StudyDetailDto;
 import com.ll.zzandi.dto.study.StudyListDto;
 import com.ll.zzandi.enumtype.StudyStatus;
 import com.ll.zzandi.enumtype.StudyType;
-import com.ll.zzandi.enumtype.TeamMateStatus;
 import com.ll.zzandi.exception.ErrorType;
 import com.ll.zzandi.exception.StudyException;
 import com.ll.zzandi.repository.BoardRepository;
 import com.ll.zzandi.repository.BookRepository;
 import com.ll.zzandi.repository.CommentRepository;
 import com.ll.zzandi.repository.StudyRepository;
-import com.ll.zzandi.repository.TeamMateRepository;
 import com.ll.zzandi.enumtype.TableType;
 import com.ll.zzandi.repository.*;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.time.Period;
 
 import com.ll.zzandi.util.aws.ImageUploadService;
@@ -290,11 +287,36 @@ public class StudyService {
         for (Study study : studyList) {
             study = study.checkStatus();
             studyRepository.save(study);
+
+            if (study.getStudyStatus().equals(StudyStatus.PROGRESS)) {
+                updateStudy(study);
+            }
         }
     }
+    public void updateStudy(Study study) {
 
+        int total = (study.getStudyType().equals(StudyType.BOOK))
+            ? study.getBook().getBookPage() : study.getLecture().getLectureNumber();
 
-    public int getStudyPeriod(Long studyId) {
+        int studyLeftNum = total - study.getStudyRate();
+
+        int studyDays = getStudyDays(study.getId());
+
+        int recommend = 0;
+
+        if (studyLeftNum % studyDays > 0) {
+            recommend = (int) Math.ceil(total / studyDays) + 1;
+        }
+        else {
+            recommend = (int) Math.ceil(total / studyDays);
+        }
+
+        study.setStudyRate(study.getStudyRate() + recommend);
+
+        studyRepository.save(study);
+    }
+
+    public int getStudyPeriod(Long studyId) {// 전체 스터디 기간을 return
         Study studies = findByStudyId(studyId).orElseThrow(() -> new StudyException(ErrorType.NOT_FOUND));
 
         LocalDate studyStart = LocalDate.parse(studies.getStudyStart());
@@ -303,18 +325,25 @@ public class StudyService {
         return Period.between(studyStart, studyEnd).getDays();
     }
 
-    public int getStudyRecommend(Long studyId) {
+    public int getStudyRecommend(Long studyId) {// 추천 진도율을 return
         Study studies = findByStudyId(studyId).orElseThrow(() -> new StudyException(ErrorType.NOT_FOUND));
-
-        int studyDays = getStudyPeriod(studyId);
 
         int total = (studies.getStudyType().equals(StudyType.BOOK))
             ? studies.getBook().getBookPage() : studies.getLecture().getLectureNumber();
 
-        return (int) Math.ceil(total / studyDays);
+        int studyLeftNum = total - studies.getStudyRate();
+
+        int studyDays = getStudyDays(studyId);
+
+        if (studyLeftNum % studyDays > 0) {
+            return (int) Math.ceil(total / studyDays) + 1;
+        }
+        else {
+            return (int) Math.ceil(total / studyDays);
+        }
     }
 
-    public int getStudyDays(Long studyId) {
+    public int getStudyDays(Long studyId) { // 남은 스터디 기간을 return
         Study studies = findByStudyId(studyId).orElseThrow(() -> new StudyException(ErrorType.NOT_FOUND));
 
         LocalDate studyStart = LocalDate.parse(studies.getStudyStart());

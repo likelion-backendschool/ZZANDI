@@ -3,6 +3,7 @@ package com.ll.zzandi.repository;
 import com.ll.zzandi.domain.Study;
 import com.ll.zzandi.domain.TeamMate;
 import com.ll.zzandi.domain.User;
+import com.ll.zzandi.enumtype.TeamMateDelegate;
 import com.ll.zzandi.enumtype.TeamMateStatus;
 import java.util.List;
 import java.util.Optional;
@@ -17,4 +18,6 @@ public interface TeamMateRepository extends JpaRepository<TeamMate, Long> {
   List<TeamMate> findByStudy(Study study);
 
   List<TeamMate> findByUserAndTeamMateStatus(User user, TeamMateStatus teamMateStatus);
+
+  List<TeamMate> findByUserAndTeamMateDelegate(User user, TeamMateDelegate teamMateDelegate);
 }

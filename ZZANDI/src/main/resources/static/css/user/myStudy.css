@@ -31,3 +31,8 @@
   word-break: break-word;
   max-width: 250px;
 }
+
+.title2{
+  word-break: break-word;
+  max-width: 170px;
+}

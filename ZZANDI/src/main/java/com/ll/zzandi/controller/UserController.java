@@ -8,6 +8,7 @@ import com.ll.zzandi.domain.User;
 import com.ll.zzandi.dto.UserDto;
 import com.ll.zzandi.dto.study.MyStudyDto;
 import com.ll.zzandi.dto.study.StudyListDto;
+import com.ll.zzandi.enumtype.TeamMateDelegate;
 import com.ll.zzandi.enumtype.TeamMateStatus;
 import com.ll.zzandi.exception.ErrorType;
 import com.ll.zzandi.exception.StudyException;
@@ -206,6 +207,15 @@ public class UserController {
     public List<MyStudyDto> findWaitingStudyList(@AuthenticationPrincipal User user) {
         List<TeamMate> teamMateList = teamMateRepository.findByUserAndTeamMateStatus(
             user, TeamMateStatus.WAITING);
+        List<MyStudyDto> studyList = studyService.findWaitingStudyList(teamMateList);
+        return studyList;
+    }
+
+    @GetMapping("/findDelegateStudyList")
+    @ResponseBody
+    public List<MyStudyDto> findDelegateStudyList(@AuthenticationPrincipal User user) {
+        List<TeamMate> teamMateList = teamMateRepository.findByUserAndTeamMateDelegate(
+            user, TeamMateDelegate.WAITING);
         List<MyStudyDto> studyList = studyService.findWaitingStudyList(teamMateList);
         return studyList;
     }

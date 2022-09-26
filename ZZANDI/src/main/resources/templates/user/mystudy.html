@@ -31,7 +31,10 @@
         <div th:if = "${user.userNickname == #authentication.principal.userNickname}">
             <nav id = "menu" class="navbar mt-5">
                 <ul class = "d-block">
-                    <li class = "p-0">
+                    <li class = "p-0 mt-3">
+                        <a th:href="@{|/user/profile?userNickname=${user.userNickname}|}"><i class="bi bi-gear-fill me-1"></i>내 프로필</a>
+                    </li>
+                    <li class = "p-0 mt-3">
                         <a th:href="@{|/user/mypage?userNickname=${user.userNickname}|}"><i class="bi bi-pencil-fill me-1"></i>회원 정보 수정</a>
                     </li>
                     <li class = "p-0 mt-3">
@@ -47,6 +50,14 @@
             <div class = "card-body">
                 <table class = "myStudyTable">
                     <tbody class = "waitingList"></tbody>
+                </table>
+            </div>
+        </div>
+        <p class = "subHeading mt-5">팀장 위임 신청 목록</p>
+        <div class = "card my-3" style = "margin-left : 75px; width : 85%">
+            <div class = "card-body">
+                <table class = "myStudyTable">
+                    <tbody class = "leaderList"></tbody>
                 </table>
             </div>
         </div>

@@ -55,6 +55,7 @@ public class StudyService {
     private final ImageUploadService imageUploadService;
     private final FileRepository fileRepository;
     private final InterestRepository interestRepository;
+    private final TeamMateRepository teamMateRepository;
 
     public Study createStudyWithBook(@Valid StudyDto studyDto, Book book, User user) {
         Study study = new Study(user, studyDto.getStudyTitle(), book, null, StudyType.BOOK,
@@ -385,6 +386,45 @@ public class StudyService {
         studyList.addAll(studyList1);
         studyList.addAll(studyList2);
         studyList.addAll(studyList3);
+
+        return studyList.stream().map(study -> new StudyListDto(study.getId(), study.getStudyTitle(),
+            study.getAcceptedStudyMember(), study.getStudyPeople(),
+            study.getStudyStart(), study.getStudyEnd(), study.getStudyTag(),
+            String.valueOf(study.getStudyType()), study.getViews(), study.getStudyCoverUrl(),
+            String.valueOf(study.getStudyStatus()))).collect(Collectors.toList());
+    }
+
+  public List<StudyListDto> findRecruitStudyList(User user) {
+      PageRequest paging = PageRequest.of(0, 9, Sort.by(Sort.Direction.DESC, "id"));
+
+      List<Study> studyList = studyRepository.findByUserAndStudyStatusOrStudyStatus(user, StudyStatus.RECRUIT, StudyStatus.RECRUIT_COMPLETE, paging);
+
+      return studyList.stream().map(study -> new StudyListDto(study.getId(), study.getStudyTitle(),
+          study.getAcceptedStudyMember(), study.getStudyPeople(),
+          study.getStudyStart(), study.getStudyEnd(), study.getStudyTag(),
+          String.valueOf(study.getStudyType()), study.getViews(), study.getStudyCoverUrl(),
+          String.valueOf(study.getStudyStatus()))).collect(Collectors.toList());
+  }
+
+    public List<StudyListDto> findProgressStudyList(User user) {
+        PageRequest paging = PageRequest.of(0, 9, Sort.by(Sort.Direction.DESC, "id"));
+
+        List<TeamMate> teamMateList = teamMateRepository.findAllByUser(user);
+        List<Study> studyList = studyRepository.findByTeamMateListInAndStudyStatus(
+            teamMateList, StudyStatus.PROGRESS, paging);
+
+        return studyList.stream().map(study -> new StudyListDto(study.getId(), study.getStudyTitle(),
+            study.getAcceptedStudyMember(), study.getStudyPeople(),
+            study.getStudyStart(), study.getStudyEnd(), study.getStudyTag(),
+            String.valueOf(study.getStudyType()), study.getViews(), study.getStudyCoverUrl(),
+            String.valueOf(study.getStudyStatus()))).collect(Collectors.toList());
+    }
+
+    public List<StudyListDto> findCompleteStudyList(User user) {
+        PageRequest paging = PageRequest.of(0, 18, Sort.by(Sort.Direction.DESC, "id"));
+        List<TeamMate> teamMateList = teamMateRepository.findAllByUser(user);
+        List<Study> studyList = studyRepository.findByTeamMateListInAndStudyStatus(
+            teamMateList, StudyStatus.COMPLETE, paging);
 
         return studyList.stream().map(study -> new StudyListDto(study.getId(), study.getStudyTitle(),
             study.getAcceptedStudyMember(), study.getStudyPeople(),

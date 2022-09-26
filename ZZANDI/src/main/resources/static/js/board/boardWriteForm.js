@@ -58,7 +58,6 @@ const editor = new Editor({
 
 document.querySelector("#file").addEventListener('change', (e) => upload(e.target.files));
 
-// 첨부파일 선택하면 border로 테두리 적용해주기
 document.querySelector('#image_container').addEventListener('click', (e) => {
     const target = e.target;
     if (target.tagName !== 'IMG') {
@@ -116,7 +115,6 @@ function deleteAllUploadFile() {
     }
 
     fileList.value = '';
-    document.querySelector('.file-count').innerHTML = '';
     document.querySelector('#image_container').innerHTML = '';
 }
 
@@ -134,11 +132,28 @@ function formatBytes(bytes, decimals = 2) {
 }
 
 function upload(files) {
+    const size = Array.from(files).map(file => file.size).reduce((sum, curr) => sum + curr);
+    if (size > 50000000) {
+        alert('첨부 가능한 파일의 총 크기는 50MB 입니다!');
+        return;
+    }
+
     let totalSize = 0;
+    let fileCount = 0;
     document.querySelector('#image_container').innerHTML = '';
     for (let image of files) {
         let reader = new FileReader();
 
+        if (image.size > 3000000) {
+            alert('첨부 파일은 하나 당 3MB 이하로 첨부해주세요!');
+            if(files.length === 1) {
+                fileCount = 0;
+                totalSize = 0;
+            }
+            continue;
+        }
+
+        fileCount += 1;
         totalSize += image.size;
 
         reader.onload = function (e) {
@@ -152,7 +167,7 @@ function upload(files) {
         reader.readAsDataURL(image);
     }
 
-    document.querySelector(".file-count").innerHTML = `${files.length}개 첨부 됨 (${formatBytes(totalSize)} / 50MB)`;
+    document.querySelector(".file-count").innerHTML = `${fileCount}개 첨부 됨 (${formatBytes(totalSize)} / 50MB)`;
 }
 
 function validSubmit() {

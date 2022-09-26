@@ -56,25 +56,53 @@ const editor = new Editor({
     },
 });
 
-document.querySelector("#file").addEventListener('change', (e) => {
-    let totalSize = 0;
-    document.querySelector('#image_container').innerHTML = '';
-    for (let image of e.target.files) {
-        let reader = new FileReader();
+document.querySelector("#file").addEventListener('change', (e) => upload(e.target.files));
 
-        totalSize += image.size;
-
-        reader.onload = function (e) {
-            let img = document.createElement('img');
-            img.setAttribute('src', e.target.result);
-            document.querySelector('#image_container').appendChild(img);
-        };
-        reader.readAsDataURL(image);
+// 첨부파일 선택하면 border로 테두리 적용해주기
+document.querySelector('#image_container').addEventListener('click', (e) => {
+    const target = e.target;
+    if (target.tagName !== 'IMG') {
+        return false;
     }
-
-    document.querySelector(".file-count").innerHTML = `${e.target.files.length}개 첨부 됨 (${formatBytes(totalSize)} / 50MB)`;
+    target.classList.toggle('selected');
 });
 
+
+function deleteSelectUploadFile() {
+    let images = Object.values(document.querySelectorAll('.upload-img'));
+
+    let isCheck = false;
+    for (let img of images) {
+        if (img.classList.contains('selected')) {
+            isCheck = true;
+        }
+    }
+
+    if (!isCheck) {
+        alert('선택된 파일이 없습니다!');
+        return false;
+    }
+
+    if (!confirm("선택한 첨부 파일을 삭제하시겠습니까?")) {
+        return false;
+    }
+
+    const dataTransfer = new DataTransfer();
+    let files = document.querySelector('#file').files;
+
+    let fileArray = Array.from(files);
+    images = images.filter(img => !img.classList.contains('selected'));
+    fileArray = fileArray.filter(file => {
+        for (let img of images) {
+            if (img.dataset.name === file.name) {
+                return file;
+            }
+        }
+    });
+    fileArray.forEach(file => dataTransfer.items.add(file));
+    document.querySelector('#file').files = dataTransfer.files;
+    upload(dataTransfer.files);
+}
 
 function deleteAllUploadFile() {
     let fileList = document.querySelector('#file');
@@ -83,7 +111,7 @@ function deleteAllUploadFile() {
         return false;
     }
 
-    if (!confirm("첨부파일을 삭제하시겠습니까?")) {
+    if (!confirm("모든 첨부 파일을 삭제하시겠습니까?")) {
         return false;
     }
 
@@ -103,6 +131,28 @@ function formatBytes(bytes, decimals = 2) {
     const i = Math.floor(Math.log(bytes) / Math.log(k));
 
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+}
+
+function upload(files) {
+    let totalSize = 0;
+    document.querySelector('#image_container').innerHTML = '';
+    for (let image of files) {
+        let reader = new FileReader();
+
+        totalSize += image.size;
+
+        reader.onload = function (e) {
+            let img = document.createElement('img');
+            img.setAttribute('class', 'upload-img');
+            img.setAttribute('src', e.target.result);
+            img.setAttribute('data-name', image.name);
+
+            document.querySelector('#image_container').appendChild(img);
+        };
+        reader.readAsDataURL(image);
+    }
+
+    document.querySelector(".file-count").innerHTML = `${files.length}개 첨부 됨 (${formatBytes(totalSize)} / 50MB)`;
 }
 
 function validSubmit() {

@@ -36,3 +36,7 @@
     height: 70px;
     object-fit: cover;
 }
+
+.selected {
+    border: 5px solid darkseagreen;
+}

@@ -129,6 +129,7 @@ public class BoardController {
             return "/board/boardWriteForm";
         }
 
+        System.out.println("files = " + files.toString());
         Study study = studyService.findByStudyId(studyId).get();
         Board board = new Board(user, boardCreateDto.getCategory(), boardCreateDto.getTitle(), boardCreateDto.getContent(), 0, 0, study);
         Long boardId = boardService.createBoard(board, files);

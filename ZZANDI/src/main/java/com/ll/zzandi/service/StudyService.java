@@ -4,10 +4,12 @@ import com.ll.zzandi.domain.*;
 import com.ll.zzandi.dto.BookDto;
 import com.ll.zzandi.dto.LectureDto;
 import com.ll.zzandi.dto.StudyDto;
+import com.ll.zzandi.dto.study.MyStudyDto;
 import com.ll.zzandi.dto.study.StudyDetailDto;
 import com.ll.zzandi.dto.study.StudyListDto;
 import com.ll.zzandi.enumtype.StudyStatus;
 import com.ll.zzandi.enumtype.StudyType;
+import com.ll.zzandi.enumtype.TeamMateStatus;
 import com.ll.zzandi.exception.ErrorType;
 import com.ll.zzandi.exception.StudyException;
 import com.ll.zzandi.repository.BoardRepository;
@@ -444,5 +446,13 @@ public class StudyService {
             study.getStudyStart(), study.getStudyEnd(), study.getStudyTag(),
             String.valueOf(study.getStudyType()), study.getViews(), study.getStudyCoverUrl(),
             String.valueOf(study.getStudyStatus()))).collect(Collectors.toList());
+    }
+
+    public List<MyStudyDto> findWaitingStudyList(List<TeamMate> teamMateList) {
+        List<Study> studyList = studyRepository.findByTeamMateListIn(teamMateList);
+
+        return studyList.stream().map(study -> new MyStudyDto(study.getId(), study.getStudyTitle(),
+            study.getStudyStart(), study.getStudyEnd(), study.getStudyTag(),
+            study.getStudyCoverUrl(), String.valueOf(study.getStudyStatus()))).collect(Collectors.toList());
     }
 }

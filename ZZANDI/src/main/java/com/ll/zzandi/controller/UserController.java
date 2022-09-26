@@ -2,13 +2,19 @@ package com.ll.zzandi.controller;
 
 import com.google.common.base.Strings;
 import com.ll.zzandi.domain.Interest;
+import com.ll.zzandi.domain.Study;
 import com.ll.zzandi.domain.TeamMate;
 import com.ll.zzandi.domain.User;
 import com.ll.zzandi.dto.UserDto;
+import com.ll.zzandi.dto.study.MyStudyDto;
 import com.ll.zzandi.dto.study.StudyListDto;
+import com.ll.zzandi.enumtype.TeamMateStatus;
 import com.ll.zzandi.exception.ErrorType;
+import com.ll.zzandi.exception.StudyException;
+import com.ll.zzandi.exception.TeamMateException;
 import com.ll.zzandi.exception.UserApplicationException;
 import com.ll.zzandi.repository.InterestRepository;
+import com.ll.zzandi.repository.TeamMateRepository;
 import com.ll.zzandi.repository.UserRepository;
 import com.ll.zzandi.service.StudyService;
 import com.ll.zzandi.service.TeamMateService;
@@ -44,6 +50,7 @@ public class UserController {
     private final TeamMateService teamMateService;
     private final InterestRepository interestRepository;
     private final StudyService studyService;
+    private final TeamMateRepository teamMateRepository;
 
     @InitBinder("registerRequest")
     public void initBinder(WebDataBinder webDataBinder) {
@@ -180,15 +187,27 @@ public class UserController {
 
     @GetMapping("/mystudy")
     public String showMyStudy(@AuthenticationPrincipal User user, Model model){
-        User currentUser = userRepository.findByUserId(user.getUserId()).orElseThrow(() -> new UserApplicationException(
-                ErrorType.NOT_FOUND));
-        User pageUser = userRepository.findByUserNickname(user.getUserNickname()).orElseThrow(() -> new UserApplicationException(
-                ErrorType.NOT_FOUND));
-        List<TeamMate> teamMateList = teamMateService.findAllByUser(currentUser);
-        model.addAttribute("currentUser",currentUser);
-        model.addAttribute("user", pageUser);
+
+        List<Interest> interestList = interestRepository.findByUser(user);
+        List<TeamMate> teamMateList = teamMateRepository.findByUserAndTeamMateStatus(
+            user, TeamMateStatus.WAITING);
+        List<MyStudyDto> waitingStudyList = studyService.findWaitingStudyList(teamMateList);
+
+        model.addAttribute("user", user);
+        model.addAttribute("interestList", interestList);
         model.addAttribute("teamMateList", teamMateList);
+        model.addAttribute("waitingStudyList", waitingStudyList);
+
         return "/user/mystudy";
+    }
+
+    @GetMapping("/findWaitingStudyList")
+    @ResponseBody
+    public List<MyStudyDto> findWaitingStudyList(@AuthenticationPrincipal User user) {
+        List<TeamMate> teamMateList = teamMateRepository.findByUserAndTeamMateStatus(
+            user, TeamMateStatus.WAITING);
+        List<MyStudyDto> studyList = studyService.findWaitingStudyList(teamMateList);
+        return studyList;
     }
 
     @PreAuthorize("isAuthenticated()")

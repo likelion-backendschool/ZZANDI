@@ -56,4 +56,5 @@ public interface StudyRepository extends JpaRepository<Study, Integer> {
 
     List<Study> findByTeamMateListInAndStudyStatus(List<TeamMate> teamMateList, StudyStatus studyStatus, Pageable pageable);
 
+    List<Study> findByTeamMateListIn(List<TeamMate> teamMateList);
 }

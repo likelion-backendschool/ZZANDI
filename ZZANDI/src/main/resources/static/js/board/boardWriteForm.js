@@ -71,9 +71,8 @@ document.querySelector("#file").addEventListener('change', (e) => {
         };
         reader.readAsDataURL(image);
     }
-    // const i = Math.floor(Math.log(totalSize) / Math.log(1024));
-    // console.log(parseFloat((totalSize / Math.pow(2048, i)).toFixed(3)) + 'MB');
-    document.querySelector(".file-count").innerHTML = `${e.target.files.length}개 첨부 됨 (${totalSize}Byte / 50MB)`;
+
+    document.querySelector(".file-count").innerHTML = `${e.target.files.length}개 첨부 됨 (${formatBytes(totalSize)} / 50MB)`;
 });
 
 
@@ -93,6 +92,18 @@ function deleteAllUploadFile() {
     document.querySelector('#image_container').innerHTML = '';
 }
 
+
+function formatBytes(bytes, decimals = 2) {
+    if (bytes === 0) return '0 Bytes';
+
+    const k = 1024;
+    const dm = decimals < 0 ? 0 : decimals;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+}
 
 function validSubmit() {
     const category = document.querySelector(".category");

@@ -1,12 +1,16 @@
 package com.ll.zzandi.controller;
 
 import com.google.common.base.Strings;
+import com.ll.zzandi.domain.Interest;
 import com.ll.zzandi.domain.TeamMate;
 import com.ll.zzandi.domain.User;
 import com.ll.zzandi.dto.UserDto;
+import com.ll.zzandi.dto.study.StudyListDto;
 import com.ll.zzandi.exception.ErrorType;
 import com.ll.zzandi.exception.UserApplicationException;
+import com.ll.zzandi.repository.InterestRepository;
 import com.ll.zzandi.repository.UserRepository;
+import com.ll.zzandi.service.StudyService;
 import com.ll.zzandi.service.TeamMateService;
 import com.ll.zzandi.service.UserService;
 import com.ll.zzandi.util.validator.RegisterFormValidator;
@@ -38,6 +42,8 @@ public class UserController {
     private final UserService userService;
     private final UserRepository userRepository;
     private final TeamMateService teamMateService;
+    private final InterestRepository interestRepository;
+    private final StudyService studyService;
 
     @InitBinder("registerRequest")
     public void initBinder(WebDataBinder webDataBinder) {
@@ -118,7 +124,7 @@ public class UserController {
         return "/user/denied";
     }
 
-    @GetMapping("/profile")
+    @GetMapping("/profileImage")
     public String getProfilePage(@AuthenticationPrincipal User user,Model model){
         //TODO 이거 질문 하기 이로직을 너무 많이 사용할거 같은데 유저가 업데이트 되면 @Autuen 에서 가져오는 User정보도 업데이트를 하는 방법
         User currentUser=userRepository.findByUserId(user.getUserId()).orElseThrow(RuntimeException::new);
@@ -126,12 +132,31 @@ public class UserController {
         return"/user/Profile-upload";
     }
 
-    @PostMapping("/profile")
+    @PostMapping("/profileImage")
     @ResponseBody
     @Transactional
     public String updateProfileImage(@RequestParam("croppedImage") MultipartFile multipartFile, @AuthenticationPrincipal User user) throws IOException {
         userService.updateProfile(multipartFile,user.getId());
         return  "1";
+    }
+
+    @GetMapping("/profile")
+    public String showProfile(@RequestParam("userNickname") String userNickname, Model model) {
+        User user = userRepository.findByUserNickname(userNickname)
+            .orElseThrow(() -> new UserApplicationException(ErrorType.NOT_FOUND));
+
+        List<Interest> interestList = interestRepository.findByUser(user);
+        List<StudyListDto> recruitStudyList = studyService.findRecruitStudyList(user);
+        List<StudyListDto> progressStudyList = studyService.findProgressStudyList(user);
+        List<StudyListDto> completeStudyList = studyService.findCompleteStudyList(user);
+
+        model.addAttribute("user", user);
+        model.addAttribute("interestList", interestList);
+        model.addAttribute("recruitStudyList", recruitStudyList);
+        model.addAttribute("progressStudyList", progressStudyList);
+        model.addAttribute("completeStudyList", completeStudyList);
+
+        return "/user/profile";
     }
 
     @GetMapping("/mypage")

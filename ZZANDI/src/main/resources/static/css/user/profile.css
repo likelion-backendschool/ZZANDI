@@ -1,0 +1,92 @@
+@font-face {
+  font-family: 'adobaonlyR';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2205@1.0/adobaonlyR.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body{
+  font-family: "adobaonlyR", serif;
+}
+
+.main {
+  margin : 0 auto;
+  max-width: 1200px;
+  min-height: 100%;
+  position : relative;
+  display : flex;
+}
+
+.profile-box {
+  width : 220px;
+  margin-top : 100px;
+  margin-bottom: 20px;
+  text-align: center;
+  padding : 20px;
+  overflow:hidden;
+  height:auto;
+}
+
+.zzandi {
+  margin : 0 auto 15px auto;
+  display : flex;
+  align-items: end;
+  justify-content: center;
+  font-weight: bold;
+  color: #519259;
+}
+
+#profileImg {
+  width : 150px;
+  border-radius : 1em;
+}
+
+#userNickname {
+  margin-top : 20px;
+  font-weight: bold;
+  font-size : 20px;
+  color : darkslategray;
+  word-wrap: break-word;
+}
+
+#interest {
+  color : #09a694;
+  font-weight: bold;
+}
+
+#menu {
+  text-align: left;
+}
+
+#menu ul > li > a{
+  color : #519259;
+  font-family: "adobaonlyR", serif;
+  justify-content: left;
+}
+
+.studyListBox {
+  width : 100%;
+  margin-top : 150px;
+  border-left: 1px solid lightgray;
+}
+
+.subHeading{
+  font-size : 21px;
+  color : darkslategray;
+  font-weight: bold;
+  margin-left : 75px;
+}
+
+.link {
+  font-size: 13px;
+  color: forestgreen;
+}
+
+.profile-studyList table {
+  width : 75%;
+  border-spacing: 20px;
+  border-collapse: separate;
+  table-layout : fixed;
+  min-width: 800px;
+  margin : 0 auto;
+}

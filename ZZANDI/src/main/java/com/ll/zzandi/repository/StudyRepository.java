@@ -1,6 +1,8 @@
 package com.ll.zzandi.repository;
 
 import com.ll.zzandi.domain.Study;
+import com.ll.zzandi.domain.TeamMate;
+import com.ll.zzandi.domain.User;
 import com.ll.zzandi.enumtype.StudyStatus;
 import com.ll.zzandi.enumtype.StudyType;
 import java.util.List;
@@ -49,4 +51,9 @@ public interface StudyRepository extends JpaRepository<Study, Integer> {
 
     @Query("select s from Study s where (:interest is null or s.studyTag = :interest)")
     List<Study> findInterest1StudyList(@Param("interest") String interest, PageRequest paging);
+
+    List<Study> findByUserAndStudyStatusOrStudyStatus(User user, StudyStatus studyStatus, StudyStatus studyStatus2, Pageable pageable);
+
+    List<Study> findByTeamMateListInAndStudyStatus(List<TeamMate> teamMateList, StudyStatus studyStatus, Pageable pageable);
+
 }

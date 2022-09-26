@@ -163,7 +163,7 @@ function displayStudy(data, teamMateList) {
         html += `
           <tr>
             <td>
-              <a id="waitingNickname" href="/user/mypage?userNickname=${teamMateList[i].userNickname}" style="margin-right: 5px;">
+              <a id="waitingNickname" href="/user/profile?userNickname=${teamMateList[i].userNickname}" style="margin-right: 5px;">
                 <img id = "waitingProfile" src="${teamMateList[i].userprofileUrl}">
                 ${teamMateList[i].userNickname}
               </a>
@@ -296,7 +296,7 @@ function displayStudy(data, teamMateList) {
     if (teamMateList[i].teamMateStatus == 'ACCEPTED') {
       html += `
       <div>
-        <a id="accepted" href="/user/mypage?userNickname=${teamMateList[i].userNickname}">
+        <a id="accepted" href="/user/profile?userNickname=${teamMateList[i].userNickname}">
         <img id = "acceptedProfile" src="${teamMateList[i].userprofileUrl}">
       `;
       if (teamMateList[i].userNickname == userNickname) {

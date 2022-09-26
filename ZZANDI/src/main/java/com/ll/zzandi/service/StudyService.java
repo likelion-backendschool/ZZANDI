@@ -291,11 +291,11 @@ public class StudyService {
             studyRepository.save(study);
 
             if (study.getStudyStatus().equals(StudyStatus.PROGRESS)) {
-                updateStudy(study);
+                updateStudyRate(study);
             }
         }
     }
-    public void updateStudy(Study study) {
+    public void updateStudyRate(Study study) {
 
         int total = (study.getStudyType().equals(StudyType.BOOK))
             ? study.getBook().getBookPage() : study.getLecture().getLectureNumber();
@@ -316,6 +316,30 @@ public class StudyService {
         study.setStudyRate(study.getStudyRate() + recommend);
         study.setRecommend(recommend);
 
+        studyRepository.save(study);
+    }
+
+    @Scheduled(cron = "0 59 23 * * *")
+    public void updateStudyRate() {
+        List<Study> studyList = studyRepository.findAll();
+        for (Study study : studyList) {
+            if (study.getStudyStatus().equals(StudyStatus.PROGRESS)) {
+                updateStudyAchieve(study);
+            }
+        }
+    }
+    public void updateStudyAchieve(Study study) {
+        List<TeamMate> teamMateList = study.getTeamMateList();
+
+        int total = (study.getStudyType().equals(StudyType.BOOK))
+            ? study.getBook().getBookPage() * teamMateList.size() : study.getLecture().getLectureNumber() * teamMateList.size();
+        System.out.println(total);
+        double achieve = 0;
+        for (TeamMate teammate : teamMateList) {
+            achieve += teammate.getTeamRate();
+        }
+        int percent = (int) Math.round(achieve/total *100);
+        study.setStudyAchieve(percent);
         studyRepository.save(study);
     }
 

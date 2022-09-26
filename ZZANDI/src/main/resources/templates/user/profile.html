@@ -33,6 +33,18 @@
     <div id = "interest">
       <p class = "m-0" th:each="interest : ${interestList}" th:text = "|# ${interest.interest}|"></p>
     </div>
+    <div th:if = "${user.userNickname == #authentication.principal.userNickname}">
+      <nav id = "menu" class="navbar mt-5">
+        <ul class = "d-block">
+          <li class = "p-0">
+            <a th:href="@{|/user/mypage?userNickname=${user.userNickname}|}"><i class="bi bi-pencil-fill me-1"></i>회원 정보 수정</a>
+          </li>
+          <li class = "p-0 mt-3">
+            <a th:href="@{/user/mystudy}"><i class="bi bi-bell-fill me-1"></i>스터디 신청 관리</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
   </div>
 
   <div class = "studyListBox">

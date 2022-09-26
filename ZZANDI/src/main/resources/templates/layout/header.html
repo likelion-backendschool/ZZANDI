@@ -29,9 +29,6 @@
           </a>
           <ul>
             <li sec:authorize="isAuthenticated()">
-              <a th:href="@{|/user/mypage?userNickname=${#authentication.principal.userNickname}|}">My Page</a>
-            </li>
-            <li sec:authorize="isAuthenticated()">
               <a th:href="@{|/user/profile?userNickname=${#authentication.principal.userNickname}|}">프로필</a>
             </li>
             <li sec:authorize="isAuthenticated()">

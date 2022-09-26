@@ -54,6 +54,16 @@ body{
   font-weight: bold;
 }
 
+#menu {
+  text-align: left;
+}
+
+#menu ul > li > a{
+  color : #519259;
+  font-family: "adobaonlyR", serif;
+  justify-content: left;
+}
+
 .studyListBox {
   width : 100%;
   margin-top : 150px;

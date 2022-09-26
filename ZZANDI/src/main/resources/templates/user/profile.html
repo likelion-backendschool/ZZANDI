@@ -28,7 +28,7 @@
 
       <span th:text = "|${user.userZzandi}cm|"></span>
     </div>
-    <img id = "profileImg" th:src = "${user.userprofileUrl}">
+    <img class = "profileImg" th:src = "${user.userprofileUrl}">
     <p id ="userNickname" th:text = "${user.userNickname}"></p>
     <div id = "interest">
       <p class = "m-0" th:each="interest : ${interestList}" th:text = "|# ${interest.interest}|"></p>

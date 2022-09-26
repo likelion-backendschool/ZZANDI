@@ -161,18 +161,20 @@ public class UserController {
 
     @GetMapping("/mypage")
     public String showMyPage(@AuthenticationPrincipal User user, @RequestParam("userNickname") String userNickname, Model model) {
-        User currentUser = userRepository.findByUserId(user.getUserId()).orElseThrow(() -> new UserApplicationException(
-            ErrorType.NOT_FOUND));
 
-        User pageUser = userRepository.findByUserNickname(userNickname).orElseThrow(() -> new UserApplicationException(
-            ErrorType.NOT_FOUND));
+        User pageUser = userRepository.findByUserNickname(userNickname)
+            .orElseThrow(() -> new UserApplicationException(ErrorType.NOT_FOUND));
 
-        List<TeamMate> teamMateList = teamMateService.findAllByUser(pageUser);
+        if (!user.getId().equals(pageUser.getId())) {
+            throw new UserApplicationException(ErrorType.NOT_LEADER);
+        }
 
-        model.addAttribute("currentUser", currentUser);
-        //여기서 user랑 currentuser랑 쓰임이 다른가요??
+        List<TeamMate> teamMateList = teamMateService.findAllByUser(user);
         model.addAttribute("user", pageUser);
         model.addAttribute("teamMateList", teamMateList);
+
+        List<Interest> interestList = interestRepository.findByUser(pageUser);
+        model.addAttribute("interestList", interestList);
         return "/user/mypage";
     }
 

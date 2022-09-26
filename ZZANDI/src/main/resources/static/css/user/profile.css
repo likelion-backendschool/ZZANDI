@@ -36,7 +36,7 @@ body{
   color: #519259;
 }
 
-#profileImg {
+.profileImg {
   width : 150px;
   border-radius : 1em;
 }

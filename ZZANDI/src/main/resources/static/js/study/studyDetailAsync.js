@@ -347,8 +347,6 @@ function displayStudy(data, teamMateList) {
 
       const each = document.querySelector(pattern);
 
-      console.log(each);
-
       each.style.width = `${eachWidth}%`;
     }
     // acceptedTeamMate[end]
@@ -540,8 +538,6 @@ function calcEach(data, i) {
     Total = data.lectureNumber;
   }
 
-  console.log(teamMateList[i].teamRate);
-
   return (teamMateList[i].teamRate / Total) * 100;
 }
 
@@ -557,9 +553,6 @@ function calcTotalTeamRate(data, teamMateList) {
   for (let i =0; i < teamMateList.length; i++) {
     teamTotal += teamMateList[i].teamRate;
   }
-
-  console.log(teamTotal);
-  console.log(teamTotalPage);
 
   return (teamTotal / teamTotalPage) * 100;
 }
@@ -578,7 +571,6 @@ function toggleStudyInput() {
 function getTeamRate(){
   for (let i = 0; i < teamMateList.length; i++) {
     if(teamMateList[i].userNickname == userNickname) {
-      console.log(teamMateList[i].teamRate)
       return teamMateList[i].teamRate;
     }
   }
@@ -622,12 +614,9 @@ async function submitModifyRate(form, studyId, userNickname, data) {
 
   let url = `/${studyId}/teamMate/update/${rateInput}`;
 
-  console.log(url);
-
   fetch(url).then(
       async () => {
         teamMateList = await findTeamMateList(studyId, userNickname);
-        console.log(teamMateList);
         studyDetail = await findStudyDetail(studyId);
         displayStudy(studyDetail, teamMateList);
       }

@@ -329,10 +329,10 @@ public class StudyService {
     public int getStudyDays(Long studyId) { // 남은 스터디 기간을 return
         Study studies = findByStudyId(studyId).orElseThrow(() -> new StudyException(ErrorType.NOT_FOUND));
 
-        LocalDate studyStart = LocalDate.parse(studies.getStudyStart());
+        LocalDate studyEnd = LocalDate.parse(studies.getStudyEnd());
         LocalDate today = LocalDate.now();
 
-        return Period.between(studyStart, today).getDays();
+        return Period.between(today, studyEnd).getDays() + 1;
     }
 
     public void updateViews(Long studyId) {

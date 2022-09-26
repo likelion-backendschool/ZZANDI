@@ -164,6 +164,7 @@ h6 {
   z-index: 997;
   height: 90px;
   background-color: var(--color-back);
+  position : relative;
 }
 
 .header.sticked {
@@ -196,6 +197,9 @@ h6 {
 .searchBox {
   display : flex;
   outline : none;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%);
 }
 
 .searchBox input {

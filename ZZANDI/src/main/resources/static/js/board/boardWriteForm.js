@@ -76,6 +76,24 @@ document.querySelector("#file").addEventListener('change', (e) => {
     document.querySelector(".file-count").innerHTML = `${e.target.files.length}개 첨부 됨 (${totalSize}Byte / 50MB)`;
 });
 
+
+function deleteAllUploadFile() {
+    let fileList = document.querySelector('#file');
+    if (fileList.value === '') {
+        alert('첨부된 파일이 없습니다!');
+        return false;
+    }
+
+    if (!confirm("첨부파일을 삭제하시겠습니까?")) {
+        return false;
+    }
+
+    fileList.value = '';
+    document.querySelector('.file-count').innerHTML = '';
+    document.querySelector('#image_container').innerHTML = '';
+}
+
+
 function validSubmit() {
     const category = document.querySelector(".category");
     const title = document.querySelector(".title");

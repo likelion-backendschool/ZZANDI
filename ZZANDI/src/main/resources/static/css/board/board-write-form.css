@@ -23,7 +23,7 @@
     height: 200px;
 }
 
-.btn-upload {
+.btn-upload, .btn-delete  {
     cursor: pointer;
     border: 1px solid var(--light-gray-color);
     border-radius: 5px;

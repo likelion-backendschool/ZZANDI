@@ -51,7 +51,10 @@
 
     <i class="mobile-nav-toggle mobile-nav-show bi bi-list"></i>
     <i class="mobile-nav-toggle mobile-nav-hide d-none bi bi-x"></i>
-
   </div>
+
+  <iframe sec:authorize="isAuthenticated()" id="todo-list" data-src="/todo/list"></iframe>
+  <i sec:authorize="isAuthenticated()" id="todo-btn" class="fa-solid fa-circle-check" style="font-size: 44px; color: darkseagreen;"></i>
+  <i sec:authorize="isAuthenticated()" class="fa-solid fa-circle-xmark close-btn" style="display: none;"></i>
 </header><!-- End Header -->
 <!-- End Header -->

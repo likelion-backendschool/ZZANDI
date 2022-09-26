@@ -29,7 +29,7 @@
           </a>
           <ul>
             <li sec:authorize="isAuthenticated()">
-              <a th:href="@{|/user/profile?userNickname=${#authentication.principal.userNickname}|}">프로필</a>
+              <a th:href="@{|/user/profile?userNickname=${#authentication.principal.userNickname}|}">내 프로필</a>
             </li>
             <li sec:authorize="isAuthenticated()">
               <a href="/user/logout">로그아웃</a>

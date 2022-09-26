@@ -62,11 +62,11 @@ function displayStudy(data, teamMateList) {
   }
 
   // 팀원이지만 팀장이 아니며, 아직 진행 중이 아닌 경우,
-  if (isTeamMate && (userNickname != data.leader)) {
+  if (isTeamMate && (userNickname != data.leader) && (data.studyStatus != 'COMPLETE')) {
     html += `
       <button onclick = "quit()" id="quitbtn" class="btn btn-outline-secondary mt-3">탈퇴하기</button>
     `;
-  } else if (isTeamMate && userNickname == data.leader) {
+  } else if (isTeamMate && (userNickname == data.leader)  && (data.studyStatus != 'COMPLETE')) {
     if (!isDelete) {
       html += `
       <button onclick = "clickDelegatebtn()" id="quitbtn" class="btn btn-outline-secondary mt-3">탈퇴하기</button>
@@ -212,7 +212,10 @@ function displayStudy(data, teamMateList) {
       </div>
       <p class = "mb-0 ms-3">${widthShowZzandi}%</p>
     </div>
-    
+    `;
+  }
+  if (data.studyStatus == 'COMPLETE' || data.studyStatus == 'PROGRESS') {
+    html += `
     <p class = "studyRate"><i class="bi bi-bar-chart-fill" style="font-size: 1.3rem; margin-right : 5px;"></i>우리의 달성률</p>
     <div class = "d-flex mt-3 mb-3 align-items-center">
       <div class="progress">

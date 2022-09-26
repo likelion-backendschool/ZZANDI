@@ -109,13 +109,6 @@ public class StudyController {
     public String StudyDetail(@AuthenticationPrincipal User user, @PathVariable Long studyId, Model model) {
         studyService.updateViews(studyId);
         model.addAttribute("studyId", studyId);
-
-        int studyDays = studyService.getStudyDays(studyId);
-        model.addAttribute("studyDays", studyDays);
-        int studyPeriod = studyService.getStudyPeriod(studyId);
-        model.addAttribute("studyPeriod", studyPeriod);
-        int studyRecommend = studyService.getStudyRecommend(studyId);
-        model.addAttribute("studyRecommend", studyRecommend);
         return "study/studyDetailAsync";
     }
 
@@ -132,11 +125,6 @@ public class StudyController {
         model.addAttribute("studyId", studyId);
 
         int studyDays = studyService.getStudyDays(studyId);
-        model.addAttribute("studyDays", studyDays);
-        int studyPeriod = studyService.getStudyPeriod(studyId);
-        model.addAttribute("studyPeriod", studyPeriod);
-        int studyRecommend = studyService.getStudyRecommend(studyId);
-        model.addAttribute("studyRecommend", studyRecommend);
         return "study/studyDetailAsync";
     }
 

@@ -326,24 +326,6 @@ public class StudyService {
         return Period.between(studyStart, studyEnd).getDays();
     }
 
-    public int getStudyRecommend(Long studyId) {// 추천 진도율을 return
-        Study studies = findByStudyId(studyId).orElseThrow(() -> new StudyException(ErrorType.NOT_FOUND));
-
-        int total = (studies.getStudyType().equals(StudyType.BOOK))
-            ? studies.getBook().getBookPage() : studies.getLecture().getLectureNumber();
-
-        int studyLeftNum = total - studies.getStudyRate();
-
-        int studyDays = getStudyDays(studyId);
-
-        if (studyLeftNum % studyDays > 0) {
-            return (int) Math.ceil(total / studyDays) + 1;
-        }
-        else {
-            return (int) Math.ceil(total / studyDays);
-        }
-    }
-
     public int getStudyDays(Long studyId) { // 남은 스터디 기간을 return
         Study studies = findByStudyId(studyId).orElseThrow(() -> new StudyException(ErrorType.NOT_FOUND));
 

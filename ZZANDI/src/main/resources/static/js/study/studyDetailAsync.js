@@ -62,11 +62,11 @@ function displayStudy(data, teamMateList) {
   }
 
   // 팀원이지만 팀장이 아니며, 아직 진행 중이 아닌 경우,
-  if (isTeamMate && (userNickname != data.leader) && (data.studyStatus == 'RECRUIT' || data.studyStatus == 'RECRUIT_COMPLETE')) {
+  if (isTeamMate && (userNickname != data.leader)) {
     html += `
       <button onclick = "quit()" id="quitbtn" class="btn btn-outline-secondary mt-3">탈퇴하기</button>
     `;
-  } else if (isTeamMate && (data.studyStatus == 'RECRUIT' || data.studyStatus == 'RECRUIT_COMPLETE') && userNickname == data.leader) {
+  } else if (isTeamMate && userNickname == data.leader) {
     if (!isDelete) {
       html += `
       <button onclick = "clickDelegatebtn()" id="quitbtn" class="btn btn-outline-secondary mt-3">탈퇴하기</button>

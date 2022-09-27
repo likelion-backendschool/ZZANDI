@@ -99,9 +99,9 @@ public class TeamMateService {
     Study study = studyRepository.findById(studyId).orElseThrow(()-> new StudyException(ErrorType.NOT_FOUND));
     TeamMate teamMate = teamMateRepository.findByUserAndAndStudy(user, study).orElseThrow(()-> new TeamMateException(ErrorType.NOT_FOUND));
 
-    if((study.getStudyStatus() == StudyStatus.RECRUIT
-        || study.getStudyStatus() == StudyStatus.RECRUIT_COMPLETE) && !study.getUser().getId().equals(user.getId())) {
+    if(!study.getUser().getId().equals(user.getId())){
       teamMateRepository.delete(teamMate);
+      teamMate.getUser().setUserZzandi(teamMate.getUser().getUserZzandi()-2);
       study.setAcceptedStudyMember(study.getAcceptedStudyMember()-1);
       studyService.updateRecruitStudyStatus(study);
     }
@@ -130,6 +130,7 @@ public class TeamMateService {
     TeamMate teamMate = teamMateRepository.findByUserAndAndStudy(prev, study).orElseThrow(()-> new TeamMateException(ErrorType.NOT_FOUND));
 
     teamMateRepository.delete(teamMate);
+    teamMate.getUser().setUserZzandi(teamMate.getUser().getUserZzandi()-2);
     study.setAcceptedStudyMember(study.getAcceptedStudyMember()-1);
     study.setUser(user);
     List<TeamMate> teamMateList = teamMateRepository.findByStudy(study);
@@ -244,7 +245,7 @@ public class TeamMateService {
     }
     return Arrays.asList(isParticipation, isTeamMate, isDelete);
   }
-
+  public int count = 0;
   @Scheduled(cron = "0 0 0 * * *")
   public void updateDailyCheck() {
     List<TeamMate> teamMates = teamMateRepository.findAll();
@@ -256,6 +257,12 @@ public class TeamMateService {
       }
       teamMate.setTeamMateDailyCheck("X");
       teamMateRepository.save(teamMate);
+      if(teamMate.getStudy().getStudyStatus().equals(StudyStatus.COMPLETE)){
+        count ++ ;
+        if(count == 1){
+          teamMate.getUser().setUserZzandi(teamMate.getUser().getUserZzandi() + 2);
+        }
+      }
     }
   }
 

@@ -1,8 +1,12 @@
 package com.ll.zzandi.controller;
 
+import com.ll.zzandi.domain.Study;
 import com.ll.zzandi.domain.TeamMate;
 import com.ll.zzandi.domain.User;
 import com.ll.zzandi.dto.teamMate.TeamMateDto;
+import com.ll.zzandi.exception.ErrorType;
+import com.ll.zzandi.exception.StudyException;
+import com.ll.zzandi.exception.TeamMateException;
 import com.ll.zzandi.service.TeamMateService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -110,5 +114,11 @@ public class TeamMateController {
   @ResponseBody
   public int findRateData(@AuthenticationPrincipal User user, @PathVariable Long studyId) {
     return teamMateService.findRateByUserId(user, studyId);
+  }
+
+  @GetMapping("/findTeamMate")
+  @ResponseBody
+  public Long findTeamMate(@AuthenticationPrincipal User user, @PathVariable Long studyId) {
+    return teamMateService.findByStudyAndUser(user, studyId).getId();
   }
 }

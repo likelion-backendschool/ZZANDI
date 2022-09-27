@@ -9,6 +9,7 @@ import com.ll.zzandi.domain.Interest;
 import com.ll.zzandi.domain.TeamMate;
 import com.ll.zzandi.domain.User;
 import com.ll.zzandi.dto.UserDto;
+import com.ll.zzandi.enumtype.DeleteStatus;
 import com.ll.zzandi.enumtype.TableType;
 import com.ll.zzandi.exception.ErrorType;
 import com.ll.zzandi.exception.UserApplicationException;
@@ -121,10 +122,9 @@ public class UserService {
     }
 
     @Transactional
-    public void updateProfile(MultipartFile multipartFile,Long userUUID) throws IOException {
-        User user=userRepository.findById(userUUID).orElseThrow(RuntimeException::new);
+    public void updateProfile(MultipartFile multipartFile, User user) throws IOException {
         if(user.getUserprofileUrl() != null){
-            File file=fileRepository.findByTableId(userUUID);
+            File file=fileRepository.findFileByFileStatusAndTableIdAndTableType(DeleteStatus.EXIST, user.getId(), TableType.USER);
             fileRepository.delete(file);
         }
         String originalName=multipartFile.getOriginalFilename();
@@ -139,12 +139,12 @@ public class UserService {
                 .fileExt(ext)
                 .fileSize(multipartFile.getSize())
                 .fileUrl(uploadUrl)
-                .tableId(userUUID)
+                .tableId(user.getId())
                 .tableType(TableType.USER)
                 .build();
-        file.deleteFileStatus();
         fileRepository.save(file);
         user.updateImageUrl(uploadUrl);
+        userRepository.save(user);
     }
     private static String getUuid() {
         return UUID.randomUUID().toString().replaceAll("-", "");

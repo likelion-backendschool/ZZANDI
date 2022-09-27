@@ -44,14 +44,15 @@ public class UploadController {
         if (!study.getUser().getId().equals(user.getId())|| study.getStudyStatus() == StudyStatus.COMPLETE) {
             throw new StudyException(ErrorType.NOT_LEADER);
         }
-        model.addAttribute("studyId", studyId);
+        model.addAttribute("study", study);
+        model.addAttribute("studyId", study.getId());
         return "/study/studyCoverUpload";
     }
 
     @PostMapping("/study/coverUpload/{studyId}")
     @ResponseBody
     @Transactional
-    public String getStudyCover(@AuthenticationPrincipal User user, @RequestParam("coverImage")MultipartFile multipartFile  , @PathVariable long studyId) throws IOException {
+    public String getStudyCover(@AuthenticationPrincipal User user, @RequestParam("croppedImage") MultipartFile multipartFile  , @PathVariable long studyId) throws IOException {
         Study study = studyService.findByStudyId(studyId).orElseThrow(()->new StudyException(
             ErrorType.NOT_FOUND));
         if (!study.getUser().getId().equals(user.getId())|| study.getStudyStatus() == StudyStatus.COMPLETE) {

@@ -15,6 +15,7 @@ import com.ll.zzandi.exception.ErrorType;
 import com.ll.zzandi.exception.UserApplicationException;
 import com.ll.zzandi.repository.FileRepository;
 import com.ll.zzandi.repository.InterestRepository;
+import com.ll.zzandi.repository.StudyRepository;
 import com.ll.zzandi.repository.UserRepository;
 import com.ll.zzandi.util.aws.ImageUploadService;
 import com.ll.zzandi.util.mail.EmailMessage;
@@ -58,6 +59,7 @@ public class UserService {
     private final FileRepository fileRepository;
 
     private final CustomUserDetailsService userDetailsService;
+    private final StudyRepository studyRepository;
 
     @Transactional
     public User join(final UserDto.RegisterRequest registerRequest) {
@@ -163,6 +165,14 @@ public class UserService {
         UsernamePasswordAuthenticationToken newAuth = new UsernamePasswordAuthenticationToken(newPrincipal, currentAuth.getCredentials(), newPrincipal.getAuthorities());
         newAuth.setDetails(currentAuth.getDetails());
         return newAuth;
+    }
+    public String deleteUser(User user) {
+        if(studyRepository.existsStudiesByUser(user)){
+            return "error";
+        }
+        userRepository.deleteById(user.getId());
+        //로그아웃 처리 해주기
+        return "회원 탈퇴가 되었습니다.";
     }
 }
 

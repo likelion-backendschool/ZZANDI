@@ -92,59 +92,30 @@
                         <td>
                             <label for="userEmail">이메일</label>
                         </td>
-                        <td>아이디</td>
+                        <td>
+                            <input type="email" th:value="user.userEmail" th:field="*{userEmail}"  class="form-control"
+                                   placeholder="이메일을 입력해주세요." aria-describedby="emailHelp" disabled />
+                        </td>
                     </tr>
                     <tr>
-                        <td>
+                        <td class = "w-25">
                             <label for="userNickname">닉네임</label>
                         </td>
-                        <td>아이디</td>
-                    </tr>
-                    <tr>
                         <td>
-                            <label for="interest">관심사</label>
+                            <div class="input-group mb-2">
+                                <input type="text" th:value="user.userNickname" th:field="*{userNickname}" class="form-control"
+                                       placeholder="변경할 닉네임을 입력해주세요." aria-describedby="nicknameHelp" required />
+                                <button class="btn btn-outline-secondary" type="button" id="button-addon3">변경</button>
+                            </div>
                         </td>
-                        <td>아이디</td>
                     </tr>
                 </table>
+                <button type="button" class="btn btn-success" id="userDelete" onclick="delete_button()">회원 탈퇴</button>
             </form>
         </div>
     </div>
 </div>
 
-<!--                        <label for="userPassword">비밀번호</label>-->
-<!--                        <div class="input-group mb-2">-->
-<!--                            <input type="password" th:value="user.userPassword" th:field="*{userPassword}" class="form-control"-->
-<!--                                   placeholder="8~16자의 영문 소문자, 숫자와 특수기호 ~!;@#$%^&*()+|= 만 사용가능합니다." aria-describedby="passwordHelp"  id="pw"  required />-->
-<!--                            <button class="btn btn-outline-secondary" type="button" id="button-addon2">변경</button>-->
-<!--                        </div>-->
-<!--                        <div class="form-group">-->
-<!--                            <label for="userEmail">이메일</label>-->
-<!--                            <input type="email" th:value="user.userEmail" th:field="*{userEmail}"  class="form-control"-->
-<!--                                   placeholder="이메일을 입력해주세요." aria-describedby="emailHelp" disabled />-->
-<!--                            &lt;!&ndash;                                <smail th:if="${#fields.hasErrors('userEmail')}" th:errors="*{userEmail}">userEmail Error</smail>&ndash;&gt;-->
-<!--                        </div>-->
-<!--                        <label for="userNickname">닉네임</label>-->
-<!--                        <div class="input-group mb-2">-->
-<!--                            <input type="text" th:value="user.userNickname" th:field="*{userNickname}" class="form-control"-->
-<!--                                   placeholder="변경할 닉네임을 입력해주세요." aria-describedby="nicknameHelp" required />-->
-<!--                            <button class="btn btn-outline-secondary" type="button" id="button-addon3">변경</button>-->
-<!--                        </div>-->
-<!--                        <div>-->
-<!--                            <div>관심사</div>-->
-<!--                            <div th:each="intrest : ${interests}" class="form-check form-check-inline">-->
-<!--                                <input type="checkbox" th:field="*{interests}" th:value="${intrest.key}"-->
-<!--                                       class="form-check-input">-->
-<!--                                <label th:for="${#ids.prev('interests')}"-->
-<!--                                       th:text="${intrest.value}" class="form-check-label">서울</label>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </form>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.js" integrity="sha512-n/4gHW3atM3QqRcbCn6ewmpxcLAHGaDjpEBu4xZd47N0W2oQ+6q7oc3PXstrJYXcbNU1OHdQ1T7pAP+gi5Yu8g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </body>
@@ -219,6 +190,26 @@
                     console.log("실패");
                 }
             })
+        }
+    }
+
+    function delete_button(s) {
+        if(!confirm('회원 탈퇴를 하십니까?')){
+            return false;
+        } else {
+            $.ajax({
+                url: "http://localhost:8080/user/delete",
+                type: 'GET',
+                success: function (res) {
+                    console.log(res);
+                    if(res==="error"){
+                        alert("스터디장을 반드시 위임해야합니다.");
+                    }else {
+                        alert(res);
+                        location.replace("http://localhost:8080/user/logout");
+                    }
+                }
+            });
         }
     }
 

@@ -174,6 +174,24 @@ public class UserService {
         //로그아웃 처리 해주기
         return "회원 탈퇴가 되었습니다.";
     }
+
+    public String updateUserPw(String userpw, String userId) {
+        if(Strings.isNullOrEmpty(userpw)) throw new UserApplicationException(ErrorType.INTERNAL_SERVER_ERROR);
+        User updateUser=userRepository.findByUserId(userId).orElseThrow(RuntimeException::new);
+        updateUser.setUserPassword(passwordEncoder.encode(userpw));
+        userRepository.save(updateUser);
+        login(updateUser);
+        return "success";
+    }
+
+    public String updateUserNn(String userNn, String userId) {
+        if(Strings.isNullOrEmpty(userNn)) throw new UserApplicationException(ErrorType.INTERNAL_SERVER_ERROR);
+        User updateUser=userRepository.findByUserId(userId).orElseThrow(RuntimeException::new);
+        updateUser.setUserNickname(userNn);
+        userRepository.save(updateUser);
+        login(updateUser);
+        return "success";
+    }
 }
 
 

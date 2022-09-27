@@ -63,7 +63,7 @@
                     <label for="file">
                         <div class="btn-upload">파일 첨부하기</div>
                     </label>
-                    <input type="file" multiple="multiple" id="file" name="file" accept="image/gif, image/jpeg, image/png, image/svg+xml" style="object-fit: cover">
+                    <input type="file" multiple="multiple" id="file" name="file" accept="image/gif, image/jpeg, image/png, image/svg+xml" style="display: none; object-fit: cover">
                 </div>
 
                 <div>
@@ -82,8 +82,8 @@
 
         <div class="button-box">
             <div class="form-group d-flex justify-content-between">
-                <button class="btn btn-secondary btn-sm mx-2" type="button" th:onclick="|location.href='@{/{studyId}/board/list (studyId=${studyId})}'|">돌아가기</button>
-                <button class="btn btn-secondary btn-sm" type="button" th:onclick="validSubmit()">등록</button>
+                <button class="w-btn-zzandi mx-2" type="button" th:onclick="|location.href='@{/{studyId}/board/list (studyId=${studyId})}'|">돌아가기</button>
+                <button class="w-btn-zzandi" type="button" th:onclick="validSubmit()">등록</button>
             </div>
         </div>
     </form>

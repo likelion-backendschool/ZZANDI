@@ -44,31 +44,31 @@
             <th class="text-center board-table-th-writer">글쓴이</th>
             <th class="text-center">날짜</th>
             <th class="text-center">조회</th>
-            <th class="text-center">좋아요</th>
         </tr>
         </thead>
         <tbody class="list"></tbody>
     </table>
 
-    <div class="d-flex justify-content-between">
+    <div class="d-flex justify-content-between align-items-center">
         <div class="w-50 d-flex">
             <div>
-                <label for="filter"></label>
-                <select name="filter" id="filter" style="height: 100%;">
-                    <option value="title-content" selected>제목+내용</option>
-                    <option value="title">제목</option>
-                    <option value="content">내용</option>
-                    <option value="comment">댓글</option>
-                    <option value="writer">글쓴이</option>
-                </select>
+                <label for="filter">
+                    <select name="filter" class="form-select" id="filter">
+                        <option value="title-content" selected>제목+내용</option>
+                        <option value="title">제목</option>
+                        <option value="content">내용</option>
+                        <option value="comment">댓글</option>
+                        <option value="writer">글쓴이</option>
+                    </select>
+                </label>
             </div>
-            <div>
-                <input type="text" id="keyword" style="width: 150px; margin-left: 5px;">
-                <button class="btn btn-secondary btn-sm search-btn">검색</button>
+            <div class="d-flex">
+                <input type="text" id="keyword" class="form-control" style="width: 150px; margin: 0 5px;">
+                <button class="w-btn-zzandi search-btn">검색</button>
             </div>
         </div>
 
-        <button type="button" th:onclick="|location.href='@{/{studyId}/board/create (studyId=${studyId})}'|" class="btn btn-secondary btn-sm">글 쓰기</button>
+        <button type="button" th:onclick="|location.href='@{/{studyId}/board/create (studyId=${studyId})}'|" class="w-btn-zzandi">글 쓰기</button>
     </div>
 
     <nav class="text-center pb-3">

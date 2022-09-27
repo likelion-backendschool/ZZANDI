@@ -158,7 +158,7 @@ function upload(files) {
 
         fileCount += 1;
         totalSize += image.size;
-        console.log(image);
+
         reader.onload = function (e) {
             let img = document.createElement('img');
             img.setAttribute('class', 'upload-img');

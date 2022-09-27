@@ -105,7 +105,6 @@ function createBoardList(item) {
                 </td>
                 <td>${item.createdDate}</td>
                 <td>${item.views}</td>
-                <td>${item.heart}</td>
             </tr>`;
 }
 

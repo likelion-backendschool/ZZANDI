@@ -36,3 +36,16 @@
     height: 70px;
     object-fit: cover;
 }
+
+.w-btn-zzandi {
+    border: none;
+    display: inline-block;
+    padding: 7px 14px;
+    border-radius: 5px;
+    font-family: "paybooc-Light", sans-serif;
+    font-weight: bold;
+    text-decoration: none;
+    transition: 0.25s;
+    background-color: var(--color-back);
+    color: white;
+}

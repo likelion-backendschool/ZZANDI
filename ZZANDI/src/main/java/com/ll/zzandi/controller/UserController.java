@@ -134,9 +134,7 @@ public class UserController {
 
     @GetMapping("/profileImage")
     public String getProfilePage(@AuthenticationPrincipal User user,Model model){
-        //TODO 이거 질문 하기 이로직을 너무 많이 사용할거 같은데 유저가 업데이트 되면 @Autuen 에서 가져오는 User정보도 업데이트를 하는 방법
-        User currentUser=userRepository.findByUserId(user.getUserId()).orElseThrow(RuntimeException::new);
-        model.addAttribute("user",currentUser);
+        model.addAttribute("user", user);
         return"/user/Profile-upload";
     }
 
@@ -144,7 +142,7 @@ public class UserController {
     @ResponseBody
     @Transactional
     public String updateProfileImage(@RequestParam("croppedImage") MultipartFile multipartFile, @AuthenticationPrincipal User user) throws IOException {
-        userService.updateProfile(multipartFile,user.getId());
+        userService.updateProfile(multipartFile, user);
         return  "1";
     }
 

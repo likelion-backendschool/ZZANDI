@@ -7,6 +7,7 @@ import com.ll.zzandi.dto.StudyDto;
 import com.ll.zzandi.dto.study.MyStudyDto;
 import com.ll.zzandi.dto.study.StudyDetailDto;
 import com.ll.zzandi.dto.study.StudyListDto;
+import com.ll.zzandi.enumtype.DeleteStatus;
 import com.ll.zzandi.enumtype.StudyStatus;
 import com.ll.zzandi.enumtype.StudyType;
 import com.ll.zzandi.enumtype.TeamMateStatus;
@@ -57,14 +58,29 @@ public class StudyService {
     private final InterestRepository interestRepository;
     private final TeamMateRepository teamMateRepository;
 
+    private final String DEFAULT_IMAGE_URL1="https://cdn-icons-png.flaticon.com/512/4683/4683425.png";
+    private final String DEFAULT_IMAGE_URL2="https://cdn-icons-png.flaticon.com/512/2112/2112961.png";
+
+
     public Study createStudyWithBook(@Valid StudyDto studyDto, Book book, User user) {
         Study study = new Study(user, studyDto.getStudyTitle(), book, null, StudyType.BOOK,
             studyDto.getStudyStart(), studyDto.getStudyEnd(), studyDto.getStudyPeople(),
             studyDto.getStudyTag(), StudyStatus.RECRUIT);
 
         study = study.checkStatus();
-        study.setStudyCoverUrl("https://cdn-icons-png.flaticon.com/512/4683/4683425.png");
-        return studyRepository.save(study);
+        study.setStudyCoverUrl(DEFAULT_IMAGE_URL1);
+        Study savedStudy = studyRepository.save(study);
+        File file=File.builder()
+            .fileName("defaultImage")
+            .originalName("defaultImage")
+            .fileExt("png")
+            .fileSize(0L)
+            .fileUrl(DEFAULT_IMAGE_URL1)
+            .tableId(study.getId())
+            .tableType(TableType.STUDY)
+            .build();
+        fileRepository.save(file);
+        return savedStudy;
     }
 
     public Study createStudyWithLecture(@Valid StudyDto studyDto, Lecture lecture, User user) {
@@ -72,8 +88,19 @@ public class StudyService {
             studyDto.getStudyStart(), studyDto.getStudyEnd(), studyDto.getStudyPeople(),
             studyDto.getStudyTag(), StudyStatus.RECRUIT);
         study = study.checkStatus();
-        study.setStudyCoverUrl("https://cdn-icons-png.flaticon.com/512/2112/2112961.png");
-        return studyRepository.save(study);
+        study.setStudyCoverUrl(DEFAULT_IMAGE_URL2);
+        Study savedStudy = studyRepository.save(study);
+        File file=File.builder()
+            .fileName("defaultImage")
+            .originalName("defaultImage")
+            .fileExt("png")
+            .fileSize(0L)
+            .fileUrl(DEFAULT_IMAGE_URL2)
+            .tableId(study.getId())
+            .tableType(TableType.STUDY)
+            .build();
+        fileRepository.save(file);
+        return savedStudy;
     }
 
     public List<Study> findAll() {
@@ -228,6 +255,13 @@ public class StudyService {
         final String ext = name[2].substring(name[2].lastIndexOf('.'));
         final String saveFileName = getUuid() + ext;
         String studyCoverUrl=imageUploadService.upload(saveFileName,multipartFile);
+
+        if (study.getStudyCoverUrl() != null) {
+            File prevFile = fileRepository.findFileByFileStatusAndTableIdAndTableType(DeleteStatus.EXIST, studyUUID,
+                TableType.STUDY);
+            fileRepository.delete(prevFile);
+        }
+
         File file=File.builder()
                 .fileName(saveFileName)
                 .originalName(name[2])
@@ -237,9 +271,8 @@ public class StudyService {
                 .tableId(studyUUID)
                 .tableType(TableType.STUDY)
                 .build();
-        file.deleteFileStatus();
         fileRepository.save(file);
-        study.getStudyCoverUrl(studyCoverUrl);
+        study.setStudyCoverUrl(studyCoverUrl);
     }
     private static String getUuid() {
         return UUID.randomUUID().toString().replaceAll("-", "");

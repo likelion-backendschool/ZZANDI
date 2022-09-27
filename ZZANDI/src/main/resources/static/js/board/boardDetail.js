@@ -59,10 +59,10 @@ function createThumbnail(file) {
         fileBox.innerHTML +=
         `<div style="position: relative; display: ${f.fileStatus === 'DELETE' ? 'none' : 'inline'};">
             <a href="/{studyId}/board/download/${f.id}">
-                <img src="${f.fileUrl}" alt="upload file" class="file-img"/>
+                <img src="${f.fileUrl}" alt="upload file" class="file-img" style="opacity: 0.8;"/>
             </a>
             <a onclick="deleteFile(${studyId}, ${f.id})" class="file-del-btn" style="cursor: pointer; display: ${currUserUUID === boardUserUUID ? 'inline' : 'none'}">
-                <i class="fa-sharp fa-solid fa-square-xmark" style="object-fit: cover; position: absolute; font-size: 16px; color: var(--bs-gray); right: 8px; top: 2px;"></i>
+                <i class="fa-sharp fa-solid fa-square-xmark" style="object-fit: cover; position: absolute; font-size: 16px; color: var(--page-num-bg-color); right: 8px; top: 2px;"></i>
             </a>
         </div>`;
     }

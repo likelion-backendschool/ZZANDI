@@ -24,4 +24,8 @@ public interface FileRepository extends JpaRepository<File,Long> {
     @Modifying
     @Query(value = "update file set file_stauts = 'DELETE' where id = :fileId", nativeQuery = true)
     void updateFileStatus(@Param("fileId") Long fileId);
+
+    @Modifying
+    @Query(value = "UPDATE FILE SET file_stauts = 'EXIST', delete_date = NULL WHERE table_id = :boardId AND table_type = 'BOARD'", nativeQuery = true)
+    void updateFileStatusExist(@Param("boardId") Long boardId);
 }

@@ -11,9 +11,6 @@ const updateRate = document.querySelector(".updateRate")
 
 const studyId = document.querySelector(".studyId").value;
 const userNickname = document.querySelector(".userNickname").value;
-const studyDays = document.querySelector(".studyDays").value;
-const studyPeriod = document.querySelector(".studyPeriod").value;
-const studyRecommend = document.querySelector(".studyRecommend").value;
 
 let teamMateList;
 let studyDetail;

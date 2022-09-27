@@ -14,9 +14,6 @@
 <section th:replace="layout/header.html :: header"></section>
 <input type="hidden" class = "studyId" th:value="${studyId}">
 <input type="hidden" class="userNickname" th:value="${#authentication.principal.userNickname}"> <!-- 현재 로그인 한 유저 식별자 -->
-<input type="hidden" class="studyDays" th:value="${studyDays}">
-<input type="hidden" class="studyPeriod" th:value="${studyPeriod}">
-<input type="hidden" class="studyRecommend" th:value="${studyRecommend}">
 
 <!--스터디 상세 정보란-->
 <div class="studyDetail-main">

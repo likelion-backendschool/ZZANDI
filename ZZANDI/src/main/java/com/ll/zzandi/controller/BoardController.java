@@ -144,7 +144,8 @@ public class BoardController {
     }
 
     @PostMapping("/update/{boardId}/{page}")
-    public String updateBoard(@PathVariable Long studyId, @PathVariable Long boardId, @PathVariable int page, BoardUpdateFormDto updateFormDto) {
+    public String updateBoard(@PathVariable Long studyId, @PathVariable Long boardId, @RequestParam("file") List<MultipartFile> files, @PathVariable int page, BoardUpdateFormDto updateFormDto) throws IOException {
+        boardService.updateBoardFile(boardId, files);
         boardService.updateBoard(boardId, updateFormDto);
         return "redirect:/%d/board/detail/%d/%d".formatted(studyId, boardId, page);
     }
@@ -156,4 +157,17 @@ public class BoardController {
         boardService.deleteBoard(boardId);
         return "redirect:/%d/board/list".formatted(studyId);
     }
+
+    @GetMapping("/exist/file/{boardId}")
+    @ResponseBody
+    public List<File> existFiles(@PathVariable Long boardId) {
+        return fileRepository.findFileByBoardId(boardId);
+    }
+
+    @PostMapping("/update/file/{boardId}")
+    @ResponseBody
+    public void updateStatus(@PathVariable Long boardId) {
+        boardService.updateBoardFile(boardId);
+    }
+
 }

@@ -95,7 +95,7 @@ function createBoardList(item) {
                 <td class="board-table-title">
                     <a href="/${studyId}/board/detail/${item.boardId}/${item.pageNum}">${title}</a>
                     <span class="board-table-title__comment">${item.count}</span>
-                    <i class="fa-solid fa-file-image" style="color: var(--comment-count-color); display: ${item.existCount === 0 ? 'none' : 'inline'}"></i>
+                    <i class="fa-solid fa-file-image" style="color: var(--color-back); display: ${item.existCount === 0 ? 'none' : 'inline'}"></i>
                 </td>
                 <td>
                     <div class="d-flex mx-2">

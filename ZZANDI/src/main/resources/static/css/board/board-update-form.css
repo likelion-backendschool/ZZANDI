@@ -49,3 +49,21 @@
     background-color: var(--color-back);
     color: white;
 }
+
+.selected {
+    border: 5px solid darkseagreen;
+}
+
+.file {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+}
+
+.btn-upload, .btn-delete  {
+    cursor: pointer;
+    border: 1px solid var(--light-gray-color);
+    border-radius: 5px;
+    padding: 5px;
+    background-color: #f7f7f7;
+}

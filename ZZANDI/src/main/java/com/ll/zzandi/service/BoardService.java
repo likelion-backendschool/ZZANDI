@@ -132,8 +132,42 @@ public class BoardService {
         fileRepository.updateFileStatus(fileId);
     }
 
+    @Transactional
+    public void updateBoardFile(Long id) {
+        fileRepository.updateFileStatusExist(id);
+    }
+
     public Board findByBoardId(Long boardId) {
         return boardRepository.findById(boardId).get();
+    }
+
+    @Transactional
+    public void updateBoardFile(Long boardId, List<MultipartFile> files) throws IOException {
+        Board board = boardRepository.findById(boardId).get();
+        for (MultipartFile file : files) {
+            if(!file.isEmpty()) {
+                String originalName = file.getOriginalFilename();
+
+                int index = originalName.lastIndexOf(".");
+                String fileName = originalName.substring(0, index);
+                String ext = originalName.substring(index);
+
+                String saveFileName = UUID.randomUUID().toString().replaceAll("-", "") + ext;
+                String uploadUrl = imageUploadService.upload(saveFileName, file);
+
+                File newFile = File.builder()
+                        .fileName(saveFileName)
+                        .originalName(fileName)
+                        .fileExt(ext)
+                        .fileSize(file.getSize())
+                        .fileUrl(uploadUrl)
+                        .tableId(board.getId())
+                        .tableType(TableType.BOARD)
+                        .build();
+
+                fileRepository.save(newFile);
+            }
+        }
     }
 
     @Transactional

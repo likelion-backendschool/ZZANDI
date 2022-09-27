@@ -119,23 +119,12 @@ function deleteAllUploadFile() {
     document.querySelector('#image_container').innerHTML = '';
 }
 
-function formatBytes(bytes, decimals = 2) {
-    if (bytes === 0) return '0 Bytes';
-
-    const k = 1024;
-    const dm = decimals < 0 ? 0 : decimals;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
-
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
-}
-
 const allowedExtension = ['gif', 'png', 'jpeg', 'jpg', 'svg'];
 function upload(files) {
     const size = Array.from(files).map(file => file.size).reduce((sum, curr) => sum + curr);
     if (size > 50000000) {
         alert('첨부 가능한 파일의 총 크기는 50MB 입니다!');
+        document.querySelector('#file').value = '';
         return;
     }
 
@@ -171,6 +160,18 @@ function upload(files) {
     }
 
     document.querySelector(".file-count").innerHTML = `${fileCount}개 첨부 됨 (${formatBytes(totalSize)} / 50MB)`;
+}
+
+function formatBytes(bytes, decimals = 2) {
+    if (bytes === 0) return '0 Bytes';
+
+    const k = 1024;
+    const dm = decimals < 0 ? 0 : decimals;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
 }
 
 function validSubmit() {

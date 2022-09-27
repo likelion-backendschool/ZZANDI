@@ -9,21 +9,49 @@ body{
   font-family: "adobaonlyR", serif;
 }
 
-#studyForm{
-  border: 1px solid;
-  border-radius: 10px;
-  padding: 20px;
-  margin: auto;
-  justify-content: center;
-  width: 500px;
-  box-shadow: 5px 5px 5px 5px gray;
+a {
+  color: #519259;;
+  text-decoration: none;
+  /*font-style: italic;*/
 }
 
-#main{
-  margin: 100px;
+a:hover {
+  color: #064635;
+  text-decoration: none;
+}
+
+.wrapper{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+#studyForm{
+  border-radius: 10px;
+  padding: 20px;
+  width: 500px;
+  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  margin : 100px auto;
+  height: auto;
+}
+
+.main{
+  margin: 0 auto;
+  max-width : 830px;
+  min-height : 100%;
+  position : relative;
 }
 
 .col-md-6.form-group{
-  margin: 10px;
+  margin: 20px auto;
   width: 250px;
+}
+
+.subHeading{
+  font-size : 21px;
+  color : darkslategray;
+  font-weight: bold;
+  margin-bottom: 30px;
 }

@@ -183,6 +183,15 @@ public class UserService {
         login(updateUser);
         return "success";
     }
+
+    public String updateUserNn(String userNn, String userId) {
+        if(Strings.isNullOrEmpty(userNn)) throw new UserApplicationException(ErrorType.INTERNAL_SERVER_ERROR);
+        User updateUser=userRepository.findByUserId(userId).orElseThrow(RuntimeException::new);
+        updateUser.setUserNickname(userNn);
+        userRepository.save(updateUser);
+        login(updateUser);
+        return "success";
+    }
 }
 
 

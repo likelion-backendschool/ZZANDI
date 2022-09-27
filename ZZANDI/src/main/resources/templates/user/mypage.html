@@ -104,8 +104,8 @@
                         <td>
                             <div class="input-group mb-2">
                                 <input type="text" th:value="user.userNickname" th:field="*{userNickname}" class="form-control"
-                                       placeholder="변경할 닉네임을 입력해주세요." aria-describedby="nicknameHelp" required />
-                                <button class="btn btn-outline-secondary" type="button" id="button-addon3">변경</button>
+                                       placeholder="변경할 닉네임을 입력해주세요." id="nickname" aria-describedby="nicknameHelp" required />
+                                <button class="btn btn-outline-secondary" type="button" onclick="nickname_button()" id="button-addon3">변경</button>
                             </div>
                         </td>
                     </tr>
@@ -235,16 +235,13 @@
         }
     }
 
-    function id_button(s) {
-        console.log(existsByUserId);
-
+    function nickname_button(s) {
         if(!confirm('회원 닉네임을 변경하시겠습니까?')){
             return false;
-        } else if(!Boolean(existsByUserId)){
-            var valueById=document.getElementById('id').value;
-
-            $.ajax('/user/modify/id',{
-                data: { userid : valueById }, // 요청 시 포함되어질 데이터
+        } else {
+            var valueByNickname=document.getElementById('nickname').value;
+            $.ajax('/user/modify/nickname',{
+                data: { usernickname : valueByNickname }, // 요청 시 포함되어질 데이터
                 dataType: 'text',
                 async: false,
                 success: function(data) {

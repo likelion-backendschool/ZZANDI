@@ -244,6 +244,14 @@ public class UserController {
     }
 
     @PreAuthorize("isAuthenticated()")
+    @GetMapping("/modify/nickname")
+    @ResponseBody
+    public String updateUserNickname(@RequestParam("usernickname") String userNn, @AuthenticationPrincipal User user)  {
+        if(Strings.isNullOrEmpty(userNn)) throw new RuntimeException();
+        return userService.updateUserNn(userNn,user.getUserId());
+    }
+
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/delete")
     @ResponseBody
     public String deleteUser(@AuthenticationPrincipal User user)  {

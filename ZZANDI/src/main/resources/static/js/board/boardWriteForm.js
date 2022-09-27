@@ -115,9 +115,9 @@ function deleteAllUploadFile() {
     }
 
     fileList.value = '';
+    document.querySelector(".file-count").innerHTML = '0개 첨부 됨 (0 Bytes / 50MB)';
     document.querySelector('#image_container').innerHTML = '';
 }
-
 
 function formatBytes(bytes, decimals = 2) {
     if (bytes === 0) return '0 Bytes';
@@ -131,6 +131,7 @@ function formatBytes(bytes, decimals = 2) {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
 }
 
+const allowedExtension = ['gif', 'png', 'jpeg', 'jpg', 'svg'];
 function upload(files) {
     const size = Array.from(files).map(file => file.size).reduce((sum, curr) => sum + curr);
     if (size > 50000000) {
@@ -143,19 +144,21 @@ function upload(files) {
     document.querySelector('#image_container').innerHTML = '';
     for (let image of files) {
         let reader = new FileReader();
+        let extension = image.name.split('.')[1].toLowerCase();
 
-        if (image.size > 3000000) {
-            alert('첨부 파일은 하나 당 3MB 이하로 첨부해주세요!');
+        if(!allowedExtension.includes(extension)) {
+            alert(`${extension} 형식의 파일은 업로드 할 수 없습니다!`);
+            document.querySelector('#file').value = '';
             if(files.length === 1) {
                 fileCount = 0;
                 totalSize = 0;
             }
-            continue;
+            break;
         }
 
         fileCount += 1;
         totalSize += image.size;
-
+        console.log(image);
         reader.onload = function (e) {
             let img = document.createElement('img');
             img.setAttribute('class', 'upload-img');

@@ -132,9 +132,10 @@ public class StudyController {
     @GetMapping("/study/delete/{studyId}")
     public String deleteStudy(@AuthenticationPrincipal User user, @PathVariable Long studyId) {
         Study studies = studyService.findByStudyId(studyId).orElseThrow(()->new StudyException(ErrorType.NOT_FOUND));
-        if (!studies.getUser().getId().equals(user.getId()) || studies.getStudyStatus() == StudyStatus.PROGRESS || studies.getStudyStatus() == StudyStatus.COMPLETE) {
+        if (!studies.getUser().getId().equals(user.getId()) || studies.getStudyStatus() == StudyStatus.COMPLETE) {
             throw new StudyException(ErrorType.NOT_LEADER);
         }
+
         studyService.deleteStudy(studies);
         return "redirect:/";
     }

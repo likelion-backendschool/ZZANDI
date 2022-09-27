@@ -37,7 +37,7 @@ public interface StudyRepository extends JpaRepository<Study, Integer> {
         + "and (:st is null or s.studyType = :st) and ((:ss is null or s.studyStatus = :ss)) and (:tag is null or s.studyTag = :tag)")
     Page<Study> searchByKwAndOption(@Param("kw") String kw, @Param("st") StudyType st, @Param("ss") StudyStatus ss, @Param("tag") String tag, Pageable paging);
 
-    @Query("select s from Study s join s.teamMateList teamMate where teamMate.user.id = :id")
+    @Query("select s from Study s join s.teamMateList teamMate where teamMate.user.id = :id and teamMate.teamMateStatus = 'ACCEPTED'")
     List<Study> findMyStudyList(@Param("id") Long id, Pageable pageable);
 
     @Query("select s from Study s")

@@ -84,7 +84,7 @@
                             <div class="input-group mb-2">
                                 <input type="password" th:value="user.userPassword" th:field="*{userPassword}" class="form-control"
                                        placeholder="8~16자의 영문 소문자, 숫자와 특수기호 ~!;@#$%^&*()+|=" aria-describedby="passwordHelp" id="pw" required />
-                                <button class="btn btn-outline-secondary" type="button" id="button-addon2">변경</button>
+                                <button class="btn btn-outline-secondary" type="button" onclick="pw_button()" id="button-addon2">변경</button>
                             </div>
                         </td>
                     </tr>
@@ -138,7 +138,12 @@
 
     var existsByUserId="false";
     id.onblur = function() {
+        var idPatten=/^[a-zA-Z0-9]{5,20}$/;
         var valueById=document.getElementById('id').value;
+        if(!idPatten.test(valueById)){
+            alert("회원 아이디(ID)는 띄어쓰기 없이 5~20자리의 영문자와 숫자 조합만 가능합니다.")
+            return;
+        }
         console.log(valueById);
         $.ajax('/user/check/id',{
             data: { userid : valueById }, // 요청 시 포함되어질 데이터
@@ -184,6 +189,68 @@
                     console.log("아이디 변경 성공!!!!!!")
                     document.getElementById("id").value=data;
                     alert("아이디 변경이 완료되었습니다.");
+                },
+                error: function(data){
+                    console.log(data);
+                    console.log("실패");
+                }
+            })
+        }
+    }
+    var existsByUserPassWord="false";
+    pw.onblur = function() {
+        var pwdCheck = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[~!;@#$%^&*()+|=])[A-Za-z\d~!;@#$%^&*()+|=]{8,16}$/;
+        var valueByPw = document.getElementById('pw').value;
+        if (!pwdCheck.test(valueByPw)) {
+            alert("띄어쓰기 없이 영문, 숫자, 특수문자 ~!;@#$%^&*()+|= 를 각각 포함하여 8~16자 사이로 입력해주세요")
+            return;
+        }
+    }
+    pw.onfocus = function() {
+        if (this.classList.contains('invalid')) {
+            this.classList.remove('invalid');
+            error.innerHTML = "";
+        }
+    };
+        function pw_button(s) {
+        if(!confirm('회원 비밀번호를 변경하시겠습니까?')){
+            return false;
+        } else {
+            var valueByPw=document.getElementById('pw').value;
+
+            $.ajax('/user/modify/pw',{
+                data: { userpw : valueByPw }, // 요청 시 포함되어질 데이터
+                dataType: 'text',
+                async: false,
+                success: function(data) {
+                    console.log("비밀번호 변경 성공!!!!!!")
+                    document.getElementById("id").value=data;
+                    alert("비밀번호 변경이 완료되었습니다.");
+                },
+                error: function(data){
+                    console.log(data);
+                    console.log("실패");
+                }
+            })
+        }
+    }
+
+    function id_button(s) {
+        console.log(existsByUserId);
+
+        if(!confirm('회원 닉네임을 변경하시겠습니까?')){
+            return false;
+        } else if(!Boolean(existsByUserId)){
+            var valueById=document.getElementById('id').value;
+
+            $.ajax('/user/modify/id',{
+                data: { userid : valueById }, // 요청 시 포함되어질 데이터
+                dataType: 'text',
+                async: false,
+                success: function(data) {
+                    console.log("닉네임 변경 성공!!!!!!")
+                    document.getElementById("id").value=data;
+                    alert("닉네임 변경이 완료되었습니다.");
                 },
                 error: function(data){
                     console.log(data);

@@ -236,6 +236,14 @@ public class UserController {
     }
 
     @PreAuthorize("isAuthenticated()")
+    @GetMapping("/modify/pw")
+    @ResponseBody
+    public String updateUserPw(@RequestParam("userpw") String userpw, @AuthenticationPrincipal User user)  {
+        if(Strings.isNullOrEmpty(userpw)) throw new RuntimeException();
+        return userService.updateUserPw(userpw,user.getUserId());
+    }
+
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/delete")
     @ResponseBody
     public String deleteUser(@AuthenticationPrincipal User user)  {

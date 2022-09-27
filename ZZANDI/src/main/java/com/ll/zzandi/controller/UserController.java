@@ -234,4 +234,11 @@ public class UserController {
         if(Strings.isNullOrEmpty(userid)) throw new RuntimeException();
         return userService.updateUserId(userid,user.getUserId());
     }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/delete")
+    @ResponseBody
+    public String deleteUser(@AuthenticationPrincipal User user)  {
+        return userService.deleteUser(user);
+    }
 }

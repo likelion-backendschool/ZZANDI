@@ -6,6 +6,8 @@ import com.ll.zzandi.domain.User;
 import com.ll.zzandi.enumtype.StudyStatus;
 import com.ll.zzandi.enumtype.StudyType;
 import java.util.List;
+
+import org.checkerframework.checker.nullness.Opt;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +21,8 @@ import java.util.Optional;
 @Repository
 public interface StudyRepository extends JpaRepository<Study, Integer> {
     Optional<Study> findById(Long id);
+
+    Boolean existsStudiesByUser(User user);
 
     List<Study> findAllByStudyTitleContainsOrUser_userIdContains(String kw1, String kw2);
 

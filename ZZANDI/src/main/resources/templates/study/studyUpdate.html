@@ -58,6 +58,11 @@
                         <input th:unless="${studyDto.studyType.toString().equals('BOOK')}" type="text" id="bookAuthor" name="bookAuthor" value="" readonly placeholder="작가">
                     </div>
                     <div class="col-md-6 form-group">
+                        <label for="bookPage"> </label>
+                        <input th:if="${studyDto.studyType.toString().equals('BOOK')}" th:field="*{bookPage}" type="text" id="bookPage" name="bookPage" value="" placeholder="쪽수">
+                        <input th:unless="${studyDto.studyType.toString().equals('BOOK')}" type="text" id="bookPage" name="bookPage" value="" readonly placeholder="쪽수">
+                    </div>
+                    <div class="col-md-6 form-group">
                         <label for="bookPublisher"> </label>
                         <input th:if="${studyDto.studyType.toString().equals('BOOK')}" th:field="*{bookPublisher}" type="text" id="bookPublisher" name="bookPublisher" placeholder="출판사" readonly>
                         <input th:unless="${studyDto.studyType.toString().equals('BOOK')}" type="text" id="bookPublisher" name="bookPublisher" placeholder="출판사" readonly>

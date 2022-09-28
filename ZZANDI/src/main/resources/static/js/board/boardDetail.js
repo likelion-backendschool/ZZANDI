@@ -1,6 +1,5 @@
 'use strict';
 
-// 토스트 UI 뷰어
 const Editor = toastui.Editor;
 const viewer = new Editor.factory({
     el: document.querySelector('#viewer'),

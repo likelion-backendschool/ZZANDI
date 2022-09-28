@@ -64,7 +64,6 @@ public class CommentService {
         Long commentRef = commentRepository.findByNvlRef(boardId);
 
         if (comment.getId() == null) {
-            log.info("부모 댓글인 경우 : 댓글 그룹 id = {}, 댓글 id = {}", (commentRef + 1L), comment.getId());
             return commentRepository.save(Comment.builder()
                     .content(comment.getContent())
                     .user(user)
@@ -77,7 +76,6 @@ public class CommentService {
                     .deleteStatus(DeleteStatus.EXIST)
                     .build());
         } else {
-            log.info("자식 댓글인 경우 : 댓글 그룹 id = {}, 댓글 id={}", commentRef, comment.getId());
             Comment parentComment = commentRepository.findById(comment.getId()).orElseThrow(() -> new IllegalArgumentException("가져올 댓글이 없습니다."));
             Long refOrderResult = refOrderAndUpdate(parentComment);
 

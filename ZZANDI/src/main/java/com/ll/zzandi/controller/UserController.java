@@ -74,7 +74,7 @@ public class UserController {
         }
 
         userService.join(registerRequest);
-        return "redirect:/";
+        return "user/Sign-up-Done";
     }
 
     @GetMapping("/check-email-token")

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<link rel="stylesheet" th:href="@{/css/user/checked-email.css}">
+<meta charset="UTF-8">
+<!-- Font Awesome -->
+<link
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    rel="stylesheet"
+/>
+<!-- Google Fonts -->
+<link
+    href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+    rel="stylesheet"
+/>
+<!-- MDB -->
+<link
+    href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.4.0/mdb.min.css"
+    rel="stylesheet"
+/>
+<!-- MDB -->
+<script
+    type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.4.0/mdb.min.js"
+></script>
+
+<style>
+    @font-face {
+        font-family: 'adobaonlyR';
+        src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2205@1.0/adobaonlyR.woff2') format('woff2');
+        font-weight: normal;
+        font-style: normal;
+    }
+
+    body{
+        font-family: "adobaonlyR", serif;
+    }
+</style>
+<body class="bg-light">
+<section class="vh-100" style="background-color: #E3F4EA;">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                <div class="card shadow" style="border-radius: 1rem;">
+                    <div class="card-body p-5 text-center">
+                        <div class = "logo mt-5" style="height: 130px">
+                            <a href="/">
+                                <img class = "center-block" src= "/images/ZZANDI-Logo.png" width="200px" height="auto">
+                            </a>
+                        </div>
+                        <h3 class="fw-bold" style = "color: #408c47; font-size: x-large">ZZANDI 이메일 인증 안내</h3>
+                        <div class="form-group w-100 center-block ms-auto me-auto">
+                            <h6 class = "mt-3">
+                                회원가입을 위한 기본적인 단계가 마무리되었습니다. <br> <br>
+                            </h6>
+                            <img src = "https://cdn-icons-png.flaticon.com/512/7759/7759472.png" width = "150px">
+                            <h5 class = "mt-2 fw-bold" style = "color : darkslategray;">
+                                가입을 위한 마지막 단계가 남았습니다!
+                            </h5>
+
+                            <br>
+                            <h6 style = "color : dimgray">회원 가입 시 입력한 이메일에서 이메일 인증을 진행해주세요!</h6>
+                            <a href = "/" class="btn btn-primary mt-3 fs-6" style = "background-color: #408c47;" >홈으로 이동하기</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</section>
+
+</body>
+</html>

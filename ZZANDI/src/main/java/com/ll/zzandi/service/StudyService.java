@@ -446,13 +446,11 @@ public class StudyService {
         String interest1 = interestList.size() > 0 ? interestList.get(0).getInterest() : null;
         String interest2 = interestList.size() > 1 ? interestList.get(1).getInterest() : null;
         String interest3 = interestList.size() > 2 ? interestList.get(2).getInterest() : null;
-//
-//        List<Study> studyList = studyRepository.findInterestStudyList(interest1 , interest2, interest3, paging);
 
-        List<Study> studyList1 = studyRepository.findInterest1StudyList(interest1 , paging);
-        List<Study> studyList2 = studyRepository.findInterest1StudyList(interest2 , paging);
+        List<Study> studyList1 = studyRepository.findInterestStudyList(interest1 , paging);
+        List<Study> studyList2 = studyRepository.findInterestStudyList(interest2 , paging);
         paging = PageRequest.of(0, 18 - (studyList1.size() + studyList2.size()), Sort.by(Sort.Direction.DESC, "id"));
-        List<Study> studyList3 = studyRepository.findInterest1StudyList(interest3 , paging);
+        List<Study> studyList3 = studyRepository.findInterestStudyList(interest3 , paging);
 
         List<Study> studyList = new ArrayList<>();
         studyList.addAll(studyList1);

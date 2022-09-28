@@ -9,11 +9,13 @@ import com.ll.zzandi.domain.Interest;
 import com.ll.zzandi.domain.TeamMate;
 import com.ll.zzandi.domain.User;
 import com.ll.zzandi.dto.UserDto;
+import com.ll.zzandi.enumtype.DeleteStatus;
 import com.ll.zzandi.enumtype.TableType;
 import com.ll.zzandi.exception.ErrorType;
 import com.ll.zzandi.exception.UserApplicationException;
 import com.ll.zzandi.repository.FileRepository;
 import com.ll.zzandi.repository.InterestRepository;
+import com.ll.zzandi.repository.StudyRepository;
 import com.ll.zzandi.repository.UserRepository;
 import com.ll.zzandi.util.aws.ImageUploadService;
 import com.ll.zzandi.util.mail.EmailMessage;
@@ -57,6 +59,7 @@ public class UserService {
     private final FileRepository fileRepository;
 
     private final CustomUserDetailsService userDetailsService;
+    private final StudyRepository studyRepository;
 
     @Transactional
     public User join(final UserDto.RegisterRequest registerRequest) {
@@ -121,10 +124,9 @@ public class UserService {
     }
 
     @Transactional
-    public void updateProfile(MultipartFile multipartFile,Long userUUID) throws IOException {
-        User user=userRepository.findById(userUUID).orElseThrow(RuntimeException::new);
+    public void updateProfile(MultipartFile multipartFile, User user) throws IOException {
         if(user.getUserprofileUrl() != null){
-            File file=fileRepository.findByTableId(userUUID);
+            File file=fileRepository.findFileByFileStatusAndTableIdAndTableType(DeleteStatus.EXIST, user.getId(), TableType.USER);
             fileRepository.delete(file);
         }
         String originalName=multipartFile.getOriginalFilename();
@@ -139,12 +141,12 @@ public class UserService {
                 .fileExt(ext)
                 .fileSize(multipartFile.getSize())
                 .fileUrl(uploadUrl)
-                .tableId(userUUID)
+                .tableId(user.getId())
                 .tableType(TableType.USER)
                 .build();
-        file.deleteFileStatus();
         fileRepository.save(file);
         user.updateImageUrl(uploadUrl);
+        userRepository.save(user);
     }
     private static String getUuid() {
         return UUID.randomUUID().toString().replaceAll("-", "");
@@ -163,6 +165,32 @@ public class UserService {
         UsernamePasswordAuthenticationToken newAuth = new UsernamePasswordAuthenticationToken(newPrincipal, currentAuth.getCredentials(), newPrincipal.getAuthorities());
         newAuth.setDetails(currentAuth.getDetails());
         return newAuth;
+    }
+    public String deleteUser(User user) {
+        if(studyRepository.existsStudiesByUser(user)){
+            return "error";
+        }
+        userRepository.deleteById(user.getId());
+        //로그아웃 처리 해주기
+        return "회원 탈퇴가 되었습니다.";
+    }
+
+    public String updateUserPw(String userpw, String userId) {
+        if(Strings.isNullOrEmpty(userpw)) throw new UserApplicationException(ErrorType.INTERNAL_SERVER_ERROR);
+        User updateUser=userRepository.findByUserId(userId).orElseThrow(RuntimeException::new);
+        updateUser.setUserPassword(passwordEncoder.encode(userpw));
+        userRepository.save(updateUser);
+        login(updateUser);
+        return "success";
+    }
+
+    public String updateUserNn(String userNn, String userId) {
+        if(Strings.isNullOrEmpty(userNn)) throw new UserApplicationException(ErrorType.INTERNAL_SERVER_ERROR);
+        User updateUser=userRepository.findByUserId(userId).orElseThrow(RuntimeException::new);
+        updateUser.setUserNickname(userNn);
+        userRepository.save(updateUser);
+        login(updateUser);
+        return "success";
     }
 }
 

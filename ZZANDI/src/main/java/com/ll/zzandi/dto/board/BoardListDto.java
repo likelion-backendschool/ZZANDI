@@ -19,7 +19,6 @@ public class BoardListDto {
     private String writer;
     private String createdDate;
     private int views;
-    private int heart;
     private int pageNum;
     private int count;
     private String profile;

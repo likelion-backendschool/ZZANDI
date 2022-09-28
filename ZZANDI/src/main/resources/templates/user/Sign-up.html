@@ -92,8 +92,8 @@
 </script>
 
 <body>
-<section class="vh-80" style="background-color: #E3F4EA;">
-    <div class="container py-5 h-80">
+<section class="vh-100" style="background-color: #E3F4EA; min-height: 1000px;">
+    <div class="container py-5 h-100">
         <div class="row d-flex justify-content-center align-items-center h-100">
             <div class="col-12 col-md-8 col-lg-6 col-xl-5">
                 <div class="card shadow" style="border-radius: 1rem;">
@@ -108,31 +108,31 @@
                             <div class="form-group w-75 center-block">
                                 <h5 class="my-0 pb-3 fw-bold fs-4" style = "color: #408c47;" for="userId" >아이디</h5>
                                 <input type="text" th:field="*{userId}" class="form-control fs-4" id="id"
-                                       placeholder="띄어쓰기 없이 5~20자리의 영문자와 숫자 조합" onchange="check_id()" aria-describedby="idHelp" required />&nbsp;<span id="check_id"></span>
-                                <smail th:if="${#fields.hasErrors('userId')} " th:errors="*{userId}" class="fieldError" >userId Error</smail>
+                                       placeholder="띄어쓰기 없이 5~20자리의 영문자와 숫자 조합" onchange="check_id()" aria-describedby="idHelp" required />&nbsp;<span id="check_id" class="fs-5"></span>
+                                <smail th:if="${#fields.hasErrors('userId')} " th:errors="*{userId}" style="color: blue" class="fieldError fs-5" >userId Error</smail>
                             </div>
                             <div class="form-group w-75 center-block">
                                 <h5 class="my-0 pb-3 fw-bold fs-4" style = "color: #408c47;" for="userPassword" >비밀번호</h5>
                                 <input type="password" th:field="*{userPassword}" class="form-control fs-4"
-                                       placeholder="8~16자의 영문 소문자, 숫자와 특수기호 ~!;@#$%^&*()+|= 만 사용가능합니다." aria-describedby="passwordHelp"  id="pw" onchange="check_pw()" required />&nbsp;<span id="check_pw"></span>
-                                <smail th:if="${#fields.hasErrors('userPassword')}" th:errors="*{userPassword}">userPassword Error</smail>
+                                       placeholder="8~16자의 영문 소문자, 숫자와 특수기호 ~!;@#$%^&*()+|= 만 사용가능합니다." aria-describedby="passwordHelp"  id="pw" onchange="check_pw()" required />&nbsp;<span id="check_pw" class="fs-5"></span>
+                                <smail th:if="${#fields.hasErrors('userPassword')}" class="fs-5" style="color: blue" th:errors="*{userPassword}">userPassword Error</smail>
                             </div>
                             <div class="form-group w-75 center-block">
                                 <h5 class="my-0 pb-3 fw-bold fs-4" style = "color: #408c47;" for="userPassword" >비밀번호 확인</h5>
                                 <input type="password"  class="form-control fs-4"
-                                       placeholder="비밀번호를 한번더 입력해주세요." aria-describedby="passwordHelp"  id="pw2" onchange="check_pw()" required />&nbsp;<span id="check_repwd"></span>
+                                       placeholder="비밀번호를 한번더 입력해주세요." aria-describedby="passwordHelp"  id="pw2" onchange="check_pw()" required />&nbsp;<span id="check_repwd" class="fs-5"></span>
                             </div>
                             <div class="form-group w-75 center-block">
                                 <h5 class="my-0 pb-3 fw-bold fs-4" style = "color: #408c47;" for="userEmail" >이메일</h5>
                                 <input type="email" th:field="*{userEmail}"  class="form-control fs-4"
                                        placeholder="이메일을 입력해주세요." aria-describedby="emailHelp" required />
-                                <smail th:if="${#fields.hasErrors('userEmail')}" th:errors="*{userEmail}">userEmail Error</smail>
+                                <smail th:if="${#fields.hasErrors('userEmail')}" class="fs-5" style="color: blue" th:errors="*{userEmail}">userEmail Error</smail>
                             </div>
                             <div class="form-group w-75 center-block">
                                 <h5 class="my-0 pb-3 fw-bold fs-4" style = "color: #408c47;" for="userEmail" >닉네임</h5>
                                 <input type="text" th:field="*{userNickname}" class="form-control fs-4"
                                        placeholder="사용할 닉네임을 입력해주세요.(추후 변경이 가능합니다.)" aria-describedby="nicknameHelp" required />
-                                <smail th:if="${#fields.hasErrors('userNickname')}" th:errors="*{userNickname}">userNickname Error</smail>
+                                <smail th:if="${#fields.hasErrors('userNickname')}" class="fs-5" style="color: blue" th:errors="*{userNickname}">userNickname Error</smail>
                             </div>
                             <div class="form-group w-85 center-block">
                                 <h5 class="my-0 py-4 fw-bold fs-4" style = "color: #408c47;" for="interests" >관심사</h5>

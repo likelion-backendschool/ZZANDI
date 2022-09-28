@@ -36,9 +36,6 @@ public class Board extends BaseEntity {
     @Column(name = "VIEWS")
     private int views;
 
-    @Column(name = "HEART")
-    private int heart;
-
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "USER_UUID")
     private User user;
@@ -53,13 +50,12 @@ public class Board extends BaseEntity {
     @Transient
     private List<File> fileList = new ArrayList<>();
 
-    public Board(User user, String category, String title, String content, int views, int heart, Study study) {
+    public Board(User user, String category, String title, String content, int views, Study study) {
         this.user = user;
         this.category = category;
         this.title = title;
         this.content = content;
         this.views = views;
-        this.heart = heart;
         this.study = study;
     }
 }

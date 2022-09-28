@@ -58,26 +58,32 @@
         <div id="editor" class="my-2"></div>
         <input type="hidden" class="editorContent" name="content">
         <div class="d-flex flex-column border rounded p-2 mb-2">
-            <div class="mb-2">
-                <label for="file">
-                    <div class="btn-upload">파일 첨부하기</div>
-                </label>
-                <input type="file" multiple="multiple" id="file" name="file" style="display: none; object-fit: cover">
+            <div class="mb-2 d-flex justify-content-between">
+                <div>
+                    <label for="file">
+                        <div class="btn-upload">파일 첨부하기</div>
+                    </label>
+                    <input type="file" multiple="multiple" id="file" name="file" accept="image/gif, image/jpeg, image/png, image/svg+xml" style="display: none; object-fit: cover">
+                </div>
+
+                <div>
+                    <button type="button" class="btn-delete" onclick="deleteSelectUploadFile();" >선택 삭제</button>
+                    <button type="button" class="btn-delete" onclick="deleteAllUploadFile();">전체 삭제</button>
+                </div>
             </div>
 
-            <div class="my-2">
-                <span class="file-count"></span>
+            <div class="upload-container">
+                <div class="my-2">
+                    <span class="file-count">0개 첨부 됨 (0 Bytes / 50MB)</span>
+                </div>
+                <div class="file-box d-flex flex-wrap" id="image_container"></div>
             </div>
-            <div class="file-box d-flex flex-wrap" id="image_container">
-
-            </div>
-
         </div>
 
         <div class="button-box">
             <div class="form-group d-flex justify-content-between">
-                <button class="btn btn-secondary btn-sm mx-2" type="button" th:onclick="|location.href='@{/{studyId}/board/list (studyId=${studyId})}'|">돌아가기</button>
-                <button class="btn btn-secondary btn-sm" type="button" th:onclick="validSubmit()">등록</button>
+                <button class="w-btn-zzandi mx-2" type="button" th:onclick="|location.href='@{/{studyId}/board/list (studyId=${studyId})}'|">돌아가기</button>
+                <button class="w-btn-zzandi" type="button" th:onclick="validSubmit()">등록</button>
             </div>
         </div>
     </form>

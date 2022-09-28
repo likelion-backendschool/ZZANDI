@@ -93,7 +93,7 @@ public class Study {
         this.studyStatus = studyStatus;
         this.acceptedStudyMember = 1;
     }
-    public void getStudyCoverUrl(String studyCoverUrl) {
+    public void setStudyCoverUrl(String studyCoverUrl) {
         this.studyCoverUrl=studyCoverUrl;
     }
 

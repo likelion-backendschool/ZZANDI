@@ -56,25 +56,123 @@ const editor = new Editor({
     },
 });
 
-document.querySelector("#file").addEventListener('change', (e) => {
-    let totalSize = 0;
-    document.querySelector('#image_container').innerHTML = '';
-    for (let image of e.target.files) {
-        let reader = new FileReader();
+document.querySelector("#file").addEventListener('change', (e) => upload(e.target.files));
 
+document.querySelector('#image_container').addEventListener('click', (e) => {
+    const target = e.target;
+    if (target.tagName !== 'IMG') {
+        return false;
+    }
+    target.classList.toggle('selected');
+});
+
+
+function deleteSelectUploadFile() {
+    let images = Object.values(document.querySelectorAll('.upload-img'));
+
+    let isCheck = false;
+    for (let img of images) {
+        if (img.classList.contains('selected')) {
+            isCheck = true;
+        }
+    }
+
+    if (!isCheck) {
+        alert('선택된 파일이 없습니다!');
+        return false;
+    }
+
+    if (!confirm("선택한 첨부 파일을 삭제하시겠습니까?")) {
+        return false;
+    }
+
+    const dataTransfer = new DataTransfer();
+    let files = document.querySelector('#file').files;
+
+    let fileArray = Array.from(files);
+    images = images.filter(img => !img.classList.contains('selected'));
+    fileArray = fileArray.filter(file => {
+        for (let img of images) {
+            if (img.dataset.name === file.name) {
+                return file;
+            }
+        }
+    });
+    fileArray.forEach(file => dataTransfer.items.add(file));
+    document.querySelector('#file').files = dataTransfer.files;
+    upload(dataTransfer.files);
+}
+
+function deleteAllUploadFile() {
+    let fileList = document.querySelector('#file');
+    if (fileList.value === '') {
+        alert('첨부된 파일이 없습니다!');
+        return false;
+    }
+
+    if (!confirm("모든 첨부 파일을 삭제하시겠습니까?")) {
+        return false;
+    }
+
+    fileList.value = '';
+    document.querySelector(".file-count").innerHTML = '0개 첨부 됨 (0 Bytes / 50MB)';
+    document.querySelector('#image_container').innerHTML = '';
+}
+
+const allowedExtension = ['gif', 'png', 'jpeg', 'jpg', 'svg'];
+function upload(files) {
+    const size = Array.from(files).map(file => file.size).reduce((sum, curr) => sum + curr);
+    if (size > 50000000) {
+        alert('첨부 가능한 파일의 총 크기는 50MB 입니다!');
+        document.querySelector('#file').value = '';
+        return;
+    }
+
+    let totalSize = 0;
+    let fileCount = 0;
+    document.querySelector('#image_container').innerHTML = '';
+    for (let image of files) {
+        let reader = new FileReader();
+        let extension = image.name.split('.')[1].toLowerCase();
+
+        if(!allowedExtension.includes(extension)) {
+            alert(`${extension} 형식의 파일은 업로드 할 수 없습니다!`);
+            document.querySelector('#file').value = '';
+            if(files.length === 1) {
+                fileCount = 0;
+                totalSize = 0;
+            }
+            break;
+        }
+
+        fileCount += 1;
         totalSize += image.size;
 
         reader.onload = function (e) {
             let img = document.createElement('img');
+            img.setAttribute('class', 'upload-img');
             img.setAttribute('src', e.target.result);
+            img.setAttribute('data-name', image.name);
+
             document.querySelector('#image_container').appendChild(img);
         };
         reader.readAsDataURL(image);
     }
-    // const i = Math.floor(Math.log(totalSize) / Math.log(1024));
-    // console.log(parseFloat((totalSize / Math.pow(2048, i)).toFixed(3)) + 'MB');
-    document.querySelector(".file-count").innerHTML = `${e.target.files.length}개 첨부 됨 (${totalSize}Byte / 50MB)`;
-});
+
+    document.querySelector(".file-count").innerHTML = `${fileCount}개 첨부 됨 (${formatBytes(totalSize)} / 50MB)`;
+}
+
+function formatBytes(bytes, decimals = 2) {
+    if (bytes === 0) return '0 Bytes';
+
+    const k = 1024;
+    const dm = decimals < 0 ? 0 : decimals;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+}
 
 function validSubmit() {
     const category = document.querySelector(".category");

@@ -18,7 +18,6 @@ public class BoardDetailDto {
     private String content;
     private String category;
     private int views;
-    private int heart;
     private int count; // 댓글의 개수
     private int page; // 현재 페이지 번호
     private Long prev; // 이전 게시물 번호

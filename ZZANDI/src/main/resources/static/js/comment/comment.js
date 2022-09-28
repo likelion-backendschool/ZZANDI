@@ -130,12 +130,7 @@ function commentButtonList(comment, num) {
                </div>`;
 
     } else {
-        html =
-            `<div class="justify-content-between align-self-center mx-2">
-                <i class="fa-regular fa-thumbs-up mx-2 comment-box-thumbs"></i>
-                <i class="fa-regular fa-thumbs-down comment-box-thumbs"></i>
-            </div>
-            <button class="comment-box-button" type="button" onclick="createForm(${num}, ${comment.commentId})">댓글</button>`;
+        html = `<button class="comment-box-button" type="button" onclick="createForm(${num}, ${comment.commentId})">댓글</button>`;
     }
     return html;
 }
@@ -179,6 +174,10 @@ function updateForm(num, content, commentId, count) {
 
 function create() {
     let value = content.value;
+    if(value === '') {
+        alert('내용을 입력해주세요!');
+        return;
+    }
     value = value.replace(/(\n|\r\n)/g, '<br>');
     const comment = {
         content: value
@@ -199,6 +198,12 @@ function create() {
 
 function createReply(commentId){
     const reply = document.querySelector(".reply-content").value.replace(/(\n|\r\n)/g, '<br>');
+    if(reply === '') {
+        alert('내용을 입력해주세요!');
+        return;
+    }
+
+    console.log(commentId, reply);
     const comment = {
         id : commentId,
         content: reply
@@ -225,6 +230,10 @@ function update(commentId, count) {
     }
 
     const updateParam = document.querySelector(".update-content").value.replace(/(\n|\r\n)/g, '<br>');
+    if(updateParam === '') {
+        alert('내용을 입력해주세요!');
+        return;
+    }
     const comment = {"content": updateParam};
 
     const url = `/comment/update/${commentId}`;

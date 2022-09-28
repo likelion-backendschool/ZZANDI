@@ -17,115 +17,98 @@
 <!-- header -->
 <section th:replace="layout/header.html :: header"></section>
 
-<main id="main">
-    <!-- ======= Breadcrumbs ======= -->
-    <div class="breadcrumbs">
-        <div class="page-header d-flex align-items-center" style="background-image: url('');">
-            <div class="container position-relative">
-                <div class="row d-flex justify-content-center">
-                    <div class="col-lg-6 text-center">
-                        <h2>Modify Study</h2>
-                        <p>원하시는 조건으로 스터디를 수정하세요!</p>
-                    </div>
+<main class="main">
+    <div class = "wrapper">
+        <div id="studyForm">
+            <p class = "subHeading">스터디 세부 수정</p>
+            <p>원하시는 조건으로 스터디를 수정하세요!</p>
+            <p>스터디 시작 전에는 언제든 수정할 수 있습니다. </p>
+            <form th:object="${studyDto}" method="post" name="myForm">
+                <div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">
+                    <div th:each="err : ${#fields.allErrors()}" th:text="${err}"/>
                 </div>
-            </div>
-        </div>
-    </div><!-- End Breadcrumbs -->
-    <!-- ======= Blog Section ======= -->
-    <div id="studyForm">
-        <h4>Study</h4>
-        <p>스터디 시작 전에는 언제든 수정할 수 있습니다. </p>
-        <form th:object="${studyDto}" method="post" name="myForm">
-            <div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">
-                <div th:each="err : ${#fields.allErrors()}" th:text="${err}"/>
-            </div>
-            <div class="col-md-6 form-group">
-                <input id="studyTitle" type="text" th:field="*{studyTitle}" class="form-control" placeholder="스터디명*">
-            </div>
-            <div class="row">
+                <div class="col-md-6 form-group">
+                    <input id="studyTitle" type="text" th:field="*{studyTitle}" class="form-control" placeholder="스터디명*">
+                </div>
                 <div class="col-md-6 form-group">
                     <input id="studyStart" type="date" th:field="*{studyStart}" th:min="${#temporals.format(#temporals.createToday(),'yyyy-MM-dd')}" class="form-control">
                 </div>
                 <div class="col-md-6 form-group">
                     <input id="studyEnd" type="date" th:field="*{studyEnd}" min="" class="form-control">
                 </div>
-            </div>
-            <div class="row">
                 <div class="col-md-6 form-group">
                     <input id="studyPeople" type="number" class="form-control" placeholder="스터디 인원 수*" th:field="*{studyPeople}" min="2">
                 </div>
-            </div>
-            <div class="col-md-6 form-group">
-                <input value="BOOK" type="radio" id="studyType" th:field="*{studyType}" name="studyType" > BOOK
-                <input value="LECTURE" type="radio" id="studyType" th:field="*{studyType}" name="studyType" > LECTURE
-            </div>
-            <div id="book">
                 <div class="col-md-6 form-group">
-                    <label for="bookName"> </label>
-                    <input th:if="${studyDto.studyType.toString().equals('BOOK')}" type="text" id="bookName" name="bookName" th:field="*{bookName}" placeholder="책 이름을 입력하세요.">
-                    <input th:unless="${studyDto.studyType.toString().equals('BOOK')}" type="text" id="bookName" name="bookName" placeholder="책 이름을 입력하세요.">
+                    <input value="BOOK" type="radio" id="studyType" th:field="*{studyType}" name="studyType" > BOOK
+                    <input value="LECTURE" type="radio" id="studyType" th:field="*{studyType}" name="studyType" > LECTURE
+                </div>
+                <div id="book">
+                    <div class="col-md-6 form-group">
+                        <input class="btn btn-outline-success" id="search" type="button" value="책 검색" onclick="openSearch()">
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label for="bookName"> </label>
+                        <input th:if="${studyDto.studyType.toString().equals('BOOK')}" th:field="*{bookName}" type="text" id="bookName" name="bookName" value="" readonly placeholder="책 제목">
+                        <input th:unless="${studyDto.studyType.toString().equals('BOOK')}" type="text" id="bookName" name="bookName" value="" readonly placeholder="책 제목">
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label for="bookAuthor"> </label>
+                        <input th:if="${studyDto.studyType.toString().equals('BOOK')}" th:field="*{bookAuthor}" type="text" id="bookAuthor" name="bookAuthor" value="" readonly placeholder="작가">
+                        <input th:unless="${studyDto.studyType.toString().equals('BOOK')}" type="text" id="bookAuthor" name="bookAuthor" value="" readonly placeholder="작가">
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label for="bookPage"> </label>
+                        <input th:if="${studyDto.studyType.toString().equals('BOOK')}" th:field="*{bookPage}" type="text" id="bookPage" name="bookPage" value="" placeholder="쪽수">
+                        <input th:unless="${studyDto.studyType.toString().equals('BOOK')}" type="text" id="bookPage" name="bookPage" value="" readonly placeholder="쪽수">
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label for="bookPublisher"> </label>
+                        <input th:if="${studyDto.studyType.toString().equals('BOOK')}" th:field="*{bookPublisher}" type="text" id="bookPublisher" name="bookPublisher" placeholder="출판사" readonly>
+                        <input th:unless="${studyDto.studyType.toString().equals('BOOK')}" type="text" id="bookPublisher" name="bookPublisher" placeholder="출판사" readonly>
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label for="bookIsbn"> </label>
+                        <input th:if="${studyDto.studyType.toString().equals('BOOK')}" th:field="*{bookIsbn}" type="text" id="bookIsbn" name="bookIsbn" placeholder="책 고유번호" readonly>
+                        <input th:unless="${studyDto.studyType.toString().equals('BOOK')}" type="text" id="bookIsbn" name="bookIsbn" placeholder="책 고유번호" readonly>
+                    </div>
+                </div>
+                <div id="lecture">
+                    <div class="col-md-6 form-group">
+                        <label for="lectureName"> </label>
+                        <input th:if="${studyDto.studyType.toString().equals('LECTURE')}" type="text" id="lectureName" name="lectureName" th:field="*{lectureName}" placeholder="강의 제목을 입력하세요">
+                        <input th:unless="${studyDto.studyType.toString().equals('LECTURE')}" type="text" id="lectureName" name="lectureName"  placeholder="강의 제목을 입력하세요">
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label for="lecturer"> </label>
+                        <input  th:if="${studyDto.studyType.toString().equals('LECTURE')}" type="text" id="lecturer" name="lecturer" th:field="*{lecturer}" placeholder="강사를 입력하세요.">
+                        <input  th:unless="${studyDto.studyType.toString().equals('LECTURE')}" type="text" id="lecturer" name="lecturer" placeholder="강사를 입력하세요.">
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label for="lectureNumber"> </label>
+                        <input th:if="${studyDto.studyType.toString().equals('LECTURE')}" type="number" id="lectureNumber" name="lectureNumber"  th:field="*{lectureNumber}" min="1" placeholder="강의 개수를 입력하세요">
+                        <input th:unless="${studyDto.studyType.toString().equals('LECTURE')}" type="number" id="lectureNumber" name="lectureNumber"  min="1" placeholder="강의 개수를 입력하세요">
+                    </div>
                 </div>
                 <div class="col-md-6 form-group">
-                    <label for="bookPage"> </label>
-                    <input th:if="${studyDto.studyType.toString().equals('BOOK')}" type="number" id="bookPage" name="bookPage"th:field="*{bookPage}" placeholder="페이지 수를 입력하세요.">
-                    <input th:unless="${studyDto.studyType.toString().equals('BOOK')}" type="number" id="bookPage" name="bookPage" placeholder="페이지 수를 입력하세요.">
+                    <select class="form-select" aria-label="관심사" name="studyTag">
+                        <option value ="역사">역사</option>
+                        <option value ="과학">과학</option>
+                        <option value ="경제경영">경제경영</option>
+                        <option value ="외국어">외국어</option>
+                        <option value ="IT">IT</option>
+                        <option value ="수험서/자격증">수험서/자격증</option>
+                        <option value ="자기계발">자기계발</option>
+                        <option value ="참고서">참고서</option>
+                    </select>
                 </div>
-                <div class="col-md-6 form-group">
-                    <label for="bookAuthor"> </label>
-                    <input th:if="${studyDto.studyType.toString().equals('BOOK')}" type="text" id="bookAuthor" name="bookAuthor" th:field="*{bookAuthor}" min="1" placeholder="작가를 입력하세요.">
-                    <input th:unless="${studyDto.studyType.toString().equals('BOOK')}" type="text" id="bookAuthor" name="bookAuthor" min="1" placeholder="작가를 입력하세요.">
-                </div>
-                <div class="col-md-6 form-group">
-                    <label for="bookPublisher"> </label>
-                    <input th:if="${studyDto.studyType.toString().equals('BOOK')}" type="text" id="bookPublisher" name="bookPublisher" th:field="*{bookPublisher}" placeholder="출판사를 입력하세요.">
-                    <input th:unless="${studyDto.studyType.toString().equals('BOOK')}" type="text" id="bookPublisher" name="bookPublisher" placeholder="출판사를 입력하세요.">
-                </div>
-                <div class="col-md-6 form-group">
-                    <label for="bookIsbn"> </label>
-                    <input th:if="${studyDto.studyType.toString().equals('BOOK')}" type="text" id="bookIsbn" name="bookIsbn" th:field="*{bookIsbn}" placeholder="책 고유번호를 입력하세요.">
-                    <input th:unless="${studyDto.studyType.toString().equals('BOOK')}" type="text" id="bookIsbn" name="bookIsbn" placeholder="책 고유번호를 입력하세요.">
-                </div>
-            </div>
-            <div id="lecture">
-                <div class="col-md-6 form-group">
-                    <label for="lectureName"> </label>
-                    <input th:if="${studyDto.studyType.toString().equals('LECTURE')}" type="text" id="lectureName" name="lectureName" th:field="*{lectureName}" placeholder="강의 제목을 입력하세요">
-                    <input th:unless="${studyDto.studyType.toString().equals('LECTURE')}" type="text" id="lectureName" name="lectureName"  placeholder="강의 제목을 입력하세요">
-                </div>
-                <div class="col-md-6 form-group">
-                    <label for="lecturer"> </label>
-                    <input  th:if="${studyDto.studyType.toString().equals('LECTURE')}" type="text" id="lecturer" name="lecturer" th:field="*{lecturer}" placeholder="강사를 입력하세요.">
-                    <input  th:unless="${studyDto.studyType.toString().equals('LECTURE')}" type="text" id="lecturer" name="lecturer" placeholder="강사를 입력하세요.">
-                </div>
-                <div class="col-md-6 form-group">
-                    <label for="lectureNumber"> </label>
-                    <input th:if="${studyDto.studyType.toString().equals('LECTURE')}" type="number" id="lectureNumber" name="lectureNumber"  th:field="*{lectureNumber}" min="1" placeholder="lecturNumber...??">
-                    <input th:unless="${studyDto.studyType.toString().equals('LECTURE')}" type="number" id="lectureNumber" name="lectureNumber"  min="1" placeholder="lecturNumber...??">
-                </div>
-            </div>
-            <div class="col-md-6 form-group">
-                <select class="form-select" aria-label="관심사" name="studyTag">
-                    <option value ="역사">역사</option>
-                    <option value ="과학">과학</option>
-                    <option value ="경제경영">경제경영</option>
-                    <option value ="외국어">외국어</option>
-                    <option value ="IT">IT</option>
-                    <option value ="수험서/자격증">수험서/자격증</option>
-                    <option value ="자기계발">자기계발</option>
-                    <option value ="참고서">참고서</option>
-                </select>
-            </div>
 
-            <div class="col-md-6 form-group">
-                <button id="submit" type="submit" class="btn btn-primary" >수정</button>
-            </div>
-
-
-        </form>
-
+                <div class="col-md-6 form-group">
+                    <button id="submit" type="submit" class="btn btn-outline-success" >수정</button>
+                </div>
+            </form>
+        </div>
     </div>
-
-
 </main><!-- End #main -->
 <!-- footer -->
 <div th:replace="layout/footer.html :: footer"></div>

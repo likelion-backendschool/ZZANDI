@@ -135,9 +135,9 @@
     }else {
         document.getElementById("zzandiImg").src = "https://cdn-icons-png.flaticon.com/512/2582/2582652.png";
     }
-
-    var existsByUserId="false";
-    id.onblur = function() {
+    function id_button(s) {
+        var existsByUserId="false";
+        console.log(existsByUserId);
         var idPatten=/^[a-zA-Z0-9]{5,20}$/;
         var valueById=document.getElementById('id').value;
         if(!idPatten.test(valueById)){
@@ -153,7 +153,7 @@
                 existsByUserId=data;
             },
             error: function(){
-               console.log("실패");
+                console.log("실패");
             }
         })
         console.log(existsByUserId);
@@ -161,20 +161,12 @@
             id.classList.add('invalid');
             error.innerHTML = '존재하는 아이디 입니다.'
             document.getElementById('error').style.color='red';
+            return
         }else{
             id.classList.add('invalid');
             error.innerHTML = '사용가능한 아이디 입니다.'
             document.getElementById('error').style.color='green';
         }
-    };
-    id.onfocus = function() {
-        if (this.classList.contains('invalid')) {
-            this.classList.remove('invalid');
-            error.innerHTML = "";
-        }
-    };
-    function id_button(s) {
-        console.log(existsByUserId);
 
         if(!confirm('회원 아이디를 변경하시겠습니까?')){
            return false;

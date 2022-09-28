@@ -22,10 +22,10 @@ public interface FileRepository extends JpaRepository<File,Long> {
     int findExistFileCount(@Param("boardId") Long boardId);
 
     @Modifying
-    @Query(value = "update file set file_stauts = 'DELETE' where id = :fileId", nativeQuery = true)
+    @Query(value = "update file set file_status = 'DELETE' where id = :fileId", nativeQuery = true)
     void updateFileStatus(@Param("fileId") Long fileId);
 
     @Modifying
-    @Query(value = "UPDATE FILE SET file_stauts = 'EXIST', delete_date = NULL WHERE table_id = :boardId AND table_type = 'BOARD'", nativeQuery = true)
+    @Query(value = "UPDATE FILE SET file_status = 'EXIST', delete_date = NULL WHERE table_id = :boardId AND table_type = 'BOARD'", nativeQuery = true)
     void updateFileStatusExist(@Param("boardId") Long boardId);
 }

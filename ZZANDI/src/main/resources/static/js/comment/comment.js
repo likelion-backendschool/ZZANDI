@@ -203,7 +203,6 @@ function createReply(commentId){
         return;
     }
 
-    console.log(commentId, reply);
     const comment = {
         id : commentId,
         content: reply

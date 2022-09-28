@@ -8,6 +8,7 @@ import com.ll.zzandi.enumtype.DeleteStatus;
 import com.ll.zzandi.repository.BoardRepository;
 import com.ll.zzandi.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -20,6 +21,7 @@ import java.time.format.DateTimeFormatter;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Slf4j
 public class CommentService {
 
     private final CommentRepository commentRepository;
@@ -60,9 +62,9 @@ public class CommentService {
         Board board = boardRepository.findById(boardId).orElseThrow(() -> new IllegalArgumentException("작성할 게시글이 없습니다."));
 
         Long commentRef = commentRepository.findByNvlRef(boardId);
-        System.out.println("commentRef = " + commentRef);
 
         if (comment.getId() == null) {
+            log.info("부모 댓글인 경우 : 댓글 그룹 id = {}, 댓글 id = {}", (commentRef + 1L), comment.getId());
             return commentRepository.save(Comment.builder()
                     .content(comment.getContent())
                     .user(user)
@@ -75,6 +77,7 @@ public class CommentService {
                     .deleteStatus(DeleteStatus.EXIST)
                     .build());
         } else {
+            log.info("자식 댓글인 경우 : 댓글 그룹 id = {}, 댓글 id={}", commentRef, comment.getId());
             Comment parentComment = commentRepository.findById(comment.getId()).orElseThrow(() -> new IllegalArgumentException("가져올 댓글이 없습니다."));
             Long refOrderResult = refOrderAndUpdate(parentComment);
             System.out.println("refOrderResult = " + refOrderResult);

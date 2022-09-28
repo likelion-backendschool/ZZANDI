@@ -80,7 +80,6 @@ public class CommentService {
             log.info("자식 댓글인 경우 : 댓글 그룹 id = {}, 댓글 id={}", commentRef, comment.getId());
             Comment parentComment = commentRepository.findById(comment.getId()).orElseThrow(() -> new IllegalArgumentException("가져올 댓글이 없습니다."));
             Long refOrderResult = refOrderAndUpdate(parentComment);
-            System.out.println("refOrderResult = " + refOrderResult);
 
             commentRepository.updateCount(parentComment.getId(), parentComment.getCount());
             return commentRepository.save(Comment.builder()
@@ -98,23 +97,25 @@ public class CommentService {
     }
 
     private Long refOrderAndUpdate(Comment parentComment) {
+        Long currBoardId = parentComment.getBoard().getId();
         Long saveStep = parentComment.getStep() + 1L;
         Long refOrder = parentComment.getRefOrder();
         Long count = parentComment.getCount();
         Long ref = parentComment.getRef();
 
-        Long countSum = commentRepository.findBySumAnswerNum(ref);
-        Long maxStep = commentRepository.findByNvlMaxStep(ref);
+        Long countSum = commentRepository.findBySumAnswerNum(ref, currBoardId);
+        Long maxStep = commentRepository.findByNvlMaxStep(ref, currBoardId);
 
         if (saveStep < maxStep) {
             return countSum + 1L;
         } else if (saveStep.equals(maxStep)) {
-            commentRepository.updateRefOrderPlus(ref, refOrder + count);
+            commentRepository.updateRefOrderPlus(ref, refOrder + count, currBoardId);
             return refOrder + count + 1L;
-        } else {
-            commentRepository.updateRefOrderPlus(ref, refOrder);
+        } else if (saveStep > maxStep) {
+            commentRepository.updateRefOrderPlus(ref, refOrder, currBoardId);
             return refOrder + 1L;
         }
+        return null;
     }
 
     @Transactional

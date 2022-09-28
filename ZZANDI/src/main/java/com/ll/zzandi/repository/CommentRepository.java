@@ -17,18 +17,18 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     @Query(value = "select c from Comment c where c.id = :parentId")
     Comment findCommentByParentId(@Param("parentId") Long parentId);
 
-    @Query(value = "select nvl(max(cm_ref),0) from comment c where c.board_id = :boardId", nativeQuery = true)
+    @Query(value = "select nvl(max(cm_ref), 0) from comment c where c.board_id = :boardId", nativeQuery = true)
     Long findByNvlRef(@Param("boardId") Long boardId);
 
-    @Query(value = "select sum(cm_count) from comment where cm_ref = :ref", nativeQuery = true)
-    Long findBySumAnswerNum(@Param("ref") Long ref);
+    @Query(value = "select sum(cm_count) from comment where board_id = :boardId and cm_ref = :ref", nativeQuery = true)
+    Long findBySumAnswerNum(@Param("ref") Long ref, @Param("boardId") Long boardId);
 
-    @Query(value = "select max(cm_step) from comment where cm_ref = :ref", nativeQuery = true)
-    Long findByNvlMaxStep(@Param("ref") Long ref);
+    @Query(value = "select max(cm_step) from comment where board_id = :boardId and cm_ref = :ref", nativeQuery = true)
+    Long findByNvlMaxStep(@Param("ref") Long ref, @Param("boardId") Long boardId);
 
     @Modifying
-    @Query(value = "update comment set cm_ref_order = cm_ref_order + 1 where cm_ref = :ref and cm_ref_order > :refOrder", nativeQuery = true)
-    void updateRefOrderPlus(@Param("ref") Long ref, @Param("refOrder") long l);
+    @Query(value = "update comment set cm_ref_order = cm_ref_order + 1 where board_id = :boardId and cm_ref = :ref and cm_ref_order > :refOrder", nativeQuery = true)
+    void updateRefOrderPlus(@Param("ref") Long ref, @Param("refOrder") long refOrder, @Param("boardId") Long boardId);
 
     @Modifying
     @Query(value = "update comment set cm_count = :count + 1 where cm_id = :commentId", nativeQuery = true)

@@ -6,14 +6,19 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Getter
+@Getter @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class File {
+@SQLDelete(sql="UPDATE file SET DELETE_DATE = NOW(), FILE_STATUS = 'DELETE' where id=?")
+@Where(clause="DELETE_DATE is NULL")
+public class File extends BaseEntity {
     @Id
     @GeneratedValue
     private Long id;
@@ -37,7 +42,7 @@ public class File {
     @Column(name="FILE_EXT")
     private String fileExt;
 
-    @Column(name="FILE_STAUTS")
+    @Column(name="FILE_STATUS")
     @Enumerated(value = EnumType.STRING)
     private DeleteStatus fileStatus;
 
@@ -57,5 +62,9 @@ public class File {
         this.fileExt = fileExt;
         this.fileUrl = fileUrl;
         this.fileStatus=DeleteStatus.EXIST;
+    }
+
+    public void deleteFileStatus(){
+        this.fileStatus=DeleteStatus.DELETE;
     }
 }

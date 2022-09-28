@@ -7,6 +7,10 @@
       <!-- <img src="assets/img/logo.png" alt=""> -->
       <h1>ZZANDI</h1>
     </a>
+    <form class = "searchBox" th:action="@{/study/list}">
+      <input type="text" autocomplete="off" th:name="kw" placeholder="스터디명, 닉네임 검색" class = "keyword" value>
+      <button type="submit"><i class="bi bi-search"></i></button>
+    </form>
     <nav id="navbar" class="navbar">
       <ul>
         <li sec:authorize="hasAuthority('ROLE_ADMIN')">
@@ -18,17 +22,14 @@
         <li sec:authorize="isAuthenticated()" class = "dropdown">
           <a href="#">
             <div>
-              <svg th:data-jdenticon-value="${user.userId}"
-                   width="30" height="30" class="rounded border bg-light"></svg>
+              <img th:if="${!#strings.isEmpty(#authentication.principal?.userprofileUrl)}" th:src="${#authentication.principal.userprofileUrl}"
+                   width="30" height="30" class="rounded border bg-light"/>
             </div>
             <i class="bi bi-chevron-down dropdown-indicator"></i>
           </a>
           <ul>
             <li sec:authorize="isAuthenticated()">
-              <a href="#">My Page</a>
-            </li>
-            <li sec:authorize="isAuthenticated()">
-              <a th:href="@{/user/profile}">프로필 수정</a>
+              <a th:href="@{|/user/profile?userNickname=${#authentication.principal.userNickname}|}">내 프로필</a>
             </li>
             <li sec:authorize="isAuthenticated()">
               <a href="/user/logout">로그아웃</a>
@@ -47,7 +48,10 @@
 
     <i class="mobile-nav-toggle mobile-nav-show bi bi-list"></i>
     <i class="mobile-nav-toggle mobile-nav-hide d-none bi bi-x"></i>
-
   </div>
+
+  <iframe sec:authorize="isAuthenticated()" id="todo-list" data-src="/todo/list"></iframe>
+  <i sec:authorize="isAuthenticated()" id="todo-btn" class="fa-solid fa-circle-check" style="font-size: 44px; color: darkseagreen;"></i>
+  <i sec:authorize="isAuthenticated()" class="fa-solid fa-circle-xmark close-btn" style="display: none;"></i>
 </header><!-- End Header -->
 <!-- End Header -->

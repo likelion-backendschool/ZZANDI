@@ -1,73 +1,96 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="ko">
 <head>
     <meta charset="UTF-8">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
-      rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
-      crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/585d621f74.js" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.css"/>
+    <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css"/>
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor-plugin-code-syntax-highlight/latest/toastui-editor-plugin-code-syntax-highlight.min.css"/>
+    <script src="https://uicdn.toast.com/editor-plugin-code-syntax-highlight/latest/toastui-editor-plugin-code-syntax-highlight-all.min.js"></script>
+
+    <div th:replace="layout/head.html :: head"></div>
+    <link rel="stylesheet" th:href="@{/css/board/board-detail.css}">
+    <link rel="stylesheet" th:href="@{/css/board/comment-list.css}">
     <script defer type="text/javascript" th:src="@{/js/board/boardDetail.js}"></script>
-    <title>상세 페이지</title>
-    <style>
-        @font-face {
-            font-family: 'GmarketSansMedium';
-            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
-            font-weight: normal;
-            font-style: normal;
-        }
-
-        body {
-            background-color: #eceff1;
-            font-family: "GmarketSansMedium", serif;
-        }
-
-        li {
-            list-style: none;
-        }
-    </style>
+    <script defer type="text/javascript" th:src="@{/js/comment/comment.js}"></script>
 </head>
 <body>
-<div class="container w-75 mx-auto mt-5">
-    <input type="hidden" class="board-id" th:value="${boardDetail.boardId}"> <!-- 현재 게시글 번호 -->
 
-    <div class="d-flex justify-content-between align-self-baseline">
-        <h3 th:text="${boardDetail.title}">제목1</h3>
-        <p th:text="${boardDetail.createdDate}">날짜</p>
-    </div>
-    <div class="d-flex justify-content-between border-bottom">
-        <p th:text="${boardDetail.writer}">작성자</p>
-        <div class="d-flex justify-content-evenly">
-            <p class="mx-1">조회 수 <span th:text="${boardDetail.views}"></span></p>
-            <p class="mx-1">좋아요 수 <span th:text="${boardDetail.heart}"></span></p>
-            <p class="mx-1">댓글 <span th:text="${boardDetail.comments}"></span></p>
+<section th:replace="layout/header.html :: header"></section>
+
+<div class="container w-75 mx-auto" style="margin-top: 120px;">
+    <input type="hidden" class="user-uuid" th:value="${userUUID}">
+    <input type="hidden" class="board-user-uuid" th:value="${boardDetail.userUUID}">
+    <input type="hidden" class="board-id" th:value="${boardDetail.boardId}">
+    <input type="hidden" class="board-content" th:value="${boardDetail.content}">
+    <input type="hidden" class="study-id" th:value="${studyId}">
+
+    <div>
+        <div class="d-flex align-items-center mb-2">
+            <a class="study-title" th:text="${studyTitle}" th:href="@{/{studyId}/board/list (studyId = ${studyId}, page = 0)}"></a>
         </div>
-    </div>
 
-    <section class="mt-4" th:text="${boardDetail.content}"></section>
+        <div class="title-box d-flex justify-content-between border-top border-bottom">
+            <h3 class="title-box__title align-self-center mb-0" th:text="${boardDetail.title}">제목1</h3>
+            <p class="align-self-center mb-0" th:text="${boardDetail.createdDate}">날짜</p>
+        </div>
 
-    <div class="d-flex justify-content-end btn-group" style="margin-top: 30px;">
-        <form name="form" th:action="@{/{studyId}/board/delete/{boardId} (studyId=${studyId}, boardId=${boardDetail.boardId})}" th:onsubmit="return false" method="post">
-            <button class="btn btn-primary mx-1" th:if="${userUUID == boardDetail.userUUID}" type="button" th:onclick="|location.href='@{/{studyId}/board/update/{boardId}/{page} (studyId=${studyId}, boardId=${boardDetail.boardId}, page=${boardDetail.pageNum})}'|">수정</button>
-            <button class="btn btn-success mx-1" th:if="${userUUID == boardDetail.userUUID}" type="submit" th:onclick="deleteBoard()">삭제</button>
-            <button class="btn btn-warning mx-1" type="button" th:onclick="|location.href='@{/{studyId}/board/list?page={page} (studyId=${studyId}, page=${boardDetail.pageNum})}'|">목록으로</button>
-        </form>
-    </div>
+        <div class="writer-box d-flex justify-content-between border-bottom">
+            <div class="d-flex align-items-center my-2" sec:authorize="isAuthenticated()">
+                <img th:if="${!#strings.isEmpty(boardDetail.profile)}" th:src="${boardDetail.profile}" alt="profile"/>
+                <p class="writer-box__writer align-self-center mb-0" th:text="${boardDetail.writer}">작성자</p>
+            </div>
+            <div class="d-flex justify-content-between align-items-baseline align-self-center">
+                <p class="mx-1 my-0"><span th:text="|조회수 ${boardDetail.views}|"></span></p>
+                <p class="comment-count ml-1 my-0"></p>
+            </div>
+        </div>
 
-    <!-- comment box   -->
-    <div class="comment w-100 mt-4">
-        <div class="comment-count mb-2"></div>
-        <ul class="comment-list" style="padding-left: 0;"></ul>
-        <div class="comment-form">
-            <span style="font-size: 18px;">댓글 쓰기</span>
+        <div id="viewer" class="my-2"></div>
 
-            <div class="box d-flex justify-content-between">
-                <textarea id="content" name="content" class="form-control" placeholder="따듯한 댓글 부탁드립니다." style="height: 100px;"></textarea>
-
-                <div class="align-self-center" style="width: 70px; height: 30px; border-radius: 50%; margin-left: 10px;">
-                    <button class="btn btn-primary cm-btn" style="font-size: 14px;">등록</button>
-                </div>
+        <div class="d-flex justify-content-between mt-3">
+            <button class="w-btn-zzandi invisible" th:if="${boardDetail.prev == null}">이전글</button>
+            <button class="w-btn-zzandi" th:if="${boardDetail.prev != null}" th:onclick="|location.href='@{/{studyId}/board/detail/{boardId}/{page} (studyId=${studyId}, boardId=${boardDetail.prev}, page=${boardDetail.page})}'|">이전글</button>
+            <button class="w-btn-zzandi w-50" type="button" th:onclick="|location.href='@{/{studyId}/board/list?page={page} (studyId=${studyId}, page=${boardDetail.page})}'|">목록으로</button>
+            <button class="w-btn-zzandi" th:if="${boardDetail.next != null}" th:onclick="|location.href='@{/{studyId}/board/detail/{boardId}/{page} (studyId=${studyId}, boardId=${boardDetail.next}, page=${boardDetail.page})}'|">다음글</button>
+            <button class="w-btn-zzandi invisible" th:if="${boardDetail.next == null}">다음글</button>
+        </div>
+        <div class="d-flex justify-content-end mt-2 py-2 border-top border-bottom">
+            <form name="form" th:action="@{/{studyId}/board/delete/{boardId} (studyId=${studyId}, boardId=${boardDetail.boardId})}" th:onsubmit="return false" method="post">
+                <button class="w-btn-zzandi-sub" th:if="${userUUID == boardDetail.userUUID}" type="button" th:onclick="|location.href='@{/{studyId}/board/update/{boardId}/{page} (studyId=${studyId}, boardId=${boardDetail.boardId}, page=${boardDetail.page})}'|">수정</button>
+                <button class="w-btn-zzandi-sub" th:if="${userUUID == boardDetail.userUUID}" type="submit" th:onclick="deleteBoard()">삭제</button>
+            </form>
+        </div>
+        <div class="d-flex flex-column border rounded p-2 mt-3" th:if="${!files.isEmpty()}">
+            <span style="font-weight: bold;" class="my-1">첨부파일</span>
+            <div class="file-box d-flex justify-content-start" style="height: auto;">
             </div>
         </div>
     </div>
+
+    <div style="padding-bottom: 300px; margin-bottom: 20px;">
+    <div class="comment w-100 mt-3">
+        <div class="comment-count mb-2 border rounded-1 p-3"></div>
+        <ul class="comment-list p-0"></ul>
+
+        <nav class="d-flex justify-content-center">
+            <ul class="pagination mt-2"></ul>
+        </nav>
+
+        <div class="comment-form">
+            <span style="font-size: 14px;">댓글 쓰기</span>
+            <div class="d-flex justify-content-between">
+                <textarea id="content" name="content" class="form-control" placeholder="따듯한 댓글 부탁드립니다." style="height: 70px; font-size: 12px;"></textarea>
+                <button class="w-btn-zzandi" th:onclick="create()" style="font-size: 12px; width: 100px; margin-left: 5px;">등록</button>
+            </div>
+        </div>
+    </div>
+        </div>
 </div>
+<div th:replace="layout/footer.html :: footer"></div>
+<div th:replace="layout/tail.html :: tail"></div>
 </body>
 </html>

@@ -1,53 +1,33 @@
 <!--ToDo 리스트 메인 페이지-->
 <!DOCTYPE html>
 <html xmlns:th="http://thymeleaf.org" lang="ko">
-
+<div th:replace="layout/head.html :: head"></div>
+<!-- js -->
+<script defer type="text/javascript" th:src="@{/js/todo/todoList.js}"></script>
 <head>
-    <meta charset="UTF-8">
-    <!-- js -->
-    <script defer type="text/javascript" th:src="@{/js/todo/todoList.js}"></script>
-    <!-- MDB -->
-    <script
-            type="text/javascript"
-            src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.4.0/mdb.min.js"
-    ></script>
-    <!-- Font Awesome -->
-    <link
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-            rel="stylesheet"
-    />
-    <!-- Google Fonts -->
-    <link
-            href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
-            rel="stylesheet"
-    />
-    <!-- MDB -->
-    <link
-            href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.4.0/mdb.min.css"
-            rel="stylesheet"
-    />
-
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.4.0/mdb.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.4.0/mdb.min.css" rel="stylesheet"/>
 </head>
 <body>
 <section class="vh-100 gradient-custom">
-    <div class="container py-5 h-100">
-        <div class="row d-flex justify-content-center align-items-center h-100">
+    <div class="d-flex justify-content-start align-items-center p-2">
+        <img src="/images/ZZANDI-Logo.png" alt="로고" style="width: 150px; height: 50px;">
+    </div>
+    <div class="container h-100 p-2">
+        <div class="h-100">
             <div class="col col-xl-10">
-
                 <div class="card">
-                    <div class="card-body p-5">
-
+                    <div class="card-body">
                         <div class="addForm">
                             <!--  todo 추가 부분 -->
-
                         </div>
-
                         <!-- Tabs navs -->
                         <!-- 선택칸-->
                         <ul class="nav nav-tabs mb-4 pb-2 menu" id="ex1" role="tablist">
                             <!-- all/doing/done 선택 부분 -->
                         </ul>
-
                         <div class="tab-content" id="ex1-content">
                             <div class="tab-pane fade show active" id="ex1-tabs-1" role="tabpanel"
                                  aria-labelledby="ex1-tab-1">
@@ -57,10 +37,8 @@
                             </div>
                         </div>
                         <!-- Tabs content -->
-
                     </div>
                 </div>
-
             </div>
         </div>
     </div>

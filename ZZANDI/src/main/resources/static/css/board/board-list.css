@@ -1,0 +1,130 @@
+@import url("https://fonts.googleapis.com/css?family=Montserrat:wght@600&Poppins:200,300,400,500,600,700,800,900&display=swap");
+@import url("root-style.css");
+@import url("footer.css");
+
+.home-btn {
+    font-size: 16px;
+    color: #333333;
+}
+
+.study-title {
+    font-family: var(--study-title-font), var(--main-font), var(--sub-font);
+    font-size: 21px;
+    font-weight: bold;
+    color: var(--color-back);
+}
+
+.study-title:hover {
+    color: var(--study-title-color);
+    text-decoration: underline;
+    text-underline-position: under;
+}
+
+.menu li {
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+.menu li > a {
+    font-size: var(--small-font-size);
+}
+
+.board-table-category {
+    font-weight: bold;
+}
+
+.board-table-title {
+    text-align: left;
+}
+
+.board-table-title__comment {
+    margin: 0 5px;
+    font-size: var(--tiny-font-size);
+    font-weight: bold;
+    color: var(--comment-count-color);
+}
+.board-table-th-category{width: 80px;}
+.board-table-th-title {width: 400px;}
+.board-table-th-writer {width: 200px;}
+
+.active {
+    background-color: var(--page-num-bg-color);
+    color: var(--white-color);
+    border-radius: 3px;
+}
+
+.w-btn {
+    border: none;
+    display: inline-block;
+    padding: 7px 14px;
+    border-radius: 15px;
+    font-family: "paybooc-Light", sans-serif;
+    font-weight: bold;
+    text-decoration: none;
+    transition: 0.25s;
+}
+
+.w-btn-sm {
+    border: none;
+    display: inline-block;
+    padding: 7px 14px;
+    border-radius: 15px;
+    font-family: "paybooc-Light", sans-serif;
+    font-size: 9px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: 0.25s;
+}
+
+.w-btn:hover {
+    transform: scale(1.1);
+    cursor: pointer;
+}
+
+.w-btn-zzandi {
+    border: none;
+    display: inline-block;
+    padding: 7px 14px;
+    border-radius: 5px;
+    font-family: "paybooc-Light", sans-serif;
+    font-weight: bold;
+    text-decoration: none;
+    transition: 0.25s;
+    background-color: var(--color-back);
+    color: white;
+}
+
+.w-btn-green {
+    background-color: #77af9c;
+    color: white;
+}
+
+.w-btn-blue {
+    background-color: #6aafe6;
+    color: white;
+}
+
+.w-btn-pink {
+    background-color: #f199bc;
+    color: white;
+}
+
+.w-btn-yellow {
+    background-color: #fce205;
+    color: white;
+}
+
+.w-btn-red {
+    background-color: #ff5f2e;
+    color: white;
+}
+
+.w-btn-brown {
+    background-color: #ce6d39;
+    color: white;
+}
+
+.w-btn.selected {
+    transform: scale(1.1);
+    cursor: pointer;
+}

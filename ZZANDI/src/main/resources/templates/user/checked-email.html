@@ -1,35 +1,90 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" th:href="@{/css/user/checked-email.css}">
+<meta charset="UTF-8">
+<title>ZZANDI</title>
+<meta content="" name="description">
+<meta content="" name="keywords">
+<!-- Favicons -->
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="/images/apple-icon-76x76.png">
+<link rel="icon" type="image/png" sizes="96x96" href="/images/favicon-96x96.png">
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="msapplication-TileImage" content="images/ms-icon-144x144.png">
+<meta name="theme-color" content="#ffffff">
+<!-- Font Awesome -->
+<link
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    rel="stylesheet"
+/>
+<!-- Google Fonts -->
+<link
+    href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+    rel="stylesheet"
+/>
+<!-- MDB -->
+<link
+    href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.4.0/mdb.min.css"
+    rel="stylesheet"
+/>
+<!-- MDB -->
+<script
+    type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.4.0/mdb.min.js"
+></script>
+
+<style>
+    @font-face {
+        font-family: 'adobaonlyR';
+        src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2205@1.0/adobaonlyR.woff2') format('woff2');
+        font-weight: normal;
+        font-style: normal;
+    }
+
+    body{
+        font-family: "adobaonlyR", serif;
+    }
+</style>
 <body class="bg-light">
-<div class="py-5 text-center" th:if="${error}">
-    <p class="lead">ZZANDI 이메일 확인</p>
-    <div class="alert alert-danger" role="alert">
-        이메일 확인 링크가 정확하지 않습니다.
+<section class="vh-100" style="background-color: #E3F4EA;">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                <div class="card shadow" style="border-radius: 1rem;">
+                    <div class="card-body p-5 text-center">
+                        <div class = "logo mt-5" style="height: 130px">
+                            <a href="/">
+                                <img class = "center-block" src= "/images/ZZANDI-Logo.png" width="200px" height="auto">
+                            </a>
+                        </div>
+                        <h3 class="fw-bold" style = "color: #408c47; font-size: x-large">ZZANDI 이메일 확인</h3>
+                        <div class="form-group w-75 center-block">
+                            <div class="py-5 text-center" th:if="${error}">
+                                <div style = "color : red; font-weight : bold;">
+                                    이메일 확인 링크가 정확하지 않습니다.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group w-75 center-block ms-auto me-auto">
+                            <div th:if="${error == null}">
+                                <h6 class = "mt-3">
+                                    이메일 인증이 완료되었습니다. <br> <br>
+                                </h6>
+                                <img src = "https://cdn-icons-png.flaticon.com/512/7759/7759472.png" width = "150px">
+                                <h5 class = "mt-2 fw-bold" style = "color : darkslategray;">
+                                    <span th:text="${nickname}">user님</span>님 가입을 환영합니다!!
+                                </h5>
+
+                                <br>
+                                <h6 style = "color : dimgray">이제부터 스터디 모집을 진행해보세요!</h6>
+                                <a href = "/" class="btn btn-primary mt-3 fs-6" style = "background-color: #408c47;" >홈으로 이동하기</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
-<div>
-    <a href="/study/new"> Create Study </a>
-</div>
-
-<div>
-    <a href="/study/list"> Study List </a>
-</div>
-
-<div>
-    <a href="/board/list">QA 게시판</a>
-</div>
-<div>
-    <a href="/">홈으로 가기</a>
-</div>
-<div class="py-5 text-center" th:if="${error == null}">
-    <p class="lead">ZZANDI 이메일 확인</p>
-    <h2>
-        이메일을 확인했습니다. <span th:text="${numberOfUser}">10</span>번째 회원,
-        <span th:text="${nickname}">user님</span>님 가입을 축하합니다.
-    </h2>
-    <small class="text-info">이제부터 가입할 때 사용한 이메일 또는 닉네임과 패스트워드로 로그인 할 수 있습니다.</small>
-</div>
+</section>
 
 </body>
 </html>

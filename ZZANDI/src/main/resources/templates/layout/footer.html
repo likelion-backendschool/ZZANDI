@@ -1,23 +1,76 @@
 <!-- ======= Footer ======= -->
 <footer th:fragment="footer" id="footer" class="footer">
 
-  <div class="container">
-    <div class="row">
-      <div class="col footer-info">
-        <a href="/" class="logo d-flex align-items-center">
-          <span>ZZANDI</span>
+  <div class="container" style="display: flex; justify-content: space-between">
+      <div class="footer-info">
+
+        <a href="/" class="logo">
+            <img id="zzandiLogo" class = "center-block" src= "/images/Footer-Logo.png" width="200" height="auto">
+<!--          <span>ZZANDI</span>-->
         </a>
-        <br>
-        <p><strong>Email:</strong> zzandi.dev@gmail.com<br></p>
-        <div class="social-links d-flex mt-4">
-          <a href="https://github.com/likelion-backendschool/ZZANDI" class="github"><i class="bi bi-github"></i></a>
-        </div>
+<!--        <p>Create your own study.</p>-->
+<!--        <p>You can make it any condition you want.</p>-->
       </div>
-      <div class="col col-lg-3">
-        &copy; Copyright <strong><span>ZZANDI</span></strong>. All Rights Reserved
-        Designed by <a class = "credit" href="https://bootstrapmade.com/">BootstrapMade</a>
+
+      <div>
+        <h6>Home Services</h6>
+        <div class="credit">
+          <a class = "credit" th:href="@{/}">Home</a>
+        </div>
+        <div class="credit">
+          <a class = "credit" th:href="@{/user/join}">Join</a>
+        </div>
+        <div class="credit">
+          <a class = "credit" th:href="@{/user/login}">Login</a>
+        </div>
+
+      </div>
+
+    <div>
+      <h6>Study Services</h6>
+      <div class="credit">
+        <a class = "credit" th:href="@{/study/create}">Create Study</a>
+      </div>
+      <div class="credit">
+        <a class = "credit" th:href="@{/study/list}">Study List</a>
+      </div>
+      <div class="credit">
+        <a class = "credit" th:href="@{/user/mystudy}">My Study</a>
       </div>
     </div>
+
+      <div>
+        <h6>Made By</h6>
+          <div>
+            <div class="credit">
+              Made by <a class = "credit" href="https://github.com/jyajoo">JUNG Yun-ah</a>
+            </div>
+            <div class="credit">
+              Made by <a class = "credit" href="https://github.com/jhdl0157">LEE Jae-ho</a>
+            </div>
+            <div class="credit">
+              Made by <a class = "credit" href="https://github.com/ddmkim94">KIM Dong-min</a>
+            </div>
+          </div>
+      </div>
+    <div>
+      <div style="margin-top: 40px">
+            <div class="credit">
+              Made by <a class = "credit" href="https://github.com/Young998904">CHO Ah-young</a>
+            </div>
+            <div class="credit">
+              Made by <a class = "credit" href="https://github.com/jootang2">SONG Ju-hwan</a>
+            </div>
+            <div class="credit">
+              Designed by <a class = "credit" href="https://bootstrapmade.com/">BootstrapMade</a>
+            </div>
+
+          </div>
+      </div>
   </div>
+    <div style="display: flex; justify-content: center; margin-top: 20px" >
+        <p>&copy; Copyright 2022. <strong><span>ZZANDI</span></strong> All Rights Reserved.</p>
+    </div>
 </footer><!-- End Footer -->
+
 <!-- End Footer -->

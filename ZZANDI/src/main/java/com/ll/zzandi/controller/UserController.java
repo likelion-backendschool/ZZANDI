@@ -1,20 +1,31 @@
 package com.ll.zzandi.controller;
 
-import com.amazonaws.AmazonClientException;
-import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.amazonaws.services.s3.transfer.TransferManager;
-import com.amazonaws.services.s3.transfer.Upload;
+import com.google.common.base.Strings;
+import com.ll.zzandi.domain.Interest;
+import com.ll.zzandi.domain.Study;
+import com.ll.zzandi.domain.TeamMate;
 import com.ll.zzandi.domain.User;
 import com.ll.zzandi.dto.UserDto;
+import com.ll.zzandi.dto.study.MyStudyDto;
+import com.ll.zzandi.dto.study.StudyListDto;
+import com.ll.zzandi.enumtype.TeamMateDelegate;
+import com.ll.zzandi.enumtype.TeamMateStatus;
+import com.ll.zzandi.exception.ErrorType;
+import com.ll.zzandi.exception.StudyException;
+import com.ll.zzandi.exception.TeamMateException;
+import com.ll.zzandi.exception.UserApplicationException;
+import com.ll.zzandi.repository.InterestRepository;
+import com.ll.zzandi.repository.TeamMateRepository;
 import com.ll.zzandi.repository.UserRepository;
+import com.ll.zzandi.service.StudyService;
+import com.ll.zzandi.service.TeamMateService;
 import com.ll.zzandi.service.UserService;
 import com.ll.zzandi.util.validator.RegisterFormValidator;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,13 +36,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.transaction.Transactional;
 import javax.validation.Valid;
-import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.UUID;
 
 @Controller
 @RequestMapping("/user")
@@ -41,7 +48,10 @@ public class UserController {
 
     private final UserService userService;
     private final UserRepository userRepository;
-
+    private final TeamMateService teamMateService;
+    private final InterestRepository interestRepository;
+    private final StudyService studyService;
+    private final TeamMateRepository teamMateRepository;
 
     @InitBinder("registerRequest")
     public void initBinder(WebDataBinder webDataBinder) {
@@ -64,7 +74,7 @@ public class UserController {
         }
 
         userService.join(registerRequest);
-        return "redirect:/";
+        return "user/Sign-up-Done";
     }
 
     @GetMapping("/check-email-token")
@@ -82,7 +92,6 @@ public class UserController {
         }
 
         userService.completeSignUp(user);
-        model.addAttribute("numberOfUser", userRepository.count());
         model.addAttribute("nickname", user.getUserNickname());
         return view;
     }
@@ -123,19 +132,127 @@ public class UserController {
         return "/user/denied";
     }
 
-    @GetMapping("/profile")
+    @GetMapping("/profileImage")
     public String getProfilePage(@AuthenticationPrincipal User user,Model model){
-        //TODO 이거 질문 하기 이로직을 너무 많이 사용할거 같은데 유저가 업데이트 되면 @Autuen 에서 가져오는 User정보도 업데이트를 하는 방법
-        User currentUser=userRepository.findByUserId(user.getUserId()).orElseThrow(RuntimeException::new);
-        model.addAttribute("user",currentUser);
+        model.addAttribute("user", user);
         return"/user/Profile-upload";
     }
 
-    @PostMapping("/profile")
+    @PostMapping("/profileImage")
     @ResponseBody
     @Transactional
     public String updateProfileImage(@RequestParam("croppedImage") MultipartFile multipartFile, @AuthenticationPrincipal User user) throws IOException {
-        userService.updateProfile(multipartFile,user.getId());
-        return  "redirect:/";
+        userService.updateProfile(multipartFile, user);
+        return  "1";
+    }
+
+    @GetMapping("/profile")
+    public String showProfile(@RequestParam("userNickname") String userNickname, Model model) {
+        User user = userRepository.findByUserNickname(userNickname)
+            .orElseThrow(() -> new UserApplicationException(ErrorType.NOT_FOUND));
+
+        List<Interest> interestList = interestRepository.findByUser(user);
+        List<StudyListDto> recruitStudyList = studyService.findRecruitStudyList(user);
+        List<StudyListDto> progressStudyList = studyService.findProgressStudyList(user);
+        List<StudyListDto> completeStudyList = studyService.findCompleteStudyList(user);
+
+        model.addAttribute("user", user);
+        model.addAttribute("interestList", interestList);
+        model.addAttribute("recruitStudyList", recruitStudyList);
+        model.addAttribute("progressStudyList", progressStudyList);
+        model.addAttribute("completeStudyList", completeStudyList);
+
+        return "/user/profile";
+    }
+
+    @GetMapping("/mypage")
+    public String showMyPage(@AuthenticationPrincipal User user, @RequestParam("userNickname") String userNickname, Model model) {
+
+        User pageUser = userRepository.findByUserNickname(userNickname)
+            .orElseThrow(() -> new UserApplicationException(ErrorType.NOT_FOUND));
+
+        if (!user.getId().equals(pageUser.getId())) {
+            throw new UserApplicationException(ErrorType.NOT_LEADER);
+        }
+
+        List<TeamMate> teamMateList = teamMateService.findAllByUser(user);
+        model.addAttribute("user", pageUser);
+        model.addAttribute("teamMateList", teamMateList);
+
+        List<Interest> interestList = interestRepository.findByUser(pageUser);
+        model.addAttribute("interestList", interestList);
+        return "/user/mypage";
+    }
+
+    @GetMapping("/mystudy")
+    public String showMyStudy(@AuthenticationPrincipal User user, Model model){
+
+        List<Interest> interestList = interestRepository.findByUser(user);
+        List<TeamMate> teamMateList = teamMateRepository.findByUserAndTeamMateStatus(
+            user, TeamMateStatus.WAITING);
+        List<MyStudyDto> waitingStudyList = studyService.findWaitingStudyList(teamMateList);
+
+        model.addAttribute("user", user);
+        model.addAttribute("interestList", interestList);
+        model.addAttribute("teamMateList", teamMateList);
+        model.addAttribute("waitingStudyList", waitingStudyList);
+
+        return "/user/mystudy";
+    }
+
+    @GetMapping("/findWaitingStudyList")
+    @ResponseBody
+    public List<MyStudyDto> findWaitingStudyList(@AuthenticationPrincipal User user) {
+        List<TeamMate> teamMateList = teamMateRepository.findByUserAndTeamMateStatus(
+            user, TeamMateStatus.WAITING);
+        List<MyStudyDto> studyList = studyService.findWaitingStudyList(teamMateList);
+        return studyList;
+    }
+
+    @GetMapping("/findDelegateStudyList")
+    @ResponseBody
+    public List<MyStudyDto> findDelegateStudyList(@AuthenticationPrincipal User user) {
+        List<TeamMate> teamMateList = teamMateRepository.findByUserAndTeamMateDelegate(
+            user, TeamMateDelegate.WAITING);
+        List<MyStudyDto> studyList = studyService.findWaitingStudyList(teamMateList);
+        return studyList;
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/check/id")
+    @ResponseBody
+    public Boolean checkUserId(@RequestParam("userid") String userid)  {
+        System.out.println("연걸 성공"+userid);
+        return userRepository.existsByUserId(userid);
+    }
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/modify/id")
+    @ResponseBody
+    public String updateUserId(@RequestParam("userid") String userid, @AuthenticationPrincipal User user)  {
+        if(Strings.isNullOrEmpty(userid)) throw new RuntimeException();
+        return userService.updateUserId(userid,user.getUserId());
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/modify/pw")
+    @ResponseBody
+    public String updateUserPw(@RequestParam("userpw") String userpw, @AuthenticationPrincipal User user)  {
+        if(Strings.isNullOrEmpty(userpw)) throw new RuntimeException();
+        return userService.updateUserPw(userpw,user.getUserId());
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/modify/nickname")
+    @ResponseBody
+    public String updateUserNickname(@RequestParam("usernickname") String userNn, @AuthenticationPrincipal User user)  {
+        if(Strings.isNullOrEmpty(userNn)) throw new RuntimeException();
+        return userService.updateUserNn(userNn,user.getUserId());
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/delete")
+    @ResponseBody
+    public String deleteUser(@AuthenticationPrincipal User user)  {
+        return userService.deleteUser(user);
     }
 }

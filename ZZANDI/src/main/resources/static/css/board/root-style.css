@@ -1,0 +1,85 @@
+:root {
+    --main-bg-color: #ffffff;
+    --page-num-bg-color: #c5e1a5;
+
+    --white-color: #fff;
+    --light-gray-color: #cfd8dc;
+    --gray-color: #888888;
+    --medium-gray-color: #AAAAAA;
+    --study-title-color: #2e7d32;
+    --comment-count-color: #0d47a1;
+    --comment-url-color: #333333;
+    --comment-reply-color: #ccc;
+
+    --main-font: "Apple SD Gothic Neo";
+    --sub-font: "맑은 고딕", arial, sans-serif;
+    --study-title-font: "Montserrat";
+
+    --tiny-font-size: 11px;
+    --small-font-size: 13px;
+    --medium-font-size: 16px;
+    --semi-medium-font-size: 18px;
+    --large-font-size: 21px;
+}
+@font-face {
+    font-family: 'adobaonlyR';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2205@1.0/adobaonlyR.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+* {
+    font-family: "adobaonlyR", serif;
+    font-size: var(--small-font-size);
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--main-bg-color);
+}
+
+.header.sticked {
+    height: 90px;
+}
+
+.footer {
+    font-size: 13px;
+    background-color: var(--color-back);
+    padding: 30px 0;
+    color: var(--color-font);
+    width : 100%;
+    justify-content: center;
+}
+
+td {
+    vertical-align: middle;
+}
+
+ul, li {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+button {
+    background-color: transparent;
+    border: none;
+    outline: none;
+}
+
+img {
+    margin-right: 5px;
+    width: 30px;
+    height: 30px;
+    border-radius: 5px;
+    border: 1px solid var(--light-gray-color);
+}
+
+#zzandiLogo {
+    width: 200px;
+    height: auto;
+    border: none;
+}

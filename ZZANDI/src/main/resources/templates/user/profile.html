@@ -1,0 +1,244 @@
+<!--메인 페이지-->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<!-- head -->
+<div th:replace="layout/head.html :: head"></div>
+
+<link rel="stylesheet" th:href="@{/css/user/profile.css}">
+<link rel="stylesheet" th:href="@{/css/study/studyList.css}">
+
+<body>
+
+<!-- header -->
+<section th:replace="layout/header.html :: header"></section>
+<input type="hidden" id = "zzandi" th:value="${user.userZzandi}">
+
+<!--스터디 상세 정보란-->
+<div class="main">
+  <div class = "profile-box">
+    <div class = "zzandi">
+      <img id = "zzandiImg" src = "https://cdn-icons-png.flaticon.com/512/932/932669.png" width="30px" style = "margin-right : 5px;">
+<!--      <img src = "/images/ms-icon-144x144.png" width="30px" style = "margin-right : 5px;">-->
+<!--      <img src = "https://cdn-icons-png.flaticon.com/512/4139/4139066.png" width="30px" style = "margin-right : 5px;">-->
+<!--      <img src = "https://cdn-icons-png.flaticon.com/512/3095/3095133.png" width="30px" style = "margin-right : 5px;">-->
+<!--      <img src = "https://cdn-icons-png.flaticon.com/512/7101/7101456.png" width="30px" style = "margin-right : 5px;">-->
+<!--      <img src = "https://cdn-icons-png.flaticon.com/512/2582/2582652.png" width="30px" style = "margin-right : 5px;">-->
+
+      <span th:text = "|${user.userZzandi}cm|"></span>
+    </div>
+    <img class = "profileImg" th:src = "${user.userprofileUrl}">
+    <p id ="userNickname" th:text = "${user.userNickname}"></p>
+    <div id = "interest">
+      <p class = "m-0" th:each="interest : ${interestList}" th:text = "|# ${interest.interest}|"></p>
+    </div>
+    <div th:if = "${user.userNickname == #authentication.principal.userNickname}">
+      <nav id = "menu" class="navbar mt-5">
+        <ul class = "d-block">
+          <li class = "p-0 mt-3">
+            <a th:href="@{|/user/profile?userNickname=${user.userNickname}|}"><i class="bi bi-gear-fill me-1"></i>내 프로필</a>
+          </li>
+          <li class = "p-0 mt-3">
+            <a th:href="@{|/user/mypage?userNickname=${user.userNickname}|}"><i class="bi bi-pencil-fill me-1"></i>회원 정보 수정</a>
+          </li>
+          <li class = "p-0 mt-3">
+            <a th:href="@{/user/mystudy}"><i class="bi bi-bell-fill me-1"></i>스터디 신청 관리</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+
+  <div class = "studyListBox">
+    <div class="d-flex align-items-baseline">
+      <p class="subHeading">모집 중인 스터디</p>
+    </div>
+    <div>
+      <div th:if="${recruitStudyList.size() == 0}" style="margin-left : 75px; margin-top : 10px;">
+        등록된 스터디가 없습니다.
+      </div>
+      <div id = "recruitStudyList" class="carousel carousel-dark slide" th:if="${recruitStudyList.size() > 0}" style = "width : 90%;">
+        <div class="carousel-inner">
+          <div class="carousel-item active profile-studyList">
+            <table>
+              <tr>
+                <td th:each="study : ${#numbers.sequence(0, 2)}">
+                  <div th:replace="layout/recruitStudyListBox.html"></div>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div class="carousel-item profile-studyList" th:if="${recruitStudyList.size() > 3}">
+            <table>
+              <tr>
+                <td th:each="study : ${#numbers.sequence(3, 5)}">
+                  <div th:replace="layout/recruitStudyListBox.html"></div>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div class="carousel-item profile-studyList" th:if="${recruitStudyList.size() > 6}">
+            <table>
+              <tr>
+                <td th:each="study : ${#numbers.sequence(6, 8)}">
+                  <div th:replace="layout/recruitStudyListBox.html"></div>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#recruitStudyList"
+                data-bs-slide="prev" style = "width : 5%">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#recruitStudyList"
+                data-bs-slide="next" style = "width : 5%">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+    </div>
+    <div class="d-flex align-items-baseline">
+      <p class="subHeading mt-5">참여 중인 스터디</p>
+    </div>
+    <div>
+      <div th:if="${progressStudyList.size() == 0}" style="margin-left : 75px; margin-top : 10px;">
+        등록된 스터디가 없습니다.
+      </div>
+      <div id = "progressStudyList" class="carousel carousel-dark slide" th:if="${progressStudyList.size() > 0}" style = "width : 90%;">
+        <div class="carousel-inner">
+          <div class="carousel-item active profile-studyList">
+            <table>
+              <tr>
+                <td th:each="study : ${#numbers.sequence(0, 2)}">
+                  <div th:replace="layout/progressStudyListBox.html"></div>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div class="carousel-item profile-studyList" th:if="${progressStudyList.size() > 3}">
+            <table>
+              <tr>
+                <td th:each="study : ${#numbers.sequence(3, 5)}">
+                  <div th:replace="layout/progressStudyListBox.html"></div>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div class="carousel-item profile-studyList" th:if="${progressStudyList.size() > 6}">
+            <table>
+              <tr>
+                <td th:each="study : ${#numbers.sequence(6, 8)}">
+                  <div th:replace="layout/progressStudyListBox.html"></div>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#progressStudyList"
+                data-bs-slide="prev" style = "width : 5%">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#progressStudyList"
+                data-bs-slide="next" style = "width : 5%">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+    </div>
+    <div class="d-flex align-items-baseline">
+      <p class="subHeading mt-5">참여 완료한 스터디</p>
+    </div>
+    <div class = "mb-5">
+      <div th:if="${completeStudyList.size() == 0}" style="margin-left : 75px; margin-top : 10px;">
+        완료된 스터디가 없습니다.
+      </div>
+      <div id = "completeStudyList" class="carousel carousel-dark slide" th:if="${completeStudyList.size() > 0}" style = "width : 90%;">
+        <div class="carousel-inner">
+          <div class="carousel-item active profile-studyList">
+            <table>
+              <tr>
+                <td th:each="study : ${#numbers.sequence(0, 2)}">
+                  <div th:replace="layout/completeStudyListBox.html"></div>
+                </td>
+              </tr>
+              <tr>
+                <td th:each="study : ${#numbers.sequence(3, 5)}">
+                  <div th:replace="layout/completeStudyListBox.html"></div>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div class="carousel-item profile-studyList" th:if="${completeStudyList.size() > 6}">
+            <table>
+              <tr>
+                <td th:each="study : ${#numbers.sequence(6, 8)}">
+                  <div th:replace="layout/completeStudyListBox.html"></div>
+                </td>
+              </tr>
+              <tr>
+                <td th:each="study : ${#numbers.sequence(9, 11)}">
+                  <div th:replace="layout/completeStudyListBox.html"></div>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div class="carousel-item profile-studyList" th:if="${completeStudyList.size() > 12}">
+            <table>
+              <tr>
+                <td th:each="study : ${#numbers.sequence(12, 14)}">
+                  <div th:replace="layout/completeStudyListBox.html"></div>
+                </td>
+              </tr>
+              <tr>
+                <td th:each="study : ${#numbers.sequence(15, 17)}">
+                  <div th:replace="layout/completeStudyListBox.html"></div>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#completeStudyList"
+                data-bs-slide="prev" style = "width : 5%">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#completeStudyList"
+                data-bs-slide="next" style = "width : 5%">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- footer -->
+<div th:replace="layout/footer.html :: footer"></div>
+
+<!-- tail -->
+<div th:replace="layout/tail.html :: tail"></div>
+
+
+</body>
+<script>
+  let zzandi = document.getElementById("zzandi").value;
+  console.log(zzandi);
+  if (zzandi == 0) {
+    document.getElementById("zzandiImg").src = "https://cdn-icons-png.flaticon.com/512/932/932669.png";
+  }else if (zzandi < 20) {
+    document.getElementById("zzandiImg").src = "/images/ms-icon-144x144.png";
+  }else if (zzandi < 40){
+    document.getElementById("zzandiImg").src = "https://cdn-icons-png.flaticon.com/512/4139/4139066.png";
+  }else if (zzandi < 60){
+    document.getElementById("zzandiImg").src = "https://cdn-icons-png.flaticon.com/512/3095/3095133.png";
+  }else if (zzandi < 80){
+    document.getElementById("zzandiImg").src = "https://cdn-icons-png.flaticon.com/512/7101/7101456.png";
+  }else {
+    document.getElementById("zzandiImg").src = "https://cdn-icons-png.flaticon.com/512/2582/2582652.png";
+  }
+</script>
+</html>

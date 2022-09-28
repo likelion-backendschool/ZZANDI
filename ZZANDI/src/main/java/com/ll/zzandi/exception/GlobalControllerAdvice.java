@@ -1,20 +1,40 @@
 package com.ll.zzandi.exception;
 
-import com.ll.zzandi.util.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @Slf4j
-@RestControllerAdvice
+@ControllerAdvice
 public class GlobalControllerAdvice {
 
-    @ExceptionHandler(UserApplicationException.class)
-    public ResponseEntity<?> applicationHandler(UserApplicationException e) {
-        log.error("Error occurs {}", e.toString());
-        return ResponseEntity.status(e.getErrorCode().getStatus())
-                .body(Response.error(e.getErrorCode().name()));
-    }
+  @ExceptionHandler({StudyException.class, TeamMateException.class})
+  public String applicationHandler(CustomException e, Model model) {
+    log.error("Error occurs {}", e.toString());
+    model.addAttribute("ErrorCode",e.getErrorType().getErrorCode());
+    model.addAttribute("message",e.getErrorType().getMessage());
+    return "error/globalErrorPage";
+  }
+
+  @ExceptionHandler(UserApplicationException.class)
+  public String applicationHandler(UserApplicationException e, Model model) {
+    log.error("Error occurs {}", e.toString());
+    model.addAttribute("ErrorCode",e.getErrorType().getErrorCode());
+    model.addAttribute("message",e.getErrorType().getMessage());
+    return "error/globalErrorPage";
+  }
+
+  //@ExceptionHandler(RuntimeException.class)
+  public String applicationHandler(RuntimeException e,Model model) {
+    log.error("Error occurs {}", e.toString());
+
+    model.addAttribute("ErrorCode",ErrorType.INTERNAL_SERVER_ERROR.getErrorCode());
+    model.addAttribute("message",ErrorType.INTERNAL_SERVER_ERROR.getMessage());
+    return "error/globalErrorPage";
+  }
+
+
 }

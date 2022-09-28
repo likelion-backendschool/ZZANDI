@@ -1,48 +1,68 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="ko">
-<head>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script type="text/javascript" th:src="@{/js/studyDetail.js}"></script>
-</head>
-<body>
-<div class="container">
-    <div>
-        <table>
-            <thead>
-            <tr>
-                <th>#</th>
-                <th>스터디명</th>
-                <th>글쓴이</th>
-                <th>모집 상태</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="study : ${studyList}">
-                <td th:text="${study.getId}"></td>
-                <td><a href="#" th:href="@{/study/detail/{studyId}(studyId = ${study.getId})}"
-                       th:text="${study.studyTitle}"></a></td>
-                <td th:text="${study.user.userId}"></td>
-                <td th:if="${#dates.create(#temporals.year(#temporals.createDate(study.studyStart, 'yyyy-MM-dd')),#temporals.month(#temporals.createDate(study.studyStart, 'yyyy-MM-dd')),#temporals.day(#temporals.createDate(study.studyStart, 'yyyy-MM-dd'))).after(#dates.createNow())}">
-                    모집 중</td>
-                <td th:if="${#dates.create(#temporals.year(#temporals.createDate(study.studyEnd, 'yyyy-MM-dd')),#temporals.month(#temporals.createDate(study.studyEnd, 'yyyy-MM-dd')),#temporals.day(#temporals.createDate(study.studyEnd, 'yyyy-MM-dd'))).after(#dates.createNow()) and
-                             #dates.create(#temporals.year(#temporals.createDate(study.studyStart, 'yyyy-MM-dd')),#temporals.month(#temporals.createDate(study.studyStart, 'yyyy-MM-dd')),#temporals.day(#temporals.createDate(study.studyStart, 'yyyy-MM-dd'))).before(#dates.createNow())}">
-                    진행 중</td>
-                <td th:if="${#dates.create(#temporals.year(#temporals.createDate(study.studyEnd, 'yyyy-MM-dd')),#temporals.month(#temporals.createDate(study.studyEnd, 'yyyy-MM-dd')),#temporals.day(#temporals.createDate(study.studyEnd, 'yyyy-MM-dd'))).before(#dates.createNow())}">
-                    완료</td>
-                <td><a th:if="${user.userId == study.user.userId}"
-                        th:href="@{/study/delete/{studyId}(studyId = ${study.getId})}" th:text="삭제"></a></td>
-                <td>
-                    <a th:if="${#dates.create(#temporals.year(#temporals.createDate(study.studyStart, 'yyyy-MM-dd')),#temporals.month(#temporals.createDate(study.studyStart, 'yyyy-MM-dd')),#temporals.day(#temporals.createDate(study.studyStart, 'yyyy-MM-dd'))).after(#dates.createNow()) and
-                                user.userId == study.user.userId}"
-                       th:href="@{/study/modify/{studyId}(studyId = ${study.getId})}"
-                       th:text="수정">
-                    </a>
-                </td>
 
-            </tr>
-            </tbody>
-        </table>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<!-- head -->
+<div th:replace="layout/head.html :: head"></div>
+<script defer type="text/javascript" th:src="@{/js/study/studyList.js}"></script>
+<link rel="stylesheet" th:href="@{/css/study/studyList.css}">
+<body>
+
+<!-- header -->
+<section th:replace="layout/header.html :: header"></section>
+<input type="hidden" class="st" th:value="${st}">
+<input type="hidden" class="ss" th:value="${ss}">
+<input type="hidden" class="kw" th:value="${kw}">
+<input type="hidden" class="tag" th:value="${tag}">
+<input type="hidden" class="page" th:value="${page}">
+
+<div class = "studyList-main">
+    <div class = "studyList-description">
+        <h3>스터디 리스트</h3>
+        <p>진행 중인 스터디를 찾아 마음껏 참여해보세요!</p>
+    </div>
+
+    <div class="selectSearch">
+        <select class="form-select form-select-sm" id="selectStudyType" name="st" onchange="changeSearch()">
+            <option th:value="BOOK" value="BOOK" th:selected="${#strings.equals(param.st, 'BOOK')}">책</option>
+            <option th:value="LECTURE" th:selected="${#strings.equals(param.st, 'LECTURE')}">강의</option>
+            <option th:value="ALL" th:selected="${param.st} == null or ${#strings.equals(param.st, 'ALL')}">전체</option>
+        </select>
+        <select class="form-select form-select-sm" id = "selectStudyStatus" name="ss" onchange="changeSearch()">
+            <option th:value="RECRUIT" th:selected="${#strings.equals(param.ss, 'RECRUIT')}">모집 중</option>
+            <option th:value="RECRUIT_COMPLETE" th:selected="${#strings.equals(param.ss, 'RECRUIT_COMPLETE')}">모집 완료</option>
+            <option th:value="PROGRESS" th:selected="${#strings.equals(param.ss, 'PROGRESS')}">진행 중</option>
+            <option th:value="COMPLETE" th:selected="${#strings.equals(param.ss, 'COMPLETE')}">완료</option>
+            <option th:value="ALL" th:selected="${param.ss} == null or ${#strings.equals(param.ss, 'ALL')}">전체</option>
+        </select>
+        <select class="form-select form-select-sm" id = "selectStudyTag" name="tag" onchange="changeSearch()">
+            <option th:selected="${#strings.equals(param.tag, '역사')}">역사</option>
+            <option th:selected="${#strings.equals(param.tag, '과학')}">과학</option>
+            <option th:selected="${#strings.equals(param.tag, '경제경영')}">경제경영</option>
+            <option th:selected="${#strings.equals(param.tag, '외국어')}">외국어</option>
+            <option th:selected="${#strings.equals(param.tag, 'IT')}">IT</option>
+            <option th:selected="${#strings.equals(param.tag, '수험서/자격증')}">수험서/자격증</option>
+            <option th:selected="${#strings.equals(param.tag, '자기계발')}">자기계발</option>
+            <option th:selected="${#strings.equals(param.tag, '참고서')}">참고서</option>
+            <option th:selected="${param.tag} == null or ${#strings.equals(param.tag, 'ALL')}">전체</option>
+        </select>
+    </div>
+
+    <div class = "studyList mb-3">
+        <!--    스터디 리스트 12개-->
+    </div>
+    <div class = "pagination d-flex justify-content-center mb-5">
+
     </div>
 </div>
+
+
+<!-- footer -->
+<div th:replace="layout/footer.html :: footer"></div>
+
+<!-- tail -->
+<div th:replace="layout/tail.html :: tail"></div>
+
 </body>
+
 </html>

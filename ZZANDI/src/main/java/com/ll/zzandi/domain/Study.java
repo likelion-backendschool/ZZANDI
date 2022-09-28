@@ -4,6 +4,9 @@ import static javax.persistence.FetchType.*;
 
 import com.ll.zzandi.enumtype.StudyStatus;
 import com.ll.zzandi.enumtype.StudyType;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -48,8 +51,23 @@ public class Study {
     @Column(name = "STUDY_TAG")
     private String studyTag;
 
-    @Column(name = "STUDY_RATE")
+    @Column(name = "STUDY_RATE", columnDefinition = "integer default 0")
     private int studyRate;
+
+    @Column(name = "STUDY_Achieve", columnDefinition = "integer default 0")
+    private int studyAchieve;
+
+    @Column(name = "RECOMMEND", columnDefinition = "integer default 0")
+    private int recommend;
+
+    @Column(name = "VIEWS", columnDefinition = "integer default 0")
+    private int views;
+
+    @Column(name = "ACCEPTED_STUDY_MEMBER")
+    private int acceptedStudyMember;
+
+    @Column(name = "STUDY_COVER_URL")
+    private String studyCoverUrl;
 
     @Column(name = "STUDY_STATUS")
     @Enumerated(EnumType.STRING)
@@ -59,7 +77,10 @@ public class Study {
     @JoinColumn(name = "USER_UUID")
     private User user;
 
-    public Study(User user , String studyTitle, Book book, Lecture lecture, StudyType studyType, String studyStart, String studyEnd, int studyPeople, String studyTag, int studyRate, StudyStatus studyStatus) {
+    @OneToMany(mappedBy = "study", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TeamMate> teamMateList = new ArrayList<>();
+
+    public Study(User user , String studyTitle, Book book, Lecture lecture, StudyType studyType, String studyStart, String studyEnd, int studyPeople, String studyTag, StudyStatus studyStatus) {
         this.user = user;
         this.studyTitle = studyTitle;
         this.book = book;
@@ -69,9 +90,32 @@ public class Study {
         this.studyEnd = studyEnd;
         this.studyPeople = studyPeople;
         this.studyTag = studyTag;
-        this.studyRate = studyRate;
         this.studyStatus = studyStatus;
+        this.acceptedStudyMember = 1;
     }
+    public void setStudyCoverUrl(String studyCoverUrl) {
+        this.studyCoverUrl=studyCoverUrl;
+    }
+
+    public Study checkStatus() {
+        int startYear = Integer.parseInt(studyStart.substring(0, 4));
+        int startMonth = Integer.parseInt(studyStart.substring(5, 7));
+        int startDay = Integer.parseInt(studyStart.substring(8, 10));
+
+        int endYear = Integer.parseInt(studyEnd.substring(0, 4));
+        int endMonth = Integer.parseInt(studyEnd.substring(5, 7));
+        int endDay = Integer.parseInt(studyEnd.substring(8, 10));
+
+        if (LocalDate.now().isEqual(LocalDate.of(startYear, startMonth, startDay))) {
+            this.studyStatus = StudyStatus.PROGRESS;
+        }
+
+        if (LocalDate.now().isAfter(LocalDate.of(endYear, endMonth, endDay))) {
+            this.studyStatus = StudyStatus.COMPLETE;
+        }
+        return this;
+    }
+
 }
 
 

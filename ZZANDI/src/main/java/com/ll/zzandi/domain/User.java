@@ -6,12 +6,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -20,6 +20,8 @@ import java.util.UUID;
 @Table(name = "\"User\"")
 @NoArgsConstructor
 @ToString
+@SQLDelete(sql="UPDATE user SET DELETE_DATE = NOW() where USER_UUID=?")
+@Where(clause="DELETE_DATE is NULL")
 public class User extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -60,6 +62,12 @@ public class User extends BaseEntity{
     @Column(name="USER_PROFILEURL")
     private String userprofileUrl;
 
+    @Column(name="USER_ZZANDI")
+    private Integer userZzandi;
+
+    @Column(name="DELETE_DATE")
+    private LocalDateTime deletedDate;
+
 
     public User(String userId, String userPassword, String userEmail, String userNickname) {
         this.userId = userId;
@@ -88,4 +96,11 @@ public class User extends BaseEntity{
         this.userEmailVerified = true;
     }
 
+    public void updateImageUrl(String image_url) {
+        this.userprofileUrl=image_url;
+    }
+
+    public void updateUserZzandi(Integer userZzandi){
+        this.userZzandi = userZzandi;
+    }
 }

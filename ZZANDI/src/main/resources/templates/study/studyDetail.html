@@ -2,12 +2,15 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script defer type="text/javascript" th:src="@{/js/studyDetail.js}"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
         rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
         crossorigin="anonymous">
-    <script type="text/javascript" th:src="@{/js/studyDetail.js}"></script>
+    <link rel="stylesheet" th:href="@{/css/progressRate.css}">
+    <div th:replace="layout/head.html :: head"></div>
 </head>
     <body>
+    <section th:replace="layout/header.html :: header"></section>
         <div class="container" style="margin: 0;">
             <div>
                 <table>
@@ -35,20 +38,129 @@
                             <p th:text="${books.bookAuthor}"></p>
                             <p th:text="${books.bookPage}"></p>
                             <p th:text="${books.bookPublisher}"></p>
-                            <p th:text="${books.bookUrl}"></p>
+                            <p th:text="${books.bookIsbn}"></p>
                         </td>
                         <td id="lecture" th:if = "${lectures != null}">
                             <p th:text="${lectures.lectureName}"></p>
                             <p th:text="${lectures.lecturer}"></p>
                             <p th:text="${lectures.lectureNumber}"></p>
                         </td>
+                        <td> <a th:href="@{/study/coverUpload/{studyId}(studyId = ${studies.getId})}" th:text="'스터디 대표이미지 생성'">
+                        </a>
+                        </td>
                     </tbody>
                 </table>
                 <div class="d-flex justify-content-start">
+                    <form th:action="@{|/${studies.id}/teamMate/create|}" method="post">
+                        <button type = "submit" onclick="if (!confirm('스터디에 참가 신청하시겠습니까?')) return false; else alert('신청이 완료되었습니다.')" class = "btn btn-outline-secondary"
+                                th:if ="!${isParticipation} and ${studies.studyStatus.name() == 'RECRUIT'}">참가 신청</button>
+                    </form>
+                    <form th:action = "@{|/${studies.id}/teamMate/quit|}" method="post">
+                    <button type= "submit" onclick = "if(!confirm('스터디에서 탈퇴하시겠습니까?')) return false; else alert('탈퇴가 완료되었습니다.')" class= "btn btn-outline-secondary"
+                    th:if = "${isTeamMate} and (${studies.studyStatus.name() == 'RECRUIT'} or ${studies.studyStatus.name() == 'RECRUIT_COMPLETE'}) and ${user.id != studies.user.id}">탈퇴하기</button>
+                    </form>
+                    <button type= "submit" onclick = "if(!confirm('스터디에서 탈퇴하시려면, 다른 팀원에게 권한을 위임해주세요.\n팀원이 수락한 후 탈퇴가 완료됩니다.')) return false; else delegate()" class= "btn btn-outline-secondary"
+                            th:if = "${isTeamMate} and !${isDelete} and (${studies.studyStatus.name() == 'RECRUIT'} or ${studies.studyStatus.name() == 'RECRUIT_COMPLETE'}) and ${user.id == studies.user.id}">탈퇴하기</button>
+                    <a th:href="@{/study/delete/{studyId}(studyId = ${studies.getId})}" class= "btn btn-outline-secondary"
+                            th:if = "${isTeamMate} and ${isDelete} and (${studies.studyStatus.name() == 'RECRUIT'} or ${studies.studyStatus.name() == 'RECRUIT_COMPLETE'}) and ${user.id == studies.user.id}">삭제</a></a>
                     <a class="btn btn-danger mx-2" th:href="@{/study/list}">스터디 리스트</a>
                     <a class="btn btn-primary" th:href="@{/{studyId}/board/list (studyId=${studies.getId})}">게시판 이동</a>
                 </div>
             </div>
+
+            <div th:if = "${user.id == studies.user.id} and ${studies.studyStatus.name() == 'RECRUIT'}">
+                <div class="border-bottom my-3 py-2 w-50">수락 대기 중인 신청자 목록</div>
+                <div class = "card my-3 w-50" th:each="teamMate : ${studies.teamMateList}" th:if = "${teamMate.teamMateStatus.name() == 'WAITING'}">
+                    <div class = "card-body">
+                        <span>
+                            <a th:href="@{|/user/mypage?userNickname=${teamMate.user.userNickname}|}">
+                                <svg th:if="${#strings.isEmpty(teamMate.user?.userprofileUrl)}" th:data-jdenticon-value="${teamMate.user.getUserNickname}"
+                                     width="30" height="30" class="rounded border bg-light"></svg>
+                                <img th:if="${!#strings.isEmpty(teamMate.user?.userprofileUrl)}" th:src="${teamMate.user.userprofileUrl}"
+                                     width="30" height="30" class="rounded border"/>
+                                <span th:text="${teamMate.user.getUserNickname}"></span>
+                            </a>
+                            <form th:action="@{|/${studyId}/teamMate/update/${teamMate.id}|}" method="post" style="display: inline;">
+                                <button type="submit" onclick = "if (!confirm('참가 신청을 수락하시겠습니까?')) return false;" class = "btn btn-outline-secondary">수락</button>
+                            </form>
+                            <form th:action="@{|/${studyId}/teamMate/delete/${teamMate.id}|}" method="post" style="display: inline;">
+                                <button type="submit" onclick = "if (!confirm('참가 신청을 거절하시겠습니까?')) return false;" class = "btn btn-outline-secondary">거절</button>
+                            </form>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-bottom my-3 py-2 w-50">팀원 목록</div>
+            <div class = "card my-3 w-50" th:each="teamMate : ${studies.teamMateList}" th:if = "${teamMate.teamMateStatus.name() == 'ACCEPTED'}">
+                <div class = "card-body">
+                    <a th:href="@{|/user/mypage?userNickname=${teamMate.user.userNickname}|}">
+                        <span>
+                            <svg th:if="${#strings.isEmpty(teamMate.user?.userprofileUrl)}" th:data-jdenticon-value="${teamMate.user.getUserNickname}"
+                                 width="30" height="30" class="rounded border bg-light"></svg>
+                            <img th:if="${!#strings.isEmpty(teamMate.user?.userprofileUrl)}" th:src="${teamMate.user.userprofileUrl}"
+                                 width="30" height="30" class="rounded border"/>
+                            <span th:text="${teamMate.user.getUserNickname}"></span>
+                        </span>
+                    </a>
+                    <form th:action="@{|/${studies.id}/teamMate/delegate/${teamMate.id}|}" method="post"  style="display: none;" class= "delegate"
+                        th:if = "${studies.user.id != teamMate.user.id} and ${teamMate.teamMateDelegate.name() != 'WAITING'}">
+                        <button type="submit" onclick = "if (!confirm('권한을 위임하시겠습니까?')) return false;
+                        else alert('신청이 완료되었습니다. 해당 팀원이 수락한 후 탈퇴가 완료됩니다.')" class = "btn btn-outline-secondary">위임 신청</button>
+                    </form>
+                    <span style="display: none;" class= "delegate" th:if = "${studies.user.id != teamMate.user.id} and ${teamMate.teamMateDelegate.name() == 'WAITING'}">신청 완료</span>
+                </div>
+            </div>
         </div>
+    <!--            진도율 표시 부분(시작)-->
+    <div th:if="${studies.getStudyStatus().name() == 'RECRUIT'}">
+        <div class="badge bg-primary text-wrap fs-3" style="width: 70%;">
+            아직 모집 중인 스터디입니다. 진도율은 스터디 시작일부터 확인 가능합니다!
+        </div>
+    </div>
+    <div th:if="${studies.getStudyStatus().name() == 'COMPLETE'}">
+        <div class="badge bg-primary text-wrap fs-3" style="width: 70%;">
+            종료된 스터디 입니다.
+        </div>
+    </div>
+    <div class="container">
+        <input type="hidden" id="studyperiod" th:value="${studyPeriod}"/>
+        <input type="hidden" id="studydays" th:value="${studyDays}"/>
+
+        <div class="badge bg-primary text-wrap fs-4" style="width: 50%;" th:if = "${books != null}">
+            하루 권장 진도율은 [[${studyRecommend}]] 페이지 입니다.
+        </div>
+        <div class="badge bg-primary text-wrap fs-3" style="width: 50%;" th:if = "${lectures != null}">
+            하루 권장 진도율은 [[${studyRecommend}]] 에서 [[${studyRecommend}+1]] 강 입니다.
+        </div>
+        <div></div>
+        <span> ZZANDI </span>
+        <div class="progress">
+            <div class="zzandi shadow leaf"></div>
+        </div>
+        <div class = "my-3 w-50" th:each="teamMate : ${studies.teamMateList}" th:if = "${teamMate.teamMateStatus.name() == 'ACCEPTED'}">
+            <div>
+                <span>
+                    <svg th:if="${#strings.isEmpty(teamMate.user?.userprofileUrl)}" th:data-jdenticon-value="${teamMate.user.getUserNickname}"
+                         width="30" height="30" class="rounded border bg-light"></svg>
+                    <img th:if="${!#strings.isEmpty(teamMate.user?.userprofileUrl)}" th:src="${teamMate.user.userprofileUrl}"
+                         width="30" height="30" class="rounded border"/>
+                    <span th:text="${teamMate.user.getUserNickname}"></span>
+                </span>
+                <button type="button" class="btn btn-success"
+                        id="study_btn" onclick='toggleStudyInput()' th:if="${teamMate.user.getId() == user.getId()}"> 진도율 기록</button>
+                <input type="text" class="form-control" id="study_input" th:if="${teamMate.user.getId() == user.getId()}" placeholder="총 몇중" style="display:none">
+            </div>
+            <div class="progress">
+                <div class="bar shadow overlap"></div>
+            </div>
+        </div>
+    </div>
+    <!--            진도율 표시 부분 (끝)-->
+
+    <script src="https://cdn.jsdelivr.net/npm/jdenticon@3.2.0/dist/jdenticon.min.js" async
+            integrity="sha384-yBhgDqxM50qJV5JPdayci8wCfooqvhFYbIKhv0hTtLvfeeyJMJCscRfFNKIxt43M" crossorigin="anonymous">
+    </script>
+
     </body>
 </html>

@@ -34,6 +34,9 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         if (!passwordEncoder.matches(userPassword, userContext.getUser().getUserPassword())) {
             throw new BadCredentialsException("아이디 혹은 비밀번호가 일치하지 않습니다.");
         }
+        else if (!userContext.getUser().isUserEmailVerified()) {
+            throw new BadCredentialsException("이메일 인증을 완료해주세요.");
+        }
 
         // 토큰 발급
         return new UsernamePasswordAuthenticationToken(userContext.getUser(), null, userContext.getAuthorities());

@@ -1,57 +1,84 @@
 'use strict';
 
-const boardId = document.querySelector('.board-id').value;
-const commentCount = document.querySelector(".comment-count");
-const commentList = document.querySelector(".comment-list");
-const content = document.querySelector("#content");
-
-window.onload = () => {
-    printComment(boardId);
-}
-
-// 댓글 목록 출력 함수
-function printComment(boardId) {
-    fetch(`/comment/list/${boardId}`)
-        .then(response => response.json())
-        .then(data => {
-            const count = data.count;
-            const comment = data.comment;
-
-            commentCount.innerHTML = `<span>댓글 ${count}개</span>`;
-
-            commentList.innerHTML = "";
-            for (let i = 0; i < count; i++) {
-                commentList.innerHTML += `<li style="border-bottom: 1px solid black;">
-                                            <img src="${comment[i].profile}" alt="profile" width="50" height="50">
-                                            <div>${comment[i].writer}</div>
-                                            <div>${comment[i].content}</div>
-                                          </li>`;
-            }
-        });
-}
-
-const writeBtn = document.querySelector(".cm-btn");
-writeBtn.addEventListener("click", () => {
-    const value = content.value;
-    const comment = {content: value}
-
-    const url = `/comment/write/${boardId}`;
-    fetch(url, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
+const Editor = toastui.Editor;
+const viewer = new Editor.factory({
+    el: document.querySelector('#viewer'),
+    initialValue: document.querySelector(".board-content").value,
+    viewer: true,
+    plugins: [Editor.plugin.codeSyntaxHighlight],
+    customHTMLRenderer: {
+        htmlBlock: {
+            iframe(node) {
+                const link = node.attrs.src;
+                return [
+                    {
+                        type: 'openTag',
+                        tagName: 'iframe',
+                        outerNewLine: true,
+                        classNames: ['youtube'],
+                        attributes: {
+                            src: link
+                        },
+                    },
+                    {
+                        type: 'html',
+                        content: node.childrenHTML
+                    },
+                    {
+                        type: 'closeTag',
+                        tagName: 'iframe',
+                        outerNewLine: true
+                    },
+                ];
+            },
         },
-        body: JSON.stringify(comment)
-    }).then(() => {
-        content.value = "";
-        printComment(boardId);
-    });
+    },
 });
 
-// 삭제 버튼 함수
+
 function deleteBoard() {
     if (confirm("정말로 삭제하시겠습니까?") === false) {
         return false;
     }
     document.forms['form'].submit();
+}
+
+const studyId = document.querySelector(".study-id").value;
+const currBoardId = document.querySelector(".board-id").value;
+const currUserUUID = document.querySelector(".user-uuid").value;
+const boardUserUUID = document.querySelector(".board-user-uuid").value;
+const fileBox = document.querySelector(".file-box");
+fetch(`/${studyId}/board/file-list/${currBoardId}`)
+    .then(data => data.json())
+    .then(file => createThumbnail(file));
+
+function createThumbnail(file) {
+    fileBox.innerHTML = '';
+    for (let f of file) {
+        fileBox.innerHTML +=
+        `<div style="position: relative; display: ${f.fileStatus === 'DELETE' ? 'none' : 'inline'};">
+            <a href="/{studyId}/board/download/${f.id}">
+                <img src="${f.fileUrl}" alt="upload file" class="file-img" style="opacity: 0.8;"/>
+            </a>
+            <a onclick="deleteFile(${studyId}, ${f.id})" class="file-del-btn" style="cursor: pointer; display: ${currUserUUID === boardUserUUID ? 'inline' : 'none'}">
+                <i class="fa-sharp fa-solid fa-square-xmark" style="object-fit: cover; position: absolute; font-size: 16px; color: var(--page-num-bg-color); right: 8px; top: 2px;"></i>
+            </a>
+        </div>`;
+    }
+}
+
+function deleteFile(studyId, fileId) {
+    if(confirm("정말로 삭제하시겠습니까?") === false) {
+        return false;
+    }
+
+    fetch(`/${studyId}/board/delete/file/${fileId}`, {
+        method: 'POST'
+    }).then(() => {
+        fetch(`/${studyId}/board/file-list/${currBoardId}`)
+            .then(data => data.json())
+            .then(file => {
+                createThumbnail(file);
+            });
+    });
 }

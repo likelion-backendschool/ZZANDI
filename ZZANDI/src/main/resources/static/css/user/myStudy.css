@@ -1,0 +1,38 @@
+.studyBox {
+  width : 100%;
+  margin-top : 150px;
+  border-left: 1px solid lightgray;
+}
+
+.subHeading{
+  font-size : 21px;
+  color : darkslategray;
+  font-weight: bold;
+  margin-left : 75px;
+}
+
+.myStudyTable{
+  width : 100%;
+  max-height : 500px;
+  border-spacing: 20px;
+  border-collapse: separate;
+  table-layout : fixed;
+  min-width: 800px;
+  margin : 0 auto;
+  display: block;
+  overflow: auto;
+}
+
+.interest{
+  color : #0a53be;
+}
+
+.title{
+  word-break: break-word;
+  max-width: 250px;
+}
+
+.title2{
+  word-break: break-word;
+  max-width: 170px;
+}

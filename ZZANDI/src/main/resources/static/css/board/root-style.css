@@ -21,9 +21,15 @@
     --semi-medium-font-size: 18px;
     --large-font-size: 21px;
 }
+@font-face {
+    font-family: 'adobaonlyR';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2205@1.0/adobaonlyR.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
 
 * {
-    font-family: var(--main-font), var(--sub-font);
+    font-family: "adobaonlyR", serif;
     font-size: var(--small-font-size);
     box-sizing: border-box;
 }
@@ -37,7 +43,12 @@ body {
 }
 
 .footer {
-    height: 300px;
+    font-size: 13px;
+    background-color: var(--color-back);
+    padding: 30px 0;
+    color: var(--color-font);
+    width : 100%;
+    justify-content: center;
 }
 
 td {
@@ -65,4 +76,10 @@ img {
     height: 30px;
     border-radius: 5px;
     border: 1px solid var(--light-gray-color);
+}
+
+#zzandiLogo {
+    width: 200px;
+    height: auto;
+    border: none;
 }

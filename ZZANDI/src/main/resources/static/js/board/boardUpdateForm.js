@@ -74,7 +74,6 @@ document.querySelector('.exist-file-box').addEventListener('click', (e) => {
 });
 
 document.querySelector('.return-btn').addEventListener('click', () => {
-    // 현재 게시글의 모든 첨부 파일의 상태를 EXIST로 변경
     fetch(`/${studyId}/board/update/file/${boardId}`, {method: 'POST'})
         .then(result => console.log(result));
 })
@@ -93,7 +92,7 @@ function createExistFiles(studyId, boardId) {
         .then(images => {
             existFileBox.innerHTML = '';
             let length = images.length;
-            let existFileSize = 0; // 기존 파일들의 총 크기
+            let existFileSize = 0;
             for(let img of images) {
                 if(img.fileStatus !== 'DELETE') {
                     existFileSize += img.fileSize;
@@ -103,7 +102,6 @@ function createExistFiles(studyId, boardId) {
         });
 }
 
-// 첨부된 이미지를 실제로 지우진 않고 화면에서 지우는 함수임
 function deleteAllUploadFile() {
     let existFiles = Object.values(document.querySelectorAll('.file'));
     let fileList = document.querySelector('#file');
@@ -147,15 +145,13 @@ function deleteSelectUploadFile() {
         return false;
     }
 
-    // 기존 이미지 제거 코드
-    existFiles = existFiles.filter(img => img.classList.contains('selected')); // 선택된 이미지 필터링
+    existFiles = existFiles.filter(img => img.classList.contains('selected'));
     for (let img of existFiles) {
         console.log(img.dataset.id);
         fetch(`/${studyId}/board/delete/file/${img.dataset.id}`, {method: 'POST'})
             .then(() => createExistFiles(studyId, boardId));
     }
 
-    // 새로 추가한 이미지 제거
     const dataTransfer = new DataTransfer();
     let files = document.querySelector('#file').files;
 

@@ -19,6 +19,7 @@ function findCommentList(boardId, page) {
         .then(comments => {
             const count = comments.totalElements;
             const comment = comments.content;
+            console.log(comment);
             lastPage = (comments.totalPages - 1 > 0) ? comments.totalPages - 1 : 0;
             currPage = comments.pageable.pageNumber;
 
@@ -41,7 +42,7 @@ function findCommentList(boardId, page) {
 
                 const content = urlFilter(comment[i].content);
                 const buttonList = commentButtonList(comment[i], i + 1);
-                const ml = comment[i].step * 3; // 들여쓰기 깊이 계산
+                const ml = comment[i].step * 3;
                 commentList.innerHTML +=
                     `<li class="comment-box mb-2" data-num="${i + 1}" style="margin-left:${ml}%;">
                         ${icon}
@@ -61,7 +62,6 @@ function findCommentList(boardId, page) {
                             <span class="comment-box-content__content" style="color: ${comment[i].writer === writer ? '#045CDF' : '#333333'};">${content}</span>
                         </div>
                     </li>
-                    <!-- 대댓글 & 댓글 수정 입력창 -->
                     <div class="comment-form mb-3 hide" style="margin-left: ${ml}%;"></div>`;
             }
         });

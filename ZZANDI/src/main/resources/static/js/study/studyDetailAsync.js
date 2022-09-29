@@ -29,7 +29,7 @@ let isTeamMate = false;
 let isDelete = false;
 let cnt = 0;
 
-const patternList = Array.of('clouds', 'bees', 'dominos', 'pie', 'piano', 'crosses', 'floor', 'wiggle', 'bubbles', 'ticTac', 'zigZag', 'stripes', 'food', 'aztec')
+const patternList = Array.of('clouds', 'zigZag', 'dominos', 'pie', 'piano', 'crosses', 'floor', 'wiggle', 'bubbles', 'ticTac', 'bees', 'stripes', 'food', 'aztec')
 
 async function findStudyDetail(studyId) {
   console.log("findStudyDetail 실행");
@@ -272,8 +272,8 @@ function displayStudy(data, teamMateList) {
 
   html += `
   <form id="study_input" style="display:none" onsubmit="submitModifyRate(this, studyId, userNickname, studyDetail); return false;">
-    <input name="rate" type="text" class="form-control updateRateForm">
-    <button type="submit" id="status" value="modify" class="btn">수정</button>
+    <input name="rate" type="text" style="height: 35px" class="form-control updateRateForm">
+    <button type="submit" id="status" value="modify" style="width: 80px" class="btn">수정</button>
   </form>
   `
 
@@ -289,7 +289,6 @@ function displayStudy(data, teamMateList) {
   else {
     updateRateForm.placeholder = "나의 진도 : " + TeamRate + " 강";
   }
-
   //updateRate[end]
 
   // acceptedTeamMate[start]
@@ -345,18 +344,16 @@ function displayStudy(data, teamMateList) {
       `;
       //
       acceptedTeamMate.innerHTML = html;
-
-      const pattern = "." + patternList[i];
-
-      const each = document.querySelector(pattern);
-
-      each.style.width = `${eachWidth}%`;
     }
     // acceptedTeamMate[end]
   }
-  const first = document.querySelector(".clouds");
-  const firstWidth = calcEach(data, 0);
-  first.style.width=`${firstWidth}%`;
+  // 진도율 채워지도록 (그림 너비 조절)
+  for (let i = 0; i < teamMateList.length; i++) {
+    const pattern = "." + patternList[i];
+    const each = document.querySelector(pattern);
+    const eachWidth = calcEach(studyDetail, i);
+    each.style.width = `${eachWidth}%`;
+  }
 }
 
 function findTeamMateList(studyId) {
@@ -541,6 +538,8 @@ function calcEach(data, i) {
     Total = data.lectureNumber;
   }
 
+  console.log(teamMateList[i].teamRate);
+
   return (teamMateList[i].teamRate / Total) * 100;
 }
 
@@ -630,7 +629,4 @@ async function getUserRate(studyId) {
   return fetch(`/${studyId}/teamMate/rate-data`)
   .then(response => response.json());
 }
-
-
-
 // list studyDetaildto

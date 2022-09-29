@@ -42,17 +42,19 @@
       </div>
     </div>
   </div>
-  <nav class="navbar">
-    <ul>
-      <li><a class = "menu" th:href="@{|/${studyId}/board/list|}">
-        <i class="bi bi-chat-left-text" style="font-size: 1.3rem; margin-right : 5px;"></i>게시판 이동</a></li>
-      <li><a id = "rateSubmit" class = "menu" onclick="toggleStudyInput()" style = "display : none;">
-        <i class="bi bi-pencil-square" style="font-size: 1.3rem; margin-right : 5px;"></i>달성률 등록</a></li>
-      <li class="updateRate">
-<!--        개인 진도율 저장-->
-      </li>
-    </ul>
-  </nav>
+  <div id="zzandinavbar">
+    <nav>
+      <ul>
+        <li style="margin-left: 0px"><a class = "menu zzandimenu" th:href="@{|/${studyId}/board/list|}">
+          <i class="bi bi-chat-left-text" style="font-size: 1.3rem; margin-right : 5px;"></i>게시판 이동</a></li>
+        <li ><a id = "rateSubmit" class = "menu zzandimenu" onclick="toggleStudyInput()" style = "display : none;">
+          <i class="bi bi-pencil-square" style="font-size: 1.3rem; margin-right : 5px;"></i>달성률 등록</a></li>
+        <li class="updateRate">
+          <!--        개인 진도율 저장-->
+        </li>
+      </ul>
+    </nav>
+  </div>
   <div class = "acceptedTeamMate">
 <!--    팀원 목록-->
   </div>

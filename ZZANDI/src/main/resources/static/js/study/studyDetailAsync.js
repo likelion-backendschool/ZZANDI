@@ -272,8 +272,8 @@ function displayStudy(data, teamMateList) {
 
   html += `
   <form id="study_input" style="display:none" onsubmit="submitModifyRate(this, studyId, userNickname, studyDetail); return false;">
-    <input name="rate" type="text" class="form-control updateRateForm">
-    <button type="submit" id="status" value="modify" class="btn">수정</button>
+    <input name="rate" type="text" style="height: 35px" class="form-control updateRateForm">
+    <button type="submit" id="status" value="modify" style="width: 80px" class="btn">수정</button>
   </form>
   `
 

@@ -22,9 +22,12 @@ import com.ll.zzandi.enumtype.TableType;
 import com.ll.zzandi.repository.*;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.time.Period;
 
 import com.ll.zzandi.util.aws.ImageUploadService;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.stream.Collectors;
@@ -70,9 +73,6 @@ public class StudyService {
         study = study.checkStatus();
         study.setStudyCoverUrl(DEFAULT_IMAGE_URL1);
         Study savedStudy = studyRepository.save(study);
-        if (savedStudy.getStudyStatus().equals(StudyStatus.PROGRESS)) {
-            updateStudyRate(savedStudy);
-        }
         File file=File.builder()
             .fileName("defaultImage")
             .originalName("defaultImage")
@@ -93,9 +93,6 @@ public class StudyService {
         study = study.checkStatus();
         study.setStudyCoverUrl(DEFAULT_IMAGE_URL2);
         Study savedStudy = studyRepository.save(study);
-        if (savedStudy.getStudyStatus().equals(StudyStatus.PROGRESS)) {
-            updateStudyRate(savedStudy);
-        }
         File file=File.builder()
             .fileName("defaultImage")
             .originalName("defaultImage")
@@ -397,10 +394,15 @@ public class StudyService {
     public int getStudyDays(Long studyId) { // 남은 스터디 기간을 return
         Study studies = findByStudyId(studyId).orElseThrow(() -> new StudyException(ErrorType.NOT_FOUND));
 
-        LocalDate studyEnd = LocalDate.parse(studies.getStudyEnd());
+        String StudyEnd = studies.getStudyEnd();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        LocalDate StudyEndDate = LocalDate.parse(StudyEnd, formatter);
         LocalDate today = LocalDate.now();
 
-        return Period.between(today, studyEnd).getDays() + 1;
+        long between = ChronoUnit.DAYS.between(today, StudyEndDate);
+
+        return Integer.parseInt(String.valueOf(between)) + 1;
     }
 
     public void updateViews(Long studyId) {

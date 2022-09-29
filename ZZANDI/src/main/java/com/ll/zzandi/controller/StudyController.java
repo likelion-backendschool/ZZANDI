@@ -86,6 +86,7 @@ public class StudyController {
             study = studyService.createStudyWithLecture(studyDto, lecture, user);
         }
         teamMateService.createTeamMate(user, study.getId());
+        studyService.updateStudyRate(study);
         return "redirect:/study/detail/%d".formatted(study.getId());
     }
 

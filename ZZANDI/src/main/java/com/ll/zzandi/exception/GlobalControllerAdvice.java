@@ -27,7 +27,7 @@ public class GlobalControllerAdvice {
     return "error/globalErrorPage";
   }
 
-  //@ExceptionHandler(RuntimeException.class)
+  @ExceptionHandler(RuntimeException.class)
   public String applicationHandler(RuntimeException e,Model model) {
     log.error("Error occurs {}", e.toString());
 

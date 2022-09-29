@@ -109,7 +109,7 @@ public class UserController {
         model.addAttribute("error", error);
         model.addAttribute("exception", exception);
 
-        return "/user/login";
+        return "user/login";
     }
 
     @GetMapping("/logout")
@@ -120,7 +120,7 @@ public class UserController {
             new SecurityContextLogoutHandler().logout(request, response,
                 authentication); // 세션 및 인증 객체 삭제
         }
-        return "redirect:/user/login";
+        return "redirect:user/login";
     }
 
     @GetMapping("/denied")
@@ -129,13 +129,13 @@ public class UserController {
         User user = (User) authentication.getPrincipal();
         model.addAttribute("userId", user.getUserId());
         model.addAttribute("exception", exception);
-        return "/user/denied";
+        return "user/denied";
     }
 
     @GetMapping("/profileImage")
     public String getProfilePage(@AuthenticationPrincipal User user,Model model){
         model.addAttribute("user", user);
-        return"/user/Profile-upload";
+        return"user/Profile-upload";
     }
 
     @PostMapping("/profileImage")
@@ -162,7 +162,7 @@ public class UserController {
         model.addAttribute("progressStudyList", progressStudyList);
         model.addAttribute("completeStudyList", completeStudyList);
 
-        return "/user/profile";
+        return "user/profile";
     }
 
     @GetMapping("/mypage")
@@ -181,7 +181,7 @@ public class UserController {
 
         List<Interest> interestList = interestRepository.findByUser(pageUser);
         model.addAttribute("interestList", interestList);
-        return "/user/mypage";
+        return "user/mypage";
     }
 
     @GetMapping("/mystudy")
@@ -197,7 +197,7 @@ public class UserController {
         model.addAttribute("teamMateList", teamMateList);
         model.addAttribute("waitingStudyList", waitingStudyList);
 
-        return "/user/mystudy";
+        return "user/mystudy";
     }
 
     @GetMapping("/findWaitingStudyList")

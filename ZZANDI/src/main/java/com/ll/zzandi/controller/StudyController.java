@@ -87,7 +87,7 @@ public class StudyController {
         }
         teamMateService.createTeamMate(user, study.getId());
         studyService.updateStudyRate(study);
-        return "redirect:/study/detail/%d".formatted(study.getId());
+        return "redirect:detail/%d".formatted(study.getId());
     }
 
     @GetMapping("/study/list")
@@ -139,6 +139,7 @@ public class StudyController {
 
         studyService.deleteStudy(studies);
         return "redirect:/";
+
     }
 
     @GetMapping("/study/update/{studyId}")
@@ -201,6 +202,6 @@ public class StudyController {
     }
     @RequestMapping("study/studyBookSearch")
     public String search() {
-        return "/study/studyBookSearch";
+        return "study/studyBookSearch";
     }
 }

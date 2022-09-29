@@ -14,7 +14,7 @@ $(document).ready(function () {
         }
         $.ajax({
             method: "GET",
-            url: "http://zzandi.ay.ms/study/search/book",
+            url: "http://www.zzandi.ay.ms/study/search/book",
             data: {
                 query: $("#bookSearch").val(),
             },

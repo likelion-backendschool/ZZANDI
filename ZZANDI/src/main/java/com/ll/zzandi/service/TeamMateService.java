@@ -166,7 +166,7 @@ public class TeamMateService {
     String message = "안녕하세요. %s님, <br/>".formatted(delegateUser.getUserNickname())
         + "%s님이 [%s] 스터디 팀장 권한 위임을 신청하셨습니다.<br/>".formatted(user.getUserNickname(), study.getStudyTitle())
         + "ZZANDI로 접속하여 %s님 신청을 수락 및 거절해주길 바랍니다.<br/>".formatted(user.getUserNickname())
-        + "http://zzandi.ay.ms/study/detail/%d".formatted(study.getId());
+        + "http://www.zzandi.ay.ms/study/detail/%d".formatted(study.getId());
 
     EmailMessage emailMessage = EmailMessage.builder()
         .to(delegateUser.getUserEmail())
@@ -181,7 +181,7 @@ public class TeamMateService {
         + "%s님이 [%s] 스터디 참가 신청을 수락했습니다.<br/>".formatted(study.getUser().getUserNickname(), study.getStudyTitle())
         + "팀원이 되신 것을 축하드리며, 스터디 시작일은 %s입니다.<br/>".formatted(study.getStudyStart())
         + "자세한 스터디 세부 정보는 아래의 링크로 접속하셔서 확인하시길 바랍니다. <br/>"
-        + "http://zzandi.ay.ms/study/detail/%d".formatted(study.getId());
+        + "http://www.zzandi.ay.ms/study/detail/%d".formatted(study.getId());
 
     EmailMessage emailMessage = EmailMessage.builder()
         .to(teamMate.getUser().getUserEmail())
@@ -196,7 +196,7 @@ public class TeamMateService {
     String message = "안녕하세요. %s님, <br/>".formatted(study.getUser().getUserNickname())
         + "%s님이 [%s] 스터디에 참가 신청했습니다.<br/>".formatted(user.getUserNickname(), study.getStudyTitle())
         + "%s님을 수락하시려면, ZZANDI로 접속하여 수락해주세요.<br/>".formatted(user.getUserNickname())
-        + "http://zzandi.ay.ms/study/detail/%d".formatted(study.getId());
+        + "http://www.zzandi.ay.ms/study/detail/%d".formatted(study.getId());
 
     EmailMessage emailMessage = EmailMessage.builder()
         .to(study.getUser().getUserEmail())

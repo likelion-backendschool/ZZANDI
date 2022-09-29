@@ -70,6 +70,9 @@ public class StudyService {
         study = study.checkStatus();
         study.setStudyCoverUrl(DEFAULT_IMAGE_URL1);
         Study savedStudy = studyRepository.save(study);
+        if (savedStudy.getStudyStatus().equals(StudyStatus.PROGRESS)) {
+            updateStudyRate(savedStudy);
+        }
         File file=File.builder()
             .fileName("defaultImage")
             .originalName("defaultImage")
@@ -90,6 +93,9 @@ public class StudyService {
         study = study.checkStatus();
         study.setStudyCoverUrl(DEFAULT_IMAGE_URL2);
         Study savedStudy = studyRepository.save(study);
+        if (savedStudy.getStudyStatus().equals(StudyStatus.PROGRESS)) {
+            updateStudyRate(savedStudy);
+        }
         File file=File.builder()
             .fileName("defaultImage")
             .originalName("defaultImage")

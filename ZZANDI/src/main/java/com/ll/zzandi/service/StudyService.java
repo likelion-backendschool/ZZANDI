@@ -319,6 +319,7 @@ public class StudyService {
     매일 12시 스터디 상태 업데이트
      */
     @Scheduled(cron = "0 0 0 * * *")
+    @Transactional
     public void updateStudyStatus() {
         List<Study> studyList = studyRepository.findAll();
         for (Study study : studyList) {

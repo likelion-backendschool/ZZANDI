@@ -32,7 +32,7 @@ public class TeamMateController {
   @PostMapping("/create")
   public String createTeamMate(@AuthenticationPrincipal User user, @PathVariable Long studyId, Model model) {
     teamMateService.createTeamMate(user, studyId);
-    return "redirect:/study/detail/%d".formatted(studyId);
+    return "redirect:study/detail/%d".formatted(studyId);
   }
 
   /*
@@ -41,7 +41,7 @@ public class TeamMateController {
   @PostMapping("/update/{teamMateId}")
   public String updateTeamMate(@AuthenticationPrincipal User user, @PathVariable Long studyId, @PathVariable Long teamMateId, Model model) {
     teamMateService.updateTeamMate(user, studyId, teamMateId);
-    return "redirect:/study/detail/%d".formatted(studyId);
+    return "redirect:study/detail/%d".formatted(studyId);
   }
 
   /*
@@ -60,9 +60,9 @@ public class TeamMateController {
   public String deleteTeamMate(@AuthenticationPrincipal User user, @PathVariable Long studyId, @PathVariable Long teamMateId) {
     boolean isLeader = teamMateService.deleteTeamMate(user, studyId, teamMateId);
     if (isLeader) {
-      return "redirect:/study/detail/%d".formatted(studyId);
+      return "redirect:study/detail/%d".formatted(studyId);
     }
-    return "redirect:/user/mypage?userNickname=%s".formatted(user.getUserNickname());
+    return "redirect:user/mypage?userNickname=%s".formatted(user.getUserNickname());
   }
 
   /*
@@ -71,7 +71,7 @@ public class TeamMateController {
   @PostMapping("/quit")
   public String quitTeamMate(@AuthenticationPrincipal User user, @PathVariable Long studyId) {
     teamMateService.quitTeamMate(user, studyId);
-    return "redirect:/study/detail/%d".formatted(studyId);
+    return "redirect:study/detail/%d".formatted(studyId);
   }
 
   /*
@@ -80,7 +80,7 @@ public class TeamMateController {
   @PostMapping("/delegate/{teamMateId}")
   public String delegateTeamMate(@AuthenticationPrincipal User user, @PathVariable Long studyId, @PathVariable Long teamMateId) {
     teamMateService.delegateTeamMate(user, studyId, teamMateId);
-    return "redirect:/study/detail/%d".formatted(studyId);
+    return "redirect:study/detail/%d".formatted(studyId);
   }
 
   /*
@@ -89,7 +89,7 @@ public class TeamMateController {
   @PostMapping("/delegate")
   public String delegateTeamMateAccept(@AuthenticationPrincipal User user, @PathVariable Long studyId) {
     teamMateService.delegateTeamMateAccept(user, studyId);
-    return "redirect:/study/detail/%d".formatted(studyId);
+    return "redirect:study/detail/%d".formatted(studyId);
   }
 
   /*
@@ -98,7 +98,7 @@ public class TeamMateController {
   @PostMapping("/delegate/refuse")
   public String delegateRefuse(@AuthenticationPrincipal User user, @PathVariable Long studyId) {
     teamMateService.delegateRefuse(user, studyId);
-    return "redirect:/study/detail/%d".formatted(studyId);
+    return "redirect:study/detail/%d".formatted(studyId);
   }
 
   /*

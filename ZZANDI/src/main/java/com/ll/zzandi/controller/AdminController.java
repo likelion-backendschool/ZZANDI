@@ -10,6 +10,6 @@ public class AdminController {
 
   @GetMapping
   public String showAdmin() {
-    return "/admin/admin";
+    return "admin/admin";
   }
 }

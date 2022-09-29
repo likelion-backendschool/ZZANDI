@@ -46,7 +46,7 @@ public class UploadController {
         }
         model.addAttribute("study", study);
         model.addAttribute("studyId", study.getId());
-        return "/study/studyCoverUpload";
+        return "study/studyCoverUpload";
     }
 
     @PostMapping("/study/coverUpload/{studyId}")

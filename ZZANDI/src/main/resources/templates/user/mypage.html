@@ -254,7 +254,7 @@
             return false;
         } else {
             $.ajax({
-                url: "http://localhost:8080/user/delete",
+                url: "http://zzandi.ay.ms/user/delete",
                 type: 'GET',
                 success: function (res) {
                     console.log(res);
@@ -262,7 +262,7 @@
                         alert("스터디장을 반드시 위임해야합니다.");
                     }else {
                         alert(res);
-                        location.replace("http://localhost:8080/user/logout");
+                        location.replace("http://zzandi.ay.ms/user/logout");
                     }
                 }
             });

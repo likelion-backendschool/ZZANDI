@@ -384,6 +384,18 @@ h6 {
 /*--------------------------------------------------------------
 # Mobile Navigation
 --------------------------------------------------------------*/
+@media (max-width: 768px) {
+  .header .logo h1 {
+    display : none;
+  }
+}
+
+@media (max-width: 576px) {
+  .searchBox input {
+    width: auto;
+  }
+}
+
 @media (max-width: 1279px) {
   .navbar {
     position: fixed;

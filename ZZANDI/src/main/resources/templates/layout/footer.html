@@ -1,18 +1,14 @@
 <!-- ======= Footer ======= -->
 <footer th:fragment="footer" id="footer" class="footer">
 
-  <div class="container" style="display: flex; justify-content: space-between">
-      <div class="footer-info">
-
+  <div class="container">
+    <div class = "row gy-4">
+      <div class="col-lg-3 col-md-5 footer-info">
         <a href="/" class="logo">
-            <img id="zzandiLogo" class = "center-block" src= "/images/Footer-Logo.png" width="200" height="auto">
-<!--          <span>ZZANDI</span>-->
+          <img id="zzandiLogo" class = "center-block" src= "/images/Footer-Logo.png" width="200" height="auto">
         </a>
-<!--        <p>Create your own study.</p>-->
-<!--        <p>You can make it any condition you want.</p>-->
       </div>
-
-      <div>
+      <div class = "col-lg-2 col-6 footer-links">
         <h6>Home Services</h6>
         <div class="credit">
           <a class = "credit" th:href="@{/}">Home</a>
@@ -23,25 +19,23 @@
         <div class="credit">
           <a class = "credit" th:href="@{/user/login}">Login</a>
         </div>
-
       </div>
-
-    <div>
-      <h6>Study Services</h6>
-      <div class="credit">
-        <a class = "credit" th:href="@{/study/create}">Create Study</a>
+      <div class = "col-lg-2 col-6 footer-links">
+        <h6>Study Services</h6>
+        <div class="credit">
+          <a class = "credit" th:href="@{/study/create}">Create Study</a>
+        </div>
+        <div class="credit">
+          <a class = "credit" th:href="@{/study/list}">Study List</a>
+        </div>
+        <div class="credit">
+          <a class = "credit" th:href="@{/user/mystudy}">My Study</a>
+        </div>
       </div>
-      <div class="credit">
-        <a class = "credit" th:href="@{/study/list}">Study List</a>
-      </div>
-      <div class="credit">
-        <a class = "credit" th:href="@{/user/mystudy}">My Study</a>
-      </div>
-    </div>
-
-      <div>
+      <div class = "col-lg-4 col-12 footer-links">
         <h6>Made By</h6>
-          <div>
+        <div class = "row gy-2">
+          <div class = "col-lg-6 col-12">
             <div class="credit">
               Made by <a class = "credit" href="https://github.com/jyajoo">JUNG Yun-ah</a>
             </div>
@@ -52,9 +46,7 @@
               Made by <a class = "credit" href="https://github.com/ddmkim94">KIM Dong-min</a>
             </div>
           </div>
-      </div>
-    <div>
-      <div style="margin-top: 40px">
+          <div class = "col-lg-6 col-12">
             <div class="credit">
               Made by <a class = "credit" href="https://github.com/Young998904">CHO Ah-young</a>
             </div>
@@ -64,9 +56,17 @@
             <div class="credit">
               Designed by <a class = "credit" href="https://bootstrapmade.com/">BootstrapMade</a>
             </div>
-
           </div>
+        </div>
       </div>
+    </div>
+
+
+
+
+
+
+
   </div>
     <div style="display: flex; justify-content: center; margin-top: 20px" >
         <p>&copy; Copyright 2022. <strong><span>ZZANDI</span></strong> All Rights Reserved.</p>

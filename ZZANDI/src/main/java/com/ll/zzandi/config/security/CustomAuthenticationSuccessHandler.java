@@ -36,12 +36,13 @@ public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             request.getSession().removeAttribute("prevPage");
         }
 
-        if (savedRequest != null) {
-            uri = savedRequest.getRedirectUrl();
-        }
-        else if (prevPage != null && !prevPage.equals("")) {
+        if (prevPage != null && !prevPage.equals("")) {
             uri = prevPage;
         }
+        else if (savedRequest != null) {
+            uri = savedRequest.getRedirectUrl();
+        }
+
         redirectStrategy.sendRedirect(request, response, uri);
     }
 }

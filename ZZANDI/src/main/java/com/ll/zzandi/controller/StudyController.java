@@ -137,7 +137,8 @@ public class StudyController {
         }
 
         studyService.deleteStudy(studies);
-        return "index";
+        return "redirect:/";
+
     }
 
     @GetMapping("/study/update/{studyId}")

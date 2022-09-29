@@ -137,7 +137,7 @@ public class StudyController {
         }
 
         studyService.deleteStudy(studies);
-        return "redirect:";
+        return "/";
     }
 
     @GetMapping("/study/update/{studyId}")
@@ -175,7 +175,7 @@ public class StudyController {
             studyService.updateStudyWithLecture(studyId, studyDto, lectureDto, user);
         }
 
-        return "redirect:detail/%d".formatted(studyId);
+        return "redirect:%d".formatted(studyId);
     }
 
     @GetMapping("/study/search/book")

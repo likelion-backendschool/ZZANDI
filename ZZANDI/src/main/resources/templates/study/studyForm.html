@@ -30,7 +30,7 @@
                     <input id="studyTitle" type="text" th:field="*{studyTitle}" class="form-control" placeholder="스터디명*">
                 </div>
                 <div class="col-md-6 form-group">
-                    <input id="studyStart" type="date" th:field="*{studyStart}" th:min="${#temporals.format(#temporals.create(#temporals.year(#temporals.createToday()), #temporals.month((#temporals.createToday())), #temporals.day(#temporals.createToday())+1), 'yyyy-MM-dd')}" class="form-control">
+                    <input id="studyStart" type="date" th:field="*{studyStart}" th:min="${#temporals.format(#temporals.create(#temporals.year(#temporals.createToday()), #temporals.month((#temporals.createToday())), #temporals.day(#temporals.createToday())), 'yyyy-MM-dd')}" class="form-control">
                 </div>
                 <div class="col-md-6 form-group">
                     <input id="studyEnd" type="date" th:field="*{studyEnd}" min="" class="form-control">

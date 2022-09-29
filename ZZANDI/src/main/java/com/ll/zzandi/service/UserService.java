@@ -97,7 +97,7 @@ public class UserService {
         context.setVariable("nickname", user.getUserNickname());
         context.setVariable("linkName", "이메일 인증하기");
         context.setVariable("message", "ZZANDI 서비스를 사용하려면 링크를 클릭하세요.");
-        context.setVariable("host", "http://localhost:8080/user");
+        context.setVariable("host", "http://zzandi.ay.ms/user");
         String message = templateEngine.process("mail/simple-link", context);
 
         EmailMessage emailMessage = EmailMessage.builder()

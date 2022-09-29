@@ -86,7 +86,7 @@ public class StudyController {
             study = studyService.createStudyWithLecture(studyDto, lecture, user);
         }
         teamMateService.createTeamMate(user, study.getId());
-        return "redirect:/study/detail/%d".formatted(study.getId());
+        return "redirect:study/detail/%d".formatted(study.getId());
     }
 
     @GetMapping("/study/list")
@@ -137,7 +137,7 @@ public class StudyController {
         }
 
         studyService.deleteStudy(studies);
-        return "redirect:/";
+        return "redirect:";
     }
 
     @GetMapping("/study/update/{studyId}")
@@ -175,7 +175,7 @@ public class StudyController {
             studyService.updateStudyWithLecture(studyId, studyDto, lectureDto, user);
         }
 
-        return "redirect:/study/detail/%d".formatted(studyId);
+        return "redirect:study/detail/%d".formatted(studyId);
     }
 
     @GetMapping("/study/search/book")
@@ -200,6 +200,6 @@ public class StudyController {
     }
     @RequestMapping("study/studyBookSearch")
     public String search() {
-        return "/study/studyBookSearch";
+        return "study/studyBookSearch";
     }
 }

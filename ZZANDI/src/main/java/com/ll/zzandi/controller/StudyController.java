@@ -86,7 +86,7 @@ public class StudyController {
             study = studyService.createStudyWithLecture(studyDto, lecture, user);
         }
         teamMateService.createTeamMate(user, study.getId());
-        return "redirect:study/detail/%d".formatted(study.getId());
+        return "redirect:detail/%d".formatted(study.getId());
     }
 
     @GetMapping("/study/list")
@@ -175,7 +175,7 @@ public class StudyController {
             studyService.updateStudyWithLecture(studyId, studyDto, lectureDto, user);
         }
 
-        return "redirect:study/detail/%d".formatted(studyId);
+        return "redirect:detail/%d".formatted(studyId);
     }
 
     @GetMapping("/study/search/book")

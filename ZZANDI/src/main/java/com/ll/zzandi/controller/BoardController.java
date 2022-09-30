@@ -133,7 +133,7 @@ public class BoardController {
         Board board = new Board(user, boardCreateDto.getCategory(), boardCreateDto.getTitle(), boardCreateDto.getContent(), 0, study);
         Long boardId = boardService.createBoard(board, files);
 
-        return "redirect:detail/%d/0".formatted(studyId, boardId);
+        return "redirect:/%d/board/detail/%d/0".formatted(studyId, boardId);
     }
 
     @GetMapping("/update/{boardId}/{page}")

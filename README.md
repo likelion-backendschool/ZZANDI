@@ -8,7 +8,7 @@
     <br />
     <a href="http://www.zzandi.ay.ms/"><strong>사이트이동</strong></a>
     <br />
-    <a href="http://www.zzandi.ay.ms/"><strong>기능 영상</strong></a>
+    <a href="https://www.youtube.com/watch?v=Uq0LaeyqQoE"><strong>기능 영상</strong></a>
     <br />
 
   </p>

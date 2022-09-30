@@ -133,7 +133,7 @@ public class BoardController {
         Board board = new Board(user, boardCreateDto.getCategory(), boardCreateDto.getTitle(), boardCreateDto.getContent(), 0, study);
         Long boardId = boardService.createBoard(board, files);
 
-        return "redirect:%d/board/detail/%d/0".formatted(studyId, boardId);
+        return "redirect:detail/%d/0".formatted(studyId, boardId);
     }
 
     @GetMapping("/update/{boardId}/{page}")
@@ -147,7 +147,7 @@ public class BoardController {
     public String updateBoard(@PathVariable Long studyId, @PathVariable Long boardId, @RequestParam("file") List<MultipartFile> files, @PathVariable int page, BoardUpdateFormDto updateFormDto) throws IOException {
         boardService.updateBoardFile(boardId, files);
         boardService.updateBoard(boardId, updateFormDto);
-        return "redirect:%d/board/detail/%d/%d".formatted(studyId, boardId, page);
+        return "redirect:/%d/board/detail/%d/%d".formatted(studyId, boardId, page);
     }
 
     @PostMapping("/delete/{boardId}")
@@ -155,7 +155,7 @@ public class BoardController {
         commentService.deleteCommentByBoardId(boardId);
         boardService.deleteFile(boardId);
         boardService.deleteBoard(boardId);
-        return "redirect:%d/board/list".formatted(studyId);
+        return "redirect:/%d/board/list".formatted(studyId);
     }
 
     @GetMapping("/exist/file/{boardId}")
